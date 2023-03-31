@@ -1,11 +1,28 @@
-import { type AppType } from "next/app";
+import { type AppType } from 'next/app';
 
-import { api } from "~/utils/api";
+import { ChakraProvider } from '@chakra-ui/react';
+import { theme } from '~/chakra/theme';
 
-import "~/styles/globals.css";
+import { ClerkProvider } from '@clerk/nextjs';
+import { ruRU } from '~/localization/ruRu';
+
+import { api } from '~/utils/api';
+
+import '~/styles/globals.css';
+import Head from 'next/head';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />;
+	return (
+		<ChakraProvider theme={theme}>
+			<Head>
+				<title>Spirit-Home</title>
+				<meta name="description" content="" />
+			</Head>
+			<ClerkProvider {...pageProps} localization={ruRU}>
+				<Component {...pageProps} />;
+			</ClerkProvider>
+		</ChakraProvider>
+	);
 };
 
 export default api.withTRPC(MyApp);
