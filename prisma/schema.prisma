@@ -10,8 +10,90 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Example {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+// Define the data model for users
+model User {
+    id        String    @id @unique @default(cuid())
+    firstName String
+    lastName  String
+    username  String?
+    role      Role      @default(USER)
+    cart      Cart?
+    orders    Order[]
+    comments  Comment[]
+}
+
+// Define the data model for products
+model Product {
+    id          String       @id @default(cuid())
+    name        String
+    description String
+    price       Float
+    image       String?
+    comments    Comment[]
+    CartEntry   CartEntry[]
+    OrderEntry  OrderEntry[]
+}
+
+// Define the data model for carts
+model Cart {
+    id       String      @id @unique @default(cuid())
+    user     User        @relation(fields: [userId], references: [id])
+    userId   String      @unique
+    products CartEntry[]
+}
+
+// Define the data model for cart entries
+model CartEntry {
+    id        String  @id @default(cuid())
+    cart      Cart    @relation(fields: [cartId], references: [id])
+    cartId    String
+    product   Product @relation(fields: [productId], references: [id])
+    productId String
+    quantity  String
+}
+
+// Define the data model for orders
+model Order {
+    id        String       @id @default(cuid())
+    user      User         @relation(fields: [userId], references: [id])
+    userId    String
+    products  OrderEntry[]
+    total     Float
+    status    OrderStatus  @default(PENDING)
+    createdAt DateTime     @default(now())
+}
+
+// Define the data model for order entries
+model OrderEntry {
+    id        String  @id @default(cuid())
+    order     Order   @relation(fields: [orderId], references: [id])
+    orderId   String
+    product   Product @relation(fields: [productId], references: [id])
+    productId String
+    quantity  String
+    price     Float
+}
+
+// Define the data model for comments
+model Comment {
+    id        String  @id @default(cuid())
+    user      User    @relation(fields: [userId], references: [id])
+    userId    String
+    product   Product @relation(fields: [productId], references: [id])
+    productId String
+    text      String
+}
+
+// Define the role type
+enum Role {
+    USER
+    ADMIN
+}
+
+// Define the order status type
+enum OrderStatus {
+    PENDING
+    PROCESSING
+    COMPLETED
+    CANCELLED
 }
