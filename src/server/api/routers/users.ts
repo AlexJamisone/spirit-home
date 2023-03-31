@@ -1,8 +1,10 @@
+import { clerkClient } from '@clerk/nextjs/server';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
-export const exampleRouter = createTRPCRouter({
+export const usersRouter = createTRPCRouter({
 	hello: publicProcedure
 		.input(z.object({ text: z.string() }))
 		.query(({ input }) => {
@@ -11,6 +13,6 @@ export const exampleRouter = createTRPCRouter({
 			};
 		}),
 	getAll: publicProcedure.query(({ ctx }) => {
-		return ctx.prisma.example.findMany();
+		// return ctx.prisma.
 	}),
 });
