@@ -1,12 +1,10 @@
 import { Box, Link as ChakraLink, Icon } from '@chakra-ui/react';
-import { useAuth, UserButton, useUser } from '@clerk/nextjs';
-import { SlHandbag } from 'react-icons/sl';
+import { UserButton, useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
+import { SlHandbag } from 'react-icons/sl';
 import Logo from './Logo';
-import { api } from '~/utils/api';
 const Navigation = () => {
-	const { isSignedIn } = useAuth();
-	const { user } = useUser();
+	const { isSignedIn,  } = useAuth();
 	const links = [
 		{
 			children: <Logo />,
@@ -34,10 +32,6 @@ const Navigation = () => {
 		},
 	]
 	
-	const { data } = api.users.getUser.useQuery({
-		email: user?.emailAddresses[0]?.emailAddress as string,
-	});
-	console.log(data)
 	return (
 		<Box
 			as="nav"
