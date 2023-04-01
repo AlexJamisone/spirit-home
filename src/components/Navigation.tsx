@@ -1,7 +1,12 @@
-import { Box, Link as ChakraLink } from '@chakra-ui/react';
+import { Box, Link as ChakraLink, Icon } from '@chakra-ui/react';
+import { useAuth, UserButton, useUser } from '@clerk/nextjs';
+import { SlHandbag } from 'react-icons/sl';
 import Link from 'next/link';
 import Logo from './Logo';
+import { api } from '~/utils/api';
 const Navigation = () => {
+	const { isSignedIn } = useAuth();
+	const { user } = useUser();
 	const links = [
 		{
 			children: <Logo />,
@@ -20,11 +25,19 @@ const Navigation = () => {
 			path: '/devilery',
 		},
 		{
-			children: 'Вход',
-			path: '/signin',
+			children: isSignedIn ? 'Профиль' : 'Войти',
+			path: isSignedIn ? '/profile' : '/signin',
 		},
-	];
-
+		{
+			children: <Icon as={SlHandbag} boxSize={6} />,
+			path: '/cart',
+		},
+	]
+	
+	const { data } = api.users.getUser.useQuery({
+		email: user?.emailAddresses[0]?.emailAddress as string,
+	});
+	console.log(data)
 	return (
 		<Box
 			as="nav"
@@ -44,6 +57,7 @@ const Navigation = () => {
 					{children}
 				</ChakraLink>
 			))}
+			{isSignedIn ? <UserButton /> : null}
 		</Box>
 	);
 };

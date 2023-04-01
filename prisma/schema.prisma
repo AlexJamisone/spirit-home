@@ -12,11 +12,20 @@ datasource db {
 
 // Define the data model for users
 model User {
-    id        String    @id @unique
-    role      Role      @default(USER)
-    cart      Cart?
-    orders    Order[]
-    comments  Comment[]
+    id         String     @id @unique
+    role       Role       @default(USER)
+    cart       Cart?
+    orders     Order[]
+    comments   Comment[]
+    categories Catrgory[]
+}
+
+model Catrgory {
+    id          String  @id @unique @default(cuid())
+    title       String  @unique
+    path        String
+    createdBy   User    @relation(fields: [createdById], references: [id])
+    createdById String
 }
 
 // Define the data model for products

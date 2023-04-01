@@ -346,11 +346,11 @@ export const ruRU: LocalizationResource = {
 			imageFormTitle: 'Аватар',
 			imageFormSubtitle: 'Загрузить',
 			imageFormDestructiveActionSubtitle: 'Удалить',
-			fileDropAreaTitle: 'Drag file here, or...',
-			fileDropAreaAction: 'Select file',
+			fileDropAreaTitle: 'Перетащите файл сюда или...',
+			fileDropAreaAction: 'Выберите файл',
 			fileDropAreaHint:
-				'Upload a JPG, PNG, GIF, or WEBP image smaller than 10 MB',
-			successMessage: 'Your profile has been updated.',
+				'Загрузите изображение в формате JPG, PNG, GIF или WEBP размером менее 10 МБ.',
+			successMessage: 'Ваш профиль был обновлен.',
 		},
 		usernamePage: {
 			title: 'Update username',
