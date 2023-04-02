@@ -1,10 +1,10 @@
-import { Box, Link as ChakraLink, Icon } from '@chakra-ui/react';
-import { UserButton, useAuth } from '@clerk/nextjs';
+import { Box, Link as ChakraLink, Icon, Spinner } from '@chakra-ui/react';
+import { UserButton, useAuth, ClerkLoading } from '@clerk/nextjs';
 import Link from 'next/link';
 import { SlHandbag } from 'react-icons/sl';
 import Logo from './Logo';
 const Navigation = () => {
-	const { isSignedIn,  } = useAuth();
+	const { isSignedIn } = useAuth();
 	const links = [
 		{
 			children: <Logo />,
@@ -30,8 +30,8 @@ const Navigation = () => {
 			children: <Icon as={SlHandbag} boxSize={6} />,
 			path: '/cart',
 		},
-	]
-	
+	];
+
 	return (
 		<Box
 			as="nav"
@@ -51,7 +51,13 @@ const Navigation = () => {
 					{children}
 				</ChakraLink>
 			))}
-			{isSignedIn ? <UserButton /> : null}
+			{isSignedIn ? (
+				<UserButton />
+			) : (
+				<ClerkLoading>
+					<Spinner />
+				</ClerkLoading>
+			)}
 		</Box>
 	);
 };

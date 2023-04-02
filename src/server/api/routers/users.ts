@@ -3,23 +3,14 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { filterUserForClient } from '~/server/helpers/filterUserForClient';
 
-import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
+import { createTRPCRouter, publicProcedure, privetProcedure } from '~/server/api/trpc';
 
 export const usersRouter = createTRPCRouter({
-	getUser: publicProcedure
-		.input(z.object({ email: z.string() }))
-		.query(async ({ input, ctx }) => {
-			const [user] = await clerkClient.users.getUserList({
-				emailAddress: [input.email],
-			});
-			if (!user)
-				throw new TRPCError({
-					code: 'NOT_FOUND',
-					message: 'User not found',
-				});
+	getUser: privetProcedure
+		.query(async ({ ctx }) => {
 			const findUser = await ctx.prisma.user.findUnique({
 				where: {
-					id: user.id
+					id: ctx.userId
 				},
 				include: {
 					cart: true,
@@ -32,21 +23,22 @@ export const usersRouter = createTRPCRouter({
 			if(!findUser) {
 				await ctx.prisma.user.create({
 					data: {
-						id: user.id,
-					}
-				})
-				return await ctx.prisma.user.findUnique({
-					where: {
-						id: user.id
-					},
-					include: {
-						cart: true,
-						comments: true,
-						orders: true,
-						categories: true
+						id: ctx.userId,
 					}
 				})
 			}
-			return filterUserForClient(user, findUser)
+			const [user] = await clerkClient.users.getUserList({
+				userId: [ctx.userId]
+			});
+			if (!user)
+				throw new TRPCError({
+					code: 'NOT_FOUND',
+					message: 'User not found',
+				});
+			const userClerk = filterUserForClient(user)
+			return {
+				...userClerk,
+				...findUser
+			}
 		}),
 });
