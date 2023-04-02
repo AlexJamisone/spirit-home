@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Logo = (props: {size?: number, color?: string}) => {
+const Logo = (props: { size?: number; color?: string }) => {
 	return (
 		<svg
 			version="1.1"
@@ -11,7 +11,7 @@ const Logo = (props: {size?: number, color?: string}) => {
 			viewBox="0 0 807 373"
 			width={props.size ?? 150}
 			height={props.size ?? 150}
-			fill={props.color ?? ""}
+			fill={props.color ?? ''}
 		>
 			<path
 				d="M592.4,346.6c-16.1-39-32.2-78.1-48.3-117.1c-3-7.2-6-14.4-8.9-21.6c-0.9-2.4-2.4-3.5-5-3.4c-2,0.1-4,0.1-6,0

@@ -19,7 +19,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 				<meta name="description" content="" />
 			</Head>
 			<ClerkProvider {...pageProps} localization={ruRU}>
-				<Navigation/>
+				<Navigation />
 				<Component {...pageProps} />
 			</ClerkProvider>
 		</ChakraProvider>

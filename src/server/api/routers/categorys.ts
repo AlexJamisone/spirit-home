@@ -18,9 +18,9 @@ export const categorysRouter = createTRPCRouter({
 				data: {
 					path: input.path,
 					title: input.title,
-					createdById: userId
+					createdById: userId,
 				},
 			});
-			return categories
+			return categories;
 		}),
 });

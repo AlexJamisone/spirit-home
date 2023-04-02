@@ -1,7 +1,5 @@
 const DevileryPage = () => {
-  return (
-    <div>DevileryPage</div>
-  )
-}
+	return <div>DevileryPage</div>;
+};
 
-export default DevileryPage
+export default DevileryPage;
