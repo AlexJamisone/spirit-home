@@ -51,15 +51,18 @@ const Menu = () => {
 	return (
 		<Box
 			as={motion.div}
+			initial={{x: -75}}
+			animate={{x: 0}}
 			display="flex"
 			flexDirection="column"
 			alignItems="center"
 			cursor="pointer"
+			position='fixed'
 			gap={5}
 			w={isOpen ? ['250px'] : ['70px']}
 			bgColor="#FFCC99"
 			transitionDuration="0.5s"
-			h={['100vh']}
+			maxH={['100%']}
 			overflow="hidden"
 			onHoverStart={() => setIsOpen(true)}
 			onHoverEnd={() => setIsOpen(false)}
