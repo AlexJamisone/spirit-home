@@ -4,7 +4,7 @@ import { Center, Spinner } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import AdminProfile from '~/components/AdminProfile';
 import { useEffect } from 'react';
-import UserProfile from '~/components/UserProfile';
+import UserProfilePage from '~/components/UserProfile';
 import { buildClerkProps, clerkClient, getAuth } from '@clerk/nextjs/server';
 import { GetServerSideProps } from 'next';
 const ProfilePage = () => {
@@ -26,9 +26,9 @@ const ProfilePage = () => {
 	if (!data) return null;
 	return (
 		<SignedIn>
-			<Center>
-				{data.role === 'USER' ? <UserProfile /> : <AdminProfile />}
-			</Center>
+			<>
+				{data.role === 'USER' ? <UserProfilePage /> : <AdminProfile />}
+			</>
 		</SignedIn>
 	);
 };

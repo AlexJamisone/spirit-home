@@ -7,6 +7,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { ruRU } from '~/localization/ruRu';
 
 import { api } from '~/utils/api';
+import '../styles/globals.css'
 
 import Head from 'next/head';
 import Navigation from '~/components/Navigation';
