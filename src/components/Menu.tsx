@@ -1,38 +1,57 @@
-import { Box, Icon, Stack, Text, Button } from '@chakra-ui/react';
-import { useState } from 'react';
+import { Box, Button, Icon, Text } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { useReducer, useState } from 'react';
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
-import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 import { BsBookmarks } from 'react-icons/bs';
+import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 import { SlHandbag } from 'react-icons/sl';
+import { MenuReducer, type MenuState } from '~/reducers/Menu.reducer';
 
 const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);
+	const initial_state: MenuState = {
+		home: true,
+		cart: false,
+		favorites: false,
+		orders: false,
+		settings: false,
+	};
+	const [state, dispatch] = useReducer(MenuReducer, initial_state);
 	const menuItems = [
 		{
 			icon: AiOutlineHome,
 			title: 'Home',
-			state: true,
+			state: state.home,
+			type: 'SET_HOME',
+			payload: true,
 		},
 		{
 			icon: HiOutlineClipboardDocumentList,
 			title: 'Заказы',
-			state: false,
+			state: state.orders,
+			type: 'SET_ORDERS',
+			payload: true,
 		},
 		{
 			icon: SlHandbag,
 			title: 'Корзина',
-			state: false,
+			state: state.cart,
+			type: 'SET_CART',
+			payload: true,
 		},
 		{
 			icon: BsBookmarks,
 			title: 'Избранное',
-			state: false,
+			state: state.favorites,
+			type: 'SET_FAVORITES',
+			payload: true,
 		},
 		{
 			icon: AiOutlineUser,
 			title: 'Профиль',
-			state: false,
+			state: state.settings,
+			type: 'SET_SETTINGS',
+			payload: true,
 		},
 	];
 	return (
@@ -41,6 +60,7 @@ const Menu = () => {
 			display="flex"
 			flexDirection="column"
 			alignItems="center"
+			cursor="pointer"
 			gap={5}
 			w={isOpen ? ['250px'] : ['70px']}
 			bgColor="#FFCC99"
@@ -52,8 +72,9 @@ const Menu = () => {
 			py={5}
 			roundedRight={20}
 		>
-			{menuItems.map(({ icon, state, title }) => (
+			{menuItems.map(({ icon, state, title, type, payload }) => (
 				<Button
+					onClick={() => dispatch({ type, payload })}
 					isActive={state}
 					rounded="50px"
 					variant="ghost"
