@@ -7,10 +7,12 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { ruRU } from '~/localization/ruRu';
 
 import { api } from '~/utils/api';
-import '../styles/globals.css'
+import '../styles/globals.css';
 
 import Head from 'next/head';
 import Navigation from '~/components/Navigation';
+
+import { MenuContextProdiver } from '~/context/Menu.context';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
 	return (
@@ -21,7 +23,9 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 			</Head>
 			<ClerkProvider {...pageProps} localization={ruRU}>
 				<Navigation />
-				<Component {...pageProps} />
+				<MenuContextProdiver>
+					<Component {...pageProps} />
+				</MenuContextProdiver>
 			</ClerkProvider>
 		</ChakraProvider>
 	);

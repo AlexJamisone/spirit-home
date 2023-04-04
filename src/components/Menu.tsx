@@ -1,55 +1,49 @@
 import { Box, Button, Icon, Text } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { useReducer, useState } from 'react';
+import { useState } from 'react';
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
 import { BsBookmarks } from 'react-icons/bs';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 import { SlHandbag } from 'react-icons/sl';
-import { MenuReducer, type MenuState } from '~/reducers/Menu.reducer';
+import { useMenuContext } from '~/context/Menu.context';
 
 const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const initial_state: MenuState = {
-		home: true,
-		cart: false,
-		favorites: false,
-		orders: false,
-		settings: false,
-	};
-	const [state, dispatch] = useReducer(MenuReducer, initial_state);
+	const { menuState, dispatchMenu } = useMenuContext();
+
 	const menuItems = [
 		{
 			icon: AiOutlineHome,
 			title: 'Home',
-			state: state.home,
+			state: menuState.home,
 			type: 'SET_HOME',
 			payload: true,
 		},
 		{
 			icon: HiOutlineClipboardDocumentList,
 			title: 'Заказы',
-			state: state.orders,
+			state: menuState.orders,
 			type: 'SET_ORDERS',
 			payload: true,
 		},
 		{
 			icon: SlHandbag,
 			title: 'Корзина',
-			state: state.cart,
+			state: menuState.cart,
 			type: 'SET_CART',
 			payload: true,
 		},
 		{
 			icon: BsBookmarks,
 			title: 'Избранное',
-			state: state.favorites,
+			state: menuState.favorites,
 			type: 'SET_FAVORITES',
 			payload: true,
 		},
 		{
 			icon: AiOutlineUser,
 			title: 'Профиль',
-			state: state.settings,
+			state: menuState.settings,
 			type: 'SET_SETTINGS',
 			payload: true,
 		},
@@ -74,7 +68,7 @@ const Menu = () => {
 		>
 			{menuItems.map(({ icon, state, title, type, payload }) => (
 				<Button
-					onClick={() => dispatch({ type, payload })}
+					onClick={() => dispatchMenu({ type, payload })}
 					isActive={state}
 					rounded="50px"
 					variant="ghost"

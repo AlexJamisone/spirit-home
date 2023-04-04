@@ -6,33 +6,33 @@ export type MenuState = {
 	settings: boolean;
 };
 
-export interface SetHomeAction {
+interface SetHomeAction {
 	// type: 'SET_HOME';
-    type: string
+	type: string;
 	payload: boolean;
 }
-export interface SetOrdersAction {
+interface SetOrdersAction {
 	// type: 'SET_ORDERS';
-    type: string
+	type: string;
 	payload: boolean;
 }
-export interface SetCartAction {
+interface SetCartAction {
 	// type: 'SET_CART';
-    type: string
+	type: string;
 	payload: boolean;
 }
-export interface SetFavoritesAction {
+interface SetFavoritesAction {
 	// type: 'SET_FAVORITES';
-    type: string
+	type: string;
 	payload: boolean;
 }
-export interface SetSettingsAction {
+interface SetSettingsAction {
 	// type: 'SET_SETTINGS';
-    type: string
+	type: string;
 	payload: boolean;
 }
 
-type Action =
+export type Action =
 	| SetCartAction
 	| SetHomeAction
 	| SetOrdersAction
@@ -84,4 +84,11 @@ export const MenuReducer = (state: MenuState, action: Action): MenuState => {
 		default:
 			return state;
 	}
+};
+export const initial_state: MenuState = {
+	home: true,
+	cart: false,
+	favorites: false,
+	orders: false,
+	settings: false,
 };
