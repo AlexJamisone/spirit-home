@@ -1,44 +1,46 @@
 import {
+	Button,
+	Link as ChakraLink,
 	Menu,
 	MenuButton,
-	MenuList,
 	MenuItem,
-	MenuItemOption,
-	MenuGroup,
-	MenuOptionGroup,
-	MenuDivider,
-	Link as ChakraLink,
-	Button,
+	MenuList,
 	Spinner,
 } from '@chakra-ui/react';
-import { IoIosArrowDown } from 'react-icons/io';
 import Link from 'next/link';
+import { IoIosArrowDown } from 'react-icons/io';
 
-import React from 'react';
 import { api } from '~/utils/api';
 
 const Category = () => {
 	const { data: categories, isLoading } =
 		api.categorys.getCategorys.useQuery();
-	if (isLoading) return <Spinner />;
-	if (!categories) return <div>No Categories yet!</div>;
+	// if (!categories) return <div>No Categories yet!</div>;
 	return (
 		<Menu>
-			<MenuButton as={Button} variant="ghost" rightIcon={<IoIosArrowDown />}>
+			<MenuButton
+				as={Button}
+				variant="ghost"
+				rightIcon={<IoIosArrowDown />}
+			>
 				Категории
 			</MenuButton>
 			<MenuList>
-				{categories.map(({ id, path, title }) => (
-					<MenuItem key={id}>
-						<ChakraLink
-							as={Link}
-							href={path}
-							_hover={{ textDecoration: 'none' }}
-						>
-							{title}
-						</ChakraLink>
-					</MenuItem>
-				))}
+				{categories?.map(({ id, path, title }) =>
+					isLoading ? (
+						<Spinner key={id} />
+					) : (
+						<MenuItem key={id}>
+							<ChakraLink
+								as={Link}
+								href={`/categories/${path}`}
+								_hover={{ textDecoration: 'none' }}
+							>
+								{title}
+							</ChakraLink>
+						</MenuItem>
+					)
+				)}
 			</MenuList>
 		</Menu>
 	);
