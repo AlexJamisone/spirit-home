@@ -1,4 +1,4 @@
-import { useAuth, SignedIn, useUser } from '@clerk/nextjs';
+import { useAuth, SignedIn } from '@clerk/nextjs';
 import { api } from '~/utils/api';
 import { Center, Spinner } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
@@ -6,7 +6,7 @@ import AdminProfile from '~/components/AdminProfile';
 import { useEffect } from 'react';
 import UserProfilePage from '~/components/UserProfile';
 import { buildClerkProps, clerkClient, getAuth } from '@clerk/nextjs/server';
-import { GetServerSideProps } from 'next';
+import type  { GetServerSideProps } from 'next';
 const ProfilePage = () => {
 	const router = useRouter();
 	const { isSignedIn } = useAuth();
@@ -26,9 +26,7 @@ const ProfilePage = () => {
 	if (!data) return null;
 	return (
 		<SignedIn>
-			<>
-				{data.role === 'USER' ? <UserProfilePage /> : <AdminProfile />}
-			</>
+			<>{data.role === 'USER' ? <UserProfilePage /> : <AdminProfile />}</>
 		</SignedIn>
 	);
 };

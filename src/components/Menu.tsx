@@ -1,63 +1,54 @@
-import { Box, Button, Icon, Text } from '@chakra-ui/react';
+import { Box, Stack, Icon, Text, Link as ChakraLink, AbsoluteCenter } from '@chakra-ui/react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
 import { BsBookmarks } from 'react-icons/bs';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 import { SlHandbag } from 'react-icons/sl';
-import { useMenuContext } from '~/context/Menu.context';
 
 const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);
-	const { menuState, dispatchMenu } = useMenuContext();
+	const router = useRouter();
 
 	const menuItems = [
 		{
 			icon: AiOutlineHome,
 			title: 'Home',
-			state: menuState.home,
-			type: 'SET_HOME',
-			payload: true,
+			path: '/profile',
 		},
 		{
 			icon: HiOutlineClipboardDocumentList,
 			title: 'Заказы',
-			state: menuState.orders,
-			type: 'SET_ORDERS',
-			payload: true,
+			path: '/profile/orders',
 		},
 		{
 			icon: SlHandbag,
 			title: 'Корзина',
-			state: menuState.cart,
-			type: 'SET_CART',
-			payload: true,
+			path: '/profile/cart',
 		},
 		{
 			icon: BsBookmarks,
 			title: 'Избранное',
-			state: menuState.favorites,
-			type: 'SET_FAVORITES',
-			payload: true,
+			path: '/profile/favorites',
 		},
 		{
 			icon: AiOutlineUser,
 			title: 'Профиль',
-			state: menuState.settings,
-			type: 'SET_SETTINGS',
-			payload: true,
+			path: '/profile/settings',
 		},
 	];
 	return (
 		<Box
 			as={motion.div}
-			initial={{x: -75}}
-			animate={{x: 0}}
+			initial={{ x: -75 }}
+			animate={{ x: 0 }}
 			display="flex"
 			flexDirection="column"
 			alignItems="center"
 			cursor="pointer"
-			position='fixed'
+			position="fixed"
 			gap={5}
 			w={isOpen ? ['250px'] : ['70px']}
 			bgColor="#FFCC99"
@@ -67,22 +58,19 @@ const Menu = () => {
 			onHoverStart={() => setIsOpen(true)}
 			onHoverEnd={() => setIsOpen(false)}
 			py={5}
+			my='10%'
 			roundedRight={20}
 		>
-			{menuItems.map(({ icon, state, title, type, payload }) => (
-				<Button
-					onClick={() => dispatchMenu({ type, payload })}
-					isActive={state}
+			{menuItems.map(({ icon, path, title }) => (
+				<ChakraLink
 					rounded="50px"
 					variant="ghost"
 					key={title}
-					as={motion.div}
-					initial={{ opacity: 0 }}
-					animate={{ opacity: 1 }}
-					transitionDuration="0.5s"
+					as={Link}
+					href={path}
 					h={'50px'}
+					display="flex"
 					alignItems="center"
-					position="relative"
 					w={['80%']}
 					justifyContent="center"
 					gap={5}
@@ -90,10 +78,16 @@ const Menu = () => {
 						bgColor: '#F0E6E6',
 						rounded: '50px',
 					}}
+					bgColor={router.pathname === path ? '#F0E6E6' : ''}
 					overflowX="hidden"
+					transition='all .5s ease-in-out'
 				>
 					{isOpen ? (
-						<>
+						<Stack
+							direction="row"
+							alignContent="center"
+							justifyContent="center"
+						>
 							<Icon as={icon} boxSize={6} />
 							<Text
 								overflowX="hidden"
@@ -104,11 +98,11 @@ const Menu = () => {
 							>
 								{title}
 							</Text>
-						</>
+						</Stack>
 					) : (
 						<Icon as={icon} boxSize={6} />
 					)}
-				</Button>
+				</ChakraLink>
 			))}
 		</Box>
 	);

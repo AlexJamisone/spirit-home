@@ -1,4 +1,5 @@
 import { type AppType } from 'next/app';
+import { SignedIn, SignedOut } from '@clerk/nextjs';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from '~/chakra/theme';
@@ -11,8 +12,7 @@ import '../styles/globals.css';
 
 import Head from 'next/head';
 import Navigation from '~/components/Navigation';
-
-import { MenuContextProdiver } from '~/context/Menu.context';
+import Menu from '~/components/Menu';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
 	return (
@@ -22,10 +22,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 				<meta name="description" content="" />
 			</Head>
 			<ClerkProvider {...pageProps} localization={ruRU}>
-				<Navigation />
-				<MenuContextProdiver>
+				<SignedIn>
+					<Menu />
+					<Navigation />
 					<Component {...pageProps} />
-				</MenuContextProdiver>
+				</SignedIn>
+				<SignedOut>
+					<Navigation />
+					<Component {...pageProps} />
+				</SignedOut>
 			</ClerkProvider>
 		</ChakraProvider>
 	);
