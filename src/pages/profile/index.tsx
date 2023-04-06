@@ -26,7 +26,7 @@ const ProfilePage = () => {
 	if (!data) return null;
 	return (
 		<SignedIn>
-			<>{data.role === 'USER' ? <UserProfilePage /> : <AdminProfile />}</>
+			{data.role === 'USER' ? <UserProfilePage /> : <AdminProfile />}
 		</SignedIn>
 	);
 };

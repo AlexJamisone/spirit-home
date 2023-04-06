@@ -8,7 +8,7 @@ import {
 export const categorysRouter = createTRPCRouter({
 	getCategorys: publicProcedure.query(async ({ ctx }) => {
 		const categories = await ctx.prisma.catrgory.findMany();
-		return [categories];
+		return categories;
 	}),
 	createCategory: privetProcedure
 		.input(z.object({ title: z.string(), path: z.string().includes('/') }))

@@ -1,19 +1,18 @@
-import { Box, Link as ChakraLink, Icon, Spinner } from '@chakra-ui/react';
+import {
+	Box,
+	Link as ChakraLink,
+	Icon,
+	Spinner,
+	Stack,
+} from '@chakra-ui/react';
 import { UserButton, useAuth, ClerkLoading } from '@clerk/nextjs';
 import Link from 'next/link';
 import { SlHandbag } from 'react-icons/sl';
 import Logo from './Logo';
+import Category from './Category';
 const Navigation = () => {
 	const { isSignedIn } = useAuth();
 	const links = [
-		{
-			children: <Logo />,
-			path: '/',
-		},
-		{
-			children: 'Продукт',
-			path: '/products',
-		},
 		{
 			children: 'О нас',
 			path: '/about',
@@ -36,28 +35,40 @@ const Navigation = () => {
 		<Box
 			as="nav"
 			display="flex"
-			justifyContent="space-evenly"
 			alignItems="center"
+			justifyContent="space-between"
 		>
-			{links.map(({ children, path }) => (
-				<ChakraLink
-					as={Link}
-					href={path}
-					key={path}
-					_hover={{
-						textDecoration: 'none',
-					}}
-				>
-					{children}
-				</ChakraLink>
-			))}
-			{isSignedIn ? (
-				<UserButton />
-			) : (
-				<ClerkLoading>
-					<Spinner />
-				</ClerkLoading>
-			)}
+			<ChakraLink as={Link} href="/" alignSelf="flex-start" ml={16}>
+				<Logo />
+			</ChakraLink>
+			<Stack
+				direction="row"
+				justifyContent="flex-end"
+				gap={10}
+				mr={16}
+				alignItems="center"
+			>
+				<Category />
+				{links.map(({ children, path }) => (
+					<ChakraLink
+						as={Link}
+						href={path}
+						key={path}
+						_hover={{
+							textDecoration: 'none',
+						}}
+					>
+						{children}
+					</ChakraLink>
+				))}
+				{isSignedIn ? (
+					<UserButton />
+				) : (
+					<ClerkLoading>
+						<Spinner />
+					</ClerkLoading>
+				)}
+			</Stack>
 		</Box>
 	);
 };
