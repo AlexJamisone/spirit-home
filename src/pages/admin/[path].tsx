@@ -1,12 +1,10 @@
 import { Center } from '@chakra-ui/react';
 import { UserProfile } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
-import { api } from '~/utils/api';
+import ProtectionRoutes from '~/guards/ProtectionRoutes';
 
 const Admin = () => {
 	const router = useRouter();
-    const {data: user} = api.users.getUser.useQuery()
-    if(user?.role !== "ADMIN") return null
 	const { path } = router.query;
 	const handlAdmin = () => {
 		switch (path) {
@@ -14,7 +12,11 @@ const Admin = () => {
 				return <UserProfile />;
 		}
 	};
-	return <Center>{handlAdmin()}</Center>;
+	return (
+		<ProtectionRoutes type="ADMIN">
+			<Center>{handlAdmin()}</Center>
+		</ProtectionRoutes>
+	);
 };
 
 export default Admin;

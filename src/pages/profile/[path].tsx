@@ -1,23 +1,16 @@
 import { Center, Spinner } from '@chakra-ui/react';
-import { UserProfile, useAuth } from '@clerk/nextjs';
+import { UserProfile } from '@clerk/nextjs';
 import { buildClerkProps, clerkClient, getAuth } from '@clerk/nextjs/server';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useEffect } from 'react';
 import UserOrders from '~/components/User/UserOrders';
+import ProtectionRoutes from '~/guards/ProtectionRoutes';
 import { api } from '~/utils/api';
 const ProfilePage = () => {
 	const router = useRouter();
-	const {path} = router.query
-	const { isSignedIn } = useAuth();
+	const { path } = router.query;
 	const { data: user, isLoading } = api.users.getUser.useQuery();
-	useEffect(() => {
-		if (!isSignedIn) {
-			void router.push('/signin');
-		} else if(user?.role !== "USER") {
-			void router.push('/')
-		}
-	}, [isSignedIn]);
+
 	if (isLoading)
 		return (
 			<Center>
@@ -25,20 +18,19 @@ const ProfilePage = () => {
 			</Center>
 		);
 	if (!user) return null;
-	console.log(path)
 	const handlProfile = () => {
-		switch(path) {
+		switch (path) {
 			case 'main':
-				return <Center>Main page for user</Center>
+				return <Center>Main page for user</Center>;
 			case 'orders':
-				return <UserOrders/>
+				return <UserOrders />;
 			case 'settings':
-				return <UserProfile/>
+				return <UserProfile />;
 		}
-	}
+	};
 	return (
 		<Center>
-			{handlProfile()}
+			<ProtectionRoutes type="USER">{handlProfile()}</ProtectionRoutes>
 		</Center>
 	);
 };
