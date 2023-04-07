@@ -11,7 +11,7 @@ export const categorysRouter = createTRPCRouter({
 		return categories;
 	}),
 	createCategory: privetProcedure
-		.input(z.object({ title: z.string(), path: z.string().includes('/') }))
+		.input(z.object({ title: z.string().nonempty(), path: z.string().nonempty() }))
 		.mutation(async ({ ctx, input }) => {
 			const { userId } = ctx;
 			const categories = await ctx.prisma.catrgory.create({
