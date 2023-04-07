@@ -8,7 +8,7 @@ import {
 import { UserButton, useAuth, ClerkLoading } from '@clerk/nextjs';
 import Link from 'next/link';
 import { SlHandbag } from 'react-icons/sl';
-import Logo from './Logo';
+import Logo from '../assets/Logo';
 import Category from './Category';
 const Navigation = () => {
 	const { isSignedIn } = useAuth();
@@ -22,15 +22,17 @@ const Navigation = () => {
 			path: '/devilery',
 		},
 		{
-			children: isSignedIn ? 'Профиль' : 'Войти',
-			path: isSignedIn ? '/profile' : '/signin',
+			children: 'Войти',
+			path: '/signin',
 		},
 		{
 			children: <Icon as={SlHandbag} boxSize={6} />,
 			path: '/cart',
 		},
 	];
-
+	if (isSignedIn) {
+		links.splice(2, 1);
+	}
 	return (
 		<Box
 			as="nav"
@@ -38,14 +40,14 @@ const Navigation = () => {
 			alignItems="center"
 			justifyContent="space-between"
 		>
-			<ChakraLink as={Link} href="/" alignSelf="flex-start" ml={16}>
+			<ChakraLink as={Link} href="/" alignSelf="flex-start" ml="60">
 				<Logo />
 			</ChakraLink>
 			<Stack
 				direction="row"
 				justifyContent="flex-end"
 				gap={10}
-				mr={16}
+				mr="60"
 				alignItems="center"
 			>
 				<Category />

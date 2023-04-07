@@ -1,10 +1,14 @@
+import { Center } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 
 const CategorysPage = () => {
 	const router = useRouter();
-	const { catig } = router.query;
-	console.log(catig);
-	return <div>Youre now on {catig}</div>;
+	const { path } = router.query;
+	return (
+		<Center>
+			Youre now on {path}
+		</Center>
+	)
 };
 
 export default CategorysPage;

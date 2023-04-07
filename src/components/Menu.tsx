@@ -1,44 +1,24 @@
-import { Box, Stack, Icon, Text, Link as ChakraLink, AbsoluteCenter } from '@chakra-ui/react';
+import {
+	Box,
+	Link as ChakraLink,
+	Icon,
+	Stack,
+	Text
+} from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { motion } from 'framer-motion';
 import { useState } from 'react';
-import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
-import { BsBookmarks } from 'react-icons/bs';
-import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
-import { SlHandbag } from 'react-icons/sl';
+import { api } from '~/utils/api';
+import { menuItems } from '~/constants/menuItem';
 
 const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const router = useRouter();
+	const { data: user } = api.users.getUser.useQuery();
+	if (!user) return null;
 
-	const menuItems = [
-		{
-			icon: AiOutlineHome,
-			title: 'Home',
-			path: '/profile',
-		},
-		{
-			icon: HiOutlineClipboardDocumentList,
-			title: 'Заказы',
-			path: '/profile/orders',
-		},
-		{
-			icon: SlHandbag,
-			title: 'Корзина',
-			path: '/profile/cart',
-		},
-		{
-			icon: BsBookmarks,
-			title: 'Избранное',
-			path: '/profile/favorites',
-		},
-		{
-			icon: AiOutlineUser,
-			title: 'Профиль',
-			path: '/profile/settings',
-		},
-	];
+	
 	return (
 		<Box
 			as={motion.div}
@@ -58,52 +38,54 @@ const Menu = () => {
 			onHoverStart={() => setIsOpen(true)}
 			onHoverEnd={() => setIsOpen(false)}
 			py={5}
-			my='10%'
+			my="10%"
 			roundedRight={20}
 		>
-			{menuItems.map(({ icon, path, title }) => (
-				<ChakraLink
-					rounded="50px"
-					variant="ghost"
-					key={title}
-					as={Link}
-					href={path}
-					h={'50px'}
-					display="flex"
-					alignItems="center"
-					w={['80%']}
-					justifyContent="center"
-					gap={5}
-					_hover={{
-						bgColor: '#F0E6E6',
-						rounded: '50px',
-					}}
-					bgColor={router.pathname === path ? '#F0E6E6' : ''}
-					overflowX="hidden"
-					transition='all .5s ease-in-out'
-				>
-					{isOpen ? (
-						<Stack
-							direction="row"
-							alignContent="center"
-							justifyContent="center"
-						>
-							<Icon as={icon} boxSize={6} />
-							<Text
-								overflowX="hidden"
-								as={motion.p}
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1, type: 'spring' }}
-								w={['100%']}
+			{menuItems
+				.filter(({ type }) => user.role === type)
+				.map(({ icon, path, title }) => (
+					<ChakraLink
+						rounded="50px"
+						variant="ghost"
+						key={title}
+						as={Link}
+						href={path}
+						h={'50px'}
+						display="flex"
+						alignItems="center"
+						w={['80%']}
+						justifyContent="center"
+						gap={5}
+						_hover={{
+							bgColor: '#F0E6E6',
+							rounded: '50px',
+						}}
+						bgColor={router.pathname === path ? '#F0E6E6' : ''}
+						overflowX="hidden"
+						transition="all .5s ease-in-out"
+					>
+						{isOpen ? (
+							<Stack
+								direction="row"
+								alignContent="center"
+								justifyContent="center"
 							>
-								{title}
-							</Text>
-						</Stack>
-					) : (
-						<Icon as={icon} boxSize={6} />
-					)}
-				</ChakraLink>
-			))}
+								<Icon as={icon} boxSize={6} color="#261F1F" />
+								<Text
+									overflowX="hidden"
+									as={motion.p}
+									initial={{ opacity: 0 }}
+									animate={{ opacity: 1, type: 'spring' }}
+									w={['100%']}
+								>
+									{title}
+								</Text>
+							</Stack>
+						) : (
+							<Icon as={icon} boxSize={6} color="#261F1F" />
+						)}
+					</ChakraLink>
+				))}
 		</Box>
 	);
 };

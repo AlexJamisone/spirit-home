@@ -5,7 +5,7 @@ import {
 	MenuButton,
 	MenuItem,
 	MenuList,
-	Spinner,
+	Spinner
 } from '@chakra-ui/react';
 import Link from 'next/link';
 import { IoIosArrowDown } from 'react-icons/io';
@@ -15,13 +15,14 @@ import { api } from '~/utils/api';
 const Category = () => {
 	const { data: categories, isLoading } =
 		api.categorys.getCategorys.useQuery();
-	// if (!categories) return <div>No Categories yet!</div>;
+
 	return (
 		<Menu>
 			<MenuButton
 				as={Button}
 				variant="ghost"
 				rightIcon={<IoIosArrowDown />}
+				
 			>
 				Категории
 			</MenuButton>

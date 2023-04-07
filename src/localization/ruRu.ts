@@ -440,7 +440,7 @@ export const ruRU: LocalizationResource = {
 			},
 		},
 		passwordPage: {
-			title: 'Set password',
+			title: 'Установи пароль',
 			successMessage: 'Your password has been set.',
 		},
 		mfaPage: {
