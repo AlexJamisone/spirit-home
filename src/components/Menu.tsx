@@ -15,7 +15,7 @@ import { menuItems } from '~/constants/menuItem';
 const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const router = useRouter();
-	const { data: user } = api.users.getUser.useQuery();
+	const { data: user } = api.users.get.useQuery();
 	if (!user) return null;
 
 	

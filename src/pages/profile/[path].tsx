@@ -9,7 +9,7 @@ import { api } from '~/utils/api';
 const ProfilePage = () => {
 	const router = useRouter();
 	const { path } = router.query;
-	const { data: user, isLoading } = api.users.getUser.useQuery();
+	const { data: user, isLoading } = api.users.get.useQuery();
 
 	if (isLoading)
 		return (

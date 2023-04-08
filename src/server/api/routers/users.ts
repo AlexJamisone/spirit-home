@@ -5,7 +5,7 @@ import { filterUserForClient } from '~/server/helpers/filterUserForClient';
 import { createTRPCRouter, privetProcedure } from '~/server/api/trpc';
 
 export const usersRouter = createTRPCRouter({
-	getUser: privetProcedure.query(async ({ ctx }) => {
+	get: privetProcedure.query(async ({ ctx }) => {
 		const findUser = await ctx.prisma.user.findUnique({
 			where: {
 				id: ctx.userId,

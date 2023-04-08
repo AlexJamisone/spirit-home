@@ -9,6 +9,7 @@ import {
 	Tag,
 	TagLabel,
 	TagLeftIcon,
+	Text,
 	useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
@@ -91,6 +92,7 @@ const AdminCategorys = () => {
 			}
 		);
 	};
+	// console.log()
 	if (!categorys) return null;
 	return (
 		<Stack direction="column" w={['300px']} gap={5}>
@@ -139,30 +141,34 @@ const AdminCategorys = () => {
 					Сохранить
 				</Button>
 			) : null}
-			<Box display="flex" gap={5} flexWrap="wrap">
-				{categorys.map(({ id, title, path }) => (
-					<Tag
-						key={id}
-						display="flex"
-						alignItems="center"
-						px={3}
-						gap={2}
-						variant="subtle"
-					>
-						<TagLabel
-							cursor="pointer"
-							onClick={() => handleEdit(id, title, path)}
+			<Box display="flex" gap={5} flexWrap="wrap" justifyContent="center">
+				{categorys.length === 0 ? (
+					<Text>Пока что категорий нет</Text>
+				) : (
+					categorys.map(({ id, title, path }) => (
+						<Tag
+							key={id}
+							display="flex"
+							alignItems="center"
+							px={3}
+							gap={2}
+							variant="subtle"
 						>
-							{title}
-						</TagLabel>
-						<TagLeftIcon
-							boxSize={5}
-							as={GrFormClose}
-							cursor="pointer"
-							onClick={() => deletHandler(id, title)}
-						/>
-					</Tag>
-				))}
+							<TagLabel
+								cursor="pointer"
+								onClick={() => handleEdit(id, title, path)}
+							>
+								{title}
+							</TagLabel>
+							<TagLeftIcon
+								boxSize={5}
+								as={GrFormClose}
+								cursor="pointer"
+								onClick={() => deletHandler(id, title)}
+							/>
+						</Tag>
+					))
+				)}
 			</Box>
 		</Stack>
 	);
