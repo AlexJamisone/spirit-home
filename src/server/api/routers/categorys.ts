@@ -8,7 +8,7 @@ import {
 
 export const categorysRouter = createTRPCRouter({
 	get: publicProcedure.query(async ({ ctx }) => {
-		const categories = await ctx.prisma.catrgory.findMany();
+		const categories = await ctx.prisma.catergory.findMany();
 		return categories;
 	}),
 	create: privetProcedure
@@ -20,7 +20,7 @@ export const categorysRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			const { userId } = ctx;
-			const create = await ctx.prisma.catrgory.create({
+			const create = await ctx.prisma.catergory.create({
 				data: {
 					path: input.path,
 					title: input.title,
@@ -32,7 +32,7 @@ export const categorysRouter = createTRPCRouter({
 	delete: privetProcedure
 		.input(z.object({ id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
-			const deleteCategory = await ctx.prisma.catrgory.delete({
+			const deleteCategory = await ctx.prisma.catergory.delete({
 				where: {
 					id: input.id,
 				},
@@ -53,7 +53,7 @@ export const categorysRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			const updateCategory = await ctx.prisma.catrgory.update({
+			const updateCategory = await ctx.prisma.catergory.update({
 				where: {
 					id: input.id,
 				},

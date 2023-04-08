@@ -12,12 +12,12 @@ datasource db {
 
 // Define the data model for users
 model User {
-    id         String     @id @unique
-    role       Role       @default(USER)
+    id         String      @id @unique
+    role       Role        @default(USER)
     cart       Cart?
     orders     Order[]
     comments   Comment[]
-    categories Catrgory[]
+    categories Catergory[]
     address    Address[]
 }
 
@@ -29,24 +29,28 @@ model Address {
     point  String
 }
 
-model Catrgory {
-    id          String @id @unique @default(cuid())
-    title       String @unique
+model Catergory {
+    id          String    @id @unique @default(cuid())
+    title       String    @unique
     path        String
-    createdBy   User   @relation(fields: [createdById], references: [id])
+    createdBy   User      @relation(fields: [createdById], references: [id])
     createdById String
+    Product     Product[]
 }
 
 // Define the data model for products
 model Product {
-    id          String       @id @default(cuid())
-    name        String
-    description String
-    price       Float
-    image       String?
-    comments    Comment[]
-    CartEntry   CartEntry[]
-    OrderEntry  OrderEntry[]
+    id            String       @id @default(cuid())
+    name          String
+    description   String
+    price         Float
+    image         String?
+    quantity      Int
+    comments      Comment[]
+    CartEntry     CartEntry[]
+    OrderEntry    OrderEntry[]
+    category      Catergory?   @relation(fields: [categoryTitle], references: [title])
+    categoryTitle String?
 }
 
 // Define the data model for carts
