@@ -28,8 +28,8 @@ export const ruRU: LocalizationResource = {
 	formFieldLabel__password: 'Пароль',
 	formFieldLabel__newPassword: 'Новый пароль',
 	formFieldLabel__confirmPassword: 'Потверди пароль',
-	formFieldLabel__firstName: 'First name',
-	formFieldLabel__lastName: 'Last name',
+	formFieldLabel__firstName: 'Имя',
+	formFieldLabel__lastName: 'Фамилия',
 	formFieldLabel__backupCode: 'Backup code',
 	formFieldLabel__organizationName: 'Organization name',
 	formFieldLabel__role: 'Role',
@@ -48,7 +48,7 @@ export const ruRU: LocalizationResource = {
 	formFieldInputPlaceholder__backupCode: '',
 	formFieldInputPlaceholder__organizationName: '',
 	formFieldAction__forgotPassword: 'Forgot password',
-	formFieldHintText__optional: 'Optional',
+	formFieldHintText__optional: 'Необязательно',
 	formButtonPrimary: 'Продолжить',
 	signInEnterPasswordTitle: 'Enter your password',
 	backButton: 'Back',
@@ -79,12 +79,12 @@ export const ruRU: LocalizationResource = {
 			actionLink: 'Вход',
 		},
 		emailLink: {
-			title: 'Verify your email',
-			subtitle: 'to continue to {{applicationName}}',
-			formTitle: 'Verification link',
+			title: 'Подтвердите Ваш электронный адрес',
+			subtitle: 'продолжить с {{applicationName}}',
+			formTitle: 'Идентификация по email',
 			formSubtitle:
-				'Use the verification link sent to your email address',
-			resendButton: 'Resend link',
+				'Используй ссылку для потверждения которая была отправленна на указанный email',
+			resendButton: 'Отправить повторно',
 			verified: {
 				title: 'Successfully signed up',
 			},
@@ -98,8 +98,8 @@ export const ruRU: LocalizationResource = {
 			},
 		},
 		emailCode: {
-			title: 'Verify your email',
-			subtitle: 'to continue to {{applicationName}}',
+			title: 'Подтвердите Ваш email',
+			subtitle: 'продолжить с {{applicationName}}',
 			formTitle: 'Verification code',
 			formSubtitle:
 				'Enter the verification code sent to your email address',

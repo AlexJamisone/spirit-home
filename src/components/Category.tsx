@@ -14,7 +14,7 @@ import { api } from '~/utils/api';
 
 const Category = () => {
 	const { data: categories, isLoading } =
-		api.categorys.getCategorys.useQuery();
+		api.categorys.get.useQuery();
 
 	return (
 		<Menu>
