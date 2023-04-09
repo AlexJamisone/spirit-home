@@ -1,10 +1,11 @@
 import { TRPCError } from '@trpc/server';
-import { string, z } from 'zod';
+import { z } from 'zod';
 import {
 	createTRPCRouter,
 	privetProcedure,
 	publicProcedure,
 } from '~/server/api/trpc';
+import { supabase } from '~/utils/supabase';
 
 export const productsRouter = createTRPCRouter({
 	get: publicProcedure.query(async ({ ctx }) => {
@@ -35,4 +36,31 @@ export const productsRouter = createTRPCRouter({
 			});
 			return createProduct;
 		}),
+	delete: privetProcedure
+		.input(
+			z.object({
+				path: z.string(),
+				id: z.string(),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			await supabase.storage.from('products').remove([input.path]);
+			return await ctx.prisma.product.delete({
+				where: {
+					id: input.id,
+				},
+			});
+		}),
+	// update: privetProcedure.input(
+	// 	z.object({
+	// 		name: z.string().nonempty(),
+	// 		description: z.string().nonempty(),
+	// 		price: z.number().nonnegative(),
+	// 		image: z.string().nonempty(),
+	// 		category: z.string().nonempty(),
+	// 		quantity: z.number().nonnegative(),
+	// 	})
+	// ).mutation(async({ctx, input}) => {
+
+	// }),
 });

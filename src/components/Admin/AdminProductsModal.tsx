@@ -18,9 +18,13 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import Image from 'next/image';
-import { useState, type ChangeEvent } from 'react';
+import { useReducer, type ChangeEvent } from 'react';
 import { api } from '~/utils/api';
 import { uploadImages } from '~/utils/uploadImage';
+import {
+	FormProductReducer,
+	initialState
+} from '~/reducer/FormReducer';
 
 type AdminProductsModalProps = {
 	isOpen: boolean;
@@ -28,25 +32,69 @@ type AdminProductsModalProps = {
 };
 
 const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
-	const [form, setForm] = useState({
-		name: '',
-		description: '',
-		price: 0,
-		image: '',
-		category: '',
-		quantity: 0,
-	});
-	const clearForm = () => {
-		setForm({
-			category: '',
-			description: '',
-			image: '',
-			name: '',
-			price: 0,
-			quantity: 0,
-		});
-	};
+
+	const [form, dispatch] = useReducer(FormProductReducer, initialState);
+
 	const ctx = api.useContext();
+	const toast = useToast();
+
+	const { data: categories } = api.categorys.get.useQuery();
+	const { mutate: create, isLoading } = api.products.create.useMutation();
+
+	const handelUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
+		let file: File | undefined;
+		const { data, error } = await uploadImages(file, e);
+		if (!data) return null;
+		if (error) {
+			toast({
+				description: `Ошибка: ${error.message}`,
+				isClosable: true,
+				duration: 5000,
+				status: 'error',
+			});
+		}
+		dispatch({ type: 'SET_IMG', payload: data.path });
+	};
+	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+		const { name, value } = e.target;
+		switch (name) {
+			case 'name':
+				dispatch({ type: 'SET_NAME', payload: value });
+				break;
+			case 'price':
+				dispatch({ type: 'SET_PRICE', payload: Number(value) });
+				break;
+			case 'quantity':
+				dispatch({ type: 'SET_QT', payload: Number(value) });
+				break;
+			default:
+				break;
+		}
+	};
+	const handleSubmit = () => {
+		create(
+			{
+				name: form.name,
+				description: form.description,
+				category: form.category,
+				image: form.image,
+				price: form.price,
+				quantity: form.quantity,
+			},
+			{
+				onSuccess: () => {
+					toast({
+						description: `Товар ${form.name} создан!🤙`,
+						status: 'success',
+						isClosable: true,
+					});
+					dispatch({ type: 'SET_CLEAR', payload: initialState });
+					void ctx.products.invalidate();
+					onClose();
+				},
+			}
+		);
+	};
 	const formInfo = [
 		{
 			type: 'text',
@@ -74,54 +122,8 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 			name: 'quantity',
 		},
 	];
-	const toast = useToast();
-	const { data: categories } = api.categorys.get.useQuery();
-	const { mutate: create, isLoading } = api.products.create.useMutation();
-	const handelUpdateImage = async (e: ChangeEvent<HTMLInputElement>) => {
-		let file: File | undefined;
-		const { data, error } = await uploadImages(file, e);
-		if (!data) return null;
-		if (error) {
-			toast({
-				description: `Ошибка: ${error.message}`,
-				isClosable: true,
-				duration: 5000,
-				status: 'error',
-			});
-		}
-		setForm({ ...form, image: data.path });
-	};
-	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		setForm({
-			...form,
-			[name]: name === 'price' || name === 'quantity' ? +value : value,
-		});
-	};
-	const handleSubmit = () => {
-		create(
-			{
-				name: form.name,
-				description: form.description,
-				category: form.category,
-				image: form.image,
-				price: form.price,
-				quantity: form.quantity,
-			},
-			{
-				onSuccess: () => {
-					toast({
-						description: `Товар ${form.name} создан!🤙`,
-						status: 'success',
-						isClosable: true,
-					});
-					clearForm();
-					void ctx.products.invalidate();
-					onClose();
-				},
-			}
-		);
-	};
+
+	console.log(form);
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
@@ -154,7 +156,7 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 							) : null}
 							<Input
 								type="file"
-								onChange={(e) => handelUpdateImage(e)}
+								onChange={(e) => handelUploadImage(e)}
 							/>
 							{formInfo.map(
 								({
@@ -172,10 +174,9 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 												value={value}
 												h="200px"
 												onChange={(e) =>
-													setForm({
-														...form,
-														description:
-															e.target.value,
+													dispatch({
+														type: 'SET_DESCR',
+														payload: e.target.value,
 													})
 												}
 											/>
@@ -185,9 +186,7 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 												type={type}
 												value={value}
 												name={name}
-												onChange={(e) =>
-													handleInputChange(e)
-												}
+												onChange={handleInputChange}
 											/>
 										)}
 									</Stack>
@@ -196,9 +195,9 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 							<FormLabel>Категория</FormLabel>
 							<Select
 								onChange={(e) =>
-									setForm({
-										...form,
-										category: e.target.value,
+									dispatch({
+										type: 'SET_CATEG',
+										payload: e.target.value,
 									})
 								}
 							>
