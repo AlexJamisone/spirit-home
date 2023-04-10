@@ -84,7 +84,8 @@ const AdminProducts = () => {
 					}) => (
 						<Stack
 							key={id}
-							w={['300px']}
+							maxW={['300px']}
+							h={['350px']}
 							direction="column"
 							justifyContent="center"
 							alignItems="center"

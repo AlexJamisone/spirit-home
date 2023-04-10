@@ -1,10 +1,4 @@
-import {
-	Box,
-	Link as ChakraLink,
-	Icon,
-	Stack,
-	Text
-} from '@chakra-ui/react';
+import { Box, Link as ChakraLink, Icon, Stack, Text } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -17,8 +11,7 @@ const Menu = () => {
 	const router = useRouter();
 	const { data: user } = api.users.get.useQuery();
 	if (!user) return null;
-
-	
+	const pathFromRoutes = router.query;
 	return (
 		<Box
 			as={motion.div}
@@ -60,7 +53,13 @@ const Menu = () => {
 							bgColor: '#F0E6E6',
 							rounded: '50px',
 						}}
-						bgColor={router.pathname === path ? '#F0E6E6' : ''}
+						bgColor={
+							`/profile/${pathFromRoutes.path as string}` ===
+								path ||
+							`/admin/${pathFromRoutes.path as string}` === path
+								? '#F0E6E6'
+								: ''
+						}
 						overflowX="hidden"
 						transition="all .5s ease-in-out"
 					>

@@ -24,7 +24,7 @@ const Category = () => {
 			>
 				Категории
 			</MenuButton>
-			<MenuList>
+			<MenuList zIndex={20}>
 				{categories?.map(({ id, path, title }) =>
 					isLoading ? (
 						<Spinner key={id} />
