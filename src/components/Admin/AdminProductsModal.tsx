@@ -7,7 +7,6 @@ import {
 	Input,
 	Modal,
 	ModalBody,
-	ModalCloseButton,
 	ModalContent,
 	ModalFooter,
 	ModalHeader,
@@ -15,16 +14,17 @@ import {
 	Select,
 	Stack,
 	Textarea,
+	useDisclosure,
 	useToast,
+	Image,
+	Spinner,
 } from '@chakra-ui/react';
-import Image from 'next/image';
 import { useReducer, type ChangeEvent } from 'react';
+import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
 import { uploadImages } from '~/utils/uploadImage';
-import {
-	FormProductReducer,
-	initialState
-} from '~/reducer/FormReducer';
+import AdminProductsAlert from './AdminProductsAlert';
+import { motion } from 'framer-motion';
 
 type AdminProductsModalProps = {
 	isOpen: boolean;
@@ -32,7 +32,11 @@ type AdminProductsModalProps = {
 };
 
 const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
-
+	const {
+		isOpen: openAlert,
+		onClose: onCloseAlert,
+		onToggle: toggleAlert,
+	} = useDisclosure();
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 
 	const ctx = api.useContext();
@@ -88,7 +92,7 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 						status: 'success',
 						isClosable: true,
 					});
-					dispatch({ type: 'SET_CLEAR', payload: initialState });
+					dispatch({ type: 'SET_CLEAR' });
 					void ctx.products.invalidate();
 					onClose();
 				},
@@ -123,13 +127,11 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 		},
 	];
 
-	console.log(form);
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
+		<Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>Создать новый товар</ModalHeader>
-				<ModalCloseButton />
 				<ModalBody>
 					<FormControl
 						as="form"
@@ -142,6 +144,11 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 							{form.image !== '' ? (
 								<Center>
 									<Image
+										initial={{ opacity: 0 }}
+										animate={{ opacity: 1 }}
+										transitionDuration="0.5s"
+										as={motion.img}
+										fallback={<Spinner />}
 										src={`${
 											process.env
 												.NEXT_PUBLIC_SUPABASE_URL as string
@@ -212,7 +219,22 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 							<Button type="submit" isLoading={isLoading}>
 								Сохранить
 							</Button>
-							<Button onClick={() => onClose()}>Отмена</Button>
+							<Button
+								onClick={() =>
+									form.image === ''
+										? onClose()
+										: toggleAlert()
+								}
+							>
+								Отмена
+							</Button>
+							<AdminProductsAlert
+								isOpen={openAlert}
+								onCloseAlert={onCloseAlert}
+								path={form.image}
+								onCloseModal={onClose}
+								dispatch={dispatch}
+							/>
 						</ModalFooter>
 					</FormControl>
 				</ModalBody>

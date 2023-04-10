@@ -1,0 +1,69 @@
+import {
+	AlertDialog,
+	AlertDialogBody,
+	AlertDialogFooter,
+	AlertDialogContent,
+	AlertDialogOverlay,
+	Button,
+} from '@chakra-ui/react';
+import { api } from '~/utils/api';
+import { type Dispatch, useRef } from 'react';
+import type { Action, FormProductState } from '~/reducer/FormReducer';
+
+type AdminProductsAlertProps = {
+	isOpen: boolean;
+	onCloseAlert: () => void;
+	path: string;
+	onCloseModal: () => void;
+	dispatch: Dispatch<Action>;
+};
+
+const AdminProductsAlert = ({
+	isOpen,
+	onCloseAlert,
+	path,
+	onCloseModal,
+	dispatch,
+}: AdminProductsAlertProps) => {
+	const cancelRef = useRef<HTMLButtonElement>(null);
+	const { mutate: deletImage, isLoading } = api.products.deletImage.useMutation();
+	const handlDeletImage = (path: string) => {
+		deletImage(
+			{ path },
+			{
+				onSuccess: () => {
+					dispatch({ type: 'SET_CLEAR' });
+                    onCloseAlert()
+					onCloseModal();
+				},
+			}
+		);
+	};
+	return (
+		<AlertDialog
+			motionPreset="slideInBottom"
+			isCentered
+			isOpen={isOpen}
+			onClose={onCloseAlert}
+			leastDestructiveRef={cancelRef}
+		>
+			<AlertDialogOverlay />
+			<AlertDialogContent>
+				<AlertDialogBody>Cбросить данные о товаре?</AlertDialogBody>
+				<AlertDialogFooter gap={5}>
+					<Button onClick={onCloseAlert}>Отмена</Button>
+					<Button
+						colorScheme="red"
+						ref={cancelRef}
+                        isLoading={isLoading}
+						onClick={() => handlDeletImage(path)}
+					>
+						Сбросить
+					</Button>
+				</AlertDialogFooter>
+			</AlertDialogContent>
+		</AlertDialog>
+	);
+};
+
+export default AdminProductsAlert;

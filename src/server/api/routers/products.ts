@@ -51,6 +51,11 @@ export const productsRouter = createTRPCRouter({
 				},
 			});
 		}),
+	deletImage: privetProcedure
+		.input(z.object({ path: z.string().nonempty() }))
+		.mutation(async ({ input }) => {
+			await supabase.storage.from('products').remove([input.path]);
+		}),
 	// update: privetProcedure.input(
 	// 	z.object({
 	// 		name: z.string().nonempty(),

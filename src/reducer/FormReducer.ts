@@ -1,4 +1,4 @@
-interface FormProductState {
+export interface FormProductState {
 	name: string;
 	description: string;
 	image: string;
@@ -33,10 +33,9 @@ interface SetQuantityAction {
 }
 interface SetClearAction {
 	type: 'SET_CLEAR';
-	payload: FormProductState;
 }
 
-type Action =
+export type Action =
 	| SetCategoryAction
 	| SetNameAction
 	| SetDescriptionAction
