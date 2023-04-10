@@ -56,16 +56,31 @@ export const productsRouter = createTRPCRouter({
 		.mutation(async ({ input }) => {
 			await supabase.storage.from('products').remove([input.path]);
 		}),
-	// update: privetProcedure.input(
-	// 	z.object({
-	// 		name: z.string().nonempty(),
-	// 		description: z.string().nonempty(),
-	// 		price: z.number().nonnegative(),
-	// 		image: z.string().nonempty(),
-	// 		category: z.string().nonempty(),
-	// 		quantity: z.number().nonnegative(),
-	// 	})
-	// ).mutation(async({ctx, input}) => {
-
-	// }),
+	update: privetProcedure
+		.input(
+			z.object({
+				id: z.string().nonempty(),
+				name: z.string().nonempty(),
+				description: z.string().nonempty(),
+				price: z.number().nonnegative(),
+				image: z.string().nonempty(),
+				category: z.string().nonempty(),
+				quantity: z.number().nonnegative(),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.product.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					name: input.name,
+					description: input.description,
+					price: input.price,
+					image: input.image,
+					categoryTitle: input.category,
+					quantity: input.quantity,
+				},
+			});
+		}),
 });

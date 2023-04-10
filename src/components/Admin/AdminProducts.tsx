@@ -1,23 +1,29 @@
 import {
+	Box,
 	Button,
 	Icon,
+	IconButton,
+	Image,
+	Spinner,
 	Stack,
+	Tag,
 	Text,
 	useDisclosure,
-	Tag,
-	IconButton,
 	useToast,
-	Spinner,
-	Box,
 } from '@chakra-ui/react';
+import type { Product } from '@prisma/client';
+import { useReducer, useState } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import { IoIosAddCircleOutline } from 'react-icons/io';
-import AdminProductsModal from './AdminProductsModal';
+import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
-import Image from 'next/image';
+import AdminProductsModal from './AdminProductsModal';
+import { RiEdit2Fill } from 'react-icons/ri';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
+	const [edit, setEdit] = useState(false);
+	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 	const toast = useToast();
 
 	const ctx = api.useContext();
@@ -52,6 +58,23 @@ const AdminProducts = () => {
 			}
 		);
 	};
+	const handlEdit = (product: Product) => {
+		setEdit(true);
+		dispatch({
+			type: 'SET_ALL',
+			payload: {
+				id: product.id,
+				category: product.categoryTitle as string,
+				description: product.description,
+				image: product.image as string,
+				name: product.name,
+				price: product.price,
+				quantity: product.quantity,
+			},
+		});
+		onToggle();
+	};
+
 	return (
 		<Stack
 			direction="row"
@@ -72,16 +95,17 @@ const AdminProducts = () => {
 			{products.length === 0 ? (
 				<Text>Пока что нету Товаров</Text>
 			) : (
-				products.map(
-					({
+				products.map((product) => {
+					const {
 						id,
-						image,
-						name,
 						categoryTitle,
 						description,
+						image,
+						name,
 						price,
 						quantity,
-					}) => (
+					} = product;
+					return (
 						<Stack
 							key={id}
 							maxW={['300px']}
@@ -99,6 +123,7 @@ const AdminProducts = () => {
 							cursor="pointer"
 							transition="all 0.1s linear"
 							position="relative"
+							zIndex={-0}
 						>
 							{isLoading ? (
 								<>
@@ -133,6 +158,7 @@ const AdminProducts = () => {
 										image as string
 									}`}
 									alt={name}
+									objectFit="cover"
 									width={100}
 									height={100}
 								/>
@@ -153,13 +179,28 @@ const AdminProducts = () => {
 										handleDelet(id, image as string, name)
 									}
 								/>
+								<IconButton
+									icon={
+										<Icon
+											as={RiEdit2Fill}
+											color="cyan.600"
+										/>
+									}
+									aria-label="editButton"
+									size="sm"
+									position="absolute"
+									top={10}
+									right={0}
+									zIndex={10}
+									onClick={() => handlEdit(product)}
+								/>
 							</Stack>
 							<Stack fontSize={16} textAlign="center">
 								<Text>{name}</Text>
 								<Text
 									fontSize={12}
 									textColor={'gray.500'}
-									maxH='100px'
+									maxH="100px"
 									overflow="hidden"
 								>
 									{description}
@@ -171,10 +212,17 @@ const AdminProducts = () => {
 								<Text>{`${quantity} шт`}</Text>
 							</Stack>
 						</Stack>
-					)
-				)
+					);
+				})
 			)}
-			<AdminProductsModal isOpen={isOpen} onClose={onClose} />
+			<AdminProductsModal
+				isOpen={isOpen}
+				onClose={onClose}
+				edit={edit}
+				form={form}
+				dispatch={dispatch}
+				setEdit={setEdit}
+			/>
 		</Stack>
 	);
 };

@@ -8,7 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { api } from '~/utils/api';
 import { type Dispatch, useRef } from 'react';
-import type { Action, FormProductState } from '~/reducer/FormReducer';
+import type { Action } from '~/reducer/FormReducer';
 
 type AdminProductsAlertProps = {
 	isOpen: boolean;
@@ -26,14 +26,15 @@ const AdminProductsAlert = ({
 	dispatch,
 }: AdminProductsAlertProps) => {
 	const cancelRef = useRef<HTMLButtonElement>(null);
-	const { mutate: deletImage, isLoading } = api.products.deletImage.useMutation();
+	const { mutate: deletImage, isLoading } =
+		api.products.deletImage.useMutation();
 	const handlDeletImage = (path: string) => {
 		deletImage(
 			{ path },
 			{
 				onSuccess: () => {
 					dispatch({ type: 'SET_CLEAR' });
-                    onCloseAlert()
+					onCloseAlert();
 					onCloseModal();
 				},
 			}
@@ -55,7 +56,7 @@ const AdminProductsAlert = ({
 					<Button
 						colorScheme="red"
 						ref={cancelRef}
-                        isLoading={isLoading}
+						isLoading={isLoading}
 						onClick={() => handlDeletImage(path)}
 					>
 						Сбросить

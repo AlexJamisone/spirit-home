@@ -1,4 +1,5 @@
 export interface FormProductState {
+	id: string;
 	name: string;
 	description: string;
 	image: string;
@@ -7,6 +8,10 @@ export interface FormProductState {
 	quantity: number;
 }
 
+interface SetIdAction {
+	type: 'SET_ID';
+	payload: string;
+}
 interface SetNameAction {
 	type: 'SET_NAME';
 	payload: string;
@@ -34,6 +39,10 @@ interface SetQuantityAction {
 interface SetClearAction {
 	type: 'SET_CLEAR';
 }
+interface SetAllAction {
+	type: 'SET_ALL';
+	payload: FormProductState;
+}
 
 export type Action =
 	| SetCategoryAction
@@ -42,9 +51,12 @@ export type Action =
 	| SetImageAction
 	| SetPriceAction
 	| SetQuantityAction
-	| SetClearAction;
+	| SetClearAction
+	| SetAllAction
+	| SetIdAction;
 
 export const initialState: FormProductState = {
+	id: '',
 	name: '',
 	description: '',
 	image: '',
@@ -58,6 +70,8 @@ export const FormProductReducer = (
 	action: Action
 ): FormProductState => {
 	switch (action.type) {
+		case 'SET_ID':
+			return { ...state, id: action.payload };
 		case 'SET_NAME':
 			return { ...state, name: action.payload };
 		case 'SET_DESCR':
@@ -72,6 +86,7 @@ export const FormProductReducer = (
 			return { ...state, quantity: action.payload };
 		case 'SET_CLEAR':
 			return {
+				id: '',
 				category: '',
 				description: '',
 				image: '',
@@ -79,5 +94,12 @@ export const FormProductReducer = (
 				price: 0,
 				quantity: 0,
 			};
+		case 'SET_ALL':
+			return {
+				...state,
+				...action.payload,
+			};
+		default:
+			return state;
 	}
 };

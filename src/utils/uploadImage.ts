@@ -28,8 +28,12 @@ export async function updateImage(
 	if (e.target.files) {
 		file = e.target.files[0];
 	}
-	const { data, error } = await supabase.storage
+	const { data: existingIMG } = await supabase.storage
 		.from('products')
 		.update(oldPath, file as File);
+	await supabase.storage.from('products').remove([existingIMG?.path as string]);
+	const { data, error } = await supabase.storage
+		.from('products')
+		.upload(`public/${file?.name as string}`, file as File);
 	return { data, error };
 }

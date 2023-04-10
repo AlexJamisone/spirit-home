@@ -19,45 +19,72 @@ import {
 	Image,
 	Spinner,
 } from '@chakra-ui/react';
-import { useReducer, type ChangeEvent } from 'react';
-import { FormProductReducer, initialState } from '~/reducer/FormReducer';
+import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { api } from '~/utils/api';
-import { uploadImages } from '~/utils/uploadImage';
+import { updateImage, uploadImages } from '~/utils/uploadImage';
 import AdminProductsAlert from './AdminProductsAlert';
 import { motion } from 'framer-motion';
+import type { Action, FormProductState } from '~/reducer/FormReducer';
 
 type AdminProductsModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
+	edit: boolean;
+	form: FormProductState;
+	dispatch: Dispatch<Action>;
+	setEdit: Dispatch<SetStateAction<boolean>>;
 };
 
-const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
+const AdminProductsModal = ({
+	isOpen,
+	onClose,
+	edit,
+	form,
+	dispatch,
+	setEdit,
+}: AdminProductsModalProps) => {
 	const {
 		isOpen: openAlert,
 		onClose: onCloseAlert,
 		onToggle: toggleAlert,
 	} = useDisclosure();
-	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 
 	const ctx = api.useContext();
 	const toast = useToast();
 
 	const { data: categories } = api.categorys.get.useQuery();
-	const { mutate: create, isLoading } = api.products.create.useMutation();
+	const { mutate: create, isLoading: isLoadingCreate } =
+		api.products.create.useMutation();
+	const { mutate: update, isLoading: isLoadingUpdate } =
+		api.products.update.useMutation();
 
 	const handelUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
 		let file: File | undefined;
-		const { data, error } = await uploadImages(file, e);
-		if (!data) return null;
-		if (error) {
-			toast({
-				description: `Ошибка: ${error.message}`,
-				isClosable: true,
-				duration: 5000,
-				status: 'error',
-			});
+		if (edit) {
+			const { data, error } = await updateImage(file, e, form.image);
+			if (!data) return null;
+			if (error?.name) {
+				toast({
+					description: `Ошибка: ${error.message}`,
+					isClosable: true,
+					duration: 5000,
+					status: 'error',
+				});
+			}
+			dispatch({ type: 'SET_IMG', payload: data.path });
+		} else {
+			const { data, error } = await uploadImages(file, e);
+			if (!data) return null;
+			if (error) {
+				toast({
+					description: `Ошибка: ${error.message}`,
+					isClosable: true,
+					duration: 5000,
+					status: 'error',
+				});
+			}
+			dispatch({ type: 'SET_IMG', payload: data.path });
 		}
-		dispatch({ type: 'SET_IMG', payload: data.path });
 	};
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -76,29 +103,56 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 		}
 	};
 	const handleSubmit = () => {
-		create(
-			{
-				name: form.name,
-				description: form.description,
-				category: form.category,
-				image: form.image,
-				price: form.price,
-				quantity: form.quantity,
-			},
-			{
-				onSuccess: () => {
-					toast({
-						description: `Товар ${form.name} создан!🤙`,
-						status: 'success',
-						isClosable: true,
-					});
-					dispatch({ type: 'SET_CLEAR' });
-					void ctx.products.invalidate();
-					onClose();
+		if (edit) {
+			update(
+				{
+					category: form.category,
+					description: form.description,
+					id: form.id,
+					image: form.image,
+					name: form.name,
+					price: form.price,
+					quantity: form.quantity,
 				},
-			}
-		);
+				{
+					onSuccess: () => {
+						toast({
+							description: `Обновление ${form.name} товара прошло успешно!🎉`,
+							status: 'info',
+						});
+						dispatch({ type: 'SET_CLEAR' });
+						void ctx.products.invalidate();
+						onClose();
+						setEdit(false);
+					},
+				}
+			);
+		} else {
+			create(
+				{
+					name: form.name,
+					description: form.description,
+					category: form.category,
+					image: form.image,
+					price: form.price,
+					quantity: form.quantity,
+				},
+				{
+					onSuccess: () => {
+						toast({
+							description: `Товар ${form.name} создан!🤙`,
+							status: 'success',
+							isClosable: true,
+						});
+						dispatch({ type: 'SET_CLEAR' });
+						void ctx.products.invalidate();
+						onClose();
+					},
+				}
+			);
+		}
 	};
+
 	const formInfo = [
 		{
 			type: 'text',
@@ -126,7 +180,6 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 			name: 'quantity',
 		},
 	];
-
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
 			<ModalOverlay />
@@ -201,6 +254,7 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 							)}
 							<FormLabel>Категория</FormLabel>
 							<Select
+								value={edit ? form.category : undefined}
 								onChange={(e) =>
 									dispatch({
 										type: 'SET_CATEG',
@@ -216,18 +270,35 @@ const AdminProductsModal = ({ isOpen, onClose }: AdminProductsModalProps) => {
 							</Select>
 						</Stack>
 						<ModalFooter gap={5}>
-							<Button type="submit" isLoading={isLoading}>
-								Сохранить
-							</Button>
 							<Button
-								onClick={() =>
-									form.image === ''
-										? onClose()
-										: toggleAlert()
+								type="submit"
+								isLoading={
+									edit ? isLoadingUpdate : isLoadingCreate
 								}
 							>
-								Отмена
+								{edit ? 'Обновить' : 'Сохранить'}
 							</Button>
+							{edit ? (
+								<Button
+									onClick={() => {
+										onClose();
+										dispatch({ type: 'SET_CLEAR' });
+										setEdit(false);
+									}}
+								>
+									Отмена
+								</Button>
+							) : (
+								<Button
+									onClick={() =>
+										form.image === ''
+											? onClose()
+											: toggleAlert()
+									}
+								>
+									Отмена
+								</Button>
+							)}
 							<AdminProductsAlert
 								isOpen={openAlert}
 								onCloseAlert={onCloseAlert}
