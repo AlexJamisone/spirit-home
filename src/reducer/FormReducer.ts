@@ -36,6 +36,7 @@ interface SetQuantityAction {
 	type: 'SET_QT';
 	payload: number;
 }
+
 interface SetClearAction {
 	type: 'SET_CLEAR';
 }

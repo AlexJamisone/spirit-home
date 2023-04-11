@@ -148,6 +148,18 @@ const AdminProductsModal = ({
 						void ctx.products.invalidate();
 						onClose();
 					},
+					onError: (e) => {
+						const errorMessage =
+							e.data?.zodError?.fieldErrors?.description;
+						toast({
+							description: `Ошибка: ${
+								errorMessage?.[0] as string
+							}`,
+							status: 'error',
+							isClosable: true,
+							duration: 10000,
+						});
+					},
 				}
 			);
 		}
@@ -201,6 +213,7 @@ const AdminProductsModal = ({
 										animate={{ opacity: 1 }}
 										transitionDuration="0.5s"
 										as={motion.img}
+										objectFit="cover"
 										fallback={<Spinner />}
 										src={`${
 											process.env

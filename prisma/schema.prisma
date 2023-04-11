@@ -14,19 +14,24 @@ datasource db {
 model User {
     id         String      @id @unique
     role       Role        @default(USER)
+    firstName  String?
+    lastName   String?
+    email      String?
     cart       Cart?
     orders     Order[]
     comments   Comment[]
     categories Catergory[]
     address    Address[]
+    updateAt   DateTime    @default(now()) @updatedAt
 }
 
 model Address {
-    id     String @id @default(cuid())
-    user   User   @relation(fields: [userId], references: [id])
-    userId String @unique
-    city   String
-    point  String
+    id           String @id @default(cuid())
+    user         User   @relation(fields: [userId], references: [id])
+    userId       String @unique
+    city         String
+    contactPhone String
+    point        String
 }
 
 model Catergory {

@@ -15,13 +15,24 @@ export const usersRouter = createTRPCRouter({
 				comments: true,
 				orders: true,
 				categories: true,
+				address: true,
 			},
 		});
+		const [user] = await clerkClient.users.getUserList({
+			userId: [ctx.userId],
+		});
 
+		if (!user)
+			throw new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'User not found',
+			});
+		const userClerk = filterUserForClient(user);
 		if (!findUser) {
 			await ctx.prisma.user.create({
 				data: {
 					id: ctx.userId,
+					email: userClerk.email,
 				},
 			});
 			await ctx.prisma.cart.create({
@@ -30,15 +41,6 @@ export const usersRouter = createTRPCRouter({
 				},
 			});
 		}
-		const [user] = await clerkClient.users.getUserList({
-			userId: [ctx.userId],
-		});
-		if (!user)
-			throw new TRPCError({
-				code: 'NOT_FOUND',
-				message: 'User not found',
-			});
-		const userClerk = filterUserForClient(user);
 		return {
 			...userClerk,
 			...findUser,
