@@ -1,16 +1,15 @@
-import { Avatar, Spinner, Stack, Text } from '@chakra-ui/react';
-import { clerkClient } from '@clerk/nextjs/server';
+import { Spinner, Stack, Text, RadioGroup, Radio } from '@chakra-ui/react';
 import { api } from '~/utils/api';
-
+import { useState } from 'react';
+import type { OrderStatus } from '@prisma/client';
 const AdminOrders = () => {
-	const { data: orders, isLoading } = api.orders.get.useQuery();
+	const { data: orders } = api.orders.get.useQuery();
+	const [statusState, setStatusState] = useState<OrderStatus>('PENDING');
 	if (!orders) return null;
 	return (
-		<Stack>
+		<Stack direction="row" gap={5}>
 			{orders.length === 0 ? (
 				<>Пока что нету заказов</>
-			) : isLoading ? (
-				<Spinner />
 			) : (
 				orders.map(
 					({
@@ -25,13 +24,14 @@ const AdminOrders = () => {
 						<Stack
 							key={id}
 							w={['300px']}
-							h={['300px']}
+							h={['400px']}
 							direction="column"
 							border="1px solid #CBD5E0"
 							p={5}
 							rounded="3xl"
 							boxShadow="2xl"
 							position="relative"
+							cursor="pointer"
 						>
 							<Text>{`ФИО: ${user.firstName ?? ''} ${
 								user.lastName ?? ''
@@ -53,6 +53,25 @@ const AdminOrders = () => {
 								(acc, { product }) => acc + product.price,
 								0
 							)}`}</Text>
+							<Stack
+								justifyContent="center"
+								alignContent="center"
+							>
+								<Text textAlign="center">Статус</Text>
+								<RadioGroup
+									onChange={(value) =>
+										setStatusState(value as OrderStatus)
+									}
+									value={statusState}
+									display="flex"
+									flexDirection="column"
+								>
+									<Radio value="PENDING">В обработке</Radio>
+									<Radio value="PROCESSING">В пути</Radio>
+									<Radio value="COMPLETED">Доставлено</Radio>
+									<Radio value="CANCELLED">Отменён</Radio>
+								</RadioGroup>
+							</Stack>
 						</Stack>
 					)
 				)

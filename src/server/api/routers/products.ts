@@ -6,7 +6,6 @@ import {
 	publicProcedure,
 } from '~/server/api/trpc';
 import { supabase } from '~/utils/supabase';
-import { v4 as uuidv4 } from 'uuid';
 
 export const productsRouter = createTRPCRouter({
 	get: publicProcedure.query(async ({ ctx }) => {

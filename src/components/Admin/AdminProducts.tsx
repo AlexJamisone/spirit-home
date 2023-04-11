@@ -1,24 +1,19 @@
 import {
-	Box,
 	Button,
 	Icon,
-	IconButton,
-	Image,
-	Spinner,
 	Stack,
-	Tag,
 	Text,
 	useDisclosure,
-	useToast,
+	useToast
 } from '@chakra-ui/react';
 import type { Product } from '@prisma/client';
 import { useReducer, useState } from 'react';
-import { BsTrashFill } from 'react-icons/bs';
+
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
+import ProductsCard from '../ProductsCard';
 import AdminProductsModal from './AdminProductsModal';
-import { RiEdit2Fill } from 'react-icons/ri';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
@@ -27,6 +22,7 @@ const AdminProducts = () => {
 	const toast = useToast();
 
 	const ctx = api.useContext();
+	const { data: user } = api.users.get.useQuery();
 	const { data: products } = api.products.get.useQuery();
 	const { mutate: deleteProducts, isLoading } =
 		api.products.delete.useMutation();
@@ -96,122 +92,15 @@ const AdminProducts = () => {
 				<Text>Пока что нету Товаров</Text>
 			) : (
 				products.map((product) => {
-					const {
-						id,
-						categoryTitle,
-						description,
-						image,
-						name,
-						price,
-						quantity,
-					} = product;
 					return (
-						<Stack
-							key={id}
-							maxW={['300px']}
-							h={['350px']}
-							direction="column"
-							justifyContent="center"
-							alignItems="center"
-							p={5}
-							border="1px solid #CBD5E0"
-							rounded="3xl"
-							boxShadow="2xl"
-							_hover={{
-								transform: 'scale(1.1)',
-							}}
-							cursor="pointer"
-							transition="all 0.1s linear"
-							position="relative"
-							zIndex={-0}
-						>
-							{isLoading ? (
-								<>
-									<Box
-										position="absolute"
-										w="100%"
-										height="100%"
-										top={0}
-										left={0}
-										zIndex={20}
-										bgColor="whiteAlpha.600"
-										rounded="3xl"
-									></Box>
-									<Spinner
-										position="absolute"
-										zIndex={20}
-										size="xl"
-									/>
-								</>
-							) : null}
-							<Stack
-								direction={['row']}
-								position="relative"
-								justifyContent="center"
-								w="100%"
-							>
-								<Image
-									src={`${
-										process.env
-											.NEXT_PUBLIC_SUPABASE_URL as string
-									}/storage/v1/object/public/products/${
-										image as string
-									}`}
-									alt={name}
-									objectFit="cover"
-									width={100}
-									height={100}
-								/>
-								<IconButton
-									icon={
-										<Icon
-											as={BsTrashFill}
-											color="red.400"
-										/>
-									}
-									aria-label="deletButton"
-									size="sm"
-									position="absolute"
-									top={0}
-									right={0}
-									zIndex={10}
-									onClick={() =>
-										handleDelet(id, image as string, name)
-									}
-								/>
-								<IconButton
-									icon={
-										<Icon
-											as={RiEdit2Fill}
-											color="cyan.600"
-										/>
-									}
-									aria-label="editButton"
-									size="sm"
-									position="absolute"
-									top={10}
-									right={0}
-									zIndex={10}
-									onClick={() => handlEdit(product)}
-								/>
-							</Stack>
-							<Stack fontSize={16} textAlign="center">
-								<Text>{name}</Text>
-								<Text
-									fontSize={12}
-									textColor={'gray.500'}
-									maxH="100px"
-									overflow="hidden"
-								>
-									{description}
-								</Text>
-							</Stack>
-							<Tag>{categoryTitle}</Tag>
-							<Stack dir="row">
-								<Text>{`${price} ₽`}</Text>
-								<Text>{`${quantity} шт`}</Text>
-							</Stack>
-						</Stack>
+						<ProductsCard
+							key={product.id}
+							admin={user?.role}
+							product={product}
+							isLoading={isLoading}
+							handlEdit={handlEdit}
+							handleDelet={handleDelet}
+						/>
 					);
 				})
 			)}
