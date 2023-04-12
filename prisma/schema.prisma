@@ -17,7 +17,6 @@ model User {
     firstName  String?
     lastName   String?
     email      String?
-    cart       Cart?
     orders     Order[]
     comments   Comment[]
     categories Catergory[]
@@ -43,78 +42,42 @@ model Catergory {
     Product     Product[]
 }
 
-// Define the data model for products
 model Product {
-    id            String       @id @default(cuid())
+    id            String     @id @default(cuid())
     name          String
     description   String
     price         Float
     image         String?
     quantity      Int
     comments      Comment[]
-    CartEntry     CartEntry[]
-    OrderEntry    OrderEntry[]
-    category      Catergory?   @relation(fields: [categoryTitle], references: [title])
+    orders        Order[]
+    category      Catergory? @relation(fields: [categoryTitle], references: [title])
     categoryTitle String?
 }
 
-// Define the data model for carts
-model Cart {
-    id       String      @id @unique @default(cuid())
-    user     User        @relation(fields: [userId], references: [id])
-    userId   String      @unique
-    products CartEntry[]
-}
-
-// Define the data model for cart entries
-model CartEntry {
-    id        String  @id @default(cuid())
-    cart      Cart    @relation(fields: [cartId], references: [id])
-    cartId    String
-    product   Product @relation(fields: [productId], references: [id])
-    productId String
-    quantity  String
-}
-
-// Define the data model for orders
 model Order {
-    id        String       @id @default(cuid())
-    user      User         @relation(fields: [userId], references: [id])
+    id        String      @id @default(cuid())
+    user      User?       @relation(fields: [userId], references: [id])
     userId    String
-    products  OrderEntry[]
-    total     Float
-    status    OrderStatus  @default(PENDING)
-    createdAt DateTime     @default(now())
+    products  Product[]
+    status    OrderStatus @default(PENDING)
+    createdAt DateTime    @default(now())
 }
 
-// Define the data model for order entries
-model OrderEntry {
-    id        String  @id @default(cuid())
-    order     Order   @relation(fields: [orderId], references: [id])
-    orderId   String
-    product   Product @relation(fields: [productId], references: [id])
-    productId String
-    quantity  String
-    price     Float
-}
-
-// Define the data model for comments
 model Comment {
     id        String  @id @default(cuid())
     user      User    @relation(fields: [userId], references: [id])
     userId    String
     product   Product @relation(fields: [productId], references: [id])
     productId String
-    text      String
+    value     String
 }
 
-// Define the role type
 enum Role {
     USER
     ADMIN
 }
 
-// Define the order status type
 enum OrderStatus {
     PENDING
     PROCESSING

@@ -10,15 +10,21 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import type { Product, Role } from '@prisma/client';
-import { SyntheticEvent } from 'react';
+import type { SyntheticEvent } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
+import { useCart } from '~/context/cartContext';
 
 type ProductsCardProps = {
 	product: Product;
 	handlEdit?: (product: Product) => void;
-	handleDelet?: (id: string, path: string, name: string) => void;
+	handleDelet?: (
+		id: string,
+		path: string,
+		name: string,
+		e: SyntheticEvent
+	) => void;
 	isLoading?: boolean;
-	admin?: Role
+	admin?: Role;
 };
 const ProductsCard = ({
 	product,
@@ -29,8 +35,9 @@ const ProductsCard = ({
 }: ProductsCardProps) => {
 	const { description, name, image, price, id, categoryTitle, quantity } =
 		product;
-	const handlButton = (e: SyntheticEvent) => {
-		console.log('button');
+	const { cartDispatch } = useCart();
+	const handlAddToCart = (e: SyntheticEvent) => {
+		cartDispatch({ type: 'ADD_TO_CART', payload: product });
 		e.stopPropagation();
 	};
 	return (
@@ -97,8 +104,8 @@ const ProductsCard = ({
 							top={0}
 							right={0}
 							zIndex={10}
-							onClick={() =>
-								handleDelet?.(id, image as string, name)
+							onClick={(e) =>
+								handleDelet?.(id, image as string, name, e)
 							}
 						/>
 					</>
@@ -129,7 +136,9 @@ const ProductsCard = ({
 				gap={16}
 			>
 				{admin === undefined || admin === 'USER' ? (
-					<Button onClick={(e) => handlButton(e)}>В корзину</Button>
+					<Button onClick={(e) => handlAddToCart(e)}>
+						В корзину
+					</Button>
 				) : (
 					<Text>{`${quantity} шт`}</Text>
 				)}

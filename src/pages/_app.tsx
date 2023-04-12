@@ -13,6 +13,7 @@ import '../styles/globals.css';
 import Head from 'next/head';
 import Navigation from '~/components/Navigation';
 import Menu from '~/components/Menu';
+import { CartProvider } from '~/context/cartContext';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
 	return (
@@ -22,15 +23,17 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 				<meta name="description" content="" />
 			</Head>
 			<ClerkProvider {...pageProps} localization={ruRU}>
-				<SignedIn>
-					<Menu />
-					<Navigation />
-					<Component {...pageProps} />
-				</SignedIn>
-				<SignedOut>
-					<Navigation />
-					<Component {...pageProps} />
-				</SignedOut>
+				<CartProvider>
+					<SignedIn>
+						<Menu />
+						<Navigation />
+						<Component {...pageProps} />
+					</SignedIn>
+					<SignedOut>
+						<Navigation />
+						<Component {...pageProps} />
+					</SignedOut>
+				</CartProvider>
 			</ClerkProvider>
 		</ChakraProvider>
 	);

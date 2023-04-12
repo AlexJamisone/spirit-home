@@ -16,7 +16,9 @@ export async function uploadImages(
 	}
 	const { data, error } = await supabase.storage
 		.from('products')
-		.upload(`public/${file?.name as string}`, file as File);
+		.upload(`public/${file?.name as string}`, file as File, {
+			upsert: true,
+		});
 	return { data, error };
 }
 
@@ -31,9 +33,11 @@ export async function updateImage(
 	const { data: existingIMG } = await supabase.storage
 		.from('products')
 		.update(oldPath, file as File);
-	await supabase.storage.from('products').remove([existingIMG?.path as string]);
+	await supabase.storage
+		.from('products')
+		.remove([existingIMG?.path as string]);
 	const { data, error } = await supabase.storage
 		.from('products')
-		.upload(`public/${file?.name as string}`, file as File);
+		.upload(`public/${file?.name as string}`, file as File, {upsert: true});
 	return { data, error };
 }

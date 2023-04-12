@@ -12,15 +12,7 @@ const AdminOrders = () => {
 				<>Пока что нету заказов</>
 			) : (
 				orders.map(
-					({
-						userId,
-						status,
-						createdAt,
-						id,
-						total,
-						products,
-						user,
-					}) => (
+					({ id, products, user }) => (
 						<Stack
 							key={id}
 							w={['300px']}
@@ -33,24 +25,26 @@ const AdminOrders = () => {
 							position="relative"
 							cursor="pointer"
 						>
-							<Text>{`ФИО: ${user.firstName ?? ''} ${
-								user.lastName ?? ''
-							}`}</Text>
-							<Text>Email: {user.email}</Text>
-							<Text>Телефон {user.address[0]?.contactPhone}</Text>
-							<Text>CДЭК: {user.address[0]?.point}</Text>
-							{products.map(({ id, product }) => (
+							<Text>
+								ФИО: {user?.firstName} {user?.lastName}
+							</Text>
+							<Text>Email: {user?.email}</Text>
+							<Text>
+								Телефон {user?.address[0]?.contactPhone}
+							</Text>
+							<Text>CДЭК: {user?.address[0]?.point}</Text>
+							{products.map(({ id, name, price }) => (
 								<Stack
 									key={id}
 									direction="row"
 									justifyContent="space-between"
 								>
-									<Text>{product.name}</Text>
-									<Text>{product.price}</Text>
+									<Text>{name}</Text>
+									<Text>{price}</Text>
 								</Stack>
 							))}
 							<Text>{`Итог: ${products.reduce(
-								(acc, { product }) => acc + product.price,
+								(acc, { price }) => acc + price,
 								0
 							)}`}</Text>
 							<Stack

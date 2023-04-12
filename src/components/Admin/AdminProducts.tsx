@@ -7,7 +7,7 @@ import {
 	useToast
 } from '@chakra-ui/react';
 import type { Product } from '@prisma/client';
-import { useReducer, useState } from 'react';
+import { useReducer, useState, type SyntheticEvent } from 'react';
 
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FormProductReducer, initialState } from '~/reducer/FormReducer';
@@ -29,7 +29,7 @@ const AdminProducts = () => {
 
 	if (!products) return null;
 
-	const handleDelet = (id: string, path: string, name: string) => {
+	const handleDelet = (id: string, path: string, name: string, e: SyntheticEvent) => {
 		deleteProducts(
 			{
 				id,
@@ -53,6 +53,7 @@ const AdminProducts = () => {
 				},
 			}
 		);
+		e.stopPropagation()
 	};
 	const handlEdit = (product: Product) => {
 		setEdit(true);
@@ -102,7 +103,7 @@ const AdminProducts = () => {
 							handleDelet={handleDelet}
 						/>
 					);
-				})
+				}).reverse()
 			)}
 			<AdminProductsModal
 				isOpen={isOpen}

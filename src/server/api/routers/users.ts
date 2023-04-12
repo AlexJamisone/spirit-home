@@ -11,7 +11,6 @@ export const usersRouter = createTRPCRouter({
 				id: ctx.userId,
 			},
 			include: {
-				cart: true,
 				comments: true,
 				orders: true,
 				categories: true,
@@ -33,11 +32,6 @@ export const usersRouter = createTRPCRouter({
 				data: {
 					id: ctx.userId,
 					email: userClerk.email,
-				},
-			});
-			await ctx.prisma.cart.create({
-				data: {
-					userId: ctx.userId,
 				},
 			});
 		}
