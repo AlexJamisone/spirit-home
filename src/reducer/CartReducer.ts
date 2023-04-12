@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
 import type { Product } from '@prisma/client';
 
-interface CartItem extends Product {
+export interface CartItem extends Product {
 	quantityInCart: number;
 }
 
@@ -24,7 +24,7 @@ interface SetRemoveFromCart {
 
 interface SetUpdateQtCart {
 	type: 'UPDATE_QT';
-	payload: { id: string | undefined; quantity: number };
+	payload: { id: string; quantity: number };
 }
 interface SetClearCart {
 	type: 'CLER_CART';

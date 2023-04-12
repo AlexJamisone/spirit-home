@@ -10,10 +10,6 @@ const Home: NextPage = () => {
 	if (isLoading) return <Spinner />;
 	return (
 		<>
-			<Head>
-				<title>Index Page</title>
-				<meta name="description" content="" />
-			</Head>
 			<Center as="main" gap={5}>
 				{products.map((product) => (
 					<ProductsCard key={product.id} product={product} />
