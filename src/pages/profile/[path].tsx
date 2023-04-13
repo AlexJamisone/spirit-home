@@ -3,6 +3,7 @@ import { UserProfile } from '@clerk/nextjs';
 import { buildClerkProps, clerkClient, getAuth } from '@clerk/nextjs/server';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import UserMain from '~/components/User/UserMain';
 import UserOrders from '~/components/User/UserOrders';
 import ProtectionRoutes from '~/guards/ProtectionRoutes';
 import { api } from '~/utils/api';
@@ -21,7 +22,7 @@ const ProfilePage = () => {
 	const handlProfile = () => {
 		switch (path) {
 			case 'main':
-				return <Center>Main page for user</Center>;
+				return <UserMain />;
 			case 'orders':
 				return <UserOrders />;
 			case 'settings':

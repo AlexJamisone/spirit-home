@@ -20,12 +20,6 @@ export const menuItems = [
 		type: 'USER',
 	},
 	{
-		icon: SlHandbag,
-		title: 'Корзина',
-		path: '/profile/cart',
-		type: 'USER',
-	},
-	{
 		icon: BsBookmarks,
 		title: 'Избранное',
 		path: '/profile/favorites',

@@ -1,17 +1,14 @@
 import {
+	Box,
+	Button,
+	IconButton,
 	Menu,
 	MenuButton,
-	MenuList,
-	MenuItem,
-	MenuItemOption,
-	MenuGroup,
-	MenuOptionGroup,
 	MenuDivider,
-	IconButton,
-	Box,
-	Text,
+	MenuItem,
+	MenuList,
 	Stack,
-	Button,
+	Text,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { SlHandbag } from 'react-icons/sl';
@@ -71,12 +68,12 @@ const CartMenu = () => {
 				{cartState.items.length === 0 ? null : (
 					<>
 						<MenuDivider />
-						<Stack direction="row" justifyContent="space-between">
+						<Stack direction="row" justifyContent="space-between" p={2}>
 							<Text>Итог: </Text>
-							<Text>{cartState.totalPrice} ₽</Text>
+							<Text fontWeight={600}>{cartState.totalPrice} ₽</Text>
 						</Stack>
 						<MenuDivider />
-						<Button>Оформить заказ</Button>
+						<Button w='100%' justifySelf="flex-end">Оформить заказ</Button>
 					</>
 				)}
 			</MenuList>

@@ -3,7 +3,7 @@ import { Center } from '@chakra-ui/react';
 const SignInPage = () => {
 	return (
 		<Center>
-			<SignIn signUpUrl="/signup" afterSignInUrl='/profile/mainE'/>
+			<SignIn signUpUrl="/signup" afterSignInUrl='/profile/main'/>
 		</Center>
 	);
 };

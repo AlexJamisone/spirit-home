@@ -51,7 +51,7 @@ const CartItem = ({
 	return (
 		<Stack
 			direction="row"
-			gap={10}
+			gap={3}
 			p={5}
 			alignItems="center"
 			w="100%"
