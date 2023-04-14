@@ -20,6 +20,7 @@ import {
 } from '~/reducer/InputAddressReducer';
 import type { Address } from '@prisma/client';
 import UserAddressCard from './UserAddressCard';
+import UserOrders from './UserOrders';
 
 const UserMain = () => {
 	const { data: user } = api.users.get.useQuery();
@@ -139,9 +140,7 @@ const UserMain = () => {
 				</Stack>
 			</GridItem>
 			<GridItem>
-				<Stack>
-					<Text>orders</Text>
-				</Stack>
+				<UserOrders/>
 			</GridItem>
 		</Grid>
 	);

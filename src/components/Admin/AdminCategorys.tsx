@@ -92,7 +92,6 @@ const AdminCategorys = () => {
 			}
 		);
 	};
-	// console.log()
 	if (!categorys) return null;
 	return (
 		<Stack direction="column" w={['300px']} gap={5}>
