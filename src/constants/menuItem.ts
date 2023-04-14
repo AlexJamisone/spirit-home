@@ -3,7 +3,6 @@ import { BsBookmarks } from "react-icons/bs";
 import { FiSettings } from "react-icons/fi";
 import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
 import { IoIosAddCircleOutline } from "react-icons/io";
-import { SlHandbag } from "react-icons/sl";
 import { TbBrandProducthunt } from "react-icons/tb";
 
 export const menuItems = [

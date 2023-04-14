@@ -1,11 +1,16 @@
 export interface InputAddressState {
-	firstName: string;
-	lastName: string;
+	id: string;
+	firstName: string | null;
+	lastName: string | null;
 	citys: string;
 	contactPhone: string;
 	point: string;
 }
 
+interface SetIdAction {
+	type: 'SET_ID';
+	payload: string;
+}
 interface SetNameAction {
 	type: 'SET_NAME';
 	payload: string;
@@ -41,9 +46,11 @@ export type Action =
 	| SetCitysAction
 	| SetPointAction
 	| SetClearAction
-	| SetAllAction;
+	| SetAllAction
+	| SetIdAction;
 
 export const initialState: InputAddressState = {
+	id: '',
 	firstName: '',
 	lastName: '',
 	citys: '',
@@ -56,6 +63,8 @@ export const InputAddressReducer = (
 	action: Action
 ): InputAddressState => {
 	switch (action.type) {
+		case 'SET_ID':
+			return { ...state, id: action.payload };
 		case 'SET_NAME':
 			return { ...state, firstName: action.payload };
 		case 'SET_LAST_NAME':
@@ -68,6 +77,7 @@ export const InputAddressReducer = (
 			return { ...state, point: action.payload };
 		case 'SET_CLEAR':
 			return {
+				id: '',
 				citys: '',
 				contactPhone: '',
 				firstName: '',

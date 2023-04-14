@@ -13,25 +13,37 @@ import {
 	useToast,
 	Stack,
 } from '@chakra-ui/react';
-import React, { type ChangeEvent, useReducer } from 'react';
+import React, {
+	type ChangeEvent,
+	type Dispatch,
+	type SetStateAction,
+} from 'react';
+
+import type { InputAddressState, Action } from '~/reducer/InputAddressReducer';
 import { api } from '~/utils/api';
-import {
-	InputAddressReducer,
-	initialState,
-} from '~/reducer/InputAddressReducer';
 
 type UserAddressesFormModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
+	input: InputAddressState;
+	dispatch: Dispatch<Action>;
+	edit: boolean;
+	setEdit: Dispatch<SetStateAction<boolean>>;
 };
 
 const UserAddressesFormModal = ({
 	isOpen,
 	onClose,
+	dispatch,
+	input,
+	edit,
+	setEdit,
 }: UserAddressesFormModalProps) => {
-	const { mutate: createByUser, isLoading } =
+	const { mutate: createByUser, isLoading: createLoading } =
 		api.addresses.createByUser.useMutation();
-	const [input, dispatch] = useReducer(InputAddressReducer, initialState);
+	const { mutate: updateAddress, isLoading: updateLoading } =
+		api.addresses.update.useMutation();
+
 	const toast = useToast();
 
 	const ctx = api.useContext();
@@ -58,27 +70,53 @@ const UserAddressesFormModal = ({
 		}
 	};
 	const handleSubmit = () => {
-		createByUser(
-			{
-				firstName: input.firstName,
-				lastName: input.lastName,
-				city: input.citys,
-				contactPhone: input.contactPhone,
-				point: input.point,
-			},
-			{
-				onSuccess: () => {
-					toast({
-						description: `Адрес успешно создан!🚀`,
-						status: 'success',
-						isClosable: true,
-					});
-					dispatch({ type: 'SET_CLEAR' });
-					void ctx.users.invalidate();
-					onClose();
+		if (edit) {
+			updateAddress(
+				{
+					id: input.id,
+					city: input.citys,
+					contactPhone: input.contactPhone,
+					point: input.point,
+					firstName: input.firstName as string,
+					lastName: input.lastName as string,
 				},
-			}
-		);
+				{
+					onSuccess: () => {
+						toast({
+							description: `Адрес успешно обновлён!🌊`,
+							status: 'info',
+							isClosable: true,
+						});
+						void ctx.users.invalidate();
+						dispatch({ type: 'SET_CLEAR' });
+						setEdit(false);
+						onClose();
+					},
+				}
+			);
+		} else {
+			createByUser(
+				{
+					firstName: input.firstName as string,
+					lastName: input.lastName as string,
+					city: input.citys,
+					contactPhone: input.contactPhone,
+					point: input.point,
+				},
+				{
+					onSuccess: () => {
+						toast({
+							description: `Адрес успешно создан!🚀`,
+							status: 'success',
+							isClosable: true,
+						});
+						dispatch({ type: 'SET_CLEAR' });
+						void ctx.users.invalidate();
+						onClose();
+					},
+				}
+			);
+		}
 	};
 	const inputFilds = [
 		{
@@ -108,7 +146,13 @@ const UserAddressesFormModal = ({
 		},
 	];
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
+		<Modal
+			isOpen={isOpen}
+			onClose={() => {
+				dispatch({ type: 'SET_CLEAR' });
+				onClose();
+			}}
+		>
 			<ModalOverlay />
 			<ModalContent>
 				<FormControl
@@ -128,7 +172,7 @@ const UserAddressesFormModal = ({
 									<Input
 										type="text"
 										placeholder={placeholder}
-										value={value}
+										value={value ?? ''}
 										name={name}
 										onChange={(e) => handlInput(e)}
 									/>
@@ -137,10 +181,20 @@ const UserAddressesFormModal = ({
 						</Stack>
 					</ModalBody>
 					<ModalFooter gap={5}>
-						<Button isLoading={isLoading} type="submit">
-							Сохранить
+						<Button
+							isLoading={edit ? updateLoading : createLoading}
+							type="submit"
+						>
+							{edit ? 'Обновить' : 'Сохранить'}
 						</Button>
-						<Button onClick={onClose}>Oтмена</Button>
+						<Button
+							onClick={() => {
+								dispatch({ type: 'SET_CLEAR' });
+								onClose();
+							}}
+						>
+							Oтмена
+						</Button>
 					</ModalFooter>
 				</FormControl>
 			</ModalContent>

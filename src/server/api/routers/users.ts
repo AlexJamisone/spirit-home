@@ -20,7 +20,6 @@ export const usersRouter = createTRPCRouter({
 		const [user] = await clerkClient.users.getUserList({
 			userId: [ctx.userId],
 		});
-
 		if (!user)
 			throw new TRPCError({
 				code: 'NOT_FOUND',

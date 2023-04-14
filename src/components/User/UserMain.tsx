@@ -13,16 +13,34 @@ import {
 import { api } from '~/utils/api';
 import UserAddressesFormModal from './UserAddressesFormModal';
 import { BsTrashFill } from 'react-icons/bs';
+import { useReducer, useState } from 'react';
+import {
+	InputAddressReducer,
+	initialState,
+} from '~/reducer/InputAddressReducer';
+import type { Address } from '@prisma/client';
+import UserAddressCard from './UserAddressCard';
 
 const UserMain = () => {
 	const { data: user } = api.users.get.useQuery();
-
+	const [edit, setEdit] = useState(false);
 	const { mutate: deleteAddress, isLoading } =
 		api.addresses.delete.useMutation();
 	const ctx = api.useContext();
 	const { isOpen, onClose, onToggle } = useDisclosure();
 	const toast = useToast();
+
+	const [input, dispatch] = useReducer(InputAddressReducer, initialState);
 	if (!user) return null;
+	const handlAdd = () => {
+		if (user.firstName && user.lastName) {
+			dispatch({ type: 'SET_NAME', payload: user.firstName });
+			dispatch({ type: 'SET_LAST_NAME', payload: user.lastName });
+			onToggle();
+		} else {
+			onToggle();
+		}
+	};
 	const handlDeletAddress = (id: string) => {
 		deleteAddress(
 			{ id },
@@ -38,6 +56,21 @@ const UserMain = () => {
 			}
 		);
 	};
+	const handlEdit = (address: Address) => {
+		dispatch({
+			type: 'SET_ALL',
+			payload: {
+				id: address.id,
+				citys: address.city,
+				firstName: user.firstName,
+				contactPhone: address.contactPhone,
+				lastName: user.lastName,
+				point: address.point,
+			},
+		});
+		setEdit(true);
+		onToggle();
+	};
 	return (
 		<Grid
 			w={['70%']}
@@ -48,69 +81,59 @@ const UserMain = () => {
 			<GridItem>
 				<Stack direction="row">
 					<Avatar size="2xl" src={user.profileImageUrl} />
-					<Text>{user.email}</Text>
+					<Stack>
+						<Text>{user.email}</Text>
+						<Stack direction="row">
+							<Text>{user.firstName}</Text>
+							<Text>{user.lastName}</Text>
+						</Stack>
+					</Stack>
 				</Stack>
-				<Stack w={['600px']}>
+				<Stack
+					w={['700px']}
+					justifyContent="center"
+					alignItems="center"
+				>
 					<Text textAlign="center">Адреса доставки</Text>
 					<Stack
 						direction="row"
 						gap={5}
 						alignItems="center"
 						flexWrap="wrap"
+						justifyContent="center"
 					>
 						<Button
-							w={['40%']}
-							h={['200px']}
 							variant="outline"
-							onClick={onToggle}
+							onClick={() => handlAdd()}
+							w="100%"
 						>
 							Добавить Адрес
 						</Button>
 						<UserAddressesFormModal
 							isOpen={isOpen}
 							onClose={onClose}
+							dispatch={dispatch}
+							input={input}
+							edit={edit}
+							setEdit={setEdit}
 						/>
 						{user.address?.length === 0 ? (
 							<Text>Пока что нету адрессов</Text>
 						) : (
-							user.address?.map(
-								({ id, city, contactPhone, point }) => (
-									<Stack
-										key={id}
-										direction="column"
-										gap={3}
-										border="1px solid #CBD5E0"
-										rounded="2xl"
-										p={5}
-										maxW={['100%']}
-										position="relative"
-									>
-										<Text>Имя: {user.firstName}</Text>
-										<Text>Фамилия: {user.lastName}</Text>
-										<Text>Email: {user.email}</Text>
-										<Text>Телефон: {contactPhone}</Text>
-										<Text>Город: {city}</Text>
-										<Text>СДЭК ПВЗ: {point}</Text>
-										<IconButton
-											isLoading={isLoading}
-											size="sm"
-											position="absolute"
-											top={2}
-											right={5}
-											aria-label="delet"
-											onClick={() =>
-												handlDeletAddress(id)
-											}
-											icon={
-												<Icon
-													as={BsTrashFill}
-													color="red.400"
-												/>
-											}
-										/>
-									</Stack>
-								)
-							)
+							user.address?.map((address) => {
+								return (
+									<UserAddressCard
+										key={address.id}
+										address={address}
+										email={user.email}
+										firstName={user.firstName}
+										lastName={user.lastName}
+										handlDeletAddress={handlDeletAddress}
+										handlEdit={handlEdit}
+										isLoading={isLoading}
+									/>
+								);
+							})
 						)}
 					</Stack>
 				</Stack>
