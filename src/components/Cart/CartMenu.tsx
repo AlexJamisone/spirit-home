@@ -9,14 +9,17 @@ import {
 	MenuList,
 	Stack,
 	Text,
+	useDisclosure,
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import { SlHandbag } from 'react-icons/sl';
 import { useCart } from '~/context/cartContext';
 import CartItem from './CartItem';
+import NewOrder from '../NewOrder';
 const CartMenu = () => {
 	const [isLength, setIsLength] = useState(false);
 	const { cartState } = useCart();
+	const { isOpen, onClose, onToggle } = useDisclosure();
 	useEffect(() => {
 		setIsLength(cartState.items.length > 0);
 	}, [isLength, cartState.items.length]);
@@ -68,12 +71,25 @@ const CartMenu = () => {
 				{cartState.items.length === 0 ? null : (
 					<>
 						<MenuDivider />
-						<Stack direction="row" justifyContent="space-between" p={2}>
+						<Stack
+							direction="row"
+							justifyContent="space-between"
+							p={2}
+						>
 							<Text>Итог: </Text>
-							<Text fontWeight={600}>{cartState.totalPrice} ₽</Text>
+							<Text fontWeight={600}>
+								{cartState.totalPrice} ₽
+							</Text>
 						</Stack>
 						<MenuDivider />
-						<Button w='100%' justifySelf="flex-end">Оформить заказ</Button>
+						<Button
+							w="100%"
+							justifySelf="flex-end"
+							onClick={onToggle}
+						>
+							Оформить заказ
+						</Button>
+						<NewOrder isOpen={isOpen} onClose={onClose} />
 					</>
 				)}
 			</MenuList>

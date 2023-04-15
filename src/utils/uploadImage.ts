@@ -38,6 +38,8 @@ export async function updateImage(
 		.remove([existingIMG?.path as string]);
 	const { data, error } = await supabase.storage
 		.from('products')
-		.upload(`public/${file?.name as string}`, file as File, {upsert: true});
+		.upload(`public/${file?.name as string}`, file as File, {
+			upsert: true,
+		});
 	return { data, error };
 }

@@ -8,9 +8,10 @@ type UserAddressCardProps = {
 	firstName: string | null;
 	lastName: string | null;
 	email: string | null | undefined;
-	isLoading: boolean;
-	handlEdit: (address: Address) => void;
-	handlDeletAddress: (id: string) => void;
+	isLoading?: boolean;
+	handlEdit?: (address: Address) => void;
+	handlDeletAddress?: (id: string) => void;
+	cantEdit?: boolean;
 };
 
 const UserAddressCard = ({
@@ -21,6 +22,7 @@ const UserAddressCard = ({
 	handlEdit,
 	lastName,
 	isLoading,
+	cantEdit,
 }: UserAddressCardProps) => {
 	const { city, contactPhone, id, point } = address;
 	return (
@@ -44,7 +46,7 @@ const UserAddressCard = ({
 			_hover={{
 				transform: 'scale(1.05)',
 			}}
-			onClick={() => handlEdit(address)}
+			onClick={() => (cantEdit ? null : handlEdit?.(address))}
 		>
 			<Text>Имя: {firstName}</Text>
 			<Text>Фамилия: {lastName}</Text>
@@ -52,19 +54,21 @@ const UserAddressCard = ({
 			<Text>Телефон: {contactPhone}</Text>
 			<Text>Город: {city}</Text>
 			<Text>СДЭК ПВЗ: {point}</Text>
-			<IconButton
-				isLoading={isLoading}
-				size="sm"
-				position="absolute"
-				top={2}
-				right={5}
-				aria-label="delet"
-				onClick={(e) => {
-					handlDeletAddress(id);
-					e.stopPropagation();
-				}}
-				icon={<Icon as={BsTrashFill} color="red.400" />}
-			/>
+			{cantEdit ? null : (
+				<IconButton
+					isLoading={isLoading}
+					size="sm"
+					position="absolute"
+					top={2}
+					right={5}
+					aria-label="delet"
+					onClick={(e) => {
+						handlDeletAddress?.(id);
+						e.stopPropagation();
+					}}
+					icon={<Icon as={BsTrashFill} color="red.400" />}
+				/>
+			)}
 		</Stack>
 	);
 };

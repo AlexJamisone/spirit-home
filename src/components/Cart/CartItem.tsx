@@ -54,7 +54,7 @@ const CartItem = ({
 			gap={3}
 			p={5}
 			alignItems="center"
-			w="100%"
+			minW="100%"
 			justifyContent="space-between"
 		>
 			<Image
