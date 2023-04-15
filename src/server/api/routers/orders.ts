@@ -8,7 +8,11 @@ export const ordersRouter = createTRPCRouter({
 	get: privetProcedure.query(async ({ ctx }) => {
 		const orders = await ctx.prisma.order.findMany({
 			select: {
-				orderItem: true,
+				orderItem: {
+					include: {
+						product: true
+					}
+				},
 				createdAt: true,
 				id: true,
 				status: true,

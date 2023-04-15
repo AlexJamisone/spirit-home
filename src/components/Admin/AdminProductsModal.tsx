@@ -4,6 +4,7 @@ import {
 	Center,
 	FormControl,
 	FormLabel,
+	Image,
 	Input,
 	Modal,
 	ModalBody,
@@ -12,20 +13,19 @@ import {
 	ModalHeader,
 	ModalOverlay,
 	Select,
+	Spinner,
 	Stack,
 	Textarea,
 	useDisclosure,
-	useToast,
-	Image,
-	Spinner,
+	useToast
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
 import { updateImage, uploadImages } from '~/utils/uploadImage';
 import AdminProductsAlert from './AdminProductsAlert';
-import { motion } from 'framer-motion';
-import type { Action, FormProductState } from '~/reducer/FormReducer';
-
+import DragDrop from '../Drag&Drop';
 type AdminProductsModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
@@ -48,7 +48,6 @@ const AdminProductsModal = ({
 		onClose: onCloseAlert,
 		onToggle: toggleAlert,
 	} = useDisclosure();
-
 	const ctx = api.useContext();
 	const toast = useToast();
 
@@ -86,6 +85,7 @@ const AdminProductsModal = ({
 			dispatch({ type: 'SET_IMG', payload: data.path });
 		}
 	};
+	
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		switch (name) {
@@ -227,10 +227,11 @@ const AdminProductsModal = ({
 									/>
 								</Center>
 							) : null}
-							<Input
+							{/* <Input
 								type="file"
 								onChange={(e) => handelUploadImage(e)}
-							/>
+							/> */}
+							<DragDrop/>
 							{formInfo.map(
 								({
 									placeholder,

@@ -4,7 +4,7 @@ import {
 	Stack,
 	Text,
 	useDisclosure,
-	useToast
+	useToast,
 } from '@chakra-ui/react';
 import type { Product } from '@prisma/client';
 import { useReducer, useState, type SyntheticEvent } from 'react';
@@ -14,11 +14,13 @@ import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
 import ProductsCard from '../ProductsCard';
 import AdminProductsModal from './AdminProductsModal';
+import { useDropzone } from 'react-dropzone';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
 	const [edit, setEdit] = useState(false);
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
+	
 	const toast = useToast();
 
 	const ctx = api.useContext();
@@ -29,7 +31,12 @@ const AdminProducts = () => {
 
 	if (!products) return null;
 
-	const handleDelet = (id: string, path: string, name: string, e: SyntheticEvent) => {
+	const handleDelet = (
+		id: string,
+		path: string,
+		name: string,
+		e: SyntheticEvent
+	) => {
 		deleteProducts(
 			{
 				id,
@@ -53,7 +60,7 @@ const AdminProducts = () => {
 				},
 			}
 		);
-		e.stopPropagation()
+		e.stopPropagation();
 	};
 	const handlEdit = (product: Product) => {
 		setEdit(true);
@@ -92,18 +99,20 @@ const AdminProducts = () => {
 			{products.length === 0 ? (
 				<Text>Пока что нету Товаров</Text>
 			) : (
-				products.map((product) => {
-					return (
-						<ProductsCard
-							key={product.id}
-							admin={user?.role}
-							product={product}
-							isLoading={isLoading}
-							handlEdit={handlEdit}
-							handleDelet={handleDelet}
-						/>
-					);
-				}).reverse()
+				products
+					.map((product) => {
+						return (
+							<ProductsCard
+								key={product.id}
+								admin={user?.role}
+								product={product}
+								isLoading={isLoading}
+								handlEdit={handlEdit}
+								handleDelet={handleDelet}
+							/>
+						);
+					})
+					.reverse()
 			)}
 			<AdminProductsModal
 				isOpen={isOpen}
