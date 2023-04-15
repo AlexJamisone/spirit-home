@@ -47,7 +47,7 @@ model Product {
     name          String
     description   String
     price         Float
-    image         String?
+    image         String[]
     quantity      Int
     comments      Comment[]
     category      Catergory?  @relation(fields: [categoryTitle], references: [title])

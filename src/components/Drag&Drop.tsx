@@ -1,24 +1,30 @@
-import { Box } from '@chakra-ui/react';
-import React from 'react';
-import { useDropzone } from 'react-dropzone';
-import { useCallback } from 'react';
+import { Box, Text } from '@chakra-ui/react';
+import { type Dispatch, useCallback } from 'react';
 import Dropzone from 'react-dropzone';
-import { updateDrop } from '~/utils/uploadImage';
+import type { Action } from '~/reducer/FormReducer';
+import { uploadDrop } from '~/utils/uploadImage';
 
-const DragDrop = () => {
+type DragDropProps = {
+	dispatch: Dispatch<Action>;
+};
+
+const DragDrop = ({ dispatch }: DragDropProps) => {
 	const handleFileSelect = useCallback(async (acceptedFiles: File[]) => {
-		const hi = await updateDrop(acceptedFiles);
-		console.log(hi);
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
+		const upload = await uploadDrop(acceptedFiles);
+		dispatch({type: "SET_IMG", payload: upload})
 	}, []);
 
 	return (
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
 		<Dropzone onDrop={handleFileSelect}>
 			{({ getRootProps, getInputProps }) => (
-				<div {...getRootProps()}>
+				<Box {...getRootProps()}>
 					<input {...getInputProps()} />
-					<p>Drag and drop files here, or click to select files</p>
-				</div>
+					<Text>
+						Drag and drop files here, or click to select files
+					</Text>
+				</Box>
 			)}
 		</Dropzone>
 	);

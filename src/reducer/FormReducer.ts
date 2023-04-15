@@ -1,8 +1,10 @@
+import { UploadResult } from '~/utils/uploadImage';
+
 export interface FormProductState {
 	id: string;
 	name: string;
 	description: string;
-	image: string;
+	image: UploadResult[];
 	category: string;
 	price: number;
 	quantity: number;
@@ -22,7 +24,7 @@ interface SetDescriptionAction {
 }
 interface SetImageAction {
 	type: 'SET_IMG';
-	payload: string;
+	payload: UploadResult[];
 }
 interface SetCategoryAction {
 	type: 'SET_CATEG';
@@ -60,7 +62,7 @@ export const initialState: FormProductState = {
 	id: '',
 	name: '',
 	description: '',
-	image: '',
+	image: [],
 	category: '',
 	price: 0,
 	quantity: 0,
@@ -90,7 +92,7 @@ export const FormProductReducer = (
 				id: '',
 				category: '',
 				description: '',
-				image: '',
+				image: [],
 				name: '',
 				price: 0,
 				quantity: 0,

@@ -9,16 +9,17 @@ import {
 import { api } from '~/utils/api';
 import { type Dispatch, useRef } from 'react';
 import type { Action } from '~/reducer/FormReducer';
+import type { UploadResult } from '~/utils/uploadImage';
 
 type AdminProductsAlertProps = {
 	isOpen: boolean;
 	onCloseAlert: () => void;
-	path: string;
+	path: UploadResult[];
 	onCloseModal: () => void;
 	dispatch: Dispatch<Action>;
 };
 
-const AdminProductsAlert = ({
+const AdminProductsAlert = ({	
 	isOpen,
 	onCloseAlert,
 	path,
@@ -28,17 +29,14 @@ const AdminProductsAlert = ({
 	const cancelRef = useRef<HTMLButtonElement>(null);
 	const { mutate: deletImage, isLoading } =
 		api.products.deletImage.useMutation();
-	const handlDeletImage = (path: string) => {
-		deletImage(
-			{ path },
-			{
-				onSuccess: () => {
-					dispatch({ type: 'SET_CLEAR' });
-					onCloseAlert();
-					onCloseModal();
-				},
-			}
-		);
+	const handlDeletImage = (res: UploadResult[]) => {
+		deletImage(res, {
+			onSuccess: () => {
+				dispatch({ type: 'SET_CLEAR' });
+				onCloseAlert();
+				onCloseModal();
+			},
+		});
 	};
 	return (
 		<AlertDialog

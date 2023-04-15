@@ -1,4 +1,5 @@
 import { TRPCError } from '@trpc/server';
+import path from 'path';
 import { z } from 'zod';
 import {
 	createTRPCRouter,
@@ -6,6 +7,7 @@ import {
 	publicProcedure,
 } from '~/server/api/trpc';
 import { supabase } from '~/utils/supabase';
+import { UploadResult } from '~/utils/uploadImage';
 
 export const productsRouter = createTRPCRouter({
 	get: publicProcedure.query(async ({ ctx }) => {
@@ -52,9 +54,16 @@ export const productsRouter = createTRPCRouter({
 			});
 		}),
 	deletImage: privetProcedure
-		.input(z.object({ path: z.string().nonempty() }))
-		.mutation(async ({ input }) => {
-			await supabase.storage.from('products').remove([input.path]);
+		.input(z.array(z.custom<UploadResult>()))
+		.mutation(({ input }) => {
+			const res = Promise.all(
+				input.map(async ({ path }) => {
+					const {} = await supabase.storage
+						.from('products')
+						.remove([path]);
+				})
+			);
+			return res;
 		}),
 	update: privetProcedure
 		.input(

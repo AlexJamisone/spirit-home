@@ -17,13 +17,13 @@ import {
 	Stack,
 	Textarea,
 	useDisclosure,
-	useToast
+	useToast,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
-import { updateImage, uploadImages } from '~/utils/uploadImage';
+import { updateImage } from '~/utils/uploadImage';
 import AdminProductsAlert from './AdminProductsAlert';
 import DragDrop from '../Drag&Drop';
 type AdminProductsModalProps = {
@@ -57,35 +57,35 @@ const AdminProductsModal = ({
 	const { mutate: update, isLoading: isLoadingUpdate } =
 		api.products.update.useMutation();
 
-	const handelUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
-		let file: File | undefined;
-		if (edit) {
-			const { data, error } = await updateImage(file, e, form.image);
-			if (!data) return null;
-			if (error?.name) {
-				toast({
-					description: `Ошибка: ${error.message}`,
-					isClosable: true,
-					duration: 5000,
-					status: 'error',
-				});
-			}
-			dispatch({ type: 'SET_IMG', payload: data.path });
-		} else {
-			const { data, error } = await uploadImages(file, e);
-			if (!data) return null;
-			if (error) {
-				toast({
-					description: `Ошибка: ${error.message}`,
-					isClosable: true,
-					duration: 5000,
-					status: 'error',
-				});
-			}
-			dispatch({ type: 'SET_IMG', payload: data.path });
-		}
-	};
-	
+	// const handelUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
+	// 	let file: File | undefined;
+	// 	if (edit) {
+	// 		const { data, error } = await updateImage(file, e, form.image);
+	// 		if (!data) return null;
+	// 		if (error?.name) {
+	// 			toast({
+	// 				description: `Ошибка: ${error.message}`,
+	// 				isClosable: true,
+	// 				duration: 5000,
+	// 				status: 'error',
+	// 			});
+	// 		}
+	// 		dispatch({ type: 'SET_IMG', payload: data.path });
+	// 	} else {
+	// 		const { data, error } = await uploadImages(file, e);
+	// 		if (!data) return null;
+	// 		if (error) {
+	// 			toast({
+	// 				description: `Ошибка: ${error.message}`,
+	// 				isClosable: true,
+	// 				duration: 5000,
+	// 				status: 'error',
+	// 			});
+	// 		}
+	// 		dispatch({ type: 'SET_IMG', payload: data.path });
+	// 	}
+	// };
+
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		switch (name) {
@@ -103,66 +103,66 @@ const AdminProductsModal = ({
 		}
 	};
 	const handleSubmit = () => {
-		if (edit) {
-			update(
-				{
-					category: form.category,
-					description: form.description,
-					id: form.id,
-					image: form.image,
-					name: form.name,
-					price: form.price,
-					quantity: form.quantity,
-				},
-				{
-					onSuccess: () => {
-						toast({
-							description: `Обновление ${form.name} товара прошло успешно!🎉`,
-							status: 'info',
-						});
-						dispatch({ type: 'SET_CLEAR' });
-						void ctx.products.invalidate();
-						onClose();
-						setEdit(false);
-					},
-				}
-			);
-		} else {
-			create(
-				{
-					name: form.name,
-					description: form.description,
-					category: form.category,
-					image: form.image,
-					price: form.price,
-					quantity: form.quantity,
-				},
-				{
-					onSuccess: () => {
-						toast({
-							description: `Товар ${form.name} создан!🤙`,
-							status: 'success',
-							isClosable: true,
-						});
-						dispatch({ type: 'SET_CLEAR' });
-						void ctx.products.invalidate();
-						onClose();
-					},
-					onError: (e) => {
-						const errorMessage =
-							e.data?.zodError?.fieldErrors?.description;
-						toast({
-							description: `Ошибка: ${
-								errorMessage?.[0] as string
-							}`,
-							status: 'error',
-							isClosable: true,
-							duration: 10000,
-						});
-					},
-				}
-			);
-		}
+		// if (edit) {
+		// 	update(
+		// 		{
+		// 			category: form.category,
+		// 			description: form.description,
+		// 			id: form.id,
+		// 			image: form.image,
+		// 			name: form.name,
+		// 			price: form.price,
+		// 			quantity: form.quantity,
+		// 		},
+		// 		{
+		// 			onSuccess: () => {
+		// 				toast({
+		// 					description: `Обновление ${form.name} товара прошло успешно!🎉`,
+		// 					status: 'info',
+		// 				});
+		// 				dispatch({ type: 'SET_CLEAR' });
+		// 				void ctx.products.invalidate();
+		// 				onClose();
+		// 				setEdit(false);
+		// 			},
+		// 		}
+		// 	);
+		// } else {
+		// 	create(
+		// 		{
+		// 			name: form.name,
+		// 			description: form.description,
+		// 			category: form.category,
+		// 			image: form.image,
+		// 			price: form.price,
+		// 			quantity: form.quantity,
+		// 		},
+		// 		{
+		// 			onSuccess: () => {
+		// 				toast({
+		// 					description: `Товар ${form.name} создан!🤙`,
+		// 					status: 'success',
+		// 					isClosable: true,
+		// 				});
+		// 				dispatch({ type: 'SET_CLEAR' });
+		// 				void ctx.products.invalidate();
+		// 				onClose();
+		// 			},
+		// 			onError: (e) => {
+		// 				const errorMessage =
+		// 					e.data?.zodError?.fieldErrors?.description;
+		// 				toast({
+		// 					description: `Ошибка: ${
+		// 						errorMessage?.[0] as string
+		// 					}`,
+		// 					status: 'error',
+		// 					isClosable: true,
+		// 					duration: 10000,
+		// 				});
+		// 			},
+		// 		}
+		// 	);
+		// }
 	};
 
 	const formInfo = [
@@ -192,6 +192,7 @@ const AdminProductsModal = ({
 			name: 'quantity',
 		},
 	];
+	console.log(form.image);
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
 			<ModalOverlay />
@@ -206,32 +207,31 @@ const AdminProductsModal = ({
 						}}
 					>
 						<Stack gap={3}>
-							{form.image !== '' ? (
-								<Center>
-									<Image
-										initial={{ opacity: 0 }}
-										animate={{ opacity: 1 }}
-										transitionDuration="0.5s"
-										as={motion.img}
-										objectFit="cover"
-										fallback={<Spinner />}
-										src={`${
-											process.env
-												.NEXT_PUBLIC_SUPABASE_URL as string
-										}/storage/v1/object/public/products/${
-											form.image
-										}`}
-										alt="product"
-										width={200}
-										height={200}
-									/>
-								</Center>
-							) : null}
-							{/* <Input
-								type="file"
-								onChange={(e) => handelUploadImage(e)}
-							/> */}
-							<DragDrop/>
+							{form.image.length === 0 ? null : (
+								<Stack direction="row" gap={5}>
+									{form.image.map((src, index) => (
+										<Image
+											key={index}
+											initial={{ opacity: 0 }}
+											animate={{ opacity: 1 }}
+											transitionDuration="0.5s"
+											as={motion.img}
+											objectFit="cover"
+											fallback={<Spinner />}
+											src={`${
+												process.env
+													.NEXT_PUBLIC_SUPABASE_URL as string
+											}/storage/v1/object/public/products/${
+												src.path
+											}`}
+											alt="product"
+											width={200}
+											height={200}
+										/>
+									))}
+								</Stack>
+							)}
+							<DragDrop dispatch={dispatch} />
 							{formInfo.map(
 								({
 									placeholder,
@@ -305,7 +305,7 @@ const AdminProductsModal = ({
 							) : (
 								<Button
 									onClick={() =>
-										form.image === ''
+										form.image.length === 0
 											? onClose()
 											: toggleAlert()
 									}
