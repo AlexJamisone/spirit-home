@@ -60,9 +60,10 @@ export const productsRouter = createTRPCRouter({
 		.mutation(({ input }) => {
 			const res = Promise.all(
 				input.map(async ({ path }) => {
-					const {} = await supabase.storage
+					await supabase.storage
 						.from('products')
 						.remove([path]);
+					return {path, error: null}
 				})
 			);
 			return res;

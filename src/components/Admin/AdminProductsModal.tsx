@@ -17,6 +17,8 @@ import {
 	Textarea,
 	useDisclosure,
 	useToast,
+	IconButton,
+	Icon,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
@@ -24,6 +26,8 @@ import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
 import DragDrop from '../Drag&Drop';
 import AdminProductsAlert from './AdminProductsAlert';
+import { TiDeleteOutline } from 'react-icons/ti';
+import { UploadResult } from '~/utils/uploadImage';
 type AdminProductsModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
@@ -54,6 +58,8 @@ const AdminProductsModal = ({
 		api.products.create.useMutation();
 	const { mutate: update, isLoading: isLoadingUpdate } =
 		api.products.update.useMutation();
+
+	const { mutate: deletImg } = api.products.deletImage.useMutation();
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -134,6 +140,23 @@ const AdminProductsModal = ({
 		}
 	};
 
+	const handlDeletImage = (path: UploadResult, index: number) => {
+		deletImg([path], {
+			onSuccess: () => {
+				toast({
+					description: `Картинка удалена`,
+					status: 'warning',
+					isClosable: true,
+				});
+				const updateImages = form.image.filter((_, i) => i !== index)
+				dispatch({
+					type: 'SET_IMG',
+					payload: updateImages,
+				});
+			},
+		});
+	};
+
 	const formInfo = [
 		{
 			type: 'text',
@@ -161,6 +184,7 @@ const AdminProductsModal = ({
 			name: 'quantity',
 		},
 	];
+	console.log(form.image);
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -170,7 +194,7 @@ const AdminProductsModal = ({
 			onEsc={() => {
 				if (edit) {
 					dispatch({ type: 'SET_CLEAR' });
-					setEdit(false)
+					setEdit(false);
 					onClose();
 				} else {
 					toggleAlert();
@@ -178,7 +202,7 @@ const AdminProductsModal = ({
 			}}
 		>
 			<ModalOverlay />
-			<ModalContent>
+			<ModalContent w={['500px']} maxW={'100%'}>
 				<ModalHeader>Создать новый товар</ModalHeader>
 				<ModalBody>
 					<FormControl
@@ -190,26 +214,49 @@ const AdminProductsModal = ({
 					>
 						<Stack gap={3}>
 							{form.image.length === 0 ? null : (
-								<Stack direction="row" gap={5}>
+								<Stack
+									direction="row"
+									flexWrap="wrap"
+									gap={5}
+									justifyContent="center"
+								>
 									{form.image.map((src, index) => (
-										<Image
-											key={index}
-											initial={{ opacity: 0 }}
-											animate={{ opacity: 1 }}
-											transitionDuration="0.5s"
-											as={motion.img}
-											objectFit="cover"
-											fallback={<Spinner />}
-											src={`${
-												process.env
-													.NEXT_PUBLIC_SUPABASE_URL as string
-											}/storage/v1/object/public/products/${
-												src.path
-											}`}
-											alt="product"
-											width={200}
-											height={200}
-										/>
+										<Stack key={index} position="relative">
+											<IconButton
+												position="absolute"
+												right={-5}
+												top={-2}
+												size="sm"
+												aria-label="deletImg"
+												icon={
+													<Icon
+														as={TiDeleteOutline}
+														color="red.500"
+														boxSize={7}
+													/>
+												}
+												onClick={() =>
+													handlDeletImage(src, index)
+												}
+											/>
+											<Image
+												initial={{ opacity: 0 }}
+												animate={{ opacity: 1 }}
+												transitionDuration="0.5s"
+												as={motion.img}
+												objectFit="cover"
+												fallback={<Spinner />}
+												src={`${
+													process.env
+														.NEXT_PUBLIC_SUPABASE_URL as string
+												}/storage/v1/object/public/products/${
+													src.path
+												}`}
+												alt="product"
+												width={200}
+												height={200}
+											/>
+										</Stack>
 									))}
 								</Stack>
 							)}

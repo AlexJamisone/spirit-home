@@ -1,8 +1,9 @@
-import { Box, Text } from '@chakra-ui/react';
+import { AbsoluteCenter, Box, Icon, Stack, Text } from '@chakra-ui/react';
 import { type Dispatch, useCallback } from 'react';
-import Dropzone from 'react-dropzone';
+import Dropzone, { useDropzone } from 'react-dropzone';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { update, upload } from '~/utils/uploadImage';
+import { MdOutlinePhotoLibrary } from 'react-icons/md';
 
 type DragDropProps = {
 	dispatch: Dispatch<Action>;
@@ -23,16 +24,39 @@ const DragDrop = ({ dispatch, edit, form }: DragDropProps) => {
 			dispatch({ type: 'SET_IMG', payload: uploadImg });
 		}
 	}, []);
+	const { acceptedFiles } = useDropzone();
 
 	return (
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
 		<Dropzone onDrop={handleFileSelect}>
 			{({ getRootProps, getInputProps }) => (
-				<Box {...getRootProps()}>
+				<Box
+					{...getRootProps()}
+					w={['100%']}
+					h={['150px']}
+					border="1px dashed #CBD5E0"
+					cursor="pointer"
+					position="relative"
+				>
 					<input {...getInputProps()} />
-					<Text>
-						Drag and drop files here, or click to select files
-					</Text>
+					<AbsoluteCenter>
+						<Stack direction="column" alignItems="center">
+							<Icon
+								as={MdOutlinePhotoLibrary}
+								color="#CBD5E0"
+								boxSize={16}
+							/>
+							<Text
+								textAlign="center"
+								fontSize={12}
+								fontWeight={600}
+								textColor="#CBD5E0"
+							>
+								Перенеси сюда фотографии или кликни что бы
+								добавить
+							</Text>
+						</Stack>
+					</AbsoluteCenter>
 				</Box>
 			)}
 		</Dropzone>
