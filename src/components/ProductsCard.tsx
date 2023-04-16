@@ -13,13 +13,14 @@ import type { Product, Role } from '@prisma/client';
 import type { SyntheticEvent } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import { useCart } from '~/context/cartContext';
+import { UploadResult } from '~/utils/uploadImage';
 
 type ProductsCardProps = {
 	product: Product;
 	handlEdit?: (product: Product) => void;
 	handleDelet?: (
 		id: string,
-		path: string,
+		path: UploadResult[],
 		name: string,
 		e: SyntheticEvent
 	) => void;
@@ -88,7 +89,7 @@ const ProductsCard = ({
 				<Image
 					src={`${
 						process.env.NEXT_PUBLIC_SUPABASE_URL as string
-					}/storage/v1/object/public/products/${image as string}`}
+					}/storage/v1/object/public/products/${image[0] as string}`}
 					alt={name}
 					objectFit="cover"
 					width={100}
@@ -105,7 +106,15 @@ const ProductsCard = ({
 							right={0}
 							zIndex={10}
 							onClick={(e) =>
-								handleDelet?.(id, image as string, name, e)
+								handleDelet?.(
+									id,
+									image.map((path) => ({
+										path,
+										error: null,
+									})),
+									name,
+									e
+								)
 							}
 						/>
 					</>

@@ -61,7 +61,7 @@ const CartItem = ({
 				w={[100]}
 				src={`${
 					process.env.NEXT_PUBLIC_SUPABASE_URL as string
-				}/storage/v1/object/public/products/${image as string}`}
+				}/storage/v1/object/public/products/${image[0] as string}`}
 				alt={name}
 				fallback={<Spinner />}
 			/>

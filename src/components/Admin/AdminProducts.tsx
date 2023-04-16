@@ -12,9 +12,9 @@ import { useReducer, useState, type SyntheticEvent } from 'react';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
+import type { UploadResult } from '~/utils/uploadImage';
 import ProductsCard from '../ProductsCard';
 import AdminProductsModal from './AdminProductsModal';
-import { useDropzone } from 'react-dropzone';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
@@ -33,7 +33,7 @@ const AdminProducts = () => {
 
 	const handleDelet = (
 		id: string,
-		path: string,
+		path: UploadResult[],
 		name: string,
 		e: SyntheticEvent
 	) => {
@@ -70,7 +70,7 @@ const AdminProducts = () => {
 				id: product.id,
 				category: product.categoryTitle as string,
 				description: product.description,
-				image: product.image as string,
+				image: product.image.map((path) => ({path, error: null})),
 				name: product.name,
 				price: product.price,
 				quantity: product.quantity,

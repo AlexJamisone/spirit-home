@@ -57,35 +57,6 @@ const AdminProductsModal = ({
 	const { mutate: update, isLoading: isLoadingUpdate } =
 		api.products.update.useMutation();
 
-	// const handelUploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
-	// 	let file: File | undefined;
-	// 	if (edit) {
-	// 		const { data, error } = await updateImage(file, e, form.image);
-	// 		if (!data) return null;
-	// 		if (error?.name) {
-	// 			toast({
-	// 				description: `Ошибка: ${error.message}`,
-	// 				isClosable: true,
-	// 				duration: 5000,
-	// 				status: 'error',
-	// 			});
-	// 		}
-	// 		dispatch({ type: 'SET_IMG', payload: data.path });
-	// 	} else {
-	// 		const { data, error } = await uploadImages(file, e);
-	// 		if (!data) return null;
-	// 		if (error) {
-	// 			toast({
-	// 				description: `Ошибка: ${error.message}`,
-	// 				isClosable: true,
-	// 				duration: 5000,
-	// 				status: 'error',
-	// 			});
-	// 		}
-	// 		dispatch({ type: 'SET_IMG', payload: data.path });
-	// 	}
-	// };
-
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		switch (name) {
@@ -103,66 +74,66 @@ const AdminProductsModal = ({
 		}
 	};
 	const handleSubmit = () => {
-		// if (edit) {
-		// 	update(
-		// 		{
-		// 			category: form.category,
-		// 			description: form.description,
-		// 			id: form.id,
-		// 			image: form.image,
-		// 			name: form.name,
-		// 			price: form.price,
-		// 			quantity: form.quantity,
-		// 		},
-		// 		{
-		// 			onSuccess: () => {
-		// 				toast({
-		// 					description: `Обновление ${form.name} товара прошло успешно!🎉`,
-		// 					status: 'info',
-		// 				});
-		// 				dispatch({ type: 'SET_CLEAR' });
-		// 				void ctx.products.invalidate();
-		// 				onClose();
-		// 				setEdit(false);
-		// 			},
-		// 		}
-		// 	);
-		// } else {
-		// 	create(
-		// 		{
-		// 			name: form.name,
-		// 			description: form.description,
-		// 			category: form.category,
-		// 			image: form.image,
-		// 			price: form.price,
-		// 			quantity: form.quantity,
-		// 		},
-		// 		{
-		// 			onSuccess: () => {
-		// 				toast({
-		// 					description: `Товар ${form.name} создан!🤙`,
-		// 					status: 'success',
-		// 					isClosable: true,
-		// 				});
-		// 				dispatch({ type: 'SET_CLEAR' });
-		// 				void ctx.products.invalidate();
-		// 				onClose();
-		// 			},
-		// 			onError: (e) => {
-		// 				const errorMessage =
-		// 					e.data?.zodError?.fieldErrors?.description;
-		// 				toast({
-		// 					description: `Ошибка: ${
-		// 						errorMessage?.[0] as string
-		// 					}`,
-		// 					status: 'error',
-		// 					isClosable: true,
-		// 					duration: 10000,
-		// 				});
-		// 			},
-		// 		}
-		// 	);
-		// }
+		if (edit) {
+			update(
+				{
+					category: form.category,
+					description: form.description,
+					id: form.id,
+					name: form.name,
+					price: form.price,
+					quantity: form.quantity,
+					image: form.image.map((item) => item.path),
+				},
+				{
+					onSuccess: () => {
+						toast({
+							description: `Обновление ${form.name} товара прошло успешно!🎉`,
+							status: 'info',
+						});
+						dispatch({ type: 'SET_CLEAR' });
+						void ctx.products.invalidate();
+						onClose();
+						setEdit(false);
+					},
+				}
+			);
+		} else {
+			create(
+				{
+					name: form.name,
+					description: form.description,
+					category: form.category,
+					image: form.image.map((item) => item.path),
+					price: form.price,
+					quantity: form.quantity,
+				},
+				{
+					onSuccess: () => {
+						toast({
+							description: `Товар ${form.name} создан!🤙`,
+							status: 'success',
+							isClosable: true,
+						});
+						dispatch({ type: 'SET_CLEAR' });
+						void ctx.products.invalidate();
+						onClose();
+					},
+					onError: (e) => {
+						const errorMessage =
+							e.data?.zodError?.fieldErrors?.description;
+						toast({
+							description: `Ошибка: ${
+								errorMessage?.[0] as string
+							}`,
+							status: 'error',
+							isClosable: true,
+							duration: 10000,
+						});
+					},
+				}
+			);
+		}
 	};
 
 	const formInfo = [
@@ -192,7 +163,6 @@ const AdminProductsModal = ({
 			name: 'quantity',
 		},
 	];
-	console.log(form.image);
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
 			<ModalOverlay />
