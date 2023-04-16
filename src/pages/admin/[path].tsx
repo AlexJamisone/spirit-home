@@ -14,11 +14,11 @@ const Admin = () => {
 			case 'statictic':
 				return <UserProfile />;
 			case 'categorys':
-				return <AdminCategorys/>
+				return <AdminCategorys />;
 			case 'product':
-				return <AdminProducts/>
+				return <AdminProducts />;
 			case 'orders':
-				return <AdminOrders/>
+				return <AdminOrders />;
 		}
 	};
 	return (

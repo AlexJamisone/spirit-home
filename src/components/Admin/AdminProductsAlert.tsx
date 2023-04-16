@@ -19,7 +19,7 @@ type AdminProductsAlertProps = {
 	dispatch: Dispatch<Action>;
 };
 
-const AdminProductsAlert = ({	
+const AdminProductsAlert = ({
 	isOpen,
 	onCloseAlert,
 	path,

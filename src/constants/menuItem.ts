@@ -1,9 +1,9 @@
-import { AiOutlineHome, AiOutlineUser } from "react-icons/ai";
-import { BsBookmarks } from "react-icons/bs";
-import { FiSettings } from "react-icons/fi";
-import { HiOutlineClipboardDocumentList } from "react-icons/hi2";
-import { IoIosAddCircleOutline } from "react-icons/io";
-import { TbBrandProducthunt } from "react-icons/tb";
+import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
+import { BsBookmarks } from 'react-icons/bs';
+import { FiSettings } from 'react-icons/fi';
+import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
+import { IoIosAddCircleOutline } from 'react-icons/io';
+import { TbBrandProducthunt } from 'react-icons/tb';
 
 export const menuItems = [
 	{

@@ -21,8 +21,8 @@ export const usersRouter = createTRPCRouter({
 						},
 					},
 					orderBy: {
-						createdAt: 'desc'
-					}
+						createdAt: 'desc',
+					},
 				},
 				categories: true,
 				address: true,

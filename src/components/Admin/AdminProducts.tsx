@@ -20,7 +20,7 @@ const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
 	const [edit, setEdit] = useState(false);
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
-	
+
 	const toast = useToast();
 
 	const ctx = api.useContext();
@@ -70,7 +70,7 @@ const AdminProducts = () => {
 				id: product.id,
 				category: product.categoryTitle as string,
 				description: product.description,
-				image: product.image.map((path) => ({path, error: null})),
+				image: product.image.map((path) => ({ path, error: null })),
 				name: product.name,
 				price: product.price,
 				quantity: product.quantity,

@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import {
 	Button,
-	Center,
 	FormControl,
 	FormLabel,
 	Image,
@@ -23,9 +22,8 @@ import { motion } from 'framer-motion';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
-import { updateImage } from '~/utils/uploadImage';
-import AdminProductsAlert from './AdminProductsAlert';
 import DragDrop from '../Drag&Drop';
+import AdminProductsAlert from './AdminProductsAlert';
 type AdminProductsModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
@@ -201,7 +199,11 @@ const AdminProductsModal = ({
 									))}
 								</Stack>
 							)}
-							<DragDrop dispatch={dispatch} />
+							<DragDrop
+								form={form}
+								edit={edit}
+								dispatch={dispatch}
+							/>
 							{formInfo.map(
 								({
 									placeholder,

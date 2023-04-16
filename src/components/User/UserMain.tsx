@@ -140,7 +140,7 @@ const UserMain = () => {
 				</Stack>
 			</GridItem>
 			<GridItem>
-				<UserOrders/>
+				<UserOrders />
 			</GridItem>
 		</Grid>
 	);

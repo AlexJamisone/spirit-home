@@ -1,5 +1,3 @@
-import { TRPCError } from '@trpc/server';
-import path from 'path';
 import { z } from 'zod';
 import {
 	createTRPCRouter,
@@ -7,7 +5,7 @@ import {
 	publicProcedure,
 } from '~/server/api/trpc';
 import { supabase } from '~/utils/supabase';
-import { UploadResult } from '~/utils/uploadImage';
+import type { UploadResult } from '~/utils/uploadImage';
 
 export const productsRouter = createTRPCRouter({
 	get: publicProcedure.query(async ({ ctx }) => {

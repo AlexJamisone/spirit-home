@@ -19,7 +19,6 @@ const Navigation = () => {
 			children: 'Войти',
 			path: '/signin',
 		},
-		
 	];
 	if (isSignedIn) {
 		links.splice(2, 1);
@@ -54,7 +53,7 @@ const Navigation = () => {
 						{children}
 					</ChakraLink>
 				))}
-				<CartMenu/>
+				<CartMenu />
 				{isSignedIn ? (
 					<UserButton />
 				) : (

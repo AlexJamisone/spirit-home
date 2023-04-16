@@ -1,18 +1,27 @@
 import { Box, Text } from '@chakra-ui/react';
 import { type Dispatch, useCallback } from 'react';
 import Dropzone from 'react-dropzone';
-import type { Action } from '~/reducer/FormReducer';
-import { uploadDrop } from '~/utils/uploadImage';
+import type { Action, FormProductState } from '~/reducer/FormReducer';
+import { update, upload } from '~/utils/uploadImage';
 
 type DragDropProps = {
 	dispatch: Dispatch<Action>;
+	edit: boolean;
+	form: FormProductState;
 };
 
-const DragDrop = ({ dispatch }: DragDropProps) => {
+const DragDrop = ({ dispatch, edit, form }: DragDropProps) => {
 	const handleFileSelect = useCallback(async (acceptedFiles: File[]) => {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-		const upload = await uploadDrop(acceptedFiles);
-		dispatch({type: "SET_IMG", payload: upload})
+		if (edit) {
+			const updateImg = await update(
+				acceptedFiles,
+				form.image.map((item) => item.path)
+			);
+			dispatch({ type: 'SET_IMG', payload: updateImg });
+		} else {
+			const uploadImg = await upload(acceptedFiles);
+			dispatch({ type: 'SET_IMG', payload: uploadImg });
+		}
 	}, []);
 
 	return (
