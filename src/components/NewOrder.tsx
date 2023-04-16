@@ -9,11 +9,13 @@ import {
 	Radio,
 	Button,
 	Stack,
+	useToast,
 } from '@chakra-ui/react';
 import UserAddressCard from './User/UserAddressCard';
 import { api } from '~/utils/api';
 import CartItem from './Cart/CartItem';
 import { useCart } from '~/context/cartContext';
+import { CartState } from '~/reducer/CartReducer';
 
 type NewOrderProps = {
 	isOpen: boolean;
@@ -22,15 +24,34 @@ type NewOrderProps = {
 
 const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 	const { data: user } = api.users.get.useQuery();
-	const { cartState } = useCart();
+	const { mutate: createOrder, isLoading } = api.orders.create.useMutation();
+	const { cartState, cartDispatch } = useCart();
+	const toast = useToast();
+	const ctx = api.useContext();
 	if (!user) return null;
+	const handlCreate = () => {
+		createOrder(
+			{ cart: cartState },
+			{
+				onSuccess: () => {
+					toast({
+						description: `Заказ успешно создан🚀`,
+						status: 'success',
+					});
+					void ctx.users.invalidate();
+					cartDispatch({ type: 'CLER_CART' });
+					onClose();
+				},
+			}
+		);
+	};
 	return (
 		<Modal isOpen={isOpen} onClose={onClose}>
 			<ModalOverlay />
-			<ModalContent maxW={['50%']}>
+			<ModalContent maxW={['40%']}>
 				<ModalHeader>Новый заказ</ModalHeader>
 				<ModalCloseButton />
-				<ModalBody>
+				<ModalBody minW={['100%']}>
 					<Stack gap={5} direction="column">
 						{user.address?.map((address) => (
 							<Radio key={address.id}>
@@ -49,7 +70,9 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 					</Stack>
 				</ModalBody>
 				<ModalFooter gap={5}>
-					<Button>Оформить</Button>
+					<Button isLoading={isLoading} onClick={handlCreate}>
+						Оформить
+					</Button>
 					<Button>Отмена</Button>
 				</ModalFooter>
 			</ModalContent>

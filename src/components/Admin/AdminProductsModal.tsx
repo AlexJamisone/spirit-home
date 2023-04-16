@@ -227,6 +227,7 @@ const AdminProductsModal = ({
 									{form.image.map((src, index) => (
 										<Stack key={index} position="relative">
 											<IconButton
+												variant="ghost"
 												as={motion.button}
 												initial={{
 													opacity: 0,

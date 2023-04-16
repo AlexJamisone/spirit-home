@@ -28,7 +28,7 @@ const UserOrders = () => {
 				p={5}
 			>
 				{user.orders?.length === 0 ? (
-					<Text>Пока что нету заказов</Text>
+					<Text textAlign="center">Пока что нету заказов</Text>
 				) : (
 					<TableContainer>
 						<Table>
