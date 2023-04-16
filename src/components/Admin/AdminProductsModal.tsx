@@ -162,7 +162,21 @@ const AdminProductsModal = ({
 		},
 	];
 	return (
-		<Modal isOpen={isOpen} onClose={onClose} closeOnOverlayClick={false}>
+		<Modal
+			isOpen={isOpen}
+			onClose={onClose}
+			closeOnOverlayClick={false}
+			closeOnEsc={false}
+			onEsc={() => {
+				if (edit) {
+					dispatch({ type: 'SET_CLEAR' });
+					setEdit(false)
+					onClose();
+				} else {
+					toggleAlert();
+				}
+			}}
+		>
 			<ModalOverlay />
 			<ModalContent>
 				<ModalHeader>Создать новый товар</ModalHeader>
