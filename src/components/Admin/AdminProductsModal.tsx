@@ -22,12 +22,13 @@ import {
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import { useEffect } from 'react';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
 import DragDrop from '../Drag&Drop';
 import AdminProductsAlert from './AdminProductsAlert';
 import { TiDeleteOutline } from 'react-icons/ti';
-import { UploadResult } from '~/utils/uploadImage';
+import type { UploadResult } from '~/utils/uploadImage';
 type AdminProductsModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
@@ -60,6 +61,10 @@ const AdminProductsModal = ({
 		api.products.update.useMutation();
 
 	const { mutate: deletImg } = api.products.deletImage.useMutation();
+
+	useEffect(() => {
+		dispatch({ type: 'SET_CATEG', payload: categories?.[0]?.title ?? '' });
+	}, []);
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -123,9 +128,9 @@ const AdminProductsModal = ({
 						void ctx.products.invalidate();
 						onClose();
 					},
-					onError: (e) => {
+					onError: ({ data }) => {
 						const errorMessage =
-							e.data?.zodError?.fieldErrors?.description;
+							data?.zodError?.fieldErrors?.description;
 						toast({
 							description: `Ошибка: ${
 								errorMessage?.[0] as string
@@ -148,7 +153,7 @@ const AdminProductsModal = ({
 					status: 'warning',
 					isClosable: true,
 				});
-				const updateImages = form.image.filter((_, i) => i !== index)
+				const updateImages = form.image.filter((_, i) => i !== index);
 				dispatch({
 					type: 'SET_IMG',
 					payload: updateImages,
@@ -184,7 +189,6 @@ const AdminProductsModal = ({
 			name: 'quantity',
 		},
 	];
-	console.log(form.image);
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -223,6 +227,20 @@ const AdminProductsModal = ({
 									{form.image.map((src, index) => (
 										<Stack key={index} position="relative">
 											<IconButton
+												as={motion.button}
+												initial={{
+													opacity: 0,
+													rotate: 180,
+												}}
+												animate={{
+													opacity: 1,
+													rotate: 0,
+													transition: {
+														type: 'just',
+														duration: 0.5,
+														delay: 1,
+													},
+												}}
 												position="absolute"
 												right={-5}
 												top={-2}
@@ -301,12 +319,16 @@ const AdminProductsModal = ({
 							)}
 							<FormLabel>Категория</FormLabel>
 							<Select
-								value={edit ? form.category : undefined}
 								onChange={(e) =>
 									dispatch({
 										type: 'SET_CATEG',
 										payload: e.target.value,
 									})
+								}
+								defaultValue={
+									edit
+										? form.category
+										: categories?.[0]?.title
 								}
 							>
 								{categories?.map(({ id, title }) => (
@@ -337,11 +359,14 @@ const AdminProductsModal = ({
 								</Button>
 							) : (
 								<Button
-									onClick={() =>
-										form.image.length === 0
-											? onClose()
-											: toggleAlert()
-									}
+									onClick={() => {
+										if (form.image.length === 0) {
+											dispatch({ type: 'SET_CLEAR' });
+											onClose();
+										} else {
+											toggleAlert();
+										}
+									}}
 								>
 									Отмена
 								</Button>

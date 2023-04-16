@@ -13,7 +13,7 @@ import type { Product, Role } from '@prisma/client';
 import type { SyntheticEvent } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import { useCart } from '~/context/cartContext';
-import { UploadResult } from '~/utils/uploadImage';
+import type { UploadResult } from '~/utils/uploadImage';
 
 type ProductsCardProps = {
 	product: Product;

@@ -1,6 +1,6 @@
 import { AbsoluteCenter, Box, Icon, Stack, Text } from '@chakra-ui/react';
 import { type Dispatch, useCallback } from 'react';
-import Dropzone, { useDropzone } from 'react-dropzone';
+import Dropzone from 'react-dropzone';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { update, upload } from '~/utils/uploadImage';
 import { MdOutlinePhotoLibrary } from 'react-icons/md';
@@ -24,7 +24,6 @@ const DragDrop = ({ dispatch, edit, form }: DragDropProps) => {
 			dispatch({ type: 'SET_IMG', payload: uploadImg });
 		}
 	}, []);
-	const { acceptedFiles } = useDropzone();
 
 	return (
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
