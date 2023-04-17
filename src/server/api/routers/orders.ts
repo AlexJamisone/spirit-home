@@ -6,10 +6,11 @@ import {
 	createTRPCRouter,
 	privetProcedure,
 	publicProcedure,
+	adminProcedure
 } from '~/server/api/trpc';
 
 export const ordersRouter = createTRPCRouter({
-	get: privetProcedure.query(async ({ ctx }) => {
+	get: adminProcedure.query(async ({ ctx }) => {
 		const orders = await ctx.prisma.order.findMany({
 			select: {
 				orderItem: {

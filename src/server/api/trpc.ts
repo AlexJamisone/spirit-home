@@ -41,10 +41,10 @@ export const createTRPCContext = (opts: CreateNextContextOptions) => {
  * ZodErrors so that you get typesafety on the frontend if your procedure fails due to validation
  * errors on the backend.
  */
+import { getAuth } from '@clerk/nextjs/server';
 import { TRPCError, initTRPC } from '@trpc/server';
 import superjson from 'superjson';
 import { ZodError } from 'zod';
-import { getAuth } from '@clerk/nextjs/server';
 
 const t = initTRPC.context<typeof createTRPCContext>().create({
 	transformer: superjson,
@@ -85,6 +85,22 @@ export const createTRPCRouter = t.router;
  */
 export const publicProcedure = t.procedure;
 
+const isAdmin = t.middleware(async ({ ctx, next }) => {
+	const user = await ctx.prisma.user.findUnique({
+		where: {
+			id: ctx.userId as string,
+		},
+	});
+	if (!user)
+		throw new TRPCError({ code: 'NOT_FOUND', message: 'User not found' });
+	if (user?.role === 'USER')
+		throw new TRPCError({
+			code: 'UNAUTHORIZED',
+			message: 'User is Not Admin',
+		});
+	return next();
+});
+
 const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
 	if (!ctx.userId) {
 		throw new TRPCError({ code: 'UNAUTHORIZED' });
@@ -97,3 +113,4 @@ const enforceUserIsAuthed = t.middleware(async ({ ctx, next }) => {
 });
 
 export const privetProcedure = t.procedure.use(enforceUserIsAuthed);
+export const adminProcedure = t.procedure.use(isAdmin);
