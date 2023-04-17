@@ -59,6 +59,8 @@ const CartItem = ({
 		>
 			<Image
 				w={[100]}
+				h={[90]}
+				objectFit='contain'
 				src={`${
 					process.env.NEXT_PUBLIC_SUPABASE_URL as string
 				}/storage/v1/object/public/products/${image[0] as string}`}

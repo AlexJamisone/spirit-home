@@ -1,15 +1,12 @@
-import { clerkClient } from '@clerk/nextjs/server';
 import { TRPCError } from '@trpc/server';
-import { filterUserForClient } from '~/server/helpers/filterUserForClient';
 import { z } from 'zod';
 
+import type { CartState } from '~/reducer/CartReducer';
 import {
 	createTRPCRouter,
 	privetProcedure,
 	publicProcedure,
 } from '~/server/api/trpc';
-import type { Address } from '@prisma/client';
-import type { CartState } from '~/reducer/CartReducer';
 
 export const ordersRouter = createTRPCRouter({
 	get: privetProcedure.query(async ({ ctx }) => {
@@ -30,7 +27,11 @@ export const ordersRouter = createTRPCRouter({
 					},
 				},
 				userId: true,
+
 			},
+			orderBy: {
+				createdAt: "desc"
+			}
 		});
 		return orders;
 	}),

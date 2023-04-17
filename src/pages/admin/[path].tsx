@@ -2,7 +2,7 @@ import { Center } from '@chakra-ui/react';
 import { UserProfile } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 import AdminCategorys from '~/components/Admin/AdminCategorys';
-import AdminOrders from '~/components/Admin/AdminOrders';
+import AdminOrders from '~/components/Admin/AdminOrders/AdminOrders';
 import AdminProducts from '~/components/Admin/AdminProducts';
 import ProtectionRoutes from '~/guards/ProtectionRoutes';
 
