@@ -1,3 +1,4 @@
+import { OrderStatus } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -6,7 +7,7 @@ import {
 	createTRPCRouter,
 	privetProcedure,
 	publicProcedure,
-	adminProcedure
+	adminProcedure,
 } from '~/server/api/trpc';
 
 export const ordersRouter = createTRPCRouter({
@@ -28,11 +29,10 @@ export const ordersRouter = createTRPCRouter({
 					},
 				},
 				userId: true,
-
 			},
 			orderBy: {
-				createdAt: "desc"
-			}
+				createdAt: 'desc',
+			},
 		});
 		return orders;
 	}),
@@ -63,5 +63,17 @@ export const ordersRouter = createTRPCRouter({
 					message: 'Ошибка с созданием заказа',
 				});
 			return createOrder;
+		}),
+	changeStatus: adminProcedure
+		.input(z.object({ status: z.custom<OrderStatus>(), id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.order.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					status: input.status,
+				},
+			});
 		}),
 });

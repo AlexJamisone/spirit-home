@@ -1,34 +1,50 @@
 import {
 	Radio,
 	RadioGroup,
+	Spinner,
 	Stack,
-	Table,
-	TableCaption,
-	TableContainer,
-	Tbody,
-	Td,
 	Text,
-	Th,
-	Thead,
-	Tr,
+	useToast,
 } from '@chakra-ui/react';
-import type { OrderStatus } from '@prisma/client';
-import { useState } from 'react';
 import { api } from '~/utils/api';
-import AdminOrdersTable from './AdminOrdersTable';
 import AdminOrdersInfo from './AdminOrdersInfo';
+import AdminOrdersTable from './AdminOrdersTable';
+import type { OrderStatus } from '@prisma/client';
 
 const AdminOrders = () => {
 	const { data: orders } = api.orders.get.useQuery();
-	const [statusState, setStatusState] = useState<OrderStatus>('PENDING');
+	const { mutate: changeStatus, isLoading } =
+		api.orders.changeStatus.useMutation();
+	const ctx = api.useContext();
+	const toast = useToast();
 	if (!orders) return null;
+
+	const handlChangeStatus = (value: OrderStatus, id: string) => {
+		changeStatus(
+			{
+				status: value,
+				id,
+			},
+			{
+				onSuccess: () => {
+					toast({
+						description: `Статус изменён!✌`,
+						status: 'info',
+						isClosable: true,
+					});
+					void ctx.orders.invalidate();
+				},
+			}
+		);
+	};
 	return (
 		<Stack direction="row" gap={5}>
 			{orders.length === 0 ? (
 				<>Пока что нету заказов</>
 			) : (
 				orders.map((order) => {
-					const { address, createdAt, orderItem, id, user } = order;
+					const { address, createdAt, orderItem, id, user, status } =
+						order;
 					return (
 						<Stack
 							key={id}
@@ -42,7 +58,11 @@ const AdminOrders = () => {
 							position="relative"
 							cursor="pointer"
 						>
-							<AdminOrdersInfo address={address} user={user} createdAt={createdAt}/>
+							<AdminOrdersInfo
+								address={address}
+								user={user}
+								createdAt={createdAt}
+							/>
 							<AdminOrdersTable orderItem={orderItem} />
 							<Stack
 								direction="row"
@@ -64,12 +84,25 @@ const AdminOrders = () => {
 								justifyContent="center"
 								alignContent="center"
 							>
-								<Text textAlign="center">Статус</Text>
+								<Stack
+									direction="row"
+									justifyContent="center"
+									alignItems="center"
+								>
+									<Text textAlign="center">Статус</Text>
+									{isLoading ? (
+										<Spinner size="sm" key={id} />
+									) : null}
+								</Stack>
 								<RadioGroup
 									onChange={(value) =>
-										setStatusState(value as OrderStatus)
+										handlChangeStatus(
+											value as OrderStatus,
+											id
+										)
 									}
-									value={statusState}
+									defaultValue={status}
+									value={status}
 									display="flex"
 									flexDirection="column"
 								>
