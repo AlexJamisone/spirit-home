@@ -31,6 +31,7 @@ model Address {
     city         String
     contactPhone String
     point        String
+    Order        Order[]
 }
 
 model Catergory {
@@ -58,10 +59,12 @@ model Product {
 model Order {
     id        String      @id @default(cuid())
     user      User?       @relation(fields: [userId], references: [id])
+    address   Address     @relation(fields: [addressId], references: [id])
     userId    String
     status    OrderStatus @default(PENDING)
     createdAt DateTime    @default(now())
     orderItem OrderItem[]
+    addressId String
 }
 
 model OrderItem {

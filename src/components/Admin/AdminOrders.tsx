@@ -1,7 +1,22 @@
-import { Spinner, Stack, Text, RadioGroup, Radio } from '@chakra-ui/react';
-import { api } from '~/utils/api';
-import { useState } from 'react';
+import {
+	Radio,
+	RadioGroup,
+	Stack,
+	Table,
+	TableCaption,
+	Tbody,
+	Td,
+	Text,
+	Th,
+	Thead,
+	Tr,
+} from '@chakra-ui/react';
 import type { OrderStatus } from '@prisma/client';
+import { useState } from 'react';
+import { api } from '~/utils/api';
+import dayjs from 'dayjs';
+dayjs().locale('ru').format();
+
 const AdminOrders = () => {
 	const { data: orders } = api.orders.get.useQuery();
 	const [statusState, setStatusState] = useState<OrderStatus>('PENDING');
@@ -11,11 +26,11 @@ const AdminOrders = () => {
 			{orders.length === 0 ? (
 				<>Пока что нету заказов</>
 			) : (
-				orders.map(({ id, orderItem, user }) => (
+				orders.map(({ id, orderItem, user, address, createdAt }) => (
 					<Stack
 						key={id}
-						w={['300px']}
-						h={['400px']}
+						w={['100%']}
+						h={['100%']}
 						direction="column"
 						border="1px solid #CBD5E0"
 						p={5}
@@ -24,26 +39,57 @@ const AdminOrders = () => {
 						position="relative"
 						cursor="pointer"
 					>
-						<Text>
-							ФИО: {user?.firstName} {user?.lastName}
-						</Text>
-						<Text>Email: {user?.email}</Text>
-						<Text>Телефон {user?.address[0]?.contactPhone}</Text>
-						<Text>CДЭК: {user?.address[0]?.point}</Text>
-						{orderItem.map(({ product: { name, price } }) => (
-							<Stack
-								key={id}
-								direction="row"
-								justifyContent="space-between"
-							>
-								<Text>{name}</Text>
-								<Text>{price}</Text>
-							</Stack>
-						))}
-						<Text>{`Итог: ${orderItem.reduce(
-							(acc, curr) => acc + curr.product.price,
-							0
-						)}`}</Text>
+						<Stack>
+							<Text fontWeight={600}>
+								Дата cоздания:{' '}
+								{dayjs(createdAt).format('DD.MM.YYYY HH:mm')}
+								{}
+							</Text>
+							<Text>
+								ФИО: {user?.firstName} {user?.lastName}
+							</Text>
+							<Text>Телефон: {address.contactPhone}</Text>
+							<Text>Email: {user?.email}</Text>
+							<Text>Город: {address.city}</Text>
+							<Text>ПВЗ: {address.point}</Text>
+						</Stack>
+						<Table variant="simple">
+							<TableCaption placement="top">Заказ</TableCaption>
+							<Thead>
+								<Tr>
+									<Th>Позиция</Th>
+									<Th>Кол-во</Th>
+									<Th>Сумма</Th>
+								</Tr>
+							</Thead>
+							<Tbody>
+								{orderItem.map(
+									({
+										product: { id, name, price },
+										quantity,
+									}) => (
+										<Tr key={id}>
+											<Td>{name}</Td>
+											<Td>{quantity} шт.</Td>
+											<Td>{price * quantity} ₽</Td>
+										</Tr>
+									)
+								)}
+							</Tbody>
+						</Table>
+						<Stack direction="row" justifyContent="space-between">
+							<Text>Итог:</Text>
+							<Text fontWeight={600}>
+								{orderItem.reduce(
+									(acc, current) =>
+										acc +
+										current.product.price *
+											current.quantity,
+									0
+								)}{' '}
+								₽
+							</Text>
+						</Stack>
 						<Stack justifyContent="center" alignContent="center">
 							<Text textAlign="center">Статус</Text>
 							<RadioGroup

@@ -20,6 +20,7 @@ export const ordersRouter = createTRPCRouter({
 						product: true,
 					},
 				},
+				address: true,
 				createdAt: true,
 				id: true,
 				status: true,
@@ -36,6 +37,7 @@ export const ordersRouter = createTRPCRouter({
 	create: publicProcedure
 		.input(
 			z.object({
+				address: z.string().nonempty(),
 				cart: z.custom<CartState>(),
 			})
 		)
@@ -50,6 +52,7 @@ export const ordersRouter = createTRPCRouter({
 					orderItem: {
 						createMany: { data: product },
 					},
+					addressId: input.address,
 				},
 			});
 			if (!createOrder)

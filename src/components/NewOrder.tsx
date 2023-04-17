@@ -10,12 +10,14 @@ import {
 	Button,
 	Stack,
 	useToast,
+	FormControl,
+	RadioGroup,
 } from '@chakra-ui/react';
 import UserAddressCard from './User/UserAddressCard';
 import { api } from '~/utils/api';
 import CartItem from './Cart/CartItem';
 import { useCart } from '~/context/cartContext';
-import { CartState } from '~/reducer/CartReducer';
+import { useState } from 'react';
 
 type NewOrderProps = {
 	isOpen: boolean;
@@ -26,12 +28,13 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 	const { data: user } = api.users.get.useQuery();
 	const { mutate: createOrder, isLoading } = api.orders.create.useMutation();
 	const { cartState, cartDispatch } = useCart();
+	const [address, setAddress] = useState('');
 	const toast = useToast();
 	const ctx = api.useContext();
 	if (!user) return null;
-	const handlCreate = () => {
+	const handlSubmit = (idAddress: string) => {
 		createOrder(
-			{ cart: cartState },
+			{ cart: cartState, address: idAddress },
 			{
 				onSuccess: () => {
 					toast({
@@ -46,35 +49,69 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 		);
 	};
 	return (
-		<Modal isOpen={isOpen} onClose={onClose}>
+		<Modal
+			isOpen={isOpen}
+			onClose={() => {
+				setAddress('');
+				onClose();
+			}}
+		>
 			<ModalOverlay />
-			<ModalContent maxW={['40%']}>
+			<ModalContent maxW={['50%']}>
 				<ModalHeader>Новый заказ</ModalHeader>
 				<ModalCloseButton />
-				<ModalBody minW={['100%']}>
-					<Stack gap={5} direction="column">
-						{user.address?.map((address) => (
-							<Radio key={address.id}>
-								<UserAddressCard
-									address={address}
-									email={user.email}
-									firstName={user.firstName}
-									lastName={user.lastName}
-									cantEdit={true}
-								/>
-							</Radio>
-						))}
-						{cartState.items.map((item) => (
-							<CartItem item={item} key={item.id} />
-						))}
-					</Stack>
+				<ModalBody>
+					<FormControl
+						as="form"
+						onSubmit={(e) => {
+							e.preventDefault();
+							handlSubmit(address);
+						}}
+						isRequired
+					>
+						<Stack gap={5} direction="column">
+							<RadioGroup onChange={setAddress} value={address}>
+								<Stack
+									direction="row"
+									gap={3}
+									flexWrap="wrap"
+									justifyContent="center"
+								>
+									{user.address?.map((address) => (
+										<Radio
+											key={address.id}
+											value={address.id}
+										>
+											<UserAddressCard
+												address={address}
+												email={user.email}
+												firstName={user.firstName}
+												lastName={user.lastName}
+												cantEdit={true}
+											/>
+										</Radio>
+									))}
+								</Stack>
+							</RadioGroup>
+							{cartState.items.map((item) => (
+								<CartItem item={item} key={item.id} />
+							))}
+						</Stack>
+						<ModalFooter gap={5}>
+							<Button type="submit" isLoading={isLoading}>
+								Оформить
+							</Button>
+							<Button
+								onClick={() => {
+									setAddress('');
+									onClose();
+								}}
+							>
+								Отмена
+							</Button>
+						</ModalFooter>
+					</FormControl>
 				</ModalBody>
-				<ModalFooter gap={5}>
-					<Button isLoading={isLoading} onClick={handlCreate}>
-						Оформить
-					</Button>
-					<Button>Отмена</Button>
-				</ModalFooter>
 			</ModalContent>
 		</Modal>
 	);
