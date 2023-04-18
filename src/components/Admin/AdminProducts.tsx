@@ -6,7 +6,7 @@ import {
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
-import type { Product } from '@prisma/client';
+import type { Product, ProductPriceHistory } from '@prisma/client';
 import { useReducer, useState, type SyntheticEvent } from 'react';
 
 import { IoIosAddCircleOutline } from 'react-icons/io';
@@ -62,7 +62,9 @@ const AdminProducts = () => {
 		);
 		e.stopPropagation();
 	};
-	const handlEdit = (product: Product) => {
+	const handlEdit = (
+		product: Product & { priceHistory: ProductPriceHistory[] }
+	) => {
 		setEdit(true);
 		dispatch({
 			type: 'SET_ALL',
@@ -72,7 +74,7 @@ const AdminProducts = () => {
 				description: product.description,
 				image: product.image.map((path) => ({ path, error: null })),
 				name: product.name,
-				price: product.price,
+				price: product.priceHistory[0]?.price as number,
 				quantity: product.quantity,
 			},
 		});

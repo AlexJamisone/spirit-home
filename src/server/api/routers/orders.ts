@@ -5,7 +5,6 @@ import { z } from 'zod';
 import type { CartState } from '~/reducer/CartReducer';
 import {
 	createTRPCRouter,
-	privetProcedure,
 	publicProcedure,
 	adminProcedure,
 } from '~/server/api/trpc';
@@ -16,7 +15,15 @@ export const ordersRouter = createTRPCRouter({
 			select: {
 				orderItem: {
 					include: {
-						product: true,
+						product: {
+							include: {
+								priceHistory: {
+									orderBy: {
+										effectiveFrom: "desc"
+									}
+								},
+							},
+						},
 					},
 				},
 				address: true,

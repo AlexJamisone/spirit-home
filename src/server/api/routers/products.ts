@@ -9,9 +9,35 @@ import type { UploadResult } from '~/utils/uploadImage';
 
 export const productsRouter = createTRPCRouter({
 	get: publicProcedure.query(async ({ ctx }) => {
-		const products = await ctx.prisma.product.findMany();
+		const products = await ctx.prisma.product.findMany({
+			include: {
+				priceHistory: {
+					orderBy: {
+						effectiveFrom: 'desc',
+					},
+				},
+			},
+		});
 		return products;
 	}),
+	getLastById: publicProcedure
+		.input(z.object({ id: z.string() }))
+		.query(async ({ ctx, input }) => {
+			const product = await ctx.prisma.product.findUnique({
+				where: {
+					id: input.id,
+				},
+				include: {
+					priceHistory: {
+						orderBy: {
+							effectiveFrom: 'desc',
+						},
+						take: 1,
+					},
+				},
+			});
+			return product
+		}),
 	create: privetProcedure
 		.input(
 			z.object({
@@ -28,7 +54,11 @@ export const productsRouter = createTRPCRouter({
 				data: {
 					name: input.name,
 					description: input.description,
-					price: input.price,
+					priceHistory: {
+						create: {
+							price: input.price,
+						},
+					},
 					image: input.image,
 					categoryTitle: input.category,
 					quantity: input.quantity,
@@ -60,10 +90,8 @@ export const productsRouter = createTRPCRouter({
 		.mutation(({ input }) => {
 			const res = Promise.all(
 				input.map(async ({ path }) => {
-					await supabase.storage
-						.from('products')
-						.remove([path]);
-					return {path, error: null}
+					await supabase.storage.from('products').remove([path]);
+					return { path, error: null };
 				})
 			);
 			return res;
@@ -88,7 +116,11 @@ export const productsRouter = createTRPCRouter({
 				data: {
 					name: input.name,
 					description: input.description,
-					price: input.price,
+					priceHistory: {
+						create: {
+							price: input.price,
+						},
+					},
 					image: input.image,
 					categoryTitle: input.category,
 					quantity: input.quantity,

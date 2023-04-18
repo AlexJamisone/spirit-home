@@ -8,16 +8,19 @@ import {
 	Thead,
 	Tr,
 } from '@chakra-ui/react';
-import type { OrderItem, Product } from '@prisma/client';
+import type { OrderItem, Product, ProductPriceHistory } from '@prisma/client';
 import React from 'react';
 
 type AdminOrdersTableProps = {
 	orderItem: (OrderItem & {
-		product: Product;
+		product: Product & {
+			priceHistory: ProductPriceHistory[];
+		};
 	})[];
+	createdAt: Date;
 };
 
-const AdminOrdersTable = ({ orderItem }: AdminOrdersTableProps) => {
+const AdminOrdersTable = ({ orderItem, createdAt }: AdminOrdersTableProps) => {
 	return (
 		<TableContainer
 			overflowY="auto"
@@ -47,11 +50,16 @@ const AdminOrdersTable = ({ orderItem }: AdminOrdersTableProps) => {
 				</Thead>
 				<Tbody>
 					{orderItem.map(
-						({ product: { id, name, price }, quantity }) => (
+						({ product: { id, name, priceHistory }, quantity }) => (
 							<Tr key={id}>
 								<Td>{name}</Td>
 								<Td>{quantity} шт.</Td>
-								<Td>{price * quantity} ₽</Td>
+								<Td>
+									{(priceHistory.find(
+										(history) =>
+											history.effectiveFrom <= createdAt
+									)?.price ?? 0) * quantity}
+								</Td>
 							</Tr>
 						)
 					)}

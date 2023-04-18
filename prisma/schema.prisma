@@ -44,16 +44,24 @@ model Catergory {
 }
 
 model Product {
-    id            String      @id @default(cuid())
+    id            String                @id @default(cuid())
     name          String
     description   String
-    price         Float
     image         String[]
     quantity      Int
     comments      Comment[]
-    category      Catergory?  @relation(fields: [categoryTitle], references: [title])
+    category      Catergory?            @relation(fields: [categoryTitle], references: [title])
     categoryTitle String?
     orders        OrderItem[]
+    priceHistory  ProductPriceHistory[]
+}
+
+model ProductPriceHistory {
+    id            String   @id @default(cuid())
+    product       Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+    productId     String
+    price         Int
+    effectiveFrom DateTime @default(now())
 }
 
 model Order {

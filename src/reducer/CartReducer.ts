@@ -1,9 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/restrict-plus-operands */
-import type { Product } from '@prisma/client';
+import type { Product, ProductPriceHistory } from '@prisma/client';
 
-export interface CartItem extends Product {
+type ProductWithPriceHistory = Product & {
+	priceHistory: ProductPriceHistory[];
+};
+export interface CartItem extends ProductWithPriceHistory {
 	quantityInCart: number;
 }
 
@@ -14,7 +17,7 @@ export type CartState = {
 
 interface SetAddToCart {
 	type: 'ADD_TO_CART';
-	payload: Product;
+	payload: ProductWithPriceHistory;
 }
 
 interface SetRemoveFromCart {
@@ -73,10 +76,12 @@ export const cartReducer = (
 					...action.payload,
 					quantityInCart: 1,
 				};
+				const price = action.payload.priceHistory[0]?.price;
+				if (!price) return state;
 				const newState = {
 					...state,
 					items: [...state.items, newItem],
-					totalPrice: state.totalPrice + newItem.price,
+					totalPrice: state.totalPrice + price,
 				};
 				saveCartToLocalStorage(newState);
 				return newState;
@@ -87,10 +92,12 @@ export const cartReducer = (
 				};
 				const updatedItems = [...state.items];
 				updatedItems[itemsIndex] = updatedItem;
+				const price = updatedItem.priceHistory[0]?.price;
+				if (!price) return state;
 				const newState = {
 					...state,
 					items: updatedItems,
-					totalPrice: state.totalPrice + updatedItem.price,
+					totalPrice: state.totalPrice + price,
 				};
 				saveCartToLocalStorage(newState);
 				return newState;
@@ -107,12 +114,13 @@ export const cartReducer = (
 				const updatedItems = state.items.filter(
 					(item) => item.id !== action.payload
 				);
+				const price = removedItem?.priceHistory[0]?.price;
+				if (!price) return state;
 				const newState = {
 					...state,
 					items: updatedItems,
 					totalPrice:
-						state.totalPrice -
-						removedItem!.price * removedItem!.quantityInCart,
+						state.totalPrice - price * removedItem.quantityInCart,
 				};
 				saveCartToLocalStorage(newState);
 				return newState;
@@ -131,11 +139,15 @@ export const cartReducer = (
 				};
 				const updatedItems = [...state.items];
 				updatedItems[itemIndex] = updatedItem;
+				const statePrice =
+					state.items[itemIndex]?.priceHistory[0]?.price;
+				if (!statePrice) return state;
+				const updatePrice = updatedItem.priceHistory[0]?.price;
+				if (!updatePrice) return state;
 				const newTotalPrice =
 					state.totalPrice -
-					state.items[itemIndex]!.price *
-						state.items[itemIndex]!.quantityInCart +
-					updatedItem.price * updatedItem.quantityInCart;
+					statePrice * state.items[itemIndex]!.quantityInCart +
+					updatePrice * updatedItem.quantityInCart;
 				const newState = {
 					...state,
 					items: updatedItems,

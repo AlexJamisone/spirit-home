@@ -9,15 +9,19 @@ import {
 	Tag,
 	Text,
 } from '@chakra-ui/react';
-import type { Product, Role } from '@prisma/client';
+import type { Product, ProductPriceHistory, Role } from '@prisma/client';
 import type { SyntheticEvent } from 'react';
 import { BsTrashFill } from 'react-icons/bs';
 import { useCart } from '~/context/cartContext';
 import type { UploadResult } from '~/utils/uploadImage';
 
 type ProductsCardProps = {
-	product: Product;
-	handlEdit?: (product: Product) => void;
+	product: Product & {
+		priceHistory: ProductPriceHistory[];
+	};
+	handlEdit?: (
+		product: Product & { priceHistory: ProductPriceHistory[] }
+	) => void;
 	handleDelet?: (
 		id: string,
 		path: UploadResult[],
@@ -34,8 +38,15 @@ const ProductsCard = ({
 	handlEdit,
 	admin,
 }: ProductsCardProps) => {
-	const { description, name, image, price, id, categoryTitle, quantity } =
-		product;
+	const {
+		description,
+		name,
+		image,
+		id,
+		categoryTitle,
+		quantity,
+		priceHistory,
+	} = product;
 	const { cartDispatch } = useCart();
 	const handlAddToCart = (e: SyntheticEvent) => {
 		cartDispatch({ type: 'ADD_TO_CART', payload: product });
@@ -151,7 +162,7 @@ const ProductsCard = ({
 				) : (
 					<Text>{`${quantity} шт`}</Text>
 				)}
-				<Text>{`${price} ₽`}</Text>
+				<Text>{`${priceHistory[0]?.price ?? 0} ₽`}</Text>
 			</Stack>
 		</Stack>
 	);

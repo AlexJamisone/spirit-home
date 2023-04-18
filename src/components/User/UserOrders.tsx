@@ -60,7 +60,10 @@ const UserOrders = () => {
 												{orderItem.map(
 													({
 														id,
-														product: { name },
+														product: {
+															name,
+															priceHistory,
+														},
 														quantity,
 													}) => (
 														<Stack
@@ -82,8 +85,9 @@ const UserOrders = () => {
 															quantity,
 															product,
 														} = current;
-														const price =
-															product.price;
+														const price = product
+															.priceHistory[0]
+															?.price as number;
 														const itemTotal =
 															quantity * price;
 														return acc + itemTotal;

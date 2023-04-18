@@ -63,20 +63,28 @@ const AdminOrders = () => {
 								user={user}
 								createdAt={createdAt}
 							/>
-							<AdminOrdersTable orderItem={orderItem} />
+							<AdminOrdersTable
+								orderItem={orderItem}
+								createdAt={createdAt}
+							/>
 							<Stack
 								direction="row"
 								justifyContent="space-between"
 							>
 								<Text>Итог:</Text>
 								<Text fontWeight={600}>
-									{orderItem.reduce(
-										(acc, current) =>
-											acc +
-											current.product.price *
-												current.quantity,
-										0
-									)}{' '}
+									{orderItem.reduce((acc, current) => {
+										const effectivePrice =
+											current.product.priceHistory.find(
+												(history) =>
+													history.effectiveFrom <=
+													createdAt
+											);
+										const price = effectivePrice
+											? effectivePrice.price
+											: 0;
+										return acc + price * current.quantity;
+									}, 0)}
 									₽
 								</Text>
 							</Stack>

@@ -18,7 +18,7 @@ type CartItemProps = {
 };
 
 const CartItem = ({
-	item: { image, name, price, quantityInCart, id },
+	item: { image, name, quantityInCart, id, priceHistory },
 }: CartItemProps) => {
 	const { cartDispatch } = useCart();
 	const handlCount = (icon: IconType, action: 'plus' | 'minus') => {
@@ -60,7 +60,7 @@ const CartItem = ({
 			<Image
 				w={[100]}
 				h={[90]}
-				objectFit='contain'
+				objectFit="contain"
 				src={`${
 					process.env.NEXT_PUBLIC_SUPABASE_URL as string
 				}/storage/v1/object/public/products/${image[0] as string}`}
@@ -73,7 +73,7 @@ const CartItem = ({
 				<Text>{quantityInCart}</Text>
 				{handlCount(IoIosArrowForward, 'plus')}
 			</Stack>
-			<Text>{price} ₽</Text>
+			<Text>{priceHistory[0]?.price} ₽</Text>
 			<IconButton
 				variant="ghost"
 				aria-label="remove"
