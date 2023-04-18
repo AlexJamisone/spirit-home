@@ -49,11 +49,12 @@ model Product {
     description   String
     image         String[]
     quantity      Int
+    categoryTitle String?
     comments      Comment[]
     category      Catergory?            @relation(fields: [categoryTitle], references: [title])
-    categoryTitle String?
     orders        OrderItem[]
     priceHistory  ProductPriceHistory[]
+    archived      Boolean               @default(false)
 }
 
 model ProductPriceHistory {

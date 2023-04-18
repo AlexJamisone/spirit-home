@@ -1,4 +1,4 @@
-import { UploadResult } from '~/utils/uploadImage';
+import type { UploadResult } from '~/utils/uploadImage';
 
 export interface FormProductState {
 	id: string;
@@ -42,6 +42,7 @@ interface SetQuantityAction {
 interface SetClearAction {
 	type: 'SET_CLEAR';
 }
+
 interface SetAllAction {
 	type: 'SET_ALL';
 	payload: FormProductState;
@@ -56,7 +57,7 @@ export type Action =
 	| SetQuantityAction
 	| SetClearAction
 	| SetAllAction
-	| SetIdAction;
+	| SetIdAction
 
 export const initialState: FormProductState = {
 	id: '',

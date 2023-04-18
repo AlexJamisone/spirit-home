@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+	adminProcedure,
 	createTRPCRouter,
 	privetProcedure,
 	publicProcedure,
@@ -20,24 +21,6 @@ export const productsRouter = createTRPCRouter({
 		});
 		return products;
 	}),
-	getLastById: publicProcedure
-		.input(z.object({ id: z.string() }))
-		.query(async ({ ctx, input }) => {
-			const product = await ctx.prisma.product.findUnique({
-				where: {
-					id: input.id,
-				},
-				include: {
-					priceHistory: {
-						orderBy: {
-							effectiveFrom: 'desc',
-						},
-						take: 1,
-					},
-				},
-			});
-			return product
-		}),
 	create: privetProcedure
 		.input(
 			z.object({
@@ -66,7 +49,24 @@ export const productsRouter = createTRPCRouter({
 			});
 			return createProduct;
 		}),
-	delete: privetProcedure
+	archived: adminProcedure
+		.input(
+			z.object({
+				id: z.string(),
+				action: z.boolean(),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.product.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					archived: input.action,
+				},
+			});
+		}),
+	delete: adminProcedure
 		.input(
 			z.object({
 				path: z.array(z.custom<UploadResult>()),

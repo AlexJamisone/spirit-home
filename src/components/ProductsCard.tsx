@@ -8,12 +8,14 @@ import {
 	Stack,
 	Tag,
 	Text,
+	useToast,
 } from '@chakra-ui/react';
 import type { Product, ProductPriceHistory, Role } from '@prisma/client';
 import type { SyntheticEvent } from 'react';
-import { BsTrashFill } from 'react-icons/bs';
+import { useState } from 'react';
+import { BiArchiveIn, BiArchiveOut } from 'react-icons/bi';
 import { useCart } from '~/context/cartContext';
-import type { UploadResult } from '~/utils/uploadImage';
+import { api } from '~/utils/api';
 
 type ProductsCardProps = {
 	product: Product & {
@@ -22,22 +24,10 @@ type ProductsCardProps = {
 	handlEdit?: (
 		product: Product & { priceHistory: ProductPriceHistory[] }
 	) => void;
-	handleDelet?: (
-		id: string,
-		path: UploadResult[],
-		name: string,
-		e: SyntheticEvent
-	) => void;
 	isLoading?: boolean;
 	admin?: Role;
 };
-const ProductsCard = ({
-	product,
-	isLoading,
-	handleDelet,
-	handlEdit,
-	admin,
-}: ProductsCardProps) => {
+const ProductsCard = ({ product, handlEdit, admin }: ProductsCardProps) => {
 	const {
 		description,
 		name,
@@ -46,10 +36,53 @@ const ProductsCard = ({
 		categoryTitle,
 		quantity,
 		priceHistory,
+		archived,
 	} = product;
+	const [isArch, setIsArch] = useState(false);
+	const toast = useToast();
+
+	const { mutate: archivedProduct, isLoading } =
+		api.products.archived.useMutation();
+	const ctx = api.useContext();
+
 	const { cartDispatch } = useCart();
+
 	const handlAddToCart = (e: SyntheticEvent) => {
 		cartDispatch({ type: 'ADD_TO_CART', payload: product });
+		e.stopPropagation();
+	};
+
+	const handleArchivedProduct = (
+		id: string,
+		name: string,
+		e: SyntheticEvent
+	) => {
+		setIsArch(!isArch);
+		archivedProduct(
+			{
+				id,
+				action: isArch,
+			},
+			{
+				onSuccess: () => {
+					toast({
+						description: isArch
+							? `Товар ${name} успешно архивирован!🚀`
+							: `Товар ${name} успешно восстоновлен!🎉`,
+						status: isArch ? 'info' : 'success',
+						isClosable: true,
+					});
+					void ctx.products.invalidate();
+				},
+				onError: () => {
+					toast({
+						description: `Ошбка с удалением ❌`,
+						status: 'error',
+						isClosable: true,
+					});
+				},
+			}
+		);
 		e.stopPropagation();
 	};
 	return (
@@ -73,6 +106,8 @@ const ProductsCard = ({
 			onClick={() =>
 				admin === undefined || admin === 'USER'
 					? null
+					: archived
+					? null
 					: handlEdit?.(product)
 			}
 		>
@@ -89,6 +124,21 @@ const ProductsCard = ({
 						rounded="3xl"
 					></Box>
 					<Spinner position="absolute" zIndex={20} size="xl" />
+				</>
+			) : null}
+			{archived ? (
+				<>
+					<Box
+						position="absolute"
+						cursor="not-allowed"
+						w="100%"
+						height="100%"
+						top={0}
+						left={0}
+						zIndex={10}
+						bgColor="whiteAlpha.600"
+						rounded="3xl"
+					></Box>
 				</>
 			) : null}
 			<Stack
@@ -108,26 +158,37 @@ const ProductsCard = ({
 				/>
 				{admin === undefined || admin === 'USER' ? null : (
 					<>
-						<IconButton
-							icon={<Icon as={BsTrashFill} color="red.400" />}
-							aria-label="deletButton"
-							size="sm"
-							position="absolute"
-							top={0}
-							right={0}
-							zIndex={10}
-							onClick={(e) =>
-								handleDelet?.(
-									id,
-									image.map((path) => ({
-										path,
-										error: null,
-									})),
-									name,
-									e
-								)
-							}
-						/>
+						{archived ? (
+							<IconButton
+								icon={
+									<Icon as={BiArchiveOut} color="cyan.600" />
+								}
+								aria-label="deletButton"
+								size="md"
+								position="absolute"
+								top={0}
+								right={0}
+								zIndex={20}
+								onClick={(e) =>
+									handleArchivedProduct?.(id, name, e)
+								}
+							/>
+						) : (
+							<IconButton
+								icon={
+									<Icon as={BiArchiveIn} color="cyan.600" />
+								}
+								aria-label="deletButton"
+								size="md"
+								position="absolute"
+								top={0}
+								right={0}
+								zIndex={10}
+								onClick={(e) =>
+									handleArchivedProduct?.(id, name, e)
+								}
+							/>
+						)}
 					</>
 				)}
 			</Stack>

@@ -18,8 +18,8 @@ export const usersRouter = createTRPCRouter({
 							include: {
 								product: {
 									include: {
-										priceHistory: true
-									}
+										priceHistory: true,
+									},
 								},
 							},
 						},

@@ -12,7 +12,6 @@ import { useReducer, useState, type SyntheticEvent } from 'react';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
-import type { UploadResult } from '~/utils/uploadImage';
 import ProductsCard from '../ProductsCard';
 import AdminProductsModal from './AdminProductsModal';
 
@@ -21,47 +20,13 @@ const AdminProducts = () => {
 	const [edit, setEdit] = useState(false);
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 
-	const toast = useToast();
-
-	const ctx = api.useContext();
+	
 	const { data: user } = api.users.get.useQuery();
 	const { data: products } = api.products.get.useQuery();
-	const { mutate: deleteProducts, isLoading } =
-		api.products.delete.useMutation();
+	
 
 	if (!products) return null;
 
-	const handleDelet = (
-		id: string,
-		path: UploadResult[],
-		name: string,
-		e: SyntheticEvent
-	) => {
-		deleteProducts(
-			{
-				id,
-				path,
-			},
-			{
-				onSuccess: () => {
-					toast({
-						description: `Товар ${name} успешно удалён!🚀`,
-						status: 'info',
-						isClosable: true,
-					});
-					void ctx.products.invalidate();
-				},
-				onError: () => {
-					toast({
-						description: `Ошбка с удалением ❌`,
-						status: 'error',
-						isClosable: true,
-					});
-				},
-			}
-		);
-		e.stopPropagation();
-	};
 	const handlEdit = (
 		product: Product & { priceHistory: ProductPriceHistory[] }
 	) => {
@@ -108,9 +73,7 @@ const AdminProducts = () => {
 								key={product.id}
 								admin={user?.role}
 								product={product}
-								isLoading={isLoading}
 								handlEdit={handlEdit}
-								handleDelet={handleDelet}
 							/>
 						);
 					})

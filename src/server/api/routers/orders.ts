@@ -19,8 +19,8 @@ export const ordersRouter = createTRPCRouter({
 							include: {
 								priceHistory: {
 									orderBy: {
-										effectiveFrom: "desc"
-									}
+										effectiveFrom: 'desc',
+									},
 								},
 							},
 						},
