@@ -11,9 +11,11 @@ const Home: NextPage = () => {
 	return (
 		<>
 			<Center as="main" gap={5} flexWrap="wrap">
-				{products.map((product) => (
-					<ProductsCard key={product.id} product={product} />
-				))}
+				{products
+					.filter((product) => !product.archived)
+					.map((product) => (
+						<ProductsCard key={product.id} product={product} />
+					))}
 			</Center>
 		</>
 	);

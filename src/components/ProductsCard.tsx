@@ -12,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import type { Product, ProductPriceHistory, Role } from '@prisma/client';
 import type { SyntheticEvent } from 'react';
-import { useState } from 'react';
 import { BiArchiveIn, BiArchiveOut } from 'react-icons/bi';
 import { useCart } from '~/context/cartContext';
 import { api } from '~/utils/api';
@@ -38,7 +37,6 @@ const ProductsCard = ({ product, handlEdit, admin }: ProductsCardProps) => {
 		priceHistory,
 		archived,
 	} = product;
-	const [isArch, setIsArch] = useState(false);
 	const toast = useToast();
 
 	const { mutate: archivedProduct, isLoading } =
@@ -57,19 +55,18 @@ const ProductsCard = ({ product, handlEdit, admin }: ProductsCardProps) => {
 		name: string,
 		e: SyntheticEvent
 	) => {
-		setIsArch(!isArch);
 		archivedProduct(
 			{
 				id,
-				action: isArch,
+				action: !archived,
 			},
 			{
 				onSuccess: () => {
 					toast({
-						description: isArch
+						description: archived
 							? `Товар ${name} успешно архивирован!🚀`
 							: `Товар ${name} успешно восстоновлен!🎉`,
-						status: isArch ? 'info' : 'success',
+						status: archived ? 'info' : 'success',
 						isClosable: true,
 					});
 					void ctx.products.invalidate();
@@ -97,7 +94,7 @@ const ProductsCard = ({ product, handlEdit, admin }: ProductsCardProps) => {
 			rounded="3xl"
 			boxShadow="2xl"
 			_hover={{
-				transform: 'scale(1.1)',
+				transform: `${archived ? 'none' : 'scale(1.1)'}`,
 			}}
 			cursor="pointer"
 			transition="all 0.2s ease-in-out"
