@@ -14,8 +14,8 @@ import {
 import { useEffect, useState } from 'react';
 import { SlHandbag } from 'react-icons/sl';
 import { useCart } from '~/context/cartContext';
-import CartItem from './CartItem';
 import NewOrder from '../NewOrder';
+import CartItem from './CartItem';
 const CartMenu = () => {
 	const [isLength, setIsLength] = useState(false);
 	const { cartState } = useCart();

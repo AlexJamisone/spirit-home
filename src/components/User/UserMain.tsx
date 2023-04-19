@@ -1,25 +1,22 @@
 import {
 	Avatar,
-	Stack,
+	Button,
 	Grid,
 	GridItem,
+	Stack,
 	Text,
-	Button,
 	useDisclosure,
-	IconButton,
-	Icon,
 	useToast,
 } from '@chakra-ui/react';
-import { api } from '~/utils/api';
-import UserAddressesFormModal from './UserAddressesFormModal';
-import { BsTrashFill } from 'react-icons/bs';
+import type { Address } from '@prisma/client';
 import { useReducer, useState } from 'react';
 import {
 	InputAddressReducer,
 	initialState,
 } from '~/reducer/InputAddressReducer';
-import type { Address } from '@prisma/client';
+import { api } from '~/utils/api';
 import UserAddressCard from './UserAddressCard';
+import UserAddressesFormModal from './UserAddressesFormModal';
 import UserOrders from './UserOrders';
 
 const UserMain = () => {

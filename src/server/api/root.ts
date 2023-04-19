@@ -1,9 +1,9 @@
-import { createTRPCRouter } from '~/server/api/trpc';
 import { usersRouter } from '~/server/api/routers/users';
-import { categorysRouter } from './routers/categorys';
-import { productsRouter } from './routers/products';
-import { ordersRouter } from './routers/orders';
+import { createTRPCRouter } from '~/server/api/trpc';
 import { addressesRouter } from './routers/addresses';
+import { categorysRouter } from './routers/categorys';
+import { ordersRouter } from './routers/orders';
+import { productsRouter } from './routers/products';
 
 /**
  * This is the primary router for your server.

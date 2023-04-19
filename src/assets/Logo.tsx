@@ -1,5 +1,3 @@
-import React from 'react';
-
 const Logo = (props: { size?: number; color?: string }) => {
 	return (
 		<svg

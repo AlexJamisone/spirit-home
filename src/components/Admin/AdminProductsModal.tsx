@@ -3,6 +3,8 @@ import {
 	Button,
 	FormControl,
 	FormLabel,
+	Icon,
+	IconButton,
 	Image,
 	Input,
 	Modal,
@@ -17,18 +19,16 @@ import {
 	Textarea,
 	useDisclosure,
 	useToast,
-	IconButton,
-	Icon,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { useEffect } from 'react';
+import { TiDeleteOutline } from 'react-icons/ti';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
+import type { UploadResult } from '~/utils/uploadImage';
 import DragDrop from '../Drag&Drop';
 import AdminProductsAlert from './AdminProductsAlert';
-import { TiDeleteOutline } from 'react-icons/ti';
-import type { UploadResult } from '~/utils/uploadImage';
 type AdminProductsModalProps = {
 	isOpen: boolean;
 	onClose: () => void;

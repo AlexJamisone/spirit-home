@@ -1,18 +1,18 @@
 import {
 	Center,
 	Stack,
-	Text,
 	Table,
-	Thead,
-	Tbody,
-	Tr,
-	Th,
-	Td,
 	TableCaption,
 	TableContainer,
+	Tbody,
+	Td,
+	Text,
+	Th,
+	Thead,
+	Tr,
 } from '@chakra-ui/react';
-import { api } from '~/utils/api';
 import dayjs from 'dayjs';
+import { api } from '~/utils/api';
 dayjs().locale('ru').format();
 
 const UserOrders = () => {

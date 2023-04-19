@@ -9,7 +9,6 @@ import {
 	Tr,
 } from '@chakra-ui/react';
 import type { OrderItem, Product, ProductPriceHistory } from '@prisma/client';
-import React from 'react';
 
 type AdminOrdersTableProps = {
 	orderItem: (OrderItem & {

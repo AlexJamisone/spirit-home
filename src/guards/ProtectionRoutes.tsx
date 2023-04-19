@@ -1,7 +1,7 @@
 import { useUser } from '@clerk/nextjs';
+import { Role } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { api } from '~/utils/api';
-import { Role } from '@prisma/client';
 
 type ProtectionRoutesProps = {
 	children: React.ReactNode;

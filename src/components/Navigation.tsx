@@ -2,8 +2,8 @@ import { Box, Link as ChakraLink, Spinner, Stack } from '@chakra-ui/react';
 import { ClerkLoading, UserButton, useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import Logo from '../assets/Logo';
-import Category from './Category';
 import CartMenu from './Cart/CartMenu';
+import Category from './Category';
 const Navigation = () => {
 	const { isSignedIn } = useAuth();
 	const links = [

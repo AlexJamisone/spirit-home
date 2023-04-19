@@ -57,7 +57,7 @@ export type Action =
 	| SetQuantityAction
 	| SetClearAction
 	| SetAllAction
-	| SetIdAction
+	| SetIdAction;
 
 export const initialState: FormProductState = {
 	id: '',

@@ -1,17 +1,16 @@
 import {
+	Icon,
+	IconButton,
 	Image,
 	Spinner,
 	Stack,
 	Text,
-	IconButton,
-	Icon,
 } from '@chakra-ui/react';
-import React from 'react';
-import { CartItem } from '~/reducer/CartReducer';
+import type { IconType } from 'react-icons';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { IoTrashOutline } from 'react-icons/io5';
 import { useCart } from '~/context/cartContext';
-import type { IconType } from 'react-icons';
+import { CartItem } from '~/reducer/CartReducer';
 
 type CartItemProps = {
 	item: CartItem;

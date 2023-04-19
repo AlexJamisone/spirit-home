@@ -1,6 +1,5 @@
-import { Center, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Center, Spinner } from '@chakra-ui/react';
 import { type NextPage } from 'next';
-import Head from 'next/head';
 import ProductsCard from '~/components/ProductsCard';
 import { api } from '~/utils/api';
 

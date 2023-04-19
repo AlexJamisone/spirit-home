@@ -1,13 +1,6 @@
-import {
-	Button,
-	Icon,
-	Stack,
-	Text,
-	useDisclosure,
-	useToast,
-} from '@chakra-ui/react';
+import { Button, Icon, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import type { Product, ProductPriceHistory } from '@prisma/client';
-import { useReducer, useState, type SyntheticEvent } from 'react';
+import { useReducer, useState } from 'react';
 
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FormProductReducer, initialState } from '~/reducer/FormReducer';
@@ -20,10 +13,8 @@ const AdminProducts = () => {
 	const [edit, setEdit] = useState(false);
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 
-	
 	const { data: user } = api.users.get.useQuery();
 	const { data: products } = api.products.get.useQuery();
-	
 
 	if (!products) return null;
 

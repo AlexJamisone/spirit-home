@@ -1,9 +1,9 @@
 import { AbsoluteCenter, Box, Icon, Stack, Text } from '@chakra-ui/react';
-import { type Dispatch, useCallback } from 'react';
+import { useCallback, type Dispatch } from 'react';
 import Dropzone from 'react-dropzone';
+import { MdOutlinePhotoLibrary } from 'react-icons/md';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { update, upload } from '~/utils/uploadImage';
-import { MdOutlinePhotoLibrary } from 'react-icons/md';
 
 type DragDropProps = {
 	dispatch: Dispatch<Action>;

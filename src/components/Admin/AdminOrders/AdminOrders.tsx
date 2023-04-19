@@ -6,10 +6,10 @@ import {
 	Text,
 	useToast,
 } from '@chakra-ui/react';
+import type { OrderStatus } from '@prisma/client';
 import { api } from '~/utils/api';
 import AdminOrdersInfo from './AdminOrdersInfo';
 import AdminOrdersTable from './AdminOrdersTable';
-import type { OrderStatus } from '@prisma/client';
 
 const AdminOrders = () => {
 	const { data: orders } = api.orders.get.useQuery();

@@ -1,8 +1,7 @@
-import React from 'react';
-import type { Address } from '@prisma/client';
 import { Icon, IconButton, Stack, Text } from '@chakra-ui/react';
-import { BsTrashFill } from 'react-icons/bs';
+import type { Address } from '@prisma/client';
 import { motion } from 'framer-motion';
+import { BsTrashFill } from 'react-icons/bs';
 type UserAddressCardProps = {
 	address: Address;
 	firstName: string | null;

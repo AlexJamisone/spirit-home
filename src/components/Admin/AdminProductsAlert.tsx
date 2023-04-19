@@ -1,14 +1,14 @@
 import {
 	AlertDialog,
 	AlertDialogBody,
-	AlertDialogFooter,
 	AlertDialogContent,
+	AlertDialogFooter,
 	AlertDialogOverlay,
 	Button,
 } from '@chakra-ui/react';
-import { api } from '~/utils/api';
-import { type Dispatch, useRef } from 'react';
+import { useRef, type Dispatch } from 'react';
 import type { Action } from '~/reducer/FormReducer';
+import { api } from '~/utils/api';
 import type { UploadResult } from '~/utils/uploadImage';
 
 type AdminProductsAlertProps = {

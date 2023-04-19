@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
-import { api } from '~/utils/api';
 import { menuItems } from '~/constants/menuItem';
+import { api } from '~/utils/api';
 
 const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);

@@ -1,5 +1,5 @@
-import { type AppType } from 'next/app';
 import { SignedIn, SignedOut } from '@clerk/nextjs';
+import { type AppType } from 'next/app';
 
 import { ChakraProvider } from '@chakra-ui/react';
 import { theme } from '~/chakra/theme';
@@ -11,8 +11,8 @@ import { api } from '~/utils/api';
 import '../styles/globals.css';
 
 import Head from 'next/head';
-import Navigation from '~/components/Navigation';
 import Menu from '~/components/Menu';
+import Navigation from '~/components/Navigation';
 import { CartProvider } from '~/context/cartContext';
 
 const MyApp: AppType = ({ Component, pageProps }) => {

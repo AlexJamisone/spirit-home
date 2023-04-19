@@ -1,17 +1,17 @@
 import {
-	Modal,
-	ModalOverlay,
-	ModalContent,
-	ModalHeader,
-	ModalFooter,
-	ModalBody,
-	ModalCloseButton,
+	Button,
 	FormControl,
 	FormLabel,
 	Input,
-	Button,
-	useToast,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
 	Stack,
+	useToast,
 } from '@chakra-ui/react';
 import React, {
 	type ChangeEvent,
@@ -19,7 +19,7 @@ import React, {
 	type SetStateAction,
 } from 'react';
 
-import type { InputAddressState, Action } from '~/reducer/InputAddressReducer';
+import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
 import { api } from '~/utils/api';
 
 type UserAddressesFormModalProps = {
