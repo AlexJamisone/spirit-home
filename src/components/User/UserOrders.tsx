@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { api } from '~/utils/api';
+
 dayjs().locale('ru').format();
 
 const UserOrders = () => {
@@ -79,21 +80,29 @@ const UserOrders = () => {
 												)}
 											</Td>
 											<Td>
-												{orderItem.reduce(
-													(acc, current) => {
-														const {
-															quantity,
-															product,
-														} = current;
-														const price = product
-															.priceHistory[0]
-															?.price as number;
-														const itemTotal =
-															quantity * price;
-														return acc + itemTotal;
-													},
-													0
-												)}
+												<Text>
+													{orderItem.reduce(
+														(acc, current) => {
+															const effectivePrice =
+																current.product.priceHistory.find(
+																	(history) =>
+																		history.effectiveFrom <=
+																		createdAt
+																);
+															const price =
+																effectivePrice
+																	? effectivePrice.price
+																	: 0;
+															return (
+																acc +
+																price *
+																	current.quantity
+															);
+														},
+														0
+													)}
+													₽
+												</Text>
 											</Td>
 										</Tr>
 									</Tbody>

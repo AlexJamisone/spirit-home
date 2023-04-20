@@ -1,7 +1,7 @@
 export interface InputAddressState {
 	id: string;
-	firstName: string | null;
-	lastName: string | null;
+	firstName: string;
+	lastName: string;
 	citys: string;
 	contactPhone: string;
 	point: string;

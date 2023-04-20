@@ -18,7 +18,11 @@ export const usersRouter = createTRPCRouter({
 							include: {
 								product: {
 									include: {
-										priceHistory: true,
+										priceHistory: {
+											orderBy: {
+												effectiveFrom: 'desc',
+											},
+										},
 									},
 								},
 							},
@@ -46,6 +50,8 @@ export const usersRouter = createTRPCRouter({
 				data: {
 					id: ctx.userId,
 					email: userClerk.email,
+					firstName: user.firstName ?? '',
+					lastName: user.lastName ?? '',
 				},
 			});
 		}

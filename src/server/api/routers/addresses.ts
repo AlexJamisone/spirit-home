@@ -6,8 +6,8 @@ export const addressesRouter = createTRPCRouter({
 	createByUser: privetProcedure
 		.input(
 			z.object({
-				firstName: z.string().nonempty().optional(),
-				lastName: z.string().nonempty().optional(),
+				firstName: z.string().nonempty(),
+				lastName: z.string().nonempty(),
 				city: z.string().nonempty(),
 				contactPhone: z.string().nonempty().min(12).max(12),
 				point: z.string().nonempty(),
@@ -33,6 +33,8 @@ export const addressesRouter = createTRPCRouter({
 					contactPhone: input.contactPhone,
 					point: input.point,
 					userId: ctx.userId,
+					firstName: input.firstName,
+					lastName: input.lastName,
 				},
 			});
 		}),

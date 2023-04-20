@@ -1,4 +1,5 @@
 import {
+	Box,
 	Button,
 	Link as ChakraLink,
 	Menu,
@@ -16,32 +17,35 @@ const Category = () => {
 	const { data: categories, isLoading } = api.categorys.get.useQuery();
 
 	return (
-		<Menu>
-			<MenuButton
-				as={Button}
-				variant="ghost"
-				rightIcon={<IoIosArrowDown />}
-			>
-				Категории
-			</MenuButton>
-			<MenuList zIndex={20}>
-				{categories?.map(({ id, path, title }) =>
-					isLoading ? (
-						<Spinner key={id} />
-					) : (
-						<MenuItem key={id}>
-							<ChakraLink
-								as={Link}
-								href={`/categories/${path}`}
-								_hover={{ textDecoration: 'none' }}
-							>
-								{title}
-							</ChakraLink>
-						</MenuItem>
-					)
-				)}
-			</MenuList>
-		</Menu>
+		<Box>
+			<Menu>
+				<MenuButton
+					as={Button}
+					type="button"
+					variant="ghost"
+					rightIcon={<IoIosArrowDown />}
+				>
+					Категории
+				</MenuButton>
+				<MenuList zIndex={20}>
+					{categories?.map(({ id, path, title }) =>
+						isLoading ? (
+							<Spinner key={id} />
+						) : (
+							<MenuItem key={id}>
+								<ChakraLink
+									as={Link}
+									href={`/categories/${path}`}
+									_hover={{ textDecoration: 'none' }}
+								>
+									{title}
+								</ChakraLink>
+							</MenuItem>
+						)
+					)}
+				</MenuList>
+			</Menu>
+		</Box>
 	);
 };
 

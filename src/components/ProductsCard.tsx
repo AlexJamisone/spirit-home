@@ -214,7 +214,7 @@ const ProductsCard = ({ product, handlEdit, admin }: ProductsCardProps) => {
 				gap={16}
 			>
 				{admin === undefined || admin === 'USER' ? (
-					<Button onClick={(e) => handlAddToCart(e)}>
+					<Button type="button" onClick={(e) => handlAddToCart(e)}>
 						В корзину
 					</Button>
 				) : (

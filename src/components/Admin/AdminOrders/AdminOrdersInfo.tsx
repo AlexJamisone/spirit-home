@@ -25,7 +25,7 @@ const AdminOrdersInfo = ({
 				{}
 			</Text>
 			<Text>
-				ФИО: {user?.firstName} {user?.lastName}
+				ФИО: {address.firstName} {address.lastName}
 			</Text>
 			<Text>Телефон: {address.contactPhone}</Text>
 			<Text>Email: {user?.email}</Text>

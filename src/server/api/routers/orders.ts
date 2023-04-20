@@ -1,4 +1,5 @@
-import { OrderStatus } from '@prisma/client';
+import { clerkClient } from '@clerk/nextjs/server';
+import type { OrderStatus } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -43,7 +44,7 @@ export const ordersRouter = createTRPCRouter({
 		});
 		return orders;
 	}),
-	create: publicProcedure
+	createWithAuth: publicProcedure
 		.input(
 			z.object({
 				address: z.string().nonempty(),
@@ -64,6 +65,22 @@ export const ordersRouter = createTRPCRouter({
 					addressId: input.address,
 				},
 			});
+			const updateProduct = Promise.all(
+				input.cart.items.map(
+					async ({ id, quantityInCart }) =>
+						await ctx.prisma.product.update({
+							where: {
+								id,
+							},
+							data: {
+								quantity: {
+									decrement: quantityInCart,
+								},
+							},
+						})
+				)
+			);
+			await updateProduct;
 			if (!createOrder)
 				return new TRPCError({
 					code: 'BAD_REQUEST',
@@ -82,5 +99,98 @@ export const ordersRouter = createTRPCRouter({
 					status: input.status,
 				},
 			});
+		}),
+	createNotAuth: publicProcedure
+		.input(
+			z.object({
+				email: z.string().optional(),
+				password: z.string().optional(),
+				firstName: z.string(),
+				lastName: z.string(),
+				saveAddress: z.boolean(),
+				createUser: z.boolean(),
+				address: z.object({
+					city: z.string(),
+					contactPhone: z.string(),
+					point: z.string(),
+				}),
+				cart: z.custom<CartState>(),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			const product = input.cart.items.map(({ id, quantityInCart }) => ({
+				productId: id,
+				quantity: quantityInCart,
+			}));
+			if (input.createUser) {
+				const createUserClerk = await clerkClient.users.createUser({
+					emailAddress: [input.email as string],
+					password: input.password,
+					firstName: input.firstName ?? '',
+					lastName: input.lastName ?? '',
+				});
+				const checkUserDb = await ctx.prisma.user.findUnique({
+					where: {
+						id: createUserClerk.id,
+					},
+				});
+				if (!checkUserDb) {
+					return await ctx.prisma.user.create({
+						data: {
+							id: createUserClerk.id,
+							email: createUserClerk.emailAddresses[0]
+								?.emailAddress,
+							firstName: createUserClerk.firstName,
+							lastName: createUserClerk.lastName,
+							address: {
+								create: input.saveAddress
+									? {
+											city: input.address.city,
+											contactPhone:
+												input.address.contactPhone,
+											firstName: input.firstName,
+											lastName: input.lastName,
+											point: input.address.point,
+									  }
+									: undefined,
+							},
+							orders: {
+								create: {
+									address: {
+										create: {
+											city: input.address.city,
+											contactPhone:
+												input.address.contactPhone,
+											firstName: input.firstName,
+											lastName: input.lastName,
+											point: input.address.point,
+										},
+									},
+									orderItem: {
+										createMany: { data: product },
+									},
+								},
+							},
+						},
+					});
+				}
+			} else {
+				return await ctx.prisma.order.create({
+					data: {
+						address: {
+							create: {
+								city: input.address.city,
+								contactPhone: input.address.contactPhone,
+								firstName: input.firstName,
+								lastName: input.lastName,
+								point: input.address.point,
+							},
+						},
+						orderItem: {
+							createMany: { data: product },
+						},
+					},
+				});
+			}
 		}),
 });
