@@ -25,7 +25,7 @@ export const ordersRouter = createTRPCRouter({
 								},
 							},
 						},
-					},
+					}
 				},
 				address: true,
 				createdAt: true,

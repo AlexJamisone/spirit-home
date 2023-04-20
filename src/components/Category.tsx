@@ -24,6 +24,7 @@ const Category = () => {
 					type="button"
 					variant="ghost"
 					rightIcon={<IoIosArrowDown />}
+					size={['xs','sm','md']}
 				>
 					Категории
 				</MenuButton>

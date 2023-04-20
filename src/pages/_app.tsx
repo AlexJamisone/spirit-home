@@ -1,7 +1,7 @@
 import { SignedIn, SignedOut } from '@clerk/nextjs';
 import { type AppType } from 'next/app';
 
-import { ChakraProvider } from '@chakra-ui/react';
+import { ChakraProvider, useMediaQuery } from '@chakra-ui/react';
 import { theme } from '~/chakra/theme';
 
 import { ClerkProvider } from '@clerk/nextjs';
@@ -11,11 +11,12 @@ import { api } from '~/utils/api';
 import '../styles/globals.css';
 
 import Head from 'next/head';
-import Menu from '~/components/Menu';
-import Navigation from '~/components/Navigation';
+import Menu from '~/components/Navigation/Menu';
+import Navigation from '~/components/Navigation/Navigation';
 import { CartProvider } from '~/context/cartContext';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
+	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	return (
 		<ChakraProvider theme={theme}>
 			<Head>
@@ -25,7 +26,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 			<ClerkProvider {...pageProps} localization={ruRU}>
 				<CartProvider>
 					<SignedIn>
-						<Menu />
+						{isTablet ? null : <Menu />}
 						<Navigation />
 						<Component {...pageProps} />
 					</SignedIn>

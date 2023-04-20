@@ -1,7 +1,7 @@
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react';
 
 const defultTheme: ThemeConfig = {
-	initialColorMode: 'system',
+	initialColorMode: 'light',
 	useSystemColorMode: true,
 	disableTransitionOnChange: true,
 };

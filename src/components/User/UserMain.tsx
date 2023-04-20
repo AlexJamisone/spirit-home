@@ -60,9 +60,9 @@ const UserMain = () => {
 			payload: {
 				id: address.id,
 				citys: address.city,
-				firstName: user.firstName,
+				firstName: user.firstName ?? '',
 				contactPhone: address.contactPhone,
-				lastName: user.lastName,
+				lastName: user.lastName ?? '',
 				point: address.point,
 			},
 		});
@@ -71,14 +71,15 @@ const UserMain = () => {
 	};
 	return (
 		<Grid
-			w={['70%']}
-			templateColumns="repeat(2, 1fr)"
-			gap={5}
-			justifyContent="space-between"
+			w="100%"
+			mx={['50px']}
+			templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)']}
+			gap={[0, 5]}
+			justifyContent={'space-between'}
 		>
-			<GridItem>
+			<GridItem w="100%">
 				<Stack direction="row">
-					<Avatar size="2xl" src={user.profileImageUrl} />
+					<Avatar size={['lg', '2xl']} src={user.profileImageUrl} />
 					<Stack>
 						<Text>{user.email}</Text>
 						<Stack direction="row">
@@ -88,7 +89,6 @@ const UserMain = () => {
 					</Stack>
 				</Stack>
 				<Stack
-					w={['700px']}
 					justifyContent="center"
 					alignItems="center"
 				>
@@ -136,7 +136,7 @@ const UserMain = () => {
 					</Stack>
 				</Stack>
 			</GridItem>
-			<GridItem>
+			<GridItem w="100%">
 				<UserOrders />
 			</GridItem>
 		</Grid>
