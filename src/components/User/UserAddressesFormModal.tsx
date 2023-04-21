@@ -78,8 +78,8 @@ const UserAddressesFormModal = ({
 					city: input.citys,
 					contactPhone: input.contactPhone,
 					point: input.point,
-					firstName: input.firstName as string,
-					lastName: input.lastName as string,
+					firstName: input.firstName,
+					lastName: input.lastName,
 				},
 				{
 					onSuccess: () => {
@@ -98,8 +98,8 @@ const UserAddressesFormModal = ({
 		} else {
 			createByUser(
 				{
-					firstName: input.firstName as string,
-					lastName: input.lastName as string,
+					firstName: input.firstName,
+					lastName: input.lastName,
 					city: input.citys,
 					contactPhone: input.contactPhone,
 					point: input.point,
@@ -128,7 +128,7 @@ const UserAddressesFormModal = ({
 			}}
 		>
 			<ModalOverlay />
-			<ModalContent>
+			<ModalContent width={['100%', null]} mx={[5, null]}>
 				<FormControl
 					as="form"
 					onSubmit={(e) => {
@@ -136,15 +136,21 @@ const UserAddressesFormModal = ({
 						handleSubmit();
 					}}
 				>
-					<ModalHeader>Добавить Адрес</ModalHeader>
+					<ModalHeader fontSize={[16, 19]}>
+						Добавить Адрес
+					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<Stack direction="column" gap={5}>
+						<Stack direction="column" gap={[1, 5]}>
 							{inputFildsAddress(input).map(
 								({ name, placeholder, value }) => (
 									<React.Fragment key={name}>
-										<FormLabel>{placeholder}</FormLabel>
+										<FormLabel fontSize={[12, 16]}>
+											{placeholder}
+										</FormLabel>
 										<Input
+											size={['sm', 'md']}
+											fontSize={[12, 16]}
 											type="text"
 											placeholder={placeholder}
 											value={value ?? ''}
@@ -158,12 +164,14 @@ const UserAddressesFormModal = ({
 					</ModalBody>
 					<ModalFooter gap={5}>
 						<Button
+							size={['sm', 'md']}
 							isLoading={edit ? updateLoading : createLoading}
 							type="submit"
 						>
 							{edit ? 'Обновить' : 'Сохранить'}
 						</Button>
 						<Button
+							size={['sm', 'md']}
 							onClick={() => {
 								dispatch({ type: 'SET_CLEAR' });
 								onClose();

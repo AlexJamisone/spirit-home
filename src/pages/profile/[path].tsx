@@ -30,7 +30,7 @@ const ProfilePage = () => {
 		}
 	};
 	return (
-		<Center as='main'>
+		<Center as='main' mx={['20px']}>
 			<ProtectionRoutes type="USER">{handlProfile()}</ProtectionRoutes>
 		</Center>
 	);

@@ -18,17 +18,17 @@ const Category = () => {
 
 	return (
 		<Box>
-			<Menu>
+			<Menu isLazy>
 				<MenuButton
 					as={Button}
 					type="button"
 					variant="ghost"
 					rightIcon={<IoIosArrowDown />}
-					size={['xs','sm','md']}
+					size={['xs', 'sm', 'md']}
 				>
 					Категории
 				</MenuButton>
-				<MenuList zIndex={20}>
+				<MenuList zIndex={20} mt={[3, null]}>
 					{categories?.map(({ id, path, title }) =>
 						isLoading ? (
 							<Spinner key={id} />
@@ -38,6 +38,7 @@ const Category = () => {
 									as={Link}
 									href={`/categories/${path}`}
 									_hover={{ textDecoration: 'none' }}
+									fontSize={[14, 16]}
 								>
 									{title}
 								</ChakraLink>

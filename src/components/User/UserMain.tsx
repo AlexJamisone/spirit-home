@@ -9,12 +9,15 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import type { Address } from '@prisma/client';
+import { AnimatePresence } from 'framer-motion';
 import { useReducer, useState } from 'react';
+import { FaAddressCard } from 'react-icons/fa';
 import {
 	InputAddressReducer,
 	initialState,
 } from '~/reducer/InputAddressReducer';
 import { api } from '~/utils/api';
+import NoData from '../NoData/NoData';
 import UserAddressCard from './UserAddressCard';
 import UserAddressesFormModal from './UserAddressesFormModal';
 import UserOrders from './UserOrders';
@@ -72,67 +75,75 @@ const UserMain = () => {
 	return (
 		<Grid
 			w="100%"
-			mx={['50px']}
-			templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)']}
-			gap={[0, 5]}
-			justifyContent={'space-between'}
+			templateColumns={['repeat(1, 1fr)', null, 'repeat(2, 1fr)']}
+			gap={[5]}
+			justifyContent={['center', 'space-between']}
 		>
 			<GridItem w="100%">
-				<Stack direction="row">
-					<Avatar size={['lg', '2xl']} src={user.profileImageUrl} />
-					<Stack>
-						<Text>{user.email}</Text>
-						<Stack direction="row">
-							<Text>{user.firstName}</Text>
-							<Text>{user.lastName}</Text>
+				<Stack gap={[5]}>
+					<Stack direction="row" justifyContent="center">
+						<Avatar
+							size={['lg', '2xl']}
+							src={user.profileImageUrl}
+						/>
+						<Stack fontSize={[14, 16]}>
+							<Text>{user.email}</Text>
+							<Stack direction="row">
+								<Text>{user.firstName}</Text>
+								<Text>{user.lastName}</Text>
+							</Stack>
 						</Stack>
 					</Stack>
-				</Stack>
-				<Stack
-					justifyContent="center"
-					alignItems="center"
-				>
-					<Text textAlign="center">Адреса доставки</Text>
-					<Stack
-						direction="row"
-						gap={5}
-						alignItems="center"
-						flexWrap="wrap"
-						justifyContent="center"
-					>
-						<Button
-							variant="outline"
-							onClick={() => handlAdd()}
-							w="100%"
+					<Stack justifyContent="center" alignItems="center">
+						<Stack
+							direction="row"
+							gap={5}
+							alignItems="center"
+							flexWrap="wrap"
+							justifyContent="center"
 						>
-							Добавить Адрес
-						</Button>
-						<UserAddressesFormModal
-							isOpen={isOpen}
-							onClose={onClose}
-							dispatch={dispatch}
-							input={input}
-							edit={edit}
-							setEdit={setEdit}
-						/>
-						{user.address?.length === 0 ? (
-							<Text>Пока что нету адрессов</Text>
-						) : (
-							user.address?.map((address) => {
-								return (
-									<UserAddressCard
-										key={address.id}
-										address={address}
-										email={user.email}
-										firstName={user.firstName}
-										lastName={user.lastName}
-										handlDeletAddress={handlDeletAddress}
-										handlEdit={handlEdit}
-										isLoading={isLoading}
+							<Button
+								size={['sm', 'md']}
+								variant="outline"
+								onClick={() => handlAdd()}
+								w={['50%', '100%']}
+							>
+								Добавить Адрес
+							</Button>
+							<UserAddressesFormModal
+								isOpen={isOpen}
+								onClose={onClose}
+								dispatch={dispatch}
+								input={input}
+								edit={edit}
+								setEdit={setEdit}
+							/>
+							<AnimatePresence>
+								{user.address?.length === 0 ? (
+									<NoData
+										icon={FaAddressCard}
+										text="Пока что нет адрресов"
 									/>
-								);
-							})
-						)}
+								) : (
+									user.address?.map((address) => {
+										return (
+											<UserAddressCard
+												key={address.id}
+												address={address}
+												email={user.email}
+												firstName={user.firstName}
+												lastName={user.lastName}
+												handlDeletAddress={
+													handlDeletAddress
+												}
+												handlEdit={handlEdit}
+												isLoading={isLoading}
+											/>
+										);
+									})
+								)}
+							</AnimatePresence>
+						</Stack>
 					</Stack>
 				</Stack>
 			</GridItem>

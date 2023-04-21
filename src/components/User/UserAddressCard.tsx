@@ -29,15 +29,16 @@ const UserAddressCard = ({
 			as={motion.div}
 			initial={{ opacity: 0, y: 50 }}
 			animate={{ opacity: 1, y: 0 }}
+			exit={{ opacity: 0 }}
 			whileHover={{
 				scale: 1.05,
 				transition: { type: 'spring', duration: 0.1 },
 			}}
-			direction="column"
-			gap={3}
+			direction={['column']}
+			gap={[1, 3]}
 			border="1px solid #CBD5E0"
 			rounded="2xl"
-			p={5}
+			p={[3, 5]}
 			maxW={['100%']}
 			position="relative"
 			cursor="pointer"
@@ -46,6 +47,7 @@ const UserAddressCard = ({
 				transform: 'scale(1.05)',
 			}}
 			onClick={() => (cantEdit ? null : handlEdit?.(address))}
+			fontSize={[12, 16]}
 		>
 			<Text>Имя: {firstName}</Text>
 			<Text>Фамилия: {lastName}</Text>
@@ -56,7 +58,7 @@ const UserAddressCard = ({
 			{cantEdit ? null : (
 				<IconButton
 					isLoading={isLoading}
-					size="sm"
+					size={['xs', 'sm']}
 					position="absolute"
 					top={2}
 					right={5}

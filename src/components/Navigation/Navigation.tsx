@@ -27,8 +27,11 @@ const Navigation = () => {
 		<Stack
 			alignItems="center"
 			direction="row"
-			justifyContent="space-between"
-			mx={['30px', '50px', '100px']}
+			justifyContent={['center', 'space-between']}
+			px={[null,'100px']}
+			gap={2}
+			as="nav"
+			w={'100%'}
 		>
 			<ChakraLink as={Link} href="/" alignSelf="flex-start">
 				<Logo size={isTablet ? 120 : 150} />
