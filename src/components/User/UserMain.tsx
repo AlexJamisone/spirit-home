@@ -122,7 +122,7 @@ const UserMain = () => {
 								{user.address?.length === 0 ? (
 									<NoData
 										icon={FaAddressCard}
-										text="Пока что нет адрресов"
+										text="Пока что нет адресов"
 									/>
 								) : (
 									user.address?.map((address) => {

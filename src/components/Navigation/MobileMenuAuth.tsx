@@ -1,25 +1,31 @@
 import {
-Link as ChakraLink,
-Divider,
-Drawer,
-DrawerBody,
-DrawerCloseButton,
-DrawerContent,
-DrawerHeader,
-DrawerOverlay,
-Stack,
+	Link as ChakraLink,
+	Divider,
+	Drawer,
+	DrawerBody,
+	DrawerCloseButton,
+	DrawerContent,
+	DrawerHeader,
+	DrawerOverlay,
+	Stack,
 } from '@chakra-ui/react';
+import { SignOutButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-type ModileMenuProps = {
+import { menuItems } from '~/constants/menuItem';
+import { api } from '~/utils/api';
+
+type ModileMenuAuthProps = {
 	isOpen: boolean;
 	onClose: () => void;
 	links: { children: string; path: string }[];
 };
 
-const MobileMenu = ({ isOpen, onClose, links }: ModileMenuProps) => {
+const MobileMenuAuth = ({ isOpen, onClose, links }: ModileMenuAuthProps) => {
+	const { data: user } = api.users.get.useQuery();
 	const router = useRouter();
 	const pathFromRoutes = router.query;
+
 	return (
 		<Drawer isOpen={isOpen} onClose={onClose}>
 			<DrawerOverlay />
@@ -50,6 +56,26 @@ const MobileMenu = ({ isOpen, onClose, links }: ModileMenuProps) => {
 							</ChakraLink>
 						))}
 						<Divider />
+						{user ? (
+							<Stack gap={3} alignItems="flex-start">
+								{menuItems
+									.filter(({ type }) => user.role === type)
+									.map(({ path, title }) => (
+										<ChakraLink
+											href={path}
+											key={path}
+											as={Link}
+											_hover={{
+												textDecoration: 'none',
+											}}
+											onClick={onClose}
+										>
+											{title}
+										</ChakraLink>
+									))}
+								<SignOutButton>Выход</SignOutButton>
+							</Stack>
+						) : null}
 					</Stack>
 				</DrawerBody>
 			</DrawerContent>
@@ -57,4 +83,4 @@ const MobileMenu = ({ isOpen, onClose, links }: ModileMenuProps) => {
 	);
 };
 
-export default MobileMenu;
+export default MobileMenuAuth;

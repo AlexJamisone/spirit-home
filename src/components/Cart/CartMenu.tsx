@@ -29,6 +29,7 @@ const CartMenu = () => {
 				<Stack position="relative">
 					<MenuButton
 						as={IconButton}
+						type="button"
 						fontSize={23}
 						icon={<SlHandbag />}
 						variant="ghost"
@@ -55,16 +56,12 @@ const CartMenu = () => {
 						</Text>
 					</Box>
 				</Stack>
-				<MenuList p={5}>
+				<MenuList p={[2, 5]}>
 					{cartState.items.length === 0 ? (
 						<Text>Ваша Корзина пуста</Text>
 					) : (
 						cartState.items.map((item) => (
-							<MenuItem
-								key={item.id}
-								maxW={['100%']}
-								maxH={['100px']}
-							>
+							<MenuItem key={item.id} mx={[0,5]}>
 								<CartItem item={item} />
 							</MenuItem>
 						))
@@ -83,11 +80,7 @@ const CartMenu = () => {
 								</Text>
 							</Stack>
 							<MenuDivider />
-							<Button
-								w="100%"
-								justifySelf="flex-end"
-								onClick={onToggle}
-							>
+							<Button w="100%" onClick={onToggle}>
 								Оформить заказ
 							</Button>
 							<NewOrder isOpen={isOpen} onClose={onClose} />

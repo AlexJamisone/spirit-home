@@ -50,15 +50,15 @@ const CartItem = ({
 	return (
 		<Stack
 			direction="row"
-			gap={3}
-			p={5}
+			gap={[0, 3]}
+			p={[0, 5]}
 			alignItems="center"
-			minW="100%"
 			justifyContent="space-between"
+			fontSize={[12, 16]}
 		>
 			<Image
-				w={[100]}
-				h={[90]}
+				w={[70, 100]}
+				h={[70, 90]}
 				objectFit="contain"
 				src={`${
 					process.env.NEXT_PUBLIC_SUPABASE_URL as string
@@ -67,7 +67,7 @@ const CartItem = ({
 				fallback={<Spinner />}
 			/>
 			<Text>{name}</Text>
-			<Stack direction="row" gap={3} alignItems="center">
+			<Stack direction="row" gap={[0, 3]} alignItems="center">
 				{handlCount(IoIosArrowBack, 'minus')}
 				<Text>{quantityInCart}</Text>
 				{handlCount(IoIosArrowForward, 'plus')}
@@ -75,6 +75,7 @@ const CartItem = ({
 			<Text>{priceHistory[0]?.price} ₽</Text>
 			<IconButton
 				variant="ghost"
+				size={['xs', 'md']}
 				aria-label="remove"
 				icon={<Icon as={IoTrashOutline} boxSize={6} color="red.500" />}
 				onClick={(e) => {

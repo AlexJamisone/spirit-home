@@ -8,27 +8,34 @@ import {
 } from '@chakra-ui/react';
 import { UserButton, useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import Logo from '~/assets/Logo';
 import { links } from '~/constants/links';
 import CartMenu from '../Cart/CartMenu';
 import Category from '../Category';
 import MobileMenu from './MobileMenu';
+import MobileMenuAuth from './MobileMenuAuth';
 
 const Navigation = () => {
 	const { isSignedIn } = useAuth();
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	const { isOpen, onClose, onToggle } = useDisclosure();
+	const [renderLinks, setRenderLinks] = useState(links);
 
-	if (isSignedIn) {
-		links.splice(2, 1);
-	}
+	useEffect(() => {
+		const linksCopy = [...links];
+		if (isSignedIn) {
+			linksCopy.splice(2, 1);
+		}
+		setRenderLinks(linksCopy);
+	}, [isSignedIn]);
 	return (
 		<Stack
 			alignItems="center"
 			direction="row"
 			justifyContent={['center', 'space-between']}
-			px={[null,'100px']}
+			px={[null, '100px']}
 			gap={2}
 			as="nav"
 			w={'100%'}
@@ -47,11 +54,23 @@ const Navigation = () => {
 							icon={<Icon as={RxHamburgerMenu} boxSize={6} />}
 							onClick={onToggle}
 						/>
-						<MobileMenu isOpen={isOpen} onClose={onClose} />
+						{isSignedIn ? (
+							<MobileMenuAuth
+								links={renderLinks}
+								isOpen={isOpen}
+								onClose={onClose}
+							/>
+						) : (
+							<MobileMenu
+								links={renderLinks}
+								isOpen={isOpen}
+								onClose={onClose}
+							/>
+						)}
 					</>
 				) : (
 					<>
-						{links.map(({ children, path }) => (
+						{renderLinks.map(({ children, path }) => (
 							<ChakraLink
 								as={Link}
 								href={path}

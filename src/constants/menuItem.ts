@@ -13,12 +13,6 @@ export const menuItems = [
 		type: 'USER',
 	},
 	{
-		icon: HiOutlineClipboardDocumentList,
-		title: 'Заказы',
-		path: '/profile/orders',
-		type: 'USER',
-	},
-	{
 		icon: BsBookmarks,
 		title: 'Избранное',
 		path: '/profile/favorites',

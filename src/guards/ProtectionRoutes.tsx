@@ -1,5 +1,5 @@
 import { useUser } from '@clerk/nextjs';
-import { Role } from '@prisma/client';
+import type { Role } from '@prisma/client';
 import { useRouter } from 'next/router';
 import { api } from '~/utils/api';
 

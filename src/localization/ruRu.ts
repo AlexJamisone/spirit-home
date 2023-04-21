@@ -526,7 +526,7 @@ export const ruRU: LocalizationResource = {
 	},
 	impersonationFab: {
 		title: 'Signed in as {{identifier}}',
-		action__signOut: 'Sign out',
+		action__signOut: 'Выход',
 	},
 	organizationProfile: {
 		start: {
