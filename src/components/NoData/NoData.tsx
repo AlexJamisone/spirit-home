@@ -1,4 +1,5 @@
-import { Icon,Stack,Text } from '@chakra-ui/react';
+import { Icon, Stack, Text } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import type { IconType } from 'react-icons';
 
 type NoDataProps = {
@@ -9,6 +10,12 @@ type NoDataProps = {
 const NoData = ({ icon, text }: NoDataProps) => {
 	return (
 		<Stack
+			as={motion.div}
+			initial={{ opacity: 0 }}
+			animate={{
+				opacity: 1,
+				transition: { duration: 1, type: 'spring', delay: 0.5 },
+			}}
 			mt={3}
 			justifyContent="center"
 			direction="column"

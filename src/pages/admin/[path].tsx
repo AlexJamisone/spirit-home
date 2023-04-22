@@ -22,9 +22,9 @@ const Admin = () => {
 		}
 	};
 	return (
-		<ProtectionRoutes type="ADMIN">
-			<Center>{handlAdmin()}</Center>
-		</ProtectionRoutes>
+		<Center>
+			<ProtectionRoutes type="ADMIN">{handlAdmin()}</ProtectionRoutes>
+		</Center>
 	);
 };
 

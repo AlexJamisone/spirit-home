@@ -33,7 +33,7 @@ export const usersRouter = createTRPCRouter({
 					},
 				},
 				categories: true,
-				address: true,
+				address: true
 			},
 		});
 		const [user] = await clerkClient.users.getUserList({

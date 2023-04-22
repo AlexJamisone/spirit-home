@@ -33,6 +33,7 @@ model Address {
     city         String
     contactPhone String
     point        String
+    archived     Boolean @default(false)
     Order        Order[]
 }
 

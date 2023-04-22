@@ -10,12 +10,14 @@ type AddressCreateProps = {
 	dispatch: Dispatch<Action>;
 	info: Info;
 	setInfo: Dispatch<SetStateAction<Info>>;
+	isAuth?: boolean | undefined;
 };
 const AddressCreate = ({
 	dispatch,
 	input,
 	info,
 	setInfo,
+	isAuth,
 }: AddressCreateProps) => {
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
@@ -41,7 +43,10 @@ const AddressCreate = ({
 	};
 	return (
 		<>
-			<Grid gap={3} templateColumns="repeat(2, 1fr)">
+			<Grid
+				gap={3}
+				templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)']}
+			>
 				{inputFildsAddress(input).map(
 					({ name, placeholder, value }) => (
 						<GridItem key={name}>
@@ -57,7 +62,7 @@ const AddressCreate = ({
 					)
 				)}
 			</Grid>
-			<UserCreater info={info} setInfo={setInfo} />
+			<UserCreater info={info} setInfo={setInfo} isAuth={isAuth} />
 		</>
 	);
 };

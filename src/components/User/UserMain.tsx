@@ -54,6 +54,13 @@ const UserMain = () => {
 					});
 					void ctx.users.invalidate();
 				},
+				onError: ({ message }) => {
+					toast({
+						description: `${message}`,
+						status: 'error',
+						isClosable: true,
+					});
+				},
 			}
 		);
 	};
@@ -119,28 +126,32 @@ const UserMain = () => {
 								setEdit={setEdit}
 							/>
 							<AnimatePresence>
-								{user.address?.length === 0 ? (
+								{user.address?.filter(
+									(address) => !address.archived
+								).length === 0 ? (
 									<NoData
 										icon={FaAddressCard}
 										text="Пока что нет адресов"
 									/>
 								) : (
-									user.address?.map((address) => {
-										return (
-											<UserAddressCard
-												key={address.id}
-												address={address}
-												email={user.email}
-												firstName={user.firstName}
-												lastName={user.lastName}
-												handlDeletAddress={
-													handlDeletAddress
-												}
-												handlEdit={handlEdit}
-												isLoading={isLoading}
-											/>
-										);
-									})
+									user.address
+										?.filter((address) => !address.archived)
+										.map((address) => {
+											return (
+												<UserAddressCard
+													key={address.id}
+													address={address}
+													email={user.email}
+													firstName={user.firstName}
+													lastName={user.lastName}
+													handlDeletAddress={
+														handlDeletAddress
+													}
+													handlEdit={handlEdit}
+													isLoading={isLoading}
+												/>
+											);
+										})
 								)}
 							</AnimatePresence>
 						</Stack>

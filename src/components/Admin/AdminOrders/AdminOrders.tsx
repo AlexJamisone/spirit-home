@@ -38,7 +38,12 @@ const AdminOrders = () => {
 		);
 	};
 	return (
-		<Stack direction="row" gap={5}>
+		<Stack
+			direction={['column', 'row']}
+			gap={[5]}
+			alignItems="center"
+			justifyContent="center"
+		>
 			{orders.length === 0 ? (
 				<>Пока что нету заказов</>
 			) : (
@@ -49,10 +54,11 @@ const AdminOrders = () => {
 						<Stack
 							key={id}
 							w={['100%']}
-							maxH={['665px']}
-							direction="column"
+							maxH={['600px', '665px']}
+							direction={['column']}
 							border="1px solid #CBD5E0"
-							p={5}
+							p={[3, 5]}
+							mx={[5, null]}
 							rounded="3xl"
 							boxShadow="2xl"
 							position="relative"

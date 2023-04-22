@@ -54,7 +54,17 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 	const ctx = api.useContext();
 	const handlSubmit = (idAddress: string) => {
 		createOrder(
-			{ cart: cartState, address: idAddress },
+			{
+				cart: cartState,
+				address: idAddress,
+				addressObject: {
+					city: input.citys,
+					contactPhone: input.contactPhone,
+					firstName: input.firstName,
+					lastName: input.lastName,
+					point: input.point,
+				},
+			},
 			{
 				onSuccess: () => {
 					toast({
@@ -82,7 +92,6 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 					city: input.citys,
 					contactPhone: input.contactPhone,
 					point: input.point,
-					
 				},
 			},
 			{
@@ -113,7 +122,7 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 			}}
 		>
 			<ModalOverlay />
-			<ModalContent maxW={['50%']}>
+			<ModalContent maxW={['100%', '50%']} mx={[5, null]}>
 				<ModalHeader>Новый заказ</ModalHeader>
 				<ModalCloseButton />
 				<ModalBody>
@@ -131,8 +140,13 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 						<Stack gap={5} direction="column">
 							{isSignedIn ? (
 								<UserAddressList
+									dispatch={dispatch}
+									info={info}
+									input={input}
+									setInfo={setInfo}
 									address={address}
 									setAddress={setAddress}
+									isAuth={isSignedIn}
 								/>
 							) : (
 								<AddressCreate

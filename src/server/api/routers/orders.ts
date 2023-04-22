@@ -25,7 +25,7 @@ export const ordersRouter = createTRPCRouter({
 								},
 							},
 						},
-					}
+					},
 				},
 				address: true,
 				createdAt: true,
@@ -47,8 +47,15 @@ export const ordersRouter = createTRPCRouter({
 	createWithAuth: publicProcedure
 		.input(
 			z.object({
-				address: z.string().nonempty(),
+				address: z.string().optional(),
 				cart: z.custom<CartState>(),
+				addressObject: z.object({
+					city: z.string(),
+					contactPhone: z.string(),
+					point: z.string(),
+					firstName: z.string(),
+					lastName: z.string(),
+				}),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -56,13 +63,23 @@ export const ordersRouter = createTRPCRouter({
 				productId: id,
 				quantity: quantityInCart,
 			}));
+			const createAddress = ctx.prisma.address.create({
+				data: {
+					userId: ctx.userId as string,
+					city: input.addressObject.city,
+					contactPhone: input.addressObject.contactPhone,
+					firstName: input.addressObject.firstName,
+					lastName: input.addressObject.lastName,
+					point: input.addressObject.point,
+				},
+			});
 			const createOrder = await ctx.prisma.order.create({
 				data: {
 					userId: ctx.userId as string,
 					orderItem: {
 						createMany: { data: product },
 					},
-					addressId: input.address,
+					addressId: (await createAddress).id,
 				},
 			});
 			const updateProduct = Promise.all(
