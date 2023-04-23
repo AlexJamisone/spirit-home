@@ -4,7 +4,7 @@ const commonTexts = {
 	signIn: {
 		phoneCode: {
 			title: 'Check your phone',
-			subtitle: 'to continue to {{applicationName}}',
+			subtitle: 'продолжить с {{applicationName}}',
 			formTitle: 'Verification code',
 			formSubtitle:
 				'Enter the verification code sent to your phone number',
@@ -47,12 +47,12 @@ export const ruRU: LocalizationResource = {
 	formFieldInputPlaceholder__lastName: '',
 	formFieldInputPlaceholder__backupCode: '',
 	formFieldInputPlaceholder__organizationName: '',
-	formFieldAction__forgotPassword: 'Forgot password',
+	formFieldAction__forgotPassword: 'Забыли пароль?',
 	formFieldHintText__optional: 'Необязательно',
 	formButtonPrimary: 'Продолжить',
-	signInEnterPasswordTitle: 'Enter your password',
-	backButton: 'Back',
-	footerActionLink__useAnotherMethod: 'Use another method',
+	signInEnterPasswordTitle: 'Введите свой пароль',
+	backButton: 'Назад',
+	footerActionLink__useAnotherMethod: 'Использовать другой метод',
 	badge__primary: 'Primary',
 	badge__thisDevice: 'This device',
 	badge__userDevice: 'User device',
@@ -107,7 +107,7 @@ export const ruRU: LocalizationResource = {
 		},
 		phoneCode: {
 			title: 'Verify your phone',
-			subtitle: 'to continue to {{applicationName}}',
+			subtitle: 'продолжить с {{applicationName}}',
 			formTitle: 'Verification code',
 			formSubtitle:
 				'Enter the verification code sent to your phone number',
@@ -115,7 +115,7 @@ export const ruRU: LocalizationResource = {
 		},
 		continue: {
 			title: 'Fill in missing fields',
-			subtitle: 'to continue to {{applicationName}}',
+			subtitle: 'продолжить с {{applicationName}}',
 			actionText: 'Have an account?',
 			actionLink: 'Sign in',
 		},
@@ -128,13 +128,13 @@ export const ruRU: LocalizationResource = {
 			actionLink: 'Регистрация',
 		},
 		password: {
-			title: 'Enter your password',
-			subtitle: 'to continue to {{applicationName}}',
-			actionLink: 'Use another method',
+			title: 'Введите свой пароль',
+			subtitle: 'продолжить с {{applicationName}}',
+			actionLink: 'Использовать другой метод',
 		},
 		emailCode: {
 			title: 'Check your email',
-			subtitle: 'to continue to {{applicationName}}',
+			subtitle: 'продолжить с {{applicationName}}',
 			formTitle: 'Verification code',
 			formSubtitle:
 				'Enter the verification code sent to your email address',
@@ -142,7 +142,7 @@ export const ruRU: LocalizationResource = {
 		},
 		emailLink: {
 			title: 'Check your email',
-			subtitle: 'to continue to {{applicationName}}',
+			subtitle: 'продолжить с {{applicationName}}',
 			formTitle: 'Verification link',
 			formSubtitle: 'Use the verification link sent to your email',
 			resendButton: 'Resend link',
@@ -182,7 +182,7 @@ export const ruRU: LocalizationResource = {
 		},
 		backupCodeMfa: {
 			title: 'Enter a backup code',
-			subtitle: 'to continue to {{applicationName}}',
+			subtitle: 'продолжить с {{applicationName}}',
 			formTitle: '',
 			formSubtitle: '',
 		},
@@ -192,11 +192,11 @@ export const ruRU: LocalizationResource = {
 			blockButton__emailLink: 'Send link to {{identifier}}',
 			blockButton__emailCode: 'Send code to {{identifier}}',
 			blockButton__phoneCode: 'Send code to {{identifier}}',
-			blockButton__password: 'Sign in with your password',
+			blockButton__password: 'Войти с помощью пароля',
 			blockButton__totp: 'Use your authenticator app',
 			blockButton__backupCode: 'Use a backup code',
 			getHelp: {
-				title: 'Get help',
+				title: 'Помощь',
 				content: `If you’re experiencing difficulty signing into your account, email us and we will work with you to restore access as soon as possible.`,
 				blockButton__emailSupport: 'Email support',
 			},

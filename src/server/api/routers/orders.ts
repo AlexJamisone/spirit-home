@@ -63,7 +63,7 @@ export const ordersRouter = createTRPCRouter({
 				productId: id,
 				quantity: quantityInCart,
 			}));
-			const createAddress = ctx.prisma.address.create({
+			const createAddress = await ctx.prisma.address.create({
 				data: {
 					userId: ctx.userId as string,
 					city: input.addressObject.city,
@@ -79,7 +79,7 @@ export const ordersRouter = createTRPCRouter({
 					orderItem: {
 						createMany: { data: product },
 					},
-					addressId: (await createAddress).id,
+					addressId: createAddress.id,
 				},
 			});
 			const updateProduct = Promise.all(

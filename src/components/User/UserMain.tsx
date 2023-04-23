@@ -25,8 +25,8 @@ import UserOrders from './UserOrders';
 const UserMain = () => {
 	const { data: user } = api.users.get.useQuery();
 	const [edit, setEdit] = useState(false);
-	const { mutate: deleteAddress, isLoading } =
-		api.addresses.delete.useMutation();
+	const { mutate: archivedAddress, isLoading } =
+		api.addresses.archived.useMutation();
 	const ctx = api.useContext();
 	const { isOpen, onClose, onToggle } = useDisclosure();
 	const toast = useToast();
@@ -43,7 +43,7 @@ const UserMain = () => {
 		}
 	};
 	const handlDeletAddress = (id: string) => {
-		deleteAddress(
+		archivedAddress(
 			{ id },
 			{
 				onSuccess: () => {

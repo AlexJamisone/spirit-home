@@ -38,7 +38,7 @@ export const addressesRouter = createTRPCRouter({
 				},
 			});
 		}),
-	delete: privetProcedure
+	archived: privetProcedure
 		.input(z.object({ id: z.string() }))
 		.mutation(async ({ input, ctx }) => {
 			const archiveAddress = await ctx.prisma.address.update({
