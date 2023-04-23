@@ -10,6 +10,7 @@ const ProductCardContext = createContext<{
 		name: string,
 		e: SyntheticEvent
 	) => void;
+    isLoading?: boolean
 } | null>(null);
 
 export function useProductCardContext() {

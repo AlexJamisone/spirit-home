@@ -1,9 +1,11 @@
 import { Stack, useToast } from '@chakra-ui/react';
 import type { Product, ProductPriceHistory, Role } from '@prisma/client';
+import { motion } from 'framer-motion';
 import type { ReactNode, SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';
 import ProductCardContext from '~/context/productContext';
 import { api } from '~/utils/api';
+import ProductPrice from './ProductPrice';
 
 type ProductProps = {
 	image?: ReactNode;
@@ -20,7 +22,7 @@ type ProductProps = {
 	) => void;
 };
 
-const ProductsCardNew = ({
+const ProductsCard = ({
 	image,
 	action,
 	info,
@@ -50,7 +52,7 @@ const ProductsCardNew = ({
 			{
 				onSuccess: () => {
 					toast({
-						description: product.archived
+						description: !product.archived
 							? `Товар ${name} успешно архивирован!🚀`
 							: `Товар ${name} успешно восстоновлен!🎉`,
 						status: product.archived ? 'info' : 'success',
@@ -71,11 +73,23 @@ const ProductsCardNew = ({
 	};
 	return (
 		<ProductCardContext.Provider
-			value={{ product, admin, handlAddToCart, handleArchivedProduct }}
+			value={{
+				product,
+				admin,
+				handlAddToCart,
+				handleArchivedProduct,
+				isLoading,
+			}}
 		>
 			<Stack
+				as={motion.div}
+				initial={{ opacity: 0 }}
+				animate={{
+					opacity: 1,
+					transition: { type: 'spring', duration: 1 },
+				}}
 				maxW={['300px']}
-				h={['350px']}
+				h={['425px']}
 				direction="column"
 				justifyContent="center"
 				alignItems="center"
@@ -83,15 +97,13 @@ const ProductsCardNew = ({
 				border="1px solid #CBD5E0"
 				rounded="3xl"
 				boxShadow="2xl"
-				_hover={{
-					transform: `${product.archived ? 'none' : 'scale(1.1)'}`,
+				whileHover={{
+					scale: product.archived ? 1 : 1.05,
 				}}
 				cursor="pointer"
-				transition="all 0.2s ease-in-out"
 				position="relative"
-				zIndex={-0}
 				onClick={() =>
-					admin === undefined || admin === 'USER'
+					admin === 'USER'
 						? null
 						: product.archived
 						? null
@@ -100,10 +112,18 @@ const ProductsCardNew = ({
 			>
 				{image}
 				{info}
-				{action}
+				<Stack
+					w="100%"
+					direction={admin === 'USER' ? 'row' : 'column'}
+					alignItems="center"
+					justifyContent="space-between"
+				>
+					{action}
+					<ProductPrice />
+				</Stack>
 			</Stack>
 		</ProductCardContext.Provider>
 	);
 };
 
-export default ProductsCardNew;
+export default ProductsCard;

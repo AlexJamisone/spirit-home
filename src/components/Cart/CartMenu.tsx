@@ -27,13 +27,13 @@ const CartMenu = () => {
 		<Box>
 			<Menu>
 				<Stack position="relative">
-					<MenuButton
-						as={IconButton}
-						type="button"
-						fontSize={23}
-						icon={<SlHandbag />}
-						variant="ghost"
-					/>
+						<MenuButton
+							as={IconButton}
+							type="button"
+							fontSize={23}
+							icon={<SlHandbag />}
+							variant="ghost"
+						/>
 					<Box
 						position="absolute"
 						textAlign="center"
@@ -61,7 +61,7 @@ const CartMenu = () => {
 						<Text>Ваша Корзина пуста</Text>
 					) : (
 						cartState.items.map((item) => (
-							<MenuItem key={item.id} mx={[0,5]}>
+							<MenuItem key={item.id} mx={[0, 5]}>
 								<CartItem item={item} />
 							</MenuItem>
 						))

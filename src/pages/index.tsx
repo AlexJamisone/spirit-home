@@ -4,7 +4,8 @@ import { Keyboard, Mousewheel, Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import ProductsCardNew from '~/components/Product/ProductCardNew';
+import ProductAction from '~/components/Product/ProductAction';
+import ProductsCard from '~/components/Product/ProductCard';
 import ProductImage from '~/components/Product/ProductImage';
 import ProductInfo from '~/components/Product/ProductInfo';
 import { api } from '~/utils/api';
@@ -24,7 +25,6 @@ const Home: NextPage = () => {
 				as="main"
 				gap={5}
 				flexWrap="wrap"
-				h="100%"
 				position="relative"
 			>
 				<Center
@@ -53,16 +53,13 @@ const Home: NextPage = () => {
 							{products
 								.filter((product) => !product.archived)
 								.map((product) => (
-									// <ProductsCardOld
-									// 	key={product.id}
-									// 	product={product}
-									// />
-									<ProductsCardNew
+									<ProductsCard
 										key={product.id}
 										product={product}
 										image={<ProductImage />}
 										info={<ProductInfo />}
-										admin='USER'
+										action={<ProductAction />}
+										admin="USER"
 									/>
 								))}
 						</Center>

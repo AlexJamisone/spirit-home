@@ -1,8 +1,8 @@
-import { Button, Stack, Tag, Text } from '@chakra-ui/react';
+import { Stack, Tag, Text } from '@chakra-ui/react';
 import { useProductCardContext } from '~/context/productContext';
 
 const ProductInfo = () => {
-	const { product, admin, handlAddToCart } = useProductCardContext();
+	const { product, admin } = useProductCardContext();
 	return (
 		<>
 			<Stack fontSize={16} textAlign="center">
@@ -20,22 +20,12 @@ const ProductInfo = () => {
 					{product.description}
 				</Text>
 			</Stack>
-			<Stack
-				direction="row"
-				justifyContent="space-between"
-				alignItems="center"
-				gap={16}
-			>
-				<Button type="button" onClick={(e) => handlAddToCart?.(e)}>
-					В корзину
-				</Button>
-				{admin === 'USER' ? null : <Tag>{product.categoryTitle}</Tag>}
-				{admin === 'USER' ? null : (
+			{admin === 'USER' ? null : (
+				<>
+					<Tag>{product.categoryTitle}</Tag>
 					<Text>{`${product.quantity} шт`}</Text>
-				)}
-
-				<Text>{`${product.priceHistory[0]?.price ?? 0} ₽`}</Text>
-			</Stack>
+				</>
+			)}
 		</>
 	);
 };

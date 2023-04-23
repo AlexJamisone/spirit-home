@@ -1,4 +1,8 @@
-import { Image } from '@chakra-ui/react';
+import { Center, Image } from '@chakra-ui/react';
+import { Pagination } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from 'swiper/react';
 import { useProductCardContext } from '~/context/productContext';
 const ProductImage = () => {
 	const { product } = useProductCardContext();
@@ -7,18 +11,30 @@ const ProductImage = () => {
 	}/storage/v1/object/public/products/`;
 
 	return (
-		<>
+		<Center
+			as={Swiper}
+			direction="horizontal"
+			modules={[Pagination]}
+			pagination={{ enabled: true, clickable: true }}
+			justifyContent="center"
+			alignItems="center"
+			w="100%"
+			h="100vh"
+		>
 			{product.image.map((src) => (
-				<Image
-					key={src}
-					alt="product"
-					src={path + src}
-					objectFit="cover"
-					w={100}
-					h={100}
-				/>
+				<SwiperSlide key={src}>
+					<Center>
+						<Image
+							alt="product"
+							src={path + src}
+							objectFit="cover"
+							w={100}
+							h={100}
+						/>
+					</Center>
+				</SwiperSlide>
 			))}
-		</>
+		</Center>
 	);
 };
 
