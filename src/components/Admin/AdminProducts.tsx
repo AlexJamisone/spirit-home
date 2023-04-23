@@ -5,8 +5,10 @@ import { useReducer, useState } from 'react';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
-import ProductsCard from '../ProductsCard';
+import ProductsCardNew from '../Product/ProductCardNew';
 import AdminProductsModal from './AdminProductsModal';
+import ProductImage from '../Product/ProductImage';
+import ProductInfo from '../Product/ProductInfo';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
@@ -60,10 +62,12 @@ const AdminProducts = () => {
 				products
 					.map((product) => {
 						return (
-							<ProductsCard
+							<ProductsCardNew
 								key={product.id}
 								admin={user?.role}
 								product={product}
+								image={<ProductImage/>}
+								info={<ProductInfo/>}
 								handlEdit={handlEdit}
 							/>
 						);

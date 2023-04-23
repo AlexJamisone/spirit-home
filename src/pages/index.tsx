@@ -1,16 +1,23 @@
-import { Center,Image,Spinner } from '@chakra-ui/react';
+import { Center, Image, Spinner } from '@chakra-ui/react';
 import { type NextPage } from 'next';
-import { Controller,Pagination } from 'swiper';
+import { Keyboard, Mousewheel, Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
-import { Swiper,SwiperSlide } from 'swiper/react';
-import ProductsCard from '~/components/ProductsCard';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import ProductsCardNew from '~/components/Product/ProductCardNew';
+import ProductImage from '~/components/Product/ProductImage';
+import ProductInfo from '~/components/Product/ProductInfo';
 import { api } from '~/utils/api';
 
 const Home: NextPage = () => {
 	const { data: products, isLoading } = api.products.get.useQuery();
 	if (!products) return null;
-	if (isLoading) return <Spinner />;
+	if (isLoading)
+		return (
+			<Center>
+				<Spinner />
+			</Center>
+		);
 	return (
 		<>
 			<Center
@@ -23,8 +30,10 @@ const Home: NextPage = () => {
 				<Center
 					as={Swiper}
 					direction="vertical"
-					modules={[Pagination, Controller]}
-					pagination={{ clickable: true }}
+					modules={[Pagination, Keyboard, Mousewheel]}
+					keyboard={{ pageUpDown: true }}
+					mousewheel
+					pagination={{ clickable: true, enabled: true }}
 					justifyContent="center"
 					h={'100vh'}
 					w={'100vw'}
@@ -44,9 +53,16 @@ const Home: NextPage = () => {
 							{products
 								.filter((product) => !product.archived)
 								.map((product) => (
-									<ProductsCard
+									// <ProductsCardOld
+									// 	key={product.id}
+									// 	product={product}
+									// />
+									<ProductsCardNew
 										key={product.id}
 										product={product}
+										image={<ProductImage />}
+										info={<ProductInfo />}
+										admin='USER'
 									/>
 								))}
 						</Center>

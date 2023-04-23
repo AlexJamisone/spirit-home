@@ -22,6 +22,8 @@ const Menu = () => {
 			alignItems="center"
 			cursor="pointer"
 			position="fixed"
+			top={'35%'}
+			zIndex={20}
 			gap={5}
 			w={isOpen ? ['250px'] : ['70px']}
 			bgColor="#FFCC99"
@@ -31,7 +33,7 @@ const Menu = () => {
 			onHoverStart={() => setIsOpen(true)}
 			onHoverEnd={() => setIsOpen(false)}
 			py={5}
-			my="10%"
+			// my="10%"
 			roundedRight={20}
 		>
 			{menuItems
