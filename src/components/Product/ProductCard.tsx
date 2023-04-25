@@ -1,5 +1,5 @@
 import { Stack, useToast } from '@chakra-ui/react';
-import type { Product, ProductPriceHistory, Role } from '@prisma/client';
+import type { Product, ProductPriceHistory, Role, Order } from '@prisma/client';
 import { motion } from 'framer-motion';
 import type { ReactNode, SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';

@@ -50,11 +50,11 @@ export const ordersRouter = createTRPCRouter({
 				address: z.string().optional(),
 				cart: z.custom<CartState>(),
 				addressObject: z.object({
-					city: z.string(),
-					contactPhone: z.string(),
-					point: z.string(),
-					firstName: z.string(),
-					lastName: z.string(),
+					city: z.string().nonempty(),
+					contactPhone: z.string().nonempty(),
+					point: z.string().nonempty(),
+					firstName: z.string().nonempty(),
+					lastName: z.string().nonempty(),
 				}),
 			})
 		)
@@ -108,6 +108,45 @@ export const ordersRouter = createTRPCRouter({
 	changeStatus: adminProcedure
 		.input(z.object({ status: z.custom<OrderStatus>(), id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
+			if (input.status === 'CANCELLED') {
+				const returnCount = await ctx.prisma.order.findUnique({
+					where: {
+						id: input.id,
+					},
+					select: {
+						orderItem: {
+							include: {
+								product: {
+									select: {
+										quantity: true,
+									},
+								},
+							},
+						},
+					},
+				});
+				returnCount?.orderItem.map(
+					async ({ productId, quantity }) =>
+						await ctx.prisma.product.update({
+							where: {
+								id: productId,
+							},
+							data: {
+								quantity: {
+									increment: quantity,
+								},
+							},
+						})
+				);
+				return await ctx.prisma.order.update({
+					where: {
+						id: input.id,
+					},
+					data: {
+						status: input.status,
+					},
+				});
+			}
 			return await ctx.prisma.order.update({
 				where: {
 					id: input.id,
@@ -122,14 +161,14 @@ export const ordersRouter = createTRPCRouter({
 			z.object({
 				email: z.string().optional(),
 				password: z.string().optional(),
-				firstName: z.string(),
-				lastName: z.string(),
+				firstName: z.string().nonempty(),
+				lastName: z.string().nonempty(),
 				saveAddress: z.boolean(),
 				createUser: z.boolean(),
 				address: z.object({
-					city: z.string(),
-					contactPhone: z.string(),
-					point: z.string(),
+					city: z.string().nonempty(),
+					contactPhone: z.string().nonempty(),
+					point: z.string().nonempty(),
 				}),
 				cart: z.custom<CartState>(),
 			})

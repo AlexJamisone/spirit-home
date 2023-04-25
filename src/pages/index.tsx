@@ -41,10 +41,11 @@ const Home: NextPage = () => {
 				<SwiperSlide>
 					<Center>
 						<Image
+							w='100vw'
 							height="100vh"
-							src="assets/2.jpg"
+							src="assets/3.jpg"
 							alt="bg"
-							objectFit="fill"
+							objectFit="cover"
 						/>
 					</Center>
 				</SwiperSlide>

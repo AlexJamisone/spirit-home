@@ -4,10 +4,14 @@ import {
 	Spinner,
 	Stack,
 	Text,
+	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
 import type { OrderStatus } from '@prisma/client';
+import { useState } from 'react';
+import Overlay from '~/components/NoData/Overlay';
 import { api } from '~/utils/api';
+import AdminAlertsStatus from './AdminAlertsStatus';
 import AdminOrdersInfo from './AdminOrdersInfo';
 import AdminOrdersTable from './AdminOrdersTable';
 
@@ -17,6 +21,10 @@ const AdminOrders = () => {
 		api.orders.changeStatus.useMutation();
 	const ctx = api.useContext();
 	const toast = useToast();
+	const { isOpen, onClose, onToggle } = useDisclosure();
+	const [valueStatus, setValueStatus] = useState<'COMPLETED' | 'CANCELLED'>(
+		'COMPLETED'
+	);
 	if (!orders) return null;
 
 	const handlChangeStatus = (value: OrderStatus, id: string) => {
@@ -37,6 +45,20 @@ const AdminOrders = () => {
 			}
 		);
 	};
+	const checkOrderStatus = (status: OrderStatus) => {
+		switch (status) {
+			case 'PENDING':
+				return 'teal.300';
+			case 'PROCESSING':
+				return 'green.600';
+			case 'COMPLETED':
+				return 'blue.300';
+			case 'CANCELLED':
+				return 'red.400';
+			default:
+				return '';
+		}
+	};
 	return (
 		<Stack
 			direction={['column', 'row']}
@@ -56,7 +78,8 @@ const AdminOrders = () => {
 							w={['100%']}
 							maxH={['600px', '665px']}
 							direction={['column']}
-							border="1px solid #CBD5E0"
+							border={`2px solid`}
+							borderColor={checkOrderStatus(status)}
 							p={[3, 5]}
 							mx={[5, null]}
 							rounded="3xl"
@@ -64,6 +87,10 @@ const AdminOrders = () => {
 							position="relative"
 							cursor="pointer"
 						>
+							{status === 'COMPLETED' ||
+							status === 'CANCELLED' ? (
+								<Overlay />
+							) : null}
 							<AdminOrdersInfo
 								address={address}
 								user={user}
@@ -109,22 +136,50 @@ const AdminOrders = () => {
 									) : null}
 								</Stack>
 								<RadioGroup
-									onChange={(value) =>
-										handlChangeStatus(
-											value as OrderStatus,
-											id
-										)
-									}
+									isDisabled={isLoading}
+									onChange={(value) => {
+										if (
+											value === 'COMPLETED' ||
+											value === 'CANCELLED'
+										) {
+											setValueStatus(value);
+											onToggle();
+										} else {
+											handlChangeStatus(
+												value as OrderStatus,
+												id
+											);
+										}
+									}}
 									defaultValue={status}
 									value={status}
 									display="flex"
 									flexDirection="column"
+									justifyContent="flex-start"
 								>
-									<Radio value="PENDING">В обработке</Radio>
-									<Radio value="PROCESSING">В пути</Radio>
-									<Radio value="COMPLETED">Доставлено</Radio>
-									<Radio value="CANCELLED">Отменён</Radio>
+									<Radio colorScheme="teal" value="PENDING">
+										В обработке
+									</Radio>
+									<Radio
+										colorScheme="green"
+										value="PROCESSING"
+									>
+										В пути
+									</Radio>
+									<Radio colorScheme="blue" value="COMPLETED">
+										Доставлено
+									</Radio>
+									<Radio colorScheme="red" value="CANCELLED">
+										Отменён
+									</Radio>
 								</RadioGroup>
+								<AdminAlertsStatus
+									isOpen={isOpen}
+									onClose={onClose}
+									handlChangeStatus={handlChangeStatus}
+									id={id}
+									value={valueStatus}
+								/>
 							</Stack>
 						</Stack>
 					);
