@@ -11,9 +11,7 @@ type UserCreaterProps = {
 const UserCreater = ({ info, setInfo, isAuth }: UserCreaterProps) => {
 	return (
 		<Stack>
-			{isAuth ? (
-				null
-			) : (
+			{isAuth ? null : (
 				<>
 					<Checkbox
 						isChecked={info.acc}

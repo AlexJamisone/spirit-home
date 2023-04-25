@@ -33,7 +33,7 @@ const UserOrders = () => {
 			p={[0, 5]}
 		>
 			{user.orders?.length === 0 ? (
-				<NoData icon={SiDatabricks} text='Пока что нет заказов'/>
+				<NoData icon={SiDatabricks} text="Пока что нет заказов" />
 			) : (
 				<TableContainer maxW={['100vw']}>
 					<Table size={['sm', 'md']}>

@@ -6,6 +6,7 @@ import {
 	Stack,
 	Text,
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import type { IconType } from 'react-icons';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { IoTrashOutline } from 'react-icons/io5';
@@ -24,7 +25,7 @@ const CartItem = ({
 		return (
 			<IconButton
 				variant="ghost"
-				size="sm"
+				size={['xs', 'sm']}
 				aria-label={action}
 				icon={<Icon as={icon} />}
 				onClick={(e) => {
@@ -49,9 +50,17 @@ const CartItem = ({
 	};
 	return (
 		<Stack
+			as={motion.div}
+			initial={{ opacity: 0 }}
+			animate={{
+				opacity: 1,
+				transition: { type: 'spring', duration: 0.3 },
+			}}
+			exit={{ opacity: 0, transition: { type: 'spring' } }}
 			direction="row"
 			gap={[0, 3]}
 			p={[0, 5]}
+			w={'100%'}
 			alignItems="center"
 			justifyContent="space-between"
 			fontSize={[12, 16]}
@@ -72,12 +81,18 @@ const CartItem = ({
 				<Text>{quantityInCart}</Text>
 				{handlCount(IoIosArrowForward, 'plus')}
 			</Stack>
-			<Text>{priceHistory[0]?.price} ₽</Text>
+			<Text fontSize={[12, 16]}>{priceHistory[0]?.price} ₽</Text>
 			<IconButton
 				variant="ghost"
 				size={['xs', 'md']}
 				aria-label="remove"
-				icon={<Icon as={IoTrashOutline} boxSize={6} color="red.500" />}
+				icon={
+					<Icon
+						as={IoTrashOutline}
+						boxSize={[4, 6]}
+						color="red.500"
+					/>
+				}
 				onClick={(e) => {
 					cartDispatch({ type: 'REMOVE_FROM_CART', payload: id });
 					e.stopPropagation();

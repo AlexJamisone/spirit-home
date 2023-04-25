@@ -1,5 +1,5 @@
-import type { Product,ProductPriceHistory,Role } from '@prisma/client';
-import { createContext,useContext,type SyntheticEvent } from 'react';
+import type { Product, ProductPriceHistory, Role } from '@prisma/client';
+import { createContext, useContext, type SyntheticEvent } from 'react';
 
 const ProductCardContext = createContext<{
 	product: Product & { priceHistory: ProductPriceHistory[] };
@@ -10,7 +10,7 @@ const ProductCardContext = createContext<{
 		name: string,
 		e: SyntheticEvent
 	) => void;
-    isLoading?: boolean
+	isLoading?: boolean;
 } | null>(null);
 
 export function useProductCardContext() {

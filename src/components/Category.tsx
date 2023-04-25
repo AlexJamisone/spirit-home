@@ -30,13 +30,13 @@ const Category = () => {
 					{isLoading ? (
 						<>
 							<MenuItem>
-								<Placholder/>
+								<Placholder />
 							</MenuItem>
 							<MenuItem>
-								<Placholder/>
+								<Placholder />
 							</MenuItem>
 							<MenuItem>
-								<Placholder/>
+								<Placholder />
 							</MenuItem>
 						</>
 					) : null}

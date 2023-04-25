@@ -19,7 +19,7 @@ const AdminOrdersInfo = ({
 	createdAt,
 }: AdminOrdersInfoProps) => {
 	return (
-		<Stack fontSize={[14,16]}>
+		<Stack fontSize={[14, 16]}>
 			<Text fontWeight={600}>
 				Дата cоздания: {dayjs(createdAt).format('DD.MM.YYYY HH:mm')}
 				{}

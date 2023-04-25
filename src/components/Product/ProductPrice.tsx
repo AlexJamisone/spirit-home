@@ -3,7 +3,11 @@ import { useProductCardContext } from '~/context/productContext';
 
 const ProductPrice = () => {
 	const { product } = useProductCardContext();
-	return <Text fontWeight={600}>{`${product.priceHistory[0]?.price ?? 0} ₽`}</Text>;
+	return (
+		<Text fontWeight={600}>{`${
+			product.priceHistory[0]?.price ?? 0
+		} ₽`}</Text>
+	);
 };
 
 export default ProductPrice;

@@ -11,6 +11,7 @@ import {
 	Text,
 	useDisclosure,
 } from '@chakra-ui/react';
+import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { SlHandbag } from 'react-icons/sl';
 import { useCart } from '~/context/cartContext';
@@ -27,13 +28,12 @@ const CartMenu = () => {
 		<Box>
 			<Menu>
 				<Stack position="relative">
-						<MenuButton
-							as={IconButton}
-							type="button"
-							fontSize={23}
-							icon={<SlHandbag />}
-							variant="ghost"
-						/>
+					<MenuButton
+						as={IconButton}
+						fontSize={23}
+						icon={<SlHandbag />}
+						variant="ghost"
+					/>
 					<Box
 						position="absolute"
 						textAlign="center"
@@ -56,15 +56,21 @@ const CartMenu = () => {
 						</Text>
 					</Box>
 				</Stack>
-				<MenuList p={[2, 5]}>
+				<MenuList p={[2, 5]} zIndex={20}>
 					{cartState.items.length === 0 ? (
 						<Text>Ваша Корзина пуста</Text>
 					) : (
-						cartState.items.map((item) => (
-							<MenuItem key={item.id} mx={[0, 5]}>
-								<CartItem item={item} />
-							</MenuItem>
-						))
+						<AnimatePresence>
+							{cartState.items.map((item) => (
+								<MenuItem
+									key={item.id}
+									mx={[0, 5]}
+									justifyContent="center"
+								>
+									<CartItem item={item} />
+								</MenuItem>
+							))}{' '}
+						</AnimatePresence>
 					)}
 					{cartState.items.length === 0 ? null : (
 						<>

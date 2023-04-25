@@ -20,53 +20,57 @@ const Home: NextPage = () => {
 			</Center>
 		);
 	return (
-		<>
+		<Center
+			as="main"
+			gap={5}
+			flexWrap="wrap"
+			position="relative"
+			overflow="hidden"
+		>
 			<Center
-				as="main"
-				gap={5}
-				flexWrap="wrap"
-				position="relative"
+				as={Swiper}
+				direction="vertical"
+				modules={[Pagination, Keyboard, Mousewheel]}
+				keyboard={{ pageUpDown: true }}
+				mousewheel
+				pagination={{ clickable: true, enabled: true,  }}
+				justifyContent="center"
+				h={'100vh'}
+				w={'100vw'}
 			>
-				<Center
-					as={Swiper}
-					direction="vertical"
-					modules={[Pagination, Keyboard, Mousewheel]}
-					keyboard={{ pageUpDown: true }}
-					mousewheel
-					pagination={{ clickable: true, enabled: true }}
-					justifyContent="center"
-					h={'100vh'}
-					w={'100vw'}
-				>
-					<SwiperSlide>
-						<Center>
-							<Image
-								height="100vh"
-								src="assets/2.jpg"
-								alt="bg"
-								objectFit="fill"
-							/>
-						</Center>
-					</SwiperSlide>
-					<SwiperSlide>
-						<Center>
-							{products
-								.filter((product) => !product.archived)
-								.map((product) => (
-									<ProductsCard
-										key={product.id}
-										product={product}
-										image={<ProductImage />}
-										info={<ProductInfo />}
-										action={<ProductAction />}
-										admin="USER"
-									/>
-								))}
-						</Center>
-					</SwiperSlide>
-				</Center>
+				<SwiperSlide>
+					<Center>
+						<Image
+							height="100vh"
+							src="assets/2.jpg"
+							alt="bg"
+							objectFit="fill"
+						/>
+					</Center>
+				</SwiperSlide>
+				<SwiperSlide>
+					<Center
+						mt={5}
+						gap={5}
+						flexWrap="wrap"
+						w='100%'
+					>
+						{products
+							.filter((product) => !product.archived)
+							.map((product) => (
+								<ProductsCard
+									key={product.id}
+									product={product}
+									image={<ProductImage />}
+									info={<ProductInfo />}
+									action={<ProductAction />}
+									admin="USER"
+								/>
+							))}
+					</Center>
+				</SwiperSlide>
 			</Center>
-		</>
+		</Center>
 	);
 };
 

@@ -12,6 +12,7 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
+import { AnimatePresence } from 'framer-motion';
 import { useReducer, useState } from 'react';
 import { useCart } from '~/context/cartContext';
 import {
@@ -156,9 +157,11 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 									setInfo={setInfo}
 								/>
 							)}
-							{cartState.items.map((item) => (
-								<CartItem item={item} key={item.id} />
-							))}
+							<AnimatePresence>
+								{cartState.items.map((item) => (
+									<CartItem item={item} key={item.id} />
+								))}
+							</AnimatePresence>
 						</Stack>
 						<ModalFooter gap={5}>
 							<Button

@@ -74,11 +74,10 @@ export const productsRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			const res = Promise.all(
-				input.path.map(async ({ path }) => {
-					await supabase.storage.from('products').remove([path]);
-				})
-			);
+			input.path.map(async ({ path }) => {
+				await supabase.storage.from('products').remove([path]);
+			});
+
 			return await ctx.prisma.product.delete({
 				where: {
 					id: input.id,

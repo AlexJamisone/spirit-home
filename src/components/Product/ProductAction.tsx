@@ -33,7 +33,7 @@ const ProductAction = () => {
 						top={'50%'}
 						zIndex={20}
 						size="xl"
-                        cursor='not-allowed'
+						cursor="not-allowed"
 					/>
 				</>
 			) : null}
@@ -49,9 +49,7 @@ const ProductAction = () => {
 						: handlArchiveButton(BiArchiveIn)}
 				</>
 			) : (
-				<Button type="button" onClick={(e) => handlAddToCart?.(e)}>
-					В корзину
-				</Button>
+				<Button onClick={(e) => handlAddToCart?.(e)}>В корзину</Button>
 			)}
 		</>
 	);
