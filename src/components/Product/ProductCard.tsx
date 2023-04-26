@@ -1,5 +1,5 @@
-import { Stack, useToast } from '@chakra-ui/react';
-import type { Product, ProductPriceHistory, Role, Order } from '@prisma/client';
+import { Stack, useMediaQuery, useToast } from '@chakra-ui/react';
+import type { Product, ProductPriceHistory, Role } from '@prisma/client';
 import { motion } from 'framer-motion';
 import type { ReactNode, SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';
@@ -30,6 +30,7 @@ const ProductsCard = ({
 	admin,
 	handlEdit,
 }: ProductProps) => {
+	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	const { mutate: archivedProduct, isLoading } =
 		api.products.archived.useMutation();
 	const ctx = api.useContext();
@@ -88,17 +89,21 @@ const ProductsCard = ({
 					opacity: 1,
 					transition: { type: 'spring', duration: 1 },
 				}}
+				exit={{
+					opacity: 0,
+					transition: { type: 'spring', duration: 500 },
+				}}
 				maxW={['300px']}
-				h={['425px']}
+				h={['350px', '425px']}
 				direction="column"
 				justifyContent="center"
 				alignItems="center"
-				p={5}
+				p={[3, 5]}
 				border="1px solid #CBD5E0"
 				rounded="3xl"
 				boxShadow="2xl"
 				whileHover={{
-					scale: product.archived ? 1 : 1.05,
+					scale: product.archived || isTablet ? 1 : 1.05,
 				}}
 				cursor="pointer"
 				position="relative"

@@ -9,6 +9,8 @@ import {
 } from '@chakra-ui/react';
 import type { OrderStatus } from '@prisma/client';
 import { useState } from 'react';
+import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
+import NoData from '~/components/NoData/NoData';
 import Overlay from '~/components/NoData/Overlay';
 import { api } from '~/utils/api';
 import AdminAlertsStatus from './AdminAlertsStatus';
@@ -67,7 +69,10 @@ const AdminOrders = () => {
 			justifyContent="center"
 		>
 			{orders.length === 0 ? (
-				<>Пока что нету заказов</>
+				<NoData
+					icon={HiOutlineClipboardDocumentList}
+					text="Пока что нет заказов"
+				/>
 			) : (
 				orders.map((order) => {
 					const { address, createdAt, orderItem, id, user, status } =

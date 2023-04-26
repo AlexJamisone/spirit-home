@@ -49,7 +49,12 @@ const ProductAction = () => {
 						: handlArchiveButton(BiArchiveIn)}
 				</>
 			) : (
-				<Button onClick={(e) => handlAddToCart?.(e)}>В корзину</Button>
+				<Button
+					size={['sm', 'md']}
+					onClick={(e) => handlAddToCart?.(e)}
+				>
+					В корзину
+				</Button>
 			)}
 		</>
 	);

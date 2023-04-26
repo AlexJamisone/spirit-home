@@ -25,7 +25,7 @@ const Menu = () => {
 			top={'35%'}
 			zIndex={20}
 			gap={5}
-			w={isOpen ? ['250px'] : ['70px']}
+			w={isOpen ? ['200px'] : ['70px']}
 			bgColor="#FFCC99"
 			transitionDuration="0.5s"
 			maxH={['100%']}

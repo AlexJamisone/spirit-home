@@ -16,10 +16,9 @@ const ProductImage = () => {
 			direction="horizontal"
 			modules={[Pagination]}
 			pagination={{ enabled: true, clickable: true }}
-			justifyContent="center"
-			alignItems="center"
+			justifyContent="space-around"
 			w="100%"
-			h="100vh"
+			h="100%"
 		>
 			{product.image.map((src) => (
 				<SwiperSlide key={src}>
@@ -28,8 +27,8 @@ const ProductImage = () => {
 							alt="product"
 							src={path + src}
 							objectFit="cover"
-							w={100}
-							h={100}
+							w={[100, 150]}
+							h={[100, 150]}
 						/>
 					</Center>
 				</SwiperSlide>
