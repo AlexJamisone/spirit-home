@@ -24,7 +24,6 @@ const Navigation = () => {
 	const [renderLinks, setRenderLinks] = useState(links);
 	const [bgColor, setBgColor] = useState(false);
 	useEffect(() => {
-		console.log('go useEffect')
 		const handleScroll = () => {
 			if (window.scrollY >= 100 || window.scrollY >= 150) {
 				setBgColor(true);

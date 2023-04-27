@@ -3,7 +3,7 @@ import { SignUp } from '@clerk/nextjs';
 
 const SignUpPage = () => {
 	return (
-		<Center>
+		<Center pt={150}>
 			<SignUp signInUrl="/signin" />
 		</Center>
 	);

@@ -1,4 +1,5 @@
-import { Center, Image, Spinner, Stack } from '@chakra-ui/react';
+import { Center, Img, Spinner, Stack } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { type NextPage } from 'next';
 import { useState } from 'react';
 import { Autoplay, Keyboard, Mousewheel, Pagination } from 'swiper';
@@ -37,12 +38,23 @@ const Home: NextPage = () => {
 		>
 			<SwiperSlide>
 				<Center>
-					<Image
-						w="full"
-						h="100dvh"
+					<Img
+						as={motion.img}
+						h={'100vh'}
+						objectFit="cover"
+						w="100%"
 						src="assets/3.jpg"
 						alt="bg"
-						objectFit="cover"
+						initial={{ scale: 1.2, opacity: 0 }}
+						animate={{
+							scale: 1,
+							opacity: 1,
+							transition: {
+								type: 'spring',
+								duration: 500,
+								delay: 0.1
+							},
+						}}
 					/>
 				</Center>
 			</SwiperSlide>

@@ -167,7 +167,7 @@ export const ordersRouter = createTRPCRouter({
 	createNotAuth: publicProcedure
 		.input(
 			z.object({
-				email: z.string().optional(),
+				email: z.string().email().optional(),
 				password: z.string().optional(),
 				firstName: z.string().nonempty(),
 				lastName: z.string().nonempty(),
