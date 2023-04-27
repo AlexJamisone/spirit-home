@@ -37,8 +37,11 @@ export type Info = {
 };
 
 const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
-	const { mutate: createOrder, isLoading } =
-		api.orders.createWithAuth.useMutation();
+	const {
+		mutate: createOrder,
+		isLoading,
+		isError,
+	} = api.orders.createWithAuth.useMutation();
 	const { mutate: createOrderNotAuth, isLoading: otherLoading } =
 		api.orders.createNotAuth.useMutation();
 	const { isSignedIn } = useAuth();
@@ -75,6 +78,15 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 					void ctx.users.invalidate();
 					cartDispatch({ type: 'CLER_CART' });
 					onClose();
+				},
+				onError: ({ data }) => {
+					data?.zodError?.fieldErrors.addressObject?.map((error) =>
+						toast({
+							description: `${error}`,
+							status: 'error',
+							isClosable: true,
+						})
+					);
 				},
 			}
 		);
@@ -128,6 +140,7 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 				<ModalCloseButton />
 				<ModalBody>
 					<FormControl
+						isInvalid={isError}
 						as="form"
 						onSubmit={(e) => {
 							e.preventDefault();
@@ -138,25 +151,26 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 							}
 						}}
 					>
-						<Stack gap={5} direction="column">
-							{isSignedIn ? (
-								<UserAddressList
-									dispatch={dispatch}
-									info={info}
-									input={input}
-									setInfo={setInfo}
-									address={address}
-									setAddress={setAddress}
-									isAuth={isSignedIn}
-								/>
-							) : (
-								<AddressCreate
-									dispatch={dispatch}
-									input={input}
-									info={info}
-									setInfo={setInfo}
-								/>
-							)}
+						{isSignedIn ? (
+							<UserAddressList
+								dispatch={dispatch}
+								info={info}
+								input={input}
+								setInfo={setInfo}
+								address={address}
+								setAddress={setAddress}
+								isAuth={isSignedIn}
+							/>
+						) : (
+							<AddressCreate
+								dispatch={dispatch}
+								input={input}
+								info={info}
+								setInfo={setInfo}
+							/>
+						)}
+
+						<Stack gap={[0, 3]} direction="column">
 							<AnimatePresence>
 								{cartState.items.map((item) => (
 									<CartItem item={item} key={item.id} />
@@ -165,6 +179,7 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 						</Stack>
 						<ModalFooter gap={5}>
 							<Button
+								size={['sm', 'md']}
 								type="submit"
 								isLoading={
 									isSignedIn ? isLoading : otherLoading
@@ -173,6 +188,7 @@ const NewOrder = ({ isOpen, onClose }: NewOrderProps) => {
 								Оформить
 							</Button>
 							<Button
+								size={['sm', 'md']}
 								onClick={() => {
 									setAddress('');
 									onClose();

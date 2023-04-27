@@ -1,4 +1,4 @@
-import { Grid, GridItem, Input } from '@chakra-ui/react';
+import { Input, Stack } from '@chakra-ui/react';
 import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
 import { inputFildsAddress } from '~/constants/inputFildsAddress';
 import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
@@ -10,7 +10,7 @@ type AddressCreateProps = {
 	dispatch: Dispatch<Action>;
 	info: Info;
 	setInfo: Dispatch<SetStateAction<Info>>;
-	isAuth?: boolean | undefined;
+	isAuth?: boolean;
 };
 const AddressCreate = ({
 	dispatch,
@@ -42,28 +42,20 @@ const AddressCreate = ({
 		}
 	};
 	return (
-		<>
-			<Grid
-				gap={3}
-				templateColumns={['repeat(1, 1fr)', 'repeat(2, 1fr)']}
-			>
-				{inputFildsAddress(input).map(
-					({ name, placeholder, value }) => (
-						<GridItem key={name}>
-							<Input
-								type="text"
-								name={name}
-								w={['300px']}
-								placeholder={placeholder}
-								value={value ?? ''}
-								onChange={(e) => handlInput(e)}
-							/>
-						</GridItem>
-					)
-				)}
-			</Grid>
+		<Stack gap={3}>
+			{inputFildsAddress(input).map(({ name, placeholder, value }) => (
+				<Input
+					key={name}
+					type="text"
+					name={name}
+					w={['300px']}
+					placeholder={placeholder}
+					value={value ?? ''}
+					onChange={(e) => handlInput(e)}
+				/>
+			))}
 			<UserCreater info={info} setInfo={setInfo} isAuth={isAuth} />
-		</>
+		</Stack>
 	);
 };
 

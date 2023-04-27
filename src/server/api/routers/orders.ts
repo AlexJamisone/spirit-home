@@ -50,11 +50,19 @@ export const ordersRouter = createTRPCRouter({
 				address: z.string().optional(),
 				cart: z.custom<CartState>(),
 				addressObject: z.object({
-					city: z.string().nonempty(),
-					contactPhone: z.string().nonempty(),
-					point: z.string().nonempty(),
-					firstName: z.string().nonempty(),
-					lastName: z.string().nonempty(),
+					city: z.string().nonempty({ message: 'Введи свой город' }),
+					contactPhone: z
+						.string()
+						.nonempty({ message: 'Введи свой номер телефона' }),
+					point: z
+						.string()
+						.nonempty({ message: 'Выбери пунт выдачи СДЭК' }),
+					firstName: z
+						.string()
+						.nonempty({ message: 'Нужно ввести своё имя.' }),
+					lastName: z
+						.string()
+						.nonempty({ message: 'Нужо ввести свою фамилию.' }),
 				}),
 			})
 		)

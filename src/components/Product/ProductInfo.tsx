@@ -10,7 +10,7 @@ const ProductInfo = () => {
 				<Text
 					fontSize={12}
 					textColor={'gray.500'}
-					maxH="100px"
+					h="100px"
 					borderBottom="none"
 					boxShadow="inset 0 -10px 10px -10px rgba(0, 0, 0, 0.5);"
 					rounded="md"
