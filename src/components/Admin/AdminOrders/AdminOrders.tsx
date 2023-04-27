@@ -62,12 +62,7 @@ const AdminOrders = () => {
 		}
 	};
 	return (
-		<Stack
-			direction={['column', 'row']}
-			gap={[5]}
-			alignItems="center"
-			justifyContent="center"
-		>
+		<>
 			{orders.length === 0 ? (
 				<NoData
 					icon={HiOutlineClipboardDocumentList}
@@ -80,8 +75,8 @@ const AdminOrders = () => {
 					return (
 						<Stack
 							key={id}
-							w={['100%']}
-							maxH={['600px', '665px']}
+							w={['375px']}
+							h={['600px', '665px']}
 							direction={['column']}
 							border={`2px solid`}
 							borderColor={checkOrderStatus(status)}
@@ -190,7 +185,7 @@ const AdminOrders = () => {
 					);
 				})
 			)}
-		</Stack>
+		</>
 	);
 };
 

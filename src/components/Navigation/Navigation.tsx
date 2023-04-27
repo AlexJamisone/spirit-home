@@ -22,7 +22,23 @@ const Navigation = () => {
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	const { isOpen, onClose, onToggle } = useDisclosure();
 	const [renderLinks, setRenderLinks] = useState(links);
+	const [bgColor, setBgColor] = useState(false);
+	useEffect(() => {
+		console.log('go useEffect')
+		const handleScroll = () => {
+			if (window.scrollY >= 100 || window.scrollY >= 150) {
+				setBgColor(true);
+			} else {
+				setBgColor(false);
+			}
+		};
 
+		window.addEventListener('scroll', handleScroll);
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, []);
 	useEffect(() => {
 		const linksCopy = [...links];
 		if (isSignedIn) {
@@ -39,6 +55,10 @@ const Navigation = () => {
 			gap={2}
 			as="nav"
 			w={'100%'}
+			position="fixed"
+			zIndex={5}
+			background={bgColor ? 'whiteAlpha.300' : ''}
+			backdropFilter={bgColor ? 'blur(4px)' : ''}
 		>
 			<ChakraLink as={Link} href="/" alignSelf="flex-start">
 				<Logo size={isTablet ? 120 : 150} />

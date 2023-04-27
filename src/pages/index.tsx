@@ -1,4 +1,4 @@
-import { Center, Image, Spinner } from '@chakra-ui/react';
+import { Center, Image, Spinner, Stack } from '@chakra-ui/react';
 import { type NextPage } from 'next';
 import { useState } from 'react';
 import { Autoplay, Keyboard, Mousewheel, Pagination } from 'swiper';
@@ -27,8 +27,6 @@ const Home: NextPage = () => {
 		<Center
 			as={Swiper}
 			direction="vertical"
-			longSwipesMs={3000}
-			longSwipesRatio={1}
 			modules={[Pagination, Keyboard, Mousewheel]}
 			keyboard={{ pageUpDown: true }}
 			mousewheel
@@ -49,57 +47,67 @@ const Home: NextPage = () => {
 				</Center>
 			</SwiperSlide>
 			<SwiperSlide>
-				<Center mt={5}>
-					<SearchInput setSearch={setSearch} />
-				</Center>
-				<Center
-					breakpoints={{
-						390: {
-							slidesPerView: 1,
-							spaceBetween: 15,
-						},
-						640: {
-							slidesPerView: 2,
-							spaceBetween: 10,
-						},
-						930: {
-							slidesPerView: 4,
-							spaceBetween: 10,
-						},
-					}}
-					mx={[0, 0, 0, 28]}
-					direction="horizontal"
-					justifyContent="flex-start"
-					py="100px"
-					as={Swiper}
-					modules={[Autoplay]}
-					autoplay={{
-						delay: 2500,
-						pauseOnMouseEnter: true,
-						disableOnInteraction: true,
-					}}
-					w="100%"
-				>
-					{products
-						.filter((product) =>
-							product.name
-								.toLowerCase()
-								.includes(search.toLowerCase())
-						)
-						.map((product) => (
-							<SwiperSlide key={product.id}>
-								<Center>
-									<ProductsCard
-										product={product}
-										image={<ProductImage />}
-										info={<ProductInfo />}
-										action={<ProductAction />}
-										admin="USER"
-									/>
-								</Center>
-							</SwiperSlide>
-						))}
-				</Center>
+				<Stack mt={150} mx={[0, 0, 0, 20]}>
+					<Center>
+						<SearchInput setSearch={setSearch} />
+					</Center>
+					<Center
+						breakpoints={{
+							390: {
+								slidesPerView: 1,
+								spaceBetween: 15,
+							},
+							640: {
+								slidesPerView: 2,
+								spaceBetween: 10,
+							},
+							930: {
+								slidesPerView: 2,
+								spaceBetween: 10,
+							},
+							1200: {
+								slidesPerView: 3,
+								spaceBetween: 10,
+							},
+							1400: {
+								slidesPerView: 4,
+								spaceBetween: 10,
+							},
+						}}
+						direction="horizontal"
+						justifyContent="flex-start"
+						pt="50px"
+						pb="100px"
+						as={Swiper}
+						modules={[Autoplay]}
+						autoplay={{
+							delay: 2500,
+							pauseOnMouseEnter: true,
+							disableOnInteraction: true,
+						}}
+						w="100%"
+					>
+						{products
+							.filter((product) =>
+								product.name
+									.toLowerCase()
+									.includes(search.toLowerCase())
+							)
+							.map((product) => (
+								<SwiperSlide key={product.id}>
+									<Center>
+										<ProductsCard
+											product={product}
+											image={<ProductImage />}
+											info={<ProductInfo />}
+											action={<ProductAction />}
+											admin="USER"
+										/>
+									</Center>
+								</SwiperSlide>
+							))}
+					</Center>
+				</Stack>
 			</SwiperSlide>
 		</Center>
 	);

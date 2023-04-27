@@ -22,7 +22,7 @@ const Admin = () => {
 		}
 	};
 	return (
-		<Center>
+		<Center flexWrap={'wrap'} pt={160} rowGap={5}>
 			<ProtectionRoutes type="ADMIN">{handlAdmin()}</ProtectionRoutes>
 		</Center>
 	);
