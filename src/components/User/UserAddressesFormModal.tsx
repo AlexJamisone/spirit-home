@@ -128,7 +128,7 @@ const UserAddressesFormModal = ({
 			}}
 		>
 			<ModalOverlay />
-			<ModalContent width={['100%', null]} mx={[5, null]}>
+			<ModalContent>
 				<FormControl
 					as="form"
 					onSubmit={(e) => {

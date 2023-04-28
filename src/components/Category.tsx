@@ -18,7 +18,7 @@ const Category = () => {
 	const { query } = useRouter();
 	return (
 		<Box>
-			<Menu>
+			<Menu autoSelect={false}>
 				<MenuButton
 					as={Button}
 					variant="ghost"

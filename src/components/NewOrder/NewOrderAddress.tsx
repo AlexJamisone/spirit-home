@@ -3,16 +3,8 @@ import AddressCreate from '../AddressCreate';
 import UserAddressList from '../User/UserAddressList';
 
 const NewOrderAddress = () => {
-    const {isSignedIn} = useNewOrderContext()
-	return (
-		<>
-			{isSignedIn ? (
-				<UserAddressList/>
-			) : (
-				<AddressCreate />
-			)}
-		</>
-	);
+	const { isSignedIn } = useNewOrderContext();
+	return <>{isSignedIn ? <UserAddressList /> : <AddressCreate />}</>;
 };
 
 export default NewOrderAddress;

@@ -31,7 +31,7 @@ const UserCreater = () => {
 						Создать аккаунт?
 					</Checkbox>
 					{input.saveAcc ? (
-						<Stack>
+						<Stack w="300px">
 							<Input
 								id="email"
 								type="email"

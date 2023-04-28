@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
 import { AnimatePresence } from 'framer-motion';
-import { useReducer, type ReactNode } from 'react';
+import { useReducer, useRef, type ReactNode } from 'react';
 import { useCart } from '~/context/cartContext';
 import NewOrderContext from '~/context/orderContext';
 import {
@@ -40,6 +40,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 	const [input, dispatch] = useReducer(InputAddressReducer, initialState);
 	const toast = useToast();
 	const ctx = api.useContext();
+	const initialRef = useRef<HTMLInputElement>(null);
 	const handlSubmit = () => {
 		create(
 			{
@@ -80,6 +81,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 			}
 		);
 	};
+    console.log(input)
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -87,31 +89,36 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 				dispatch({ type: 'SET_CLEAR' });
 				onClose();
 			}}
+			initialFocusRef={initialRef}
+			size={['xl', 'lg']}
 		>
 			<ModalOverlay />
-			<ModalContent mx={5}>
-				<ModalHeader textAlign="center">Новый заказ</ModalHeader>
-				<ModalCloseButton />
-				<ModalBody>
-					<NewOrderContext.Provider
-						value={{
-							input,
-							dispatch,
-							handlSubmit,
-							isSignedIn,
-							isLoading,
-							onClose,
+			<ModalContent mx={[5, null]}>
+				<NewOrderContext.Provider
+					value={{
+						input,
+						dispatch,
+						handlSubmit,
+						isSignedIn,
+						isLoading,
+						onClose,
+						initialRef,
+					}}
+				>
+					<FormControl
+						isInvalid={isError}
+						as="form"
+						onSubmit={(e) => {
+							e.preventDefault();
+							handlSubmit();
 						}}
 					>
-						<FormControl
-							isInvalid={isError}
-							as="form"
-							onSubmit={(e) => {
-								e.preventDefault();
-								handlSubmit();
-							}}
-						>
-							{address}
+						<ModalHeader textAlign="center">
+							Новый заказ
+						</ModalHeader>
+						<ModalCloseButton />
+						<ModalBody>
+							<Stack alignItems='center'>{address}</Stack>
 							<Stack direction="column" justifyContent="center">
 								<AnimatePresence>
 									{cartState.items.map((item) => (
@@ -120,9 +127,9 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 								</AnimatePresence>
 							</Stack>
 							<ModalFooter gap={5}>{action}</ModalFooter>
-						</FormControl>
-					</NewOrderContext.Provider>
-				</ModalBody>
+						</ModalBody>
+					</FormControl>
+				</NewOrderContext.Provider>
 			</ModalContent>
 		</Modal>
 	);

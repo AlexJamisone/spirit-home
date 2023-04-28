@@ -1,4 +1,4 @@
-import { Input, Stack } from '@chakra-ui/react';
+import { Input } from '@chakra-ui/react';
 import type { ChangeEvent } from 'react';
 import { IMaskInput } from 'react-imask';
 import { inputFildsAddress } from '~/constants/inputFildsAddress';
@@ -6,7 +6,7 @@ import { useNewOrderContext } from '~/context/orderContext';
 import UserCreater from './User/UserCreater';
 
 const AddressCreate = () => {
-	const { dispatch, input } = useNewOrderContext();
+	const { dispatch, input, initialRef, isSignedIn } = useNewOrderContext();
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		switch (name) {
@@ -30,12 +30,13 @@ const AddressCreate = () => {
 		}
 	};
 	return (
-		<Stack gap={3}>
+		<>
 			{inputFildsAddress(input).map(({ name, placeholder, value }) => (
 				<Input
+					key={name}
+					inputRef={name === 'firstName' ? initialRef : null}
 					as={IMaskInput}
 					mask={name === 'phone' ? '+{7}(000)000-00-00' : false}
-					key={name}
 					type="text"
 					name={name}
 					w={['300px']}
@@ -46,8 +47,8 @@ const AddressCreate = () => {
 					}}
 				/>
 			))}
-			<UserCreater />
-		</Stack>
+			{isSignedIn ? null : <UserCreater />}
+		</>
 	);
 };
 

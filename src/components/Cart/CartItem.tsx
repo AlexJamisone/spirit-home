@@ -60,7 +60,8 @@ const CartItem = ({
 			direction="row"
 			gap={[0, 3]}
 			alignItems="center"
-			w='100%'
+			justifyContent="center"
+			w="100%"
 			fontSize={[12, 16]}
 		>
 			<Image
@@ -73,13 +74,20 @@ const CartItem = ({
 				alt={name}
 				fallback={<Spinner />}
 			/>
-			<Text>{name}</Text>
+			<Text display="inline-block" w="100%" textAlign="center">
+				{name}
+			</Text>
 			<Stack direction="row" alignItems="center">
 				{handlCount(IoIosArrowBack, 'minus')}
 				<Text>{quantityInCart}</Text>
 				{handlCount(IoIosArrowForward, 'plus')}
 			</Stack>
-			<Text display="inline-block" w="100%" textAlign='center' fontSize={[12, 16]}>
+			<Text
+				display="inline-block"
+				w="100%"
+				textAlign="center"
+				fontSize={[12, 16]}
+			>
 				{priceHistory[0]?.price} ₽
 			</Text>
 			<IconButton
