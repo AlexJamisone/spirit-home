@@ -1,24 +1,12 @@
 import { Input, Stack } from '@chakra-ui/react';
-import type { ChangeEvent, Dispatch, SetStateAction } from 'react';
+import type { ChangeEvent } from 'react';
+import { IMaskInput } from 'react-imask';
 import { inputFildsAddress } from '~/constants/inputFildsAddress';
-import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
-import type { Info } from './NewOrder';
+import { useNewOrderContext } from '~/context/orderContext';
 import UserCreater from './User/UserCreater';
 
-type AddressCreateProps = {
-	input: InputAddressState;
-	dispatch: Dispatch<Action>;
-	info: Info;
-	setInfo: Dispatch<SetStateAction<Info>>;
-	isAuth?: boolean;
-};
-const AddressCreate = ({
-	dispatch,
-	input,
-	info,
-	setInfo,
-	isAuth,
-}: AddressCreateProps) => {
+const AddressCreate = () => {
+	const { dispatch, input } = useNewOrderContext();
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		switch (name) {
@@ -45,16 +33,20 @@ const AddressCreate = ({
 		<Stack gap={3}>
 			{inputFildsAddress(input).map(({ name, placeholder, value }) => (
 				<Input
+					as={IMaskInput}
+					mask={name === 'phone' ? '+{7}(000)000-00-00' : false}
 					key={name}
 					type="text"
 					name={name}
 					w={['300px']}
 					placeholder={placeholder}
 					value={value ?? ''}
-					onChange={(e) => handlInput(e)}
+					onChange={(e) => {
+						handlInput(e);
+					}}
 				/>
 			))}
-			<UserCreater info={info} setInfo={setInfo} isAuth={isAuth} />
+			<UserCreater />
 		</Stack>
 	);
 };

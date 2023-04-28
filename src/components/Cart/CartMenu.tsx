@@ -15,7 +15,9 @@ import { AnimatePresence } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { SlHandbag } from 'react-icons/sl';
 import { useCart } from '~/context/cartContext';
-import NewOrder from '../NewOrder';
+import NewOrderAction from '../NewOrder/NewOrderAction';
+import NewOrderAddress from '../NewOrder/NewOrderAddress';
+import NewOrder from '../NewOrder/NewOrderNew';
 import CartItem from './CartItem';
 const CartMenu = () => {
 	const [isLength, setIsLength] = useState(false);
@@ -62,11 +64,7 @@ const CartMenu = () => {
 					) : (
 						<AnimatePresence>
 							{cartState.items.map((item) => (
-								<MenuItem
-									key={item.id}
-									mx={[0, 5]}
-									justifyContent="center"
-								>
+								<MenuItem key={item.id} justifyContent="center">
 									<CartItem item={item} />
 								</MenuItem>
 							))}{' '}
@@ -89,7 +87,12 @@ const CartMenu = () => {
 							<Button w="100%" onClick={onToggle}>
 								Оформить заказ
 							</Button>
-							<NewOrder isOpen={isOpen} onClose={onClose} />
+							<NewOrder
+								isOpen={isOpen}
+								onClose={onClose}
+								address={<NewOrderAddress />}
+								action={<NewOrderAction />}
+							/>
 						</>
 					)}
 				</MenuList>

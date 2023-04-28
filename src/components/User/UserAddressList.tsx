@@ -1,34 +1,20 @@
 import { Radio, RadioGroup, Stack } from '@chakra-ui/react';
-import type { Dispatch, SetStateAction } from 'react';
-import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
+import { useNewOrderContext } from '~/context/orderContext';
 import { api } from '~/utils/api';
 import AddressCreate from '../AddressCreate';
-import type { Info } from '../NewOrder';
 import UserAddressCard from './UserAddressCard';
 
-type UserAddressListPorps = {
-	address: string;
-	setAddress: Dispatch<SetStateAction<string>>;
-	input: InputAddressState;
-	dispatch: Dispatch<Action>;
-	info: Info;
-	setInfo: Dispatch<SetStateAction<Info>>;
-	isAuth: boolean | undefined;
-};
-
-const UserAddressList = ({
-	address,
-	setAddress,
-	dispatch,
-	info,
-	input,
-	setInfo,
-	isAuth,
-}: UserAddressListPorps) => {
+const UserAddressList = () => {
 	const { data: user } = api.users.get.useQuery();
+	const { input, dispatch } = useNewOrderContext();
 	if (!user) return null;
 	return (
-		<RadioGroup onChange={setAddress} value={address}>
+		<RadioGroup
+			onChange={(value) =>
+				dispatch({ type: 'SET_ID_ADDRESS', payload: value })
+			}
+			value={input.idAddress}
+		>
 			<Stack
 				direction="row"
 				gap={3}
@@ -37,13 +23,7 @@ const UserAddressList = ({
 			>
 				{user.address?.filter((address) => !address.archived).length ===
 				0 ? (
-					<AddressCreate
-						dispatch={dispatch}
-						info={info}
-						input={input}
-						setInfo={setInfo}
-						isAuth={isAuth}
-					/>
+					<AddressCreate/>
 				) : (
 					user.address
 						?.filter((address) => !address.archived)

@@ -14,7 +14,7 @@ const ProfilePage = () => {
 
 	if (isLoading)
 		return (
-			<Center>
+			<Center pt={160}>
 				<Spinner />
 			</Center>
 		);
@@ -30,7 +30,7 @@ const ProfilePage = () => {
 		}
 	};
 	return (
-		<Center as="main" mx={['20px']}>
+		<Center as="main" mx={['20px']} pt={150}>
 			<ProtectionRoutes type="USER">{handlProfile()}</ProtectionRoutes>
 		</Center>
 	);

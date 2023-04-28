@@ -1,7 +1,6 @@
 import {
 	Box,
 	Button,
-	Link as ChakraLink,
 	Menu,
 	MenuButton,
 	MenuItem,
@@ -10,11 +9,13 @@ import {
 import Link from 'next/link';
 import { IoIosArrowDown } from 'react-icons/io';
 
+import { useRouter } from 'next/router';
 import { api } from '~/utils/api';
 import Placholder from './NoData/Placholder';
 
 const Category = () => {
 	const { data: categories, isLoading } = api.categorys.get.useQuery();
+	const { query } = useRouter();
 	return (
 		<Box>
 			<Menu>
@@ -41,16 +42,16 @@ const Category = () => {
 						</>
 					) : null}
 					{categories?.map(({ id, path, title }) => (
-						<MenuItem key={id}>
-							<ChakraLink
-								as={Link}
-								href={`/categories/${path}`}
-								_hover={{ textDecoration: 'none' }}
-								fontSize={[14, 16]}
-								w={'100%'}
-							>
-								{title}
-							</ChakraLink>
+						<MenuItem
+							bgColor={path === query.path ? 'gray.200' : ''}
+							key={id}
+							as={Link}
+							href={`/categories/${path}`}
+							_hover={{ textDecoration: 'none' }}
+							fontSize={[14, 16]}
+							w={'100%'}
+						>
+							{title}
 						</MenuItem>
 					))}
 				</MenuList>

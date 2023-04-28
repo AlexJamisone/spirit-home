@@ -1,51 +1,85 @@
-import { Checkbox, Input, Stack } from '@chakra-ui/react';
-import type { Dispatch, SetStateAction } from 'react';
-import type { Info } from '../NewOrder';
+import {
+	Checkbox,
+	Icon,
+	IconButton,
+	Input,
+	InputGroup,
+	InputRightElement,
+	Stack,
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { BiHide, BiShow } from 'react-icons/bi';
+import { useNewOrderContext } from '~/context/orderContext';
 
-type UserCreaterProps = {
-	info: Info;
-	setInfo: Dispatch<SetStateAction<Info>>;
-	isAuth: boolean | undefined;
-};
-
-const UserCreater = ({ info, setInfo, isAuth }: UserCreaterProps) => {
+const UserCreater = () => {
+	const { input, dispatch, isSignedIn } = useNewOrderContext();
+	const [show, setShow] = useState(false);
 	return (
 		<Stack>
-			{isAuth ? null : (
+			{isSignedIn ? null : (
 				<>
 					<Checkbox
-						isChecked={info.acc}
-						onChange={() => setInfo({ ...info, acc: !info.acc })}
+						w="150px"
+						isChecked={input.saveAcc}
+						onChange={() =>
+							dispatch({
+								type: 'SET_SAVE_ACC',
+								payload: !input.saveAcc,
+							})
+						}
 					>
 						Создать аккаунт?
 					</Checkbox>
-					{info.acc ? (
+					{input.saveAcc ? (
 						<Stack>
 							<Input
 								id="email"
 								type="email"
 								placeholder="Ваш email"
-								value={info.email}
+								value={input.email}
 								onChange={(e) =>
-									setInfo({ ...info, email: e.target.value })
-								}
-							/>
-							<Input
-								id="password"
-								type="password"
-								placeholder="Ваш пароль"
-								value={info.password}
-								onChange={(e) =>
-									setInfo({
-										...info,
-										password: e.target.value,
+									dispatch({
+										type: 'SET_EMAIL',
+										payload: e.target.value,
 									})
 								}
 							/>
+							<InputGroup>
+								<Input
+									id="password"
+									type={show ? 'text' : 'password'}
+									placeholder="Ваш пароль"
+									value={input.password}
+									onChange={(e) =>
+										dispatch({
+											type: 'SET_PASSWORD',
+											payload: e.target.value,
+										})
+									}
+								/>
+								<InputRightElement>
+									<IconButton
+										variant="ghost"
+										aria-label="password"
+										onClick={() => setShow(!show)}
+										icon={
+											<Icon
+												as={show ? BiShow : BiHide}
+												boxSize={6}
+												color="gray.500"
+											/>
+										}
+									/>
+								</InputRightElement>
+							</InputGroup>
 							<Checkbox
-								isChecked={info.save}
+								w="155px"
+								isChecked={input.saveAddress}
 								onChange={() =>
-									setInfo({ ...info, save: !info.save })
+									dispatch({
+										type: 'SET_SAVE_ADDRESS',
+										payload: !input.saveAddress,
+									})
 								}
 							>
 								Сохранить адрес?

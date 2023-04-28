@@ -22,13 +22,14 @@ const AdminOrdersInfo = ({
 		<Stack fontSize={[14, 16]}>
 			<Text fontWeight={600}>
 				Дата cоздания: {dayjs(createdAt).format('DD.MM.YYYY HH:mm')}
-				{}
 			</Text>
 			<Text>
 				ФИО: {address.firstName} {address.lastName}
 			</Text>
 			<Text>Телефон: {address.contactPhone}</Text>
-			<Text>Email: {user?.email}</Text>
+			<Text>{`Email: ${
+				user?.email ? user.email : 'не зарегестрирован'
+			}`}</Text>
 			<Text>Город: {address.city}</Text>
 			<Text>ПВЗ: {address.point}</Text>
 		</Stack>

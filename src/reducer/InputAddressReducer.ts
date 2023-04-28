@@ -5,10 +5,35 @@ export interface InputAddressState {
 	citys: string;
 	contactPhone: string;
 	point: string;
+	saveAcc: boolean;
+	saveAddress: boolean;
+	email: string;
+	password: string;
+	idAddress: string;
 }
 
 interface SetIdAction {
 	type: 'SET_ID';
+	payload: string;
+}
+interface SetIdAddressAction {
+	type: 'SET_ID_ADDRESS';
+	payload: string;
+}
+interface SetSaveAccAction {
+	type: 'SET_SAVE_ACC';
+	payload: boolean;
+}
+interface SetSaveAddressAction {
+	type: 'SET_SAVE_ADDRESS';
+	payload: boolean;
+}
+interface SetEmailAction {
+	type: 'SET_EMAIL';
+	payload: string;
+}
+interface SetPasswordAction {
+	type: 'SET_PASSWORD';
 	payload: string;
 }
 interface SetNameAction {
@@ -47,7 +72,12 @@ export type Action =
 	| SetPointAction
 	| SetClearAction
 	| SetAllAction
-	| SetIdAction;
+	| SetIdAction
+	| SetSaveAccAction
+	| SetSaveAddressAction
+	| SetEmailAction
+	| SetPasswordAction
+	| SetIdAddressAction;
 
 export const initialState: InputAddressState = {
 	id: '',
@@ -56,6 +86,11 @@ export const initialState: InputAddressState = {
 	citys: '',
 	contactPhone: '',
 	point: '',
+	email: '',
+	password: '',
+	idAddress: '',
+	saveAcc: false,
+	saveAddress: false,
 };
 
 export const InputAddressReducer = (
@@ -75,6 +110,16 @@ export const InputAddressReducer = (
 			return { ...state, contactPhone: action.payload };
 		case 'SET_POINT':
 			return { ...state, point: action.payload };
+		case 'SET_SAVE_ACC':
+			return { ...state, saveAcc: action.payload };
+		case 'SET_SAVE_ADDRESS':
+			return { ...state, saveAddress: action.payload };
+		case 'SET_EMAIL':
+			return { ...state, email: action.payload };
+		case 'SET_PASSWORD':
+			return { ...state, password: action.payload };
+		case 'SET_ID_ADDRESS':
+			return { ...state, idAddress: action.payload };
 		case 'SET_CLEAR':
 			return {
 				id: '',
@@ -83,6 +128,11 @@ export const InputAddressReducer = (
 				firstName: '',
 				lastName: '',
 				point: '',
+				email: '',
+				password: '',
+				idAddress: '',
+				saveAcc: false,
+				saveAddress: false,
 			};
 		case 'SET_ALL':
 			return {
