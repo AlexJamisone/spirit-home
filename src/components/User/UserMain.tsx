@@ -74,6 +74,10 @@ const UserMain = () => {
 				contactPhone: address.contactPhone,
 				lastName: user.lastName ?? '',
 				point: address.point,
+				email: user.email ?? '',
+				idAddress: input.idAddress,
+				password: '',
+				saveAcc: false,
 			},
 		});
 		setEdit(true);

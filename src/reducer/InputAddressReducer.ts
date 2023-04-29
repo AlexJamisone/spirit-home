@@ -105,7 +105,6 @@ export const InputAddressReducer = (
 			return { ...state, point: action.payload };
 		case 'SET_SAVE_ACC':
 			return { ...state, saveAcc: action.payload };
-
 		case 'SET_EMAIL':
 			return { ...state, email: action.payload };
 		case 'SET_PASSWORD':
