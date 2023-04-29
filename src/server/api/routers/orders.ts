@@ -1,5 +1,6 @@
 import { clerkClient } from '@clerk/nextjs/server';
 import type { OrderStatus } from '@prisma/client';
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
 import type { CartState } from '~/reducer/CartReducer';
@@ -101,7 +102,6 @@ export const ordersRouter = createTRPCRouter({
 				cart: z.custom<CartState>(),
 				idAddress: z.string().optional(),
 				createUser: z.boolean().optional(),
-				saveAddress: z.boolean().optional(),
 				address: z
 					.object({
 						city: z
@@ -144,11 +144,15 @@ export const ordersRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			console.log(input.isAuth);
 			const product = input.cart.items.map(({ id, quantityInCart }) => ({
 				productId: id,
 				quantity: quantityInCart,
 			}));
+			if (!input.address)
+				return new TRPCError({
+					code: 'BAD_REQUEST',
+					message: 'Поле адреса не заполнено',
+				});
 			if (input.isAuth) {
 				const userAddress = await ctx.prisma.user.findUnique({
 					where: {
@@ -191,12 +195,8 @@ export const ordersRouter = createTRPCRouter({
 						},
 					});
 				}
-			}
-			if (!input.isAuth) {
-				if (
-					(input.createUser && input.address) ||
-					(input.saveAddress && input.address)
-				) {
+			} else {
+				if (input.createUser) {
 					const createUserClerk = await clerkClient.users.createUser({
 						emailAddress: [input.email as string],
 						password: input.password as string,
@@ -216,20 +216,6 @@ export const ordersRouter = createTRPCRouter({
 									?.emailAddress,
 								firstName: createUserClerk.firstName,
 								lastName: createUserClerk.lastName,
-								address: {
-									create: input.saveAddress
-										? {
-												city: input.address.city,
-												contactPhone:
-													input.address.contactPhone,
-												firstName:
-													input.address.firstName,
-												lastName:
-													input.address.lastName,
-												point: input.address.point,
-										  }
-										: undefined,
-								},
 								orders: {
 									create: {
 										address: {
@@ -249,34 +235,37 @@ export const ordersRouter = createTRPCRouter({
 										},
 									},
 								},
+								address: {
+									create: {
+										city: input.address.city,
+										contactPhone:
+											input.address.contactPhone,
+										firstName: input.address.firstName,
+										lastName: input.address.lastName,
+										point: input.address.point,
+									},
+								},
 							},
 						});
 					}
+				} else {
+					return await ctx.prisma.order.create({
+						data: {
+							orderItem: {
+								createMany: { data: product },
+							},
+							address: {
+								create: {
+									city: input.address.city,
+									contactPhone: input.address.contactPhone,
+									firstName: input.address.firstName,
+									lastName: input.address.lastName,
+									point: input.address.point,
+								},
+							},
+						},
+					});
 				}
-				// if (
-				// 	(input.createUser && input.address) ||
-				// 	(input.saveAddress && input.address)
-				// ) {
-				// } else if (input.saveAddress && input.address) {
-				// 	await ctx.prisma.order.create({
-				// 		data: {
-				// 			orderItem: {
-				// 				createMany: {
-				// 					data: product,
-				// 				},
-				// 			},
-				// 			address: {
-				// 				create: {
-				// 					city: input.address?.city,
-				// 					contactPhone: input.address?.contactPhone,
-				// 					firstName: input.address?.firstName,
-				// 					lastName: input.address?.lastName,
-				// 					point: input.address?.point,
-				// 				},
-				// 			},
-				// 		},
-				// 	});
-				// }
 			}
 		}),
 });

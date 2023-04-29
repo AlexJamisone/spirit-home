@@ -6,7 +6,6 @@ export interface InputAddressState {
 	contactPhone: string;
 	point: string;
 	saveAcc: boolean;
-	saveAddress: boolean;
 	email: string;
 	password: string;
 	idAddress: string;
@@ -22,10 +21,6 @@ interface SetIdAddressAction {
 }
 interface SetSaveAccAction {
 	type: 'SET_SAVE_ACC';
-	payload: boolean;
-}
-interface SetSaveAddressAction {
-	type: 'SET_SAVE_ADDRESS';
 	payload: boolean;
 }
 interface SetEmailAction {
@@ -74,7 +69,6 @@ export type Action =
 	| SetAllAction
 	| SetIdAction
 	| SetSaveAccAction
-	| SetSaveAddressAction
 	| SetEmailAction
 	| SetPasswordAction
 	| SetIdAddressAction;
@@ -90,7 +84,6 @@ export const initialState: InputAddressState = {
 	password: '',
 	idAddress: '',
 	saveAcc: false,
-	saveAddress: false,
 };
 
 export const InputAddressReducer = (
@@ -112,8 +105,7 @@ export const InputAddressReducer = (
 			return { ...state, point: action.payload };
 		case 'SET_SAVE_ACC':
 			return { ...state, saveAcc: action.payload };
-		case 'SET_SAVE_ADDRESS':
-			return { ...state, saveAddress: action.payload };
+
 		case 'SET_EMAIL':
 			return { ...state, email: action.payload };
 		case 'SET_PASSWORD':
@@ -132,7 +124,6 @@ export const InputAddressReducer = (
 				password: '',
 				idAddress: '',
 				saveAcc: false,
-				saveAddress: false,
 			};
 		case 'SET_ALL':
 			return {

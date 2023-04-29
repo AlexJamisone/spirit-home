@@ -34,6 +34,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 		mutate: create,
 		isLoading,
 		isError,
+		reset,
 	} = api.orders.create.useMutation();
 	const { cartState, cartDispatch } = useCart();
 	const { isSignedIn } = useAuth();
@@ -57,7 +58,6 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 				email: input.email,
 				idAddress: input.idAddress,
 				password: input.password,
-				saveAddress: input.saveAddress,
 			},
 			{
 				onSuccess: () => {
@@ -67,21 +67,22 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 					});
 					void ctx.users.invalidate();
 					cartDispatch({ type: 'CLER_CART' });
+					dispatch({ type: 'SET_CLEAR' });
 					onClose();
 				},
-				onError: ({ data }) => {
-					data?.zodError?.fieldErrors.addressObject?.map((error) =>
-						toast({
-							description: `${error}`,
-							status: 'error',
-							isClosable: true,
-						})
+				onError: (error) => {
+					error.data?.zodError?.fieldErrors.addressObject?.map(
+						(error) =>
+							toast({
+								description: `${error}`,
+								status: 'error',
+								isClosable: true,
+							})
 					);
 				},
 			}
 		);
 	};
-    console.log(input)
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -103,6 +104,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 						isLoading,
 						onClose,
 						initialRef,
+						reset,
 					}}
 				>
 					<FormControl
@@ -118,7 +120,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 						</ModalHeader>
 						<ModalCloseButton />
 						<ModalBody>
-							<Stack alignItems='center'>{address}</Stack>
+							<Stack alignItems="center">{address}</Stack>
 							<Stack direction="column" justifyContent="center">
 								<AnimatePresence>
 									{cartState.items.map((item) => (

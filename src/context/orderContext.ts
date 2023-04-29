@@ -14,6 +14,7 @@ const NewOrderContext = createContext<{
 	isSignedIn?: boolean;
 	isLoading: boolean;
 	initialRef: RefObject<HTMLInputElement>;
+	reset: () => void
 } | null>(null);
 
 export function useNewOrderContext() {

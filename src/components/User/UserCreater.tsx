@@ -15,11 +15,10 @@ const UserCreater = () => {
 	const { input, dispatch, isSignedIn } = useNewOrderContext();
 	const [show, setShow] = useState(false);
 	return (
-		<Stack>
+		<Stack w="300px">
 			{isSignedIn ? null : (
 				<>
 					<Checkbox
-						w="150px"
 						isChecked={input.saveAcc}
 						onChange={() =>
 							dispatch({
@@ -72,18 +71,6 @@ const UserCreater = () => {
 									/>
 								</InputRightElement>
 							</InputGroup>
-							<Checkbox
-								w="155px"
-								isChecked={input.saveAddress}
-								onChange={() =>
-									dispatch({
-										type: 'SET_SAVE_ADDRESS',
-										payload: !input.saveAddress,
-									})
-								}
-							>
-								Сохранить адрес?
-							</Checkbox>
 						</Stack>
 					) : null}
 				</>
