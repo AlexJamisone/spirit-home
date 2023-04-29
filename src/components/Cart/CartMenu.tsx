@@ -28,7 +28,7 @@ const CartMenu = () => {
 	}, [isLength, cartState.items.length]);
 	return (
 		<Box>
-			<Menu>
+			<Menu autoSelect={false}>
 				{({ onClose: closeCart }) => (
 					<>
 						<Stack position="relative">

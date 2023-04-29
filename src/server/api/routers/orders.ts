@@ -10,6 +10,16 @@ import {
 	publicProcedure,
 } from '~/server/api/trpc';
 
+function getAllProductsFromCart(cart: CartState): {
+	productId: string;
+	quantity: number;
+}[] {
+	return cart.items.map(({ id, quantityInCart }) => ({
+		productId: id,
+		quantity: quantityInCart,
+	}));
+}
+
 export const ordersRouter = createTRPCRouter({
 	get: adminProcedure.query(async ({ ctx }) => {
 		const orders = await ctx.prisma.order.findMany({
@@ -95,38 +105,103 @@ export const ordersRouter = createTRPCRouter({
 				},
 			});
 		}),
-	create: publicProcedure
+	createWithAddressId: publicProcedure
 		.input(
 			z.object({
-				isAuth: z.boolean(),
+				idAddress: z.string(),
 				cart: z.custom<CartState>(),
-				idAddress: z.string().optional(),
-				createUser: z.boolean().optional(),
-				address: z
-					.object({
-						city: z
-							.string()
-							.nonempty({ message: 'Введи свой город' })
-							.trim(),
-						contactPhone: z
-							.string()
-							.min(16)
-							.nonempty({ message: 'Введи свой номер телефона' })
-							.trim(),
-						firstName: z
-							.string()
-							.nonempty({ message: 'Нужно ввести своё имя.' })
-							.trim(),
-						lastName: z
-							.string()
-							.nonempty({ message: 'Нужо ввести свою фамилию.' })
-							.trim(),
-						point: z
-							.string()
-							.nonempty({ message: 'Выбери пунт выдачи СДЭК' })
-							.trim(),
-					})
-					.optional(),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.order.create({
+				data: {
+					addressId: input.idAddress,
+					orderItem: {
+						createMany: {
+							data: getAllProductsFromCart(input.cart),
+						},
+					},
+				},
+			});
+		}),
+	createNoAddressIsAuth: publicProcedure
+		.input(
+			z.object({
+				cart: z.custom<CartState>(),
+				address: z.object({
+					firstName: z
+						.string()
+						.nonempty({ message: 'Нужно ввести своё имя.' })
+						.trim(),
+					lastName: z
+						.string()
+						.nonempty({ message: 'Нужо ввести свою фамилию.' })
+						.trim(),
+					city: z
+						.string()
+						.nonempty({ message: 'Введи свой город' })
+						.trim(),
+					contactPhone: z
+						.string()
+						.min(16)
+						.nonempty({ message: 'Введи свой номер телефона' })
+						.trim(),
+					point: z
+						.string()
+						.nonempty({ message: 'Выбери пунт выдачи СДЭК' })
+						.trim(),
+				}),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.order.create({
+				data: {
+					orderItem: {
+						createMany: {
+							data: getAllProductsFromCart(input.cart),
+						},
+					},
+					address: {
+						create: {
+							city: input.address.city,
+							contactPhone: input.address.contactPhone,
+							firstName: input.address.firstName,
+							lastName: input.address.lastName,
+							point: input.address.lastName,
+							userId: ctx.userId,
+						},
+					},
+				},
+			});
+		}),
+	createNoAuth: publicProcedure
+		.input(
+			z.object({
+				cart: z.custom<CartState>(),
+				createProfile: z.boolean(),
+				address: z.object({
+					firstName: z
+						.string()
+						.nonempty({ message: 'Нужно ввести своё имя.' })
+						.trim(),
+					lastName: z
+						.string()
+						.nonempty({ message: 'Нужо ввести свою фамилию.' })
+						.trim(),
+					city: z
+						.string()
+						.nonempty({ message: 'Введи свой город' })
+						.trim(),
+					contactPhone: z
+						.string()
+						.min(16)
+						.nonempty({ message: 'Введи свой номер телефона' })
+						.trim(),
+					point: z
+						.string()
+						.nonempty({ message: 'Выбери пунт выдачи СДЭК' })
+						.trim(),
+				}),
 				email: z.optional(
 					z
 						.string()
@@ -144,97 +219,26 @@ export const ordersRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			const product = input.cart.items.map(({ id, quantityInCart }) => ({
-				productId: id,
-				quantity: quantityInCart,
-			}));
-			if (!input.address)
-				return new TRPCError({
-					code: 'BAD_REQUEST',
-					message: 'Поле адреса не заполнено',
+			if (input.createProfile) {
+				const createUserClerk = await clerkClient.users.createUser({
+					emailAddress: [input.email as string],
+					password: input.password as string,
+					firstName: input.address.firstName,
+					lastName: input.address.lastName,
 				});
-			if (input.isAuth) {
-				const userAddress = await ctx.prisma.user.findUnique({
-					where: {
-						id: ctx.userId as string,
-					},
-					include: {
-						address: true,
-					},
-				});
-				const filtrArch = userAddress?.address.filter(
-					(address) => !address.archived
-				);
-				if (filtrArch?.length === 0 && input.address) {
-					return await ctx.prisma.order.create({
-						data: {
-							orderItem: {
-								createMany: { data: product },
-							},
-							address: {
-								create: {
-									city: input.address.city,
-									contactPhone: input.address.contactPhone,
-									firstName: input.address.firstName,
-									lastName: input.address.lastName,
-									point: input.address.point,
-								},
-							},
-							user: {
-								connect: { id: ctx.userId as string },
-							},
-						},
+				if (!createUserClerk)
+					return new TRPCError({
+						code: 'CONFLICT',
+						message: 'Такой пользователь уже есть',
 					});
-				} else {
-					return await ctx.prisma.order.create({
-						data: {
-							orderItem: {
-								createMany: { data: product },
-							},
-							addressId: input.idAddress ?? '',
-						},
-					});
-				}
-			} else {
-				if (input.createUser) {
-					const createUserClerk = await clerkClient.users.createUser({
-						emailAddress: [input.email as string],
-						password: input.password as string,
-						firstName: input.address.firstName,
-						lastName: input.address.lastName,
-					});
-					const checkUserDb = await ctx.prisma.user.findUnique({
-						where: {
-							id: createUserClerk.id,
-						},
-					});
-					if (!checkUserDb) {
-						return await ctx.prisma.user.create({
-							data: {
-								id: createUserClerk.id,
-								email: createUserClerk.emailAddresses[0]
-									?.emailAddress,
-								firstName: createUserClerk.firstName,
-								lastName: createUserClerk.lastName,
-								orders: {
-									create: {
-										address: {
-											create: {
-												city: input.address.city,
-												contactPhone:
-													input.address.contactPhone,
-												firstName:
-													input.address.firstName,
-												lastName:
-													input.address.lastName,
-												point: input.address.point,
-											},
-										},
-										orderItem: {
-											createMany: { data: product },
-										},
-									},
-								},
+				return await ctx.prisma.user.create({
+					data: {
+						id: createUserClerk.id,
+						email: createUserClerk.emailAddresses[0]?.emailAddress,
+						firstName: createUserClerk.firstName,
+						lastName: createUserClerk.lastName,
+						orders: {
+							create: {
 								address: {
 									create: {
 										city: input.address.city,
@@ -245,27 +249,40 @@ export const ordersRouter = createTRPCRouter({
 										point: input.address.point,
 									},
 								},
-							},
-						});
-					}
-				} else {
-					return await ctx.prisma.order.create({
-						data: {
-							orderItem: {
-								createMany: { data: product },
-							},
-							address: {
-								create: {
-									city: input.address.city,
-									contactPhone: input.address.contactPhone,
-									firstName: input.address.firstName,
-									lastName: input.address.lastName,
-									point: input.address.point,
+								orderItem: {
+									createMany: {
+										data: getAllProductsFromCart(
+											input.cart
+										),
+									},
 								},
 							},
 						},
-					});
-				}
+						address: {
+							create: {
+								city: input.address.city,
+								contactPhone: input.address.contactPhone,
+								firstName: input.address.firstName,
+								lastName: input.address.lastName,
+								point: input.address.point,
+							},
+						},
+					},
+				});
+			} else {
+				return await ctx.prisma.order.create({
+					data: {
+						address: {
+							create: {
+								city: input.address.city,
+								contactPhone: input.address.contactPhone,
+								firstName: input.address.firstName,
+								lastName: input.address.lastName,
+								point: input.address.point,
+							},
+						},
+					},
+				});
 			}
 		}),
 });

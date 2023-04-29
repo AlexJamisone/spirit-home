@@ -12,6 +12,8 @@ const NewOrderContext = createContext<{
 	handlSubmit: (idAddress: string) => void;
 	onClose: () => void;
 	isSignedIn?: boolean;
+	isError: boolean;
+	error?: string[]
 	isLoading: boolean;
 	initialRef: RefObject<HTMLInputElement>;
 	reset: () => void

@@ -31,57 +31,118 @@ type NewOrderProps = {
 
 const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 	const {
-		mutate: create,
-		isLoading,
-		isError,
+		mutate: createWithId,
+		isLoading: isLoadingId,
 		reset,
-	} = api.orders.create.useMutation();
+		isError: isErrorId,
+	} = api.orders.createWithAddressId.useMutation();
+	const {
+		mutate: createNoAddress,
+		isError: isErrorNoAddress,
+		error: errorNoAddress,
+		isLoading: isLoadingNoAddreess,
+	} = api.orders.createNoAddressIsAuth.useMutation();
+	const {
+		mutate: createNoAuth,
+		isError: isErrorAnon,
+		error: errorAnon,
+		isLoading: isLoadingAnon,
+	} = api.orders.createNoAuth.useMutation();
+
 	const { cartState, cartDispatch } = useCart();
 	const { isSignedIn } = useAuth();
 	const [input, dispatch] = useReducer(InputAddressReducer, initialState);
 	const toast = useToast();
 	const ctx = api.useContext();
 	const initialRef = useRef<HTMLInputElement>(null);
+
+	const handlSuccess = () => {
+		toast({
+			description:
+				'Заказ успешно оформлен, в ближайшее время с вами свжуться!',
+			status: 'success',
+			duration: 10000,
+			isClosable: true,
+		});
+		void ctx.orders.invalidate();
+		void ctx.users.invalidate();
+		dispatch({ type: 'SET_CLEAR' });
+		cartDispatch({ type: 'CLER_CART' });
+		onClose();
+	};
+
+	const handlError = () => {
+		toast({
+			description: 'Произошла Ошибка',
+			status: 'error',
+			duration: 3000,
+			isClosable: true,
+		});
+	};
 	const handlSubmit = () => {
-		create(
-			{
-				cart: cartState,
-				isAuth: isSignedIn as boolean,
-				address: {
-					city: input.citys,
-					contactPhone: input.contactPhone,
-					firstName: input.firstName,
-					lastName: input.lastName,
-					point: input.point,
-				},
-				createUser: input.saveAcc,
-				email: input.email,
-				idAddress: input.idAddress,
-				password: input.password,
-			},
-			{
-				onSuccess: () => {
-					toast({
-						description: `Заказ успешно создан🚀`,
-						status: 'success',
-					});
-					void ctx.users.invalidate();
-					cartDispatch({ type: 'CLER_CART' });
-					dispatch({ type: 'SET_CLEAR' });
-					onClose();
-				},
-				onError: (error) => {
-					error.data?.zodError?.fieldErrors.addressObject?.map(
-						(error) =>
-							toast({
-								description: `${error}`,
-								status: 'error',
-								isClosable: true,
-							})
-					);
-				},
+		if (isSignedIn) {
+			if (input.idAddress !== '') {
+				createWithId(
+					{
+						cart: cartState,
+						idAddress: input.idAddress,
+					},
+					{
+						onSuccess: () => {
+							handlSuccess();
+						},
+						onError: () => {
+							handlError();
+						},
+					}
+				);
+			} else {
+				createNoAddress(
+					{
+						cart: cartState,
+						address: {
+							city: input.citys,
+							contactPhone: input.contactPhone,
+							firstName: input.firstName,
+							lastName: input.lastName,
+							point: input.point,
+						},
+					},
+					{
+						onSuccess: () => {
+							handlSuccess();
+						},
+						onError: () => {
+							handlError();
+						},
+					}
+				);
 			}
-		);
+		} else {
+			createNoAuth(
+				{
+					createProfile: input.saveAcc,
+					address: {
+						city: input.citys,
+						contactPhone: input.contactPhone,
+						firstName: input.firstName,
+						lastName: input.lastName,
+						point: input.point,
+					},
+					cart: cartState,
+					email: input.saveAcc ? input.email : undefined,
+					password: input.saveAcc ? input.password : undefined,
+				},
+				{
+					onSuccess: () => {
+						handlSuccess();
+					},
+					onError: () => {
+						handlError();
+					},
+				}
+			);
+		}
 	};
 	return (
 		<Modal
@@ -101,14 +162,19 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 						dispatch,
 						handlSubmit,
 						isSignedIn,
-						isLoading,
 						onClose,
 						initialRef,
 						reset,
+						isLoading:
+							isLoadingId || isLoadingAnon || isLoadingNoAddreess,
+						isError: isErrorId || isErrorAnon || isErrorNoAddress,
+						error:
+							errorAnon?.data?.zodError?.fieldErrors?.address ||
+							errorNoAddress?.data?.zodError?.fieldErrors
+								?.address,
 					}}
 				>
 					<FormControl
-						isInvalid={isError}
 						as="form"
 						onSubmit={(e) => {
 							e.preventDefault();
