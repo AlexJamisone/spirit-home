@@ -121,6 +121,7 @@ export const ordersRouter = createTRPCRouter({
 							data: getAllProductsFromCart(input.cart),
 						},
 					},
+					userId: ctx.userId,
 				},
 			});
 		}),
@@ -139,36 +140,43 @@ export const ordersRouter = createTRPCRouter({
 						.trim(),
 					city: z
 						.string()
-						.nonempty({ message: 'Введи свой город' })
+						.nonempty({ message: 'Введи свой город.' })
 						.trim(),
 					contactPhone: z
 						.string()
-						.min(16)
-						.nonempty({ message: 'Введи свой номер телефона' })
+						.min(16, { message: 'Неправельный номер телефона.' })
 						.trim(),
 					point: z
 						.string()
-						.nonempty({ message: 'Выбери пунт выдачи СДЭК' })
+						.nonempty({ message: 'Выбери пунт выдачи СДЭК.' })
 						.trim(),
 				}),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			return await ctx.prisma.order.create({
+			if (!ctx.userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
+			return await ctx.prisma.user.update({
+				where: {
+					id: ctx.userId,
+				},
 				data: {
-					orderItem: {
-						createMany: {
-							data: getAllProductsFromCart(input.cart),
-						},
-					},
-					address: {
+					orders: {
 						create: {
-							city: input.address.city,
-							contactPhone: input.address.contactPhone,
-							firstName: input.address.firstName,
-							lastName: input.address.lastName,
-							point: input.address.lastName,
-							userId: ctx.userId,
+							address: {
+								create: {
+									city: input.address.city,
+									contactPhone: input.address.contactPhone,
+									firstName: input.address.firstName,
+									lastName: input.address.lastName,
+									point: input.address.point,
+									userId: ctx.userId,
+								},
+							},
+							orderItem: {
+								createMany: {
+									data: getAllProductsFromCart(input.cart),
+								},
+							},
 						},
 					},
 				},
@@ -190,16 +198,15 @@ export const ordersRouter = createTRPCRouter({
 						.trim(),
 					city: z
 						.string()
-						.nonempty({ message: 'Введи свой город' })
+						.nonempty({ message: 'Введи свой город.' })
 						.trim(),
 					contactPhone: z
 						.string()
-						.min(16)
-						.nonempty({ message: 'Введи свой номер телефона' })
+						.min(16, { message: 'Неправельный номер телефона.' })
 						.trim(),
 					point: z
 						.string()
-						.nonempty({ message: 'Выбери пунт выдачи СДЭК' })
+						.nonempty({ message: 'Выбери пунт выдачи СДЭК.' })
 						.trim(),
 				}),
 				email: z.optional(
@@ -219,18 +226,18 @@ export const ordersRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			if (input.createProfile) {
+			if (input.createProfile && input.password) {
+				if (input.password.length < 8)
+					throw new TRPCError({
+						code: 'CONFLICT',
+						message: 'Пароль должен быть минимум 8 символов',
+					});
 				const createUserClerk = await clerkClient.users.createUser({
 					emailAddress: [input.email as string],
-					password: input.password as string,
+					password: input.password,
 					firstName: input.address.firstName,
 					lastName: input.address.lastName,
 				});
-				if (!createUserClerk)
-					return new TRPCError({
-						code: 'CONFLICT',
-						message: 'Такой пользователь уже есть',
-					});
 				return await ctx.prisma.user.create({
 					data: {
 						id: createUserClerk.id,
@@ -279,6 +286,11 @@ export const ordersRouter = createTRPCRouter({
 								firstName: input.address.firstName,
 								lastName: input.address.lastName,
 								point: input.address.point,
+							},
+						},
+						orderItem: {
+							createMany: {
+								data: getAllProductsFromCart(input.cart),
 							},
 						},
 					},

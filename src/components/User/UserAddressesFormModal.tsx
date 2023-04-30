@@ -18,11 +18,11 @@ import React, {
 	type Dispatch,
 	type SetStateAction,
 } from 'react';
+import { IMaskInput } from 'react-imask';
 import { inputFildsAddress } from '~/constants/inputFildsAddress';
 
 import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
 import { api } from '~/utils/api';
-import AddressCreate from '../AddressCreate';
 
 type UserAddressesFormModalProps = {
 	isOpen: boolean;
@@ -150,6 +150,12 @@ const UserAddressesFormModal = ({
 											{placeholder}
 										</FormLabel>
 										<Input
+											as={IMaskInput}
+											mask={
+												name === 'phone'
+													? '+{7}(000)000-00-00'
+													: false
+											}
 											size={['sm', 'md']}
 											fontSize={[12, 16]}
 											type="text"

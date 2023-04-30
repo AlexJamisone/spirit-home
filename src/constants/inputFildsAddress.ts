@@ -6,6 +6,13 @@ type inputFildsAddressType = {
 	name: string;
 	errorMessage?: string;
 };
+
+function getErrorMessage(
+	error: string[] | undefined,
+	compairString: string
+): string | undefined {
+	return error?.filter((value) => value === compairString).toString();
+}
 export const inputFildsAddress = (
 	input: InputAddressState,
 	error?: string[]
@@ -15,31 +22,34 @@ export const inputFildsAddress = (
 			placeholder: 'Имя',
 			value: input.firstName,
 			name: 'firstName',
-			errorMessage: error?.[0],
+			errorMessage: getErrorMessage(error, 'Нужно ввести своё имя.'),
 		},
 		{
 			placeholder: 'Фамилия',
 			value: input.lastName,
 			name: 'lastName',
-			errorMessage: error?.[1],
+			errorMessage: getErrorMessage(error, 'Нужо ввести свою фамилию.'),
 		},
 		{
 			placeholder: 'Город',
 			value: input.citys,
 			name: 'city',
-			errorMessage: error?.[2],
+			errorMessage: getErrorMessage(error, 'Введи свой город.'),
 		},
 		{
 			placeholder: 'Телефон',
 			value: input.contactPhone,
 			name: 'phone',
-			errorMessage: error?.[3],
+			errorMessage: getErrorMessage(
+				error,
+				'Неправельный номер телефона.'
+			),
 		},
 		{
 			placeholder: 'СДЭК ПВЗ',
 			value: input.point,
 			name: 'cdek',
-			errorMessage: error?.[4],
+			errorMessage: getErrorMessage(error, 'Выбери пунт выдачи СДЭК.'),
 		},
 	];
 };

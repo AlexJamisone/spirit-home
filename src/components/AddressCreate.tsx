@@ -7,8 +7,16 @@ import { useNewOrderContext } from '~/context/orderContext';
 import UserCreater from './User/UserCreater';
 
 const AddressCreate = () => {
-	const { dispatch, input, initialRef, isSignedIn, reset, error, isError } =
-		useNewOrderContext();
+	const {
+		dispatch,
+		input,
+		initialRef,
+		isSignedIn,
+		resetNoAddress,
+		resetNoAuth,
+		error,
+		isError,
+	} = useNewOrderContext();
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		switch (name) {
@@ -36,7 +44,11 @@ const AddressCreate = () => {
 			<>
 				{inputFildsAddress(input, error).map(
 					({ name, placeholder, value, errorMessage }, index) => (
-						<FormControl key={name} w="300px" isInvalid={isError}>
+						<FormControl
+							key={name}
+							w="300px"
+							isInvalid={!errorMessage ? false : isError}
+						>
 							<Input
 								inputRef={
 									name === 'firstName' ? initialRef : null
@@ -53,7 +65,7 @@ const AddressCreate = () => {
 								placeholder={placeholder}
 								value={value ?? ''}
 								onChange={(e) => {
-									reset();
+									void resetNoAuth() || resetNoAddress();
 									handlInput(e);
 								}}
 							/>

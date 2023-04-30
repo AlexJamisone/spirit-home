@@ -11,6 +11,7 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
+import { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import { AnimatePresence } from 'framer-motion';
 import { useReducer, useRef, type ReactNode } from 'react';
 import { useCart } from '~/context/cartContext';
@@ -21,7 +22,6 @@ import {
 } from '~/reducer/InputAddressReducer';
 import { api } from '~/utils/api';
 import CartItem from '../Cart/CartItem';
-
 type NewOrderProps = {
 	isOpen: boolean;
 	onClose: () => void;
@@ -33,19 +33,20 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 	const {
 		mutate: createWithId,
 		isLoading: isLoadingId,
-		reset,
 		isError: isErrorId,
 	} = api.orders.createWithAddressId.useMutation();
 	const {
 		mutate: createNoAddress,
 		isError: isErrorNoAddress,
 		error: errorNoAddress,
+		reset: resetNoAddress,
 		isLoading: isLoadingNoAddreess,
 	} = api.orders.createNoAddressIsAuth.useMutation();
 	const {
 		mutate: createNoAuth,
 		isError: isErrorAnon,
 		error: errorAnon,
+		reset: resetNoAuth,
 		isLoading: isLoadingAnon,
 	} = api.orders.createNoAuth.useMutation();
 
@@ -71,11 +72,15 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 		onClose();
 	};
 
-	const handlError = () => {
+	const handlError = (code?: TRPC_ERROR_CODE_KEY) => {
 		toast({
-			description: 'Произошла Ошибка',
-			status: 'error',
-			duration: 3000,
+			description: `${
+				code === 'INTERNAL_SERVER_ERROR'
+					? 'Такой аккаунт уже есть'
+					: 'Ошибка'
+			}`,
+			status: code === 'INTERNAL_SERVER_ERROR' ? 'warning' : 'error',
+			duration: 5000,
 			isClosable: true,
 		});
 	};
@@ -112,8 +117,8 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 						onSuccess: () => {
 							handlSuccess();
 						},
-						onError: () => {
-							handlError();
+						onError: ({ data }) => {
+							handlError(data?.code);
 						},
 					}
 				);
@@ -137,8 +142,8 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 					onSuccess: () => {
 						handlSuccess();
 					},
-					onError: () => {
-						handlError();
+					onError: ({ data }) => {
+						handlError(data?.code);
 					},
 				}
 			);
@@ -164,7 +169,9 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 						isSignedIn,
 						onClose,
 						initialRef,
-						reset,
+						resetNoAuth,
+						resetNoAddress,
+						passwordLengthError: errorAnon?.message,
 						isLoading:
 							isLoadingId || isLoadingAnon || isLoadingNoAddreess,
 						isError: isErrorId || isErrorAnon || isErrorNoAddress,

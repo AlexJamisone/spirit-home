@@ -9,7 +9,7 @@ export const addressesRouter = createTRPCRouter({
 				firstName: z.string().nonempty(),
 				lastName: z.string().nonempty(),
 				city: z.string().nonempty(),
-				contactPhone: z.string().nonempty().min(12).max(12),
+				contactPhone: z.string().nonempty().min(16),
 				point: z.string().nonempty(),
 			})
 		)

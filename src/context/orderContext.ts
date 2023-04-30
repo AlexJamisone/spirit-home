@@ -13,10 +13,12 @@ const NewOrderContext = createContext<{
 	onClose: () => void;
 	isSignedIn?: boolean;
 	isError: boolean;
-	error?: string[]
+	error?: string[];
+	passwordLengthError?: string
 	isLoading: boolean;
 	initialRef: RefObject<HTMLInputElement>;
-	reset: () => void
+	resetNoAuth: () => void;
+	resetNoAddress: () => void;
 } | null>(null);
 
 export function useNewOrderContext() {
