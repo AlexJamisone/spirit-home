@@ -11,7 +11,7 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
-import { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
+import type { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import { AnimatePresence } from 'framer-motion';
 import { useReducer, useRef, type ReactNode } from 'react';
 import { useCart } from '~/context/cartContext';

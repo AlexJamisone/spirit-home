@@ -14,7 +14,7 @@ const NewOrderContext = createContext<{
 	isSignedIn?: boolean;
 	isError: boolean;
 	error?: string[];
-	passwordLengthError?: string
+	passwordLengthError?: string;
 	isLoading: boolean;
 	initialRef: RefObject<HTMLInputElement>;
 	resetNoAuth: () => void;

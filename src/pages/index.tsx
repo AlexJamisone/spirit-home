@@ -52,7 +52,7 @@ const Home: NextPage = () => {
 							transition: {
 								type: 'spring',
 								duration: 500,
-								delay: 0.1
+								delay: 0.1,
 							},
 						}}
 					/>
