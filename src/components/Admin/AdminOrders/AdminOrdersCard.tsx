@@ -31,12 +31,18 @@ type AdminOrdersCardProps = {
 		createdAt: Date;
 	};
 	info?: ReactNode;
-    table?: ReactNode;
-    sum?: ReactNode
-    statusComp?: ReactNode
+	table?: ReactNode;
+	sum?: ReactNode;
+	statusComp?: ReactNode;
 };
 
-const AdminOrdersCard = ({ info, order, statusComp, sum, table }: AdminOrdersCardProps) => {
+const AdminOrdersCard = ({
+	info,
+	order,
+	statusComp,
+	sum,
+	table,
+}: AdminOrdersCardProps) => {
 	const { mutate: changeStatus, isLoading } =
 		api.orders.changeStatus.useMutation();
 	const ctx = api.useContext();
@@ -95,7 +101,7 @@ const AdminOrdersCard = ({ info, order, statusComp, sum, table }: AdminOrdersCar
 				orderItem,
 				createdAt,
 				status,
-                id
+				id,
 			}}
 		>
 			<Stack
@@ -118,7 +124,7 @@ const AdminOrdersCard = ({ info, order, statusComp, sum, table }: AdminOrdersCar
 				{table}
 				{sum}
 				<Stack justifyContent="center" alignContent="center">
-                    {statusComp}
+					{statusComp}
 				</Stack>
 			</Stack>
 		</CardOrderContext.Provider>

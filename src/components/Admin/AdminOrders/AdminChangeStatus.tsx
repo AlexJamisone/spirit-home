@@ -3,11 +3,15 @@ import type { OrderStatus } from '@prisma/client';
 import { useCardOrderContext } from '~/context/ordersCardsContext';
 import AdminAlertsStatus from './AdminAlertsStatus';
 
-
-
 const AdminChangeStatus = () => {
-	const { isLoading, onToggle, setValueStatus, handlChangeStatus, status, id } =
-		useCardOrderContext();
+	const {
+		isLoading,
+		onToggle,
+		setValueStatus,
+		handlChangeStatus,
+		status,
+		id,
+	} = useCardOrderContext();
 	return (
 		<>
 			<Stack direction="row" justifyContent="center" alignItems="center">

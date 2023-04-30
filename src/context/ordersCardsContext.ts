@@ -29,7 +29,7 @@ interface CardOrderContext {
 		status: OrderStatus
 	) => '' | 'teal.300' | 'green.600' | 'blue.300' | 'red.400';
 	valueStatus: 'COMPLETED' | 'CANCELLED';
-    status: OrderStatus
+	status: OrderStatus;
 	isLoading: boolean;
 	isOpen: boolean;
 	onClose: () => void;

@@ -1,11 +1,10 @@
 import {
-createContext,
-useContext,
-type Dispatch,
-type RefObject,
+	createContext,
+	useContext,
+	type Dispatch,
+	type RefObject,
 } from 'react';
-import type { Action,InputAddressState } from '~/reducer/InputAddressReducer';
-
+import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
 
 interface OrderContext {
 	input: InputAddressState;
