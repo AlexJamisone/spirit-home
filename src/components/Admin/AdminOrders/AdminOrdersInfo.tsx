@@ -1,23 +1,10 @@
 import { Stack, Text } from '@chakra-ui/react';
-import type { Address, User } from '@prisma/client';
 import dayjs from 'dayjs';
+import { useCardOrderContext } from '~/context/ordersCardsContext';
 dayjs().locale('ru').format();
 
-type AdminOrdersInfoProps = {
-	user:
-		| (User & {
-				address: Address[];
-		  })
-		| null;
-	address: Address;
-	createdAt: Date;
-};
-
-const AdminOrdersInfo = ({
-	address,
-	user,
-	createdAt,
-}: AdminOrdersInfoProps) => {
+const AdminOrdersInfo = () => {
+	const { address, user, createdAt } = useCardOrderContext();
 	return (
 		<Stack fontSize={[14, 16]}>
 			<Text fontWeight={600}>

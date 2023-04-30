@@ -4,22 +4,15 @@ import {
 	TableContainer,
 	Tbody,
 	Td,
+	Text,
 	Th,
 	Thead,
 	Tr,
 } from '@chakra-ui/react';
-import type { OrderItem, Product, ProductPriceHistory } from '@prisma/client';
+import { useCardOrderContext } from '~/context/ordersCardsContext';
 
-type AdminOrdersTableProps = {
-	orderItem: (OrderItem & {
-		product: Product & {
-			priceHistory: ProductPriceHistory[];
-		};
-	})[];
-	createdAt: Date;
-};
-
-const AdminOrdersTable = ({ orderItem, createdAt }: AdminOrdersTableProps) => {
+const AdminOrdersTable = () => {
+	const { orderItem, createdAt } = useCardOrderContext();
 	return (
 		<TableContainer
 			overflowY="auto"
@@ -41,17 +34,23 @@ const AdminOrdersTable = ({ orderItem, createdAt }: AdminOrdersTableProps) => {
 			<Table variant="simple">
 				<TableCaption placement="top">Заказ</TableCaption>
 				<Thead position="sticky" top={0} bg="white">
-					<Tr>
-						<Th>Позиция</Th>
-						<Th>Кол-во</Th>
-						<Th>Сумма</Th>
+					<Tr fontSize={[10]}>
+						<Th>
+							<Text fontSize={10}>Позиция</Text>
+						</Th>
+						<Th>
+							<Text fontSize={10}>Кол-во</Text>
+						</Th>
+						<Th>
+							<Text fontSize={10}>Сумма</Text>
+						</Th>
 					</Tr>
 				</Thead>
 				<Tbody>
 					{orderItem.map(
 						({ product: { id, name, priceHistory }, quantity }) => (
 							<Tr key={id}>
-								<Td>{name}</Td>
+								<Td textAlign="left">{name}</Td>
 								<Td>{quantity} шт.</Td>
 								<Td>
 									{(priceHistory.find(

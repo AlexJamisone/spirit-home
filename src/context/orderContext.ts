@@ -1,12 +1,13 @@
 import {
-	createContext,
-	useContext,
-	type Dispatch,
-	type RefObject,
+createContext,
+useContext,
+type Dispatch,
+type RefObject,
 } from 'react';
-import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
+import type { Action,InputAddressState } from '~/reducer/InputAddressReducer';
 
-const NewOrderContext = createContext<{
+
+interface OrderContext {
 	input: InputAddressState;
 	dispatch: Dispatch<Action>;
 	handlSubmit: (idAddress: string) => void;
@@ -19,7 +20,9 @@ const NewOrderContext = createContext<{
 	initialRef: RefObject<HTMLInputElement>;
 	resetNoAuth: () => void;
 	resetNoAddress: () => void;
-} | null>(null);
+}
+
+const NewOrderContext = createContext<OrderContext | null>(null);
 
 export function useNewOrderContext() {
 	const context = useContext(NewOrderContext);

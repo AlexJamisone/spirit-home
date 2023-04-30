@@ -11,22 +11,11 @@ import {
 } from '@chakra-ui/react';
 import type { OrderStatus } from '@prisma/client';
 import { useRef } from 'react';
+import { useCardOrderContext } from '~/context/ordersCardsContext';
 
-type AdminAlertsStatusProps = {
-	isOpen: boolean;
-	onClose: () => void;
-	handlChangeStatus: (value: OrderStatus, id: string) => void;
-	value: 'COMPLETED' | 'CANCELLED';
-	id: string;
-};
-
-const AdminAlertsStatus = ({
-	isOpen,
-	onClose,
-	value,
-	handlChangeStatus,
-	id,
-}: AdminAlertsStatusProps) => {
+const AdminAlertsStatus = () => {
+	const { isOpen, onClose, handlChangeStatus, valueStatus, id } =
+		useCardOrderContext();
 	const cancelRef = useRef<HTMLButtonElement>(null);
 	return (
 		<AlertDialog
@@ -39,7 +28,7 @@ const AdminAlertsStatus = ({
 			<AlertDialogOverlay>
 				<AlertDialogContent>
 					<AlertDialogHeader>
-						{value === 'COMPLETED'
+						{valueStatus === 'COMPLETED'
 							? 'Завершить заказ?'
 							: 'Отменить Заказ?'}
 					</AlertDialogHeader>
@@ -52,13 +41,13 @@ const AdminAlertsStatus = ({
 								py: '1',
 								rounded: 'full',
 								bg: `${
-									value === 'COMPLETED'
+									valueStatus === 'COMPLETED'
 										? 'green.400'
 										: 'red.400'
 								}`,
 							}}
 						>
-							{value === 'COMPLETED'
+							{valueStatus === 'COMPLETED'
 								? 'Пожалуйста, подтвердите, что ваш заказ завершен'
 								: 'Пожалуйста, потвердите, что ваш заказ отменён'}
 						</Highlight>
@@ -67,13 +56,18 @@ const AdminAlertsStatus = ({
 						<Button
 							onClick={() => {
 								onClose();
-								handlChangeStatus(value as OrderStatus, id);
+								handlChangeStatus(
+									valueStatus as OrderStatus,
+									id
+								);
 							}}
 							colorScheme={
-								value === 'COMPLETED' ? 'green' : 'red'
+								valueStatus === 'COMPLETED' ? 'green' : 'red'
 							}
 						>
-							{value === 'COMPLETED' ? 'Завершить' : 'Отменить'}
+							{valueStatus === 'COMPLETED'
+								? 'Завершить'
+								: 'Отменить'}
 						</Button>
 						<Button onClick={onClose}>Отмена</Button>
 					</AlertDialogFooter>
