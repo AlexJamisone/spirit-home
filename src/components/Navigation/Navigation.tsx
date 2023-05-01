@@ -7,6 +7,7 @@ import {
 	useMediaQuery,
 } from '@chakra-ui/react';
 import { UserButton, useAuth } from '@clerk/nextjs';
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { RxHamburgerMenu } from 'react-icons/rx';
@@ -52,7 +53,16 @@ const Navigation = () => {
 			justifyContent={['center', 'space-between']}
 			px={[null, '100px']}
 			gap={2}
-			as="nav"
+			as={motion.nav}
+			initial={{ opacity: 0, filter: 'blur(5px)' }}
+			animate={{
+				opacity: 1,
+				filter: 'blur(0px)',
+				transition: {
+					type: 'spring',
+					duration: 1,
+				},
+			}}
 			w={'100%'}
 			position="fixed"
 			zIndex={5}
