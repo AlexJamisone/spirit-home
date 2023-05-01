@@ -9,7 +9,7 @@ export const sizeRouter = createTRPCRouter({
 	create: adminProcedure
 		.input(
 			z.object({
-				size: z.string(),
+				size: z.string().nonempty({message: 'Здесь пусто 😢'}),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {

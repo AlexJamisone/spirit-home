@@ -51,13 +51,22 @@ model Product {
     name          String
     description   String
     image         String[]
-    quantity      Int
+    size          Size[]
     categoryTitle String?
     comments      Comment[]
     category      Catergory?            @relation(fields: [categoryTitle], references: [title])
     orders        OrderItem[]
     priceHistory  ProductPriceHistory[]
     archived      Boolean               @default(false)
+}
+
+model Size {
+    id        String    @id @default(cuid())
+    title     String
+    quantity  Int
+    createdAt DateTime  @default(now())
+    updateAt  DateTime  @default(now()) @updatedAt
+    product   Product[]
 }
 
 model ProductPriceHistory {

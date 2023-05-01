@@ -9,7 +9,7 @@ type SizeCardProps = {
 
 const SizeCard = ({ size }: SizeCardProps) => {
 	const { form, dispatch } = useCreateProductContext();
-	const { title, quantity, id, createdAt, updateAt } = size;
+	const { title,  id, createdAt, updateAt } = size;
 	const [edit, setEdit] = useState(false);
 	const handlChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value } = e.target;
