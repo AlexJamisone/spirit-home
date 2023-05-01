@@ -17,6 +17,7 @@ export const productsRouter = createTRPCRouter({
 						effectiveFrom: 'desc',
 					},
 				},
+				size: true,
 			},
 		});
 		return products;
@@ -29,7 +30,6 @@ export const productsRouter = createTRPCRouter({
 				price: z.number().nonnegative(),
 				image: z.array(z.string()),
 				category: z.string().nonempty(),
-				quantity: z.number().nonnegative(),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -44,7 +44,6 @@ export const productsRouter = createTRPCRouter({
 					},
 					image: input.image,
 					categoryTitle: input.category,
-					quantity: input.quantity,
 				},
 			});
 			return createProduct;
@@ -104,7 +103,6 @@ export const productsRouter = createTRPCRouter({
 				price: z.number().nonnegative(),
 				image: z.array(z.string()),
 				category: z.string().nonempty(),
-				quantity: z.number().nonnegative(),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -122,7 +120,6 @@ export const productsRouter = createTRPCRouter({
 					},
 					image: input.image,
 					categoryTitle: input.category,
-					quantity: input.quantity,
 				},
 			});
 		}),

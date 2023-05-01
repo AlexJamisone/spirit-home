@@ -1,5 +1,5 @@
 import { Stack, Tag, Text } from '@chakra-ui/react';
-import { useProductCardContext } from '~/context/productContext';
+import { useProductCardContext } from '~/context/productCardContext';
 
 const ProductInfo = () => {
 	const { product, admin } = useProductCardContext();
@@ -12,7 +12,7 @@ const ProductInfo = () => {
 					textColor={'gray.500'}
 					h="100px"
 					borderBottom="none"
-					boxShadow="inset 0 -10px 10px -10px rgba(0, 0, 0, 0.5);"
+					boxShadow="inset 0 -10px 10px -10px"
 					rounded="md"
 					opacity="0.5"
 					overflow="hidden"
@@ -23,7 +23,7 @@ const ProductInfo = () => {
 			{admin === 'USER' ? null : (
 				<>
 					<Tag>{product.categoryTitle}</Tag>
-					<Text>{`${product.quantity} шт`}</Text>
+					<Text>{` шт`}</Text>
 				</>
 			)}
 		</>

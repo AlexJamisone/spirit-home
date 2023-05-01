@@ -3,7 +3,7 @@ import { Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { useProductCardContext } from '~/context/productContext';
+import { useProductCardContext } from '~/context/productCardContext';
 const ProductImage = () => {
 	const { product } = useProductCardContext();
 	const path = `${

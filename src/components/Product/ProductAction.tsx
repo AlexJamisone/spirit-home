@@ -1,7 +1,7 @@
 import { Button, Icon, IconButton, Spinner } from '@chakra-ui/react';
 import type { IconType } from 'react-icons';
 import { BiArchiveIn, BiArchiveOut } from 'react-icons/bi';
-import { useProductCardContext } from '~/context/productContext';
+import { useProductCardContext } from '~/context/productCardContext';
 import Overlay from '../NoData/Overlay';
 
 const ProductAction = () => {
@@ -50,6 +50,7 @@ const ProductAction = () => {
 				</>
 			) : (
 				<Button
+					variant="outline"
 					size={['sm', 'md']}
 					onClick={(e) => handlAddToCart?.(e)}
 				>

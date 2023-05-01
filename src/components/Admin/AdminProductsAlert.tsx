@@ -6,27 +6,15 @@ import {
 	AlertDialogOverlay,
 	Button,
 } from '@chakra-ui/react';
-import { useRef, type Dispatch } from 'react';
-import type { Action } from '~/reducer/FormReducer';
+import { useRef } from 'react';
+import { useCreateProductContext } from '~/context/createProductContext';
 import { api } from '~/utils/api';
 import type { UploadResult } from '~/utils/uploadImage';
 
-type AdminProductsAlertProps = {
-	isOpen: boolean;
-	onCloseAlert: () => void;
-	path: UploadResult[];
-	onCloseModal: () => void;
-	dispatch: Dispatch<Action>;
-};
-
-const AdminProductsAlert = ({
-	isOpen,
-	onCloseAlert,
-	path,
-	onCloseModal,
-	dispatch,
-}: AdminProductsAlertProps) => {
+const AdminProductsAlert = () => {
 	const cancelRef = useRef<HTMLButtonElement>(null);
+	const { dispatch, onCloseAlert, path, onClose, openAlert } =
+		useCreateProductContext();
 	const { mutate: deletImage, isLoading } =
 		api.products.deletImage.useMutation();
 	const handlDeletImage = (res: UploadResult[]) => {
@@ -34,7 +22,7 @@ const AdminProductsAlert = ({
 			onSuccess: () => {
 				dispatch({ type: 'SET_CLEAR' });
 				onCloseAlert();
-				onCloseModal();
+				onClose();
 			},
 		});
 	};
@@ -42,7 +30,7 @@ const AdminProductsAlert = ({
 		<AlertDialog
 			motionPreset="slideInBottom"
 			isCentered
-			isOpen={isOpen}
+			isOpen={openAlert}
 			onClose={onCloseAlert}
 			leastDestructiveRef={cancelRef}
 		>

@@ -3,7 +3,7 @@ import type { Product, ProductPriceHistory, Role } from '@prisma/client';
 import { motion } from 'framer-motion';
 import type { ReactNode, SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';
-import ProductCardContext from '~/context/productContext';
+import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
 import ProductPrice from './ProductPrice';
 

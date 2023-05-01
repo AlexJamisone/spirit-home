@@ -9,6 +9,11 @@ import ProductAction from '../Product/ProductAction';
 import ProductsCard from '../Product/ProductCard';
 import ProductImage from '../Product/ProductImage';
 import ProductInfo from '../Product/ProductInfo';
+import AdminCreateProductsImages from './AdminCreateProducts/AdminCreateProductsImages';
+import CategoriesSelector from './AdminCreateProducts/CategoriesSelector';
+import CreateProductInputs from './AdminCreateProducts/CreateProductInputs';
+import DragDrop from './AdminCreateProducts/Drag&Drop';
+import ProducCreateAction from './AdminCreateProducts/ProducCreateAction';
 import AdminProductsModal from './AdminProductsModal';
 
 const AdminProducts = () => {
@@ -34,7 +39,7 @@ const AdminProducts = () => {
 				image: product.image.map((path) => ({ path, error: null })),
 				name: product.name,
 				price: product.priceHistory[0]?.price as number,
-				quantity: product.quantity,
+				quantity: 5,
 			},
 		});
 		onToggle();
@@ -83,6 +88,11 @@ const AdminProducts = () => {
 				form={form}
 				dispatch={dispatch}
 				setEdit={setEdit}
+				action={<ProducCreateAction />}
+				images={<AdminCreateProductsImages />}
+				inputs={<CreateProductInputs />}
+				categories={<CategoriesSelector />}
+				drag={<DragDrop />}
 			/>
 		</Stack>
 	);

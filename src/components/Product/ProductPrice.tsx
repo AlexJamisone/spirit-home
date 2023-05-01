@@ -1,5 +1,5 @@
 import { Text } from '@chakra-ui/react';
-import { useProductCardContext } from '~/context/productContext';
+import { useProductCardContext } from '~/context/productCardContext';
 
 const ProductPrice = () => {
 	const { product } = useProductCardContext();
