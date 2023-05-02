@@ -23,7 +23,7 @@ const ProductInfo = () => {
 			{admin === 'USER' ? null : (
 				<>
 					<Tag>{product.categoryTitle}</Tag>
-					<Text>{` шт`}</Text>
+					<Text>{`${product.quantity} шт`}</Text>
 				</>
 			)}
 		</>

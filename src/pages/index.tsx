@@ -1,11 +1,13 @@
-import { Center, Img, Spinner, Stack } from '@chakra-ui/react';
+import { AbsoluteCenter, Center, Img, Spinner, Stack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { type NextPage } from 'next';
 import { useState } from 'react';
+import { IoListOutline } from 'react-icons/io5';
 import { Autoplay, Keyboard, Mousewheel, Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import NoData from '~/components/NoData/NoData';
 import ProductAction from '~/components/Product/ProductAction';
 import ProductsCard from '~/components/Product/ProductCard';
 import ProductImage from '~/components/Product/ProductImage';
@@ -99,25 +101,34 @@ const Home: NextPage = () => {
 						}}
 						w="100%"
 					>
-						{products
-							.filter((product) =>
-								product.name
-									.toLowerCase()
-									.includes(search.toLowerCase())
-							)
-							.map((product) => (
-								<SwiperSlide key={product.id}>
-									<Center>
-										<ProductsCard
-											product={product}
-											image={<ProductImage />}
-											info={<ProductInfo />}
-											action={<ProductAction />}
-											admin="USER"
-										/>
-									</Center>
-								</SwiperSlide>
-							))}
+						{products.length === 0 ? (
+							<AbsoluteCenter>
+								<NoData
+									text="Пока нет изделий"
+									icon={IoListOutline}
+								/>
+							</AbsoluteCenter>
+						) : (
+							products
+								.filter((product) =>
+									product.name
+										.toLowerCase()
+										.includes(search.toLowerCase())
+								)
+								.map((product) => (
+									<SwiperSlide key={product.id}>
+										<Center>
+											<ProductsCard
+												product={product}
+												image={<ProductImage />}
+												info={<ProductInfo />}
+												action={<ProductAction />}
+												admin="USER"
+											/>
+										</Center>
+									</SwiperSlide>
+								))
+						)}
 					</Center>
 				</Stack>
 			</SwiperSlide>

@@ -21,6 +21,7 @@ const NoData = ({ icon, text, container }: NoDataProps) => {
 			justifyContent="center"
 			direction="column"
 			alignItems="center"
+			w={'100%'}
 			{...container}
 		>
 			<Icon as={icon} boxSize={12} color="gray.200" />

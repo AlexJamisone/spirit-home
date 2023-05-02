@@ -1,5 +1,5 @@
 import { clerkClient } from '@clerk/nextjs/server';
-import type { OrderStatus } from '@prisma/client';
+import type { OrderStatus, Prisma, PrismaClient } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -18,6 +18,32 @@ function getAllProductsFromCart(cart: CartState): {
 		productId: id,
 		quantity: quantityInCart,
 	}));
+}
+
+async function operationWithProducts(
+	ctx: {
+		prisma: PrismaClient<
+			Prisma.PrismaClientOptions,
+			never,
+			Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
+		>;
+		userId: string | null;
+	},
+	productId: string,
+	quantity: number,
+	operation: 'plus' | 'minus'
+) {
+	return await ctx.prisma.product.update({
+		where: {
+			id: productId,
+		},
+		data: {
+			quantity: {
+				decrement: operation === 'minus' ? quantity : undefined,
+				increment: operation === 'plus' ? quantity : undefined,
+			},
+		},
+	});
 }
 
 export const ordersRouter = createTRPCRouter({
@@ -57,44 +83,51 @@ export const ordersRouter = createTRPCRouter({
 	changeStatus: adminProcedure
 		.input(z.object({ status: z.custom<OrderStatus>(), id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
-			if (input.status === 'CANCELLED') {
-				const returnCount = await ctx.prisma.order.findUnique({
-					where: {
-						id: input.id,
-					},
-					select: {
-						orderItem: {
-							include: {
-								product: {
-									select: {
-										quantity: true,
-									},
+			const returnCount = await ctx.prisma.order.findUnique({
+				where: {
+					id: input.id,
+				},
+				select: {
+					orderItem: {
+						include: {
+							product: {
+								select: {
+									quantity: true,
 								},
 							},
 						},
 					},
-				});
-				returnCount?.orderItem.map(
-					async ({ productId, quantity }) =>
-						await ctx.prisma.product.update({
-							where: {
-								id: productId,
-							},
-							data: {
-								quantity: {
-									increment: quantity,
-								},
-							},
-						})
-				);
-				return await ctx.prisma.order.update({
-					where: {
-						id: input.id,
-					},
-					data: {
-						status: input.status,
-					},
-				});
+				},
+			});
+			switch (input.status) {
+				case 'CANCELLED':
+					returnCount?.orderItem.map(
+						async ({ productId, quantity }) =>
+							await operationWithProducts(
+								ctx,
+								productId,
+								quantity,
+								'plus'
+							)
+					);
+					return await ctx.prisma.order.update({
+						where: {
+							id: input.id,
+						},
+						data: {
+							status: input.status,
+						},
+					});
+				case 'COMPLETED':
+					returnCount?.orderItem.map(
+						async ({ productId, quantity }) =>
+							await operationWithProducts(
+								ctx,
+								productId,
+								quantity,
+								'minus'
+							)
+					);
 			}
 			return await ctx.prisma.order.update({
 				where: {
