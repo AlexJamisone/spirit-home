@@ -1,5 +1,5 @@
 import { Button, Icon, Stack, Text, useDisclosure } from '@chakra-ui/react';
-import type { Product, ProductPriceHistory, Size } from '@prisma/client';
+import type { Product, ProductPriceHistory } from '@prisma/client';
 import { useReducer, useState } from 'react';
 
 import { IoIosAddCircleOutline } from 'react-icons/io';
@@ -12,7 +12,6 @@ import ProductInfo from '../Product/ProductInfo';
 import AdminCreateProductsImages from './AdminCreateProducts/AdminCreateProductsImages';
 import CategoriesSelector from './AdminCreateProducts/CategoriesSelector';
 import CreateProductInputs from './AdminCreateProducts/CreateProductInputs';
-import CreateSize from './AdminCreateProducts/CreateSize';
 import DragDrop from './AdminCreateProducts/Drag&Drop';
 import ProducCreateAction from './AdminCreateProducts/ProducCreateAction';
 import AdminProductsModal from './AdminProductsModal';
@@ -20,8 +19,6 @@ import AdminProductsModal from './AdminProductsModal';
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
 	const [edit, setEdit] = useState(false);
-	const { data: size } = api.size.get.useQuery();
-
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 
 	const { data: user } = api.users.get.useQuery();
@@ -30,7 +27,7 @@ const AdminProducts = () => {
 	if (!products) return null;
 
 	const handlEdit = (
-		product: Product & { priceHistory: ProductPriceHistory[]; size: Size[] }
+		product: Product & { priceHistory: ProductPriceHistory[] }
 	) => {
 		setEdit(true);
 		dispatch({
@@ -42,7 +39,7 @@ const AdminProducts = () => {
 				image: product.image.map((path) => ({ path, error: null })),
 				name: product.name,
 				price: product.priceHistory[0]?.price as number,
-				size: product.size,
+				quantity: 5,
 			},
 		});
 		onToggle();
@@ -96,7 +93,6 @@ const AdminProducts = () => {
 				inputs={<CreateProductInputs />}
 				categories={<CategoriesSelector />}
 				drag={<DragDrop />}
-				size={<CreateSize />}
 			/>
 		</Stack>
 	);

@@ -1,5 +1,5 @@
 import { Stack, useMediaQuery, useToast } from '@chakra-ui/react';
-import type { Product, ProductPriceHistory, Role, Size } from '@prisma/client';
+import type { Product, ProductPriceHistory, Role } from '@prisma/client';
 import { motion } from 'framer-motion';
 import type { ReactNode, SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';
@@ -13,13 +13,11 @@ type ProductProps = {
 	action?: ReactNode;
 	product: Product & {
 		priceHistory: ProductPriceHistory[];
-		size: Size[];
 	};
 	admin?: Role;
 	handlEdit?: (
 		product: Product & {
 			priceHistory: ProductPriceHistory[];
-			size: Size[];
 		}
 	) => void;
 };

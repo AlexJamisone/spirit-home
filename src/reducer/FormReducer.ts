@@ -1,4 +1,3 @@
-import type { Size } from '@prisma/client';
 import type { UploadResult } from '~/utils/uploadImage';
 
 export interface FormProductState {
@@ -8,7 +7,7 @@ export interface FormProductState {
 	image: UploadResult[];
 	category: string;
 	price: number;
-	size: Size[];
+	quantity: number;
 }
 
 interface SetIdAction {
@@ -35,9 +34,9 @@ interface SetPriceAction {
 	type: 'SET_PRICE';
 	payload: number;
 }
-interface SetSizeAction {
-	type: 'SET_SIZE';
-	payload: Size;
+interface SetQuantityAction {
+	type: 'SET_QT';
+	payload: number;
 }
 
 interface SetClearAction {
@@ -55,7 +54,7 @@ export type Action =
 	| SetDescriptionAction
 	| SetImageAction
 	| SetPriceAction
-	| SetSizeAction
+	| SetQuantityAction
 	| SetClearAction
 	| SetAllAction
 	| SetIdAction;
@@ -67,7 +66,7 @@ export const initialState: FormProductState = {
 	image: [],
 	category: '',
 	price: 0,
-	size: [],
+	quantity: 0,
 };
 
 export const FormProductReducer = (
@@ -87,27 +86,8 @@ export const FormProductReducer = (
 			return { ...state, category: action.payload };
 		case 'SET_PRICE':
 			return { ...state, price: action.payload };
-		case 'SET_SIZE':
-			const itemsIndex = state.size.findIndex(
-				(item) => item.id === action.payload.id
-			);
-			if (itemsIndex === -1) {
-				return {
-					...state,
-					size: [...state.size, { ...action.payload }],
-				};
-			} else {
-				const updateItem = {
-					...state.size[itemsIndex],
-					quantity: action.payload.quantity,
-				};
-				const updatedItems = [...state.size];
-				updatedItems[itemsIndex] = updateItem as Size;
-				return {
-					...state,
-					size: updatedItems,
-				};
-			}
+		case 'SET_QT':
+			return { ...state, quantity: action.payload };
 		case 'SET_CLEAR':
 			return {
 				id: '',
@@ -116,7 +96,7 @@ export const FormProductReducer = (
 				image: [],
 				name: '',
 				price: 0,
-				size: [],
+				quantity: 0,
 			};
 		case 'SET_ALL':
 			return {

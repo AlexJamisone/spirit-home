@@ -29,7 +29,6 @@ type AdminProductsModalProps = {
 	action?: ReactNode;
 	drag?: ReactNode;
 	categories?: ReactNode;
-	size?: ReactNode;
 };
 
 const AdminProductsModal = ({
@@ -44,7 +43,6 @@ const AdminProductsModal = ({
 	images,
 	inputs,
 	categories,
-	size,
 }: AdminProductsModalProps) => {
 	const {
 		isOpen: openAlert,
@@ -69,6 +67,9 @@ const AdminProductsModal = ({
 				break;
 			case 'price':
 				dispatch({ type: 'SET_PRICE', payload: Number(value) });
+				break;
+			case 'quantity':
+				dispatch({ type: 'SET_QT', payload: Number(value) });
 				break;
 			default:
 				break;
@@ -199,7 +200,6 @@ const AdminProductsModal = ({
 								{images}
 								{drag}
 								{inputs}
-								{size}
 								{categories}
 							</Stack>
 							<ModalFooter gap={5}>{action}</ModalFooter>

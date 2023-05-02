@@ -9,7 +9,7 @@
 		"lint": "next lint",
 		"start": "next start",
 		"prettier": "npx prettier --config .prettierrc --ignore-path .gitignore --write \"**/*.{js,jsx,json,md,ts,tsx}\"",
-		"pre": "lint-staged"
+		"prepare": "husky install"
 	},
 	"dependencies": {
 		"@chakra-ui/react": "^2.5.5",
@@ -56,12 +56,5 @@
 	},
 	"ct3aMetadata": {
 		"initVersion": "7.10.1"
-	},
-	"lint-staged": {
-		"*.{js,jsx,json,md,ts,tsx}": [
-			"npx prettier --config .prettierrc --ignore-path .gitignore --write",
-			"git add .",
-			"git commit"
-		]
 	}
 }
