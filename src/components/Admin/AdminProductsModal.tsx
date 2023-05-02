@@ -107,6 +107,7 @@ const AdminProductsModal = ({
 					category: form.category,
 					image: form.image.map((item) => item.path),
 					price: form.price,
+					quantity: form.quantity,
 				},
 				{
 					onSuccess: () => {
