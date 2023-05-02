@@ -1,12 +1,10 @@
-import { Button, Icon, Stack, useDisclosure } from '@chakra-ui/react';
+import { Button, Icon, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import type { Product, ProductPriceHistory, Size } from '@prisma/client';
-import { useReducer, useState, type MouseEventHandler } from 'react';
-import type { IconType } from 'react-icons';
-import { BsReverseListColumnsReverse } from 'react-icons/bs';
-import { IoIosAddCircleOutline, IoIosResize } from 'react-icons/io';
+import { useReducer, useState } from 'react';
+
+import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
-import NoData from '../NoData/NoData';
 import ProductAction from '../Product/ProductAction';
 import ProductsCard from '../Product/ProductCard';
 import ProductImage from '../Product/ProductImage';
@@ -18,16 +16,11 @@ import CreateSize from './AdminCreateProducts/CreateSize';
 import DragDrop from './AdminCreateProducts/Drag&Drop';
 import ProducCreateAction from './AdminCreateProducts/ProducCreateAction';
 import AdminProductsModal from './AdminProductsModal';
-import AdminProductSize from './AdminProductSize';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
-	const {
-		isOpen: sizeOpen,
-		onClose: sizeClose,
-		onToggle: sizeToggle,
-	} = useDisclosure();
 	const [edit, setEdit] = useState(false);
+	const { data: size } = api.size.get.useQuery();
 
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 
@@ -54,22 +47,6 @@ const AdminProducts = () => {
 		});
 		onToggle();
 	};
-	const actionProduct = (
-		title: string,
-		onClick: MouseEventHandler<HTMLButtonElement>,
-		icon: IconType
-	) => {
-		return (
-			<Button
-				h="300px"
-				variant="outline"
-				rightIcon={<Icon as={icon} boxSize={8} />}
-				onClick={onClick}
-			>
-				{title}
-			</Button>
-		);
-	};
 
 	return (
 		<Stack
@@ -80,17 +57,16 @@ const AdminProducts = () => {
 			justifyContent="center"
 			w={['80%']}
 		>
-			{actionProduct('Добавить новый размер', sizeToggle, IoIosResize)}
-			{actionProduct(
-				'Добавить новый товар',
-				onToggle,
-				IoIosAddCircleOutline
-			)}
+			<Button
+				h="300px"
+				variant="outline"
+				rightIcon={<Icon as={IoIosAddCircleOutline} boxSize={8} />}
+				onClick={() => onToggle()}
+			>
+				Добавить новый товар
+			</Button>
 			{products.length === 0 ? (
-				<NoData
-					icon={BsReverseListColumnsReverse}
-					text="Пока нет товара"
-				/>
+				<Text>Пока что нету Товаров</Text>
 			) : (
 				products
 					.map((product) => {
@@ -108,7 +84,6 @@ const AdminProducts = () => {
 					})
 					.reverse()
 			)}
-			<AdminProductSize isOpen={sizeOpen} onClose={sizeClose}/>
 			<AdminProductsModal
 				isOpen={isOpen}
 				onClose={onClose}
