@@ -17,8 +17,8 @@ import CreateProductInputs from './AdminCreateProducts/CreateProductInputs';
 import CreateSize from './AdminCreateProducts/CreateSize';
 import DragDrop from './AdminCreateProducts/Drag&Drop';
 import ProducCreateAction from './AdminCreateProducts/ProducCreateAction';
-import AdminProductsModal from './AdminProductsModal';
 import AdminProductSize from './AdminProductSize';
+import AdminProductsModal from './AdminProductsModal';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
@@ -108,7 +108,7 @@ const AdminProducts = () => {
 					})
 					.reverse()
 			)}
-			<AdminProductSize isOpen={sizeOpen} onClose={sizeClose}/>
+			<AdminProductSize isOpen={sizeOpen} onClose={sizeClose} />
 			<AdminProductsModal
 				isOpen={isOpen}
 				onClose={onClose}
