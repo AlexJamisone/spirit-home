@@ -1,10 +1,16 @@
-import { Stack, useMediaQuery, useToast } from '@chakra-ui/react';
+import {
+	Stack,
+	useDisclosure,
+	useMediaQuery,
+	useToast,
+} from '@chakra-ui/react';
 import type { Product, ProductPriceHistory, Role } from '@prisma/client';
 import { motion } from 'framer-motion';
 import type { ReactNode, SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';
 import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
+import ProductDitails from './ProductDitails';
 import ProductPrice from './ProductPrice';
 
 type ProductProps = {
@@ -40,6 +46,7 @@ const ProductsCard = ({
 		cartDispatch({ type: 'ADD_TO_CART', payload: product });
 		e.stopPropagation();
 	};
+	const { isOpen, onClose, onToggle } = useDisclosure();
 	const handleArchivedProduct = (
 		id: string,
 		name: string,
@@ -109,7 +116,7 @@ const ProductsCard = ({
 				position="relative"
 				onClick={() =>
 					admin === 'USER'
-						? null
+						? onToggle()
 						: product.archived
 						? null
 						: handlEdit?.(product)
@@ -126,6 +133,7 @@ const ProductsCard = ({
 					{action}
 					<ProductPrice />
 				</Stack>
+				<ProductDitails isOpen={isOpen} onClose={onClose} />
 			</Stack>
 		</ProductCardContext.Provider>
 	);

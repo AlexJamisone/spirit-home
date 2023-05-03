@@ -37,28 +37,25 @@ const CartMenu = () => {
 								fontSize={23}
 								icon={<SlHandbag />}
 								variant="ghost"
+								position="relative"
+								_before={{
+									content: `'${cartState.items.length}'`,
+									bgColor: 'gray.300',
+									width: '25px',
+									height: '25px',
+									rounded: '2xl',
+									position: 'absolute',
+									bottom: '-10px',
+									right: '-10px',
+									cursor: 'pointer',
+									opacity: `${isLength ? 1 : 0}`,
+									transition: 'opacity .2s ease-in-out',
+									fontWeight: 600,
+									textAlign: 'center',
+									lineHeight: 1.5,
+									fontSize: '16px',
+								}}
 							/>
-							<Box
-								position="absolute"
-								textAlign="center"
-								bottom="-10px"
-								right="-10px"
-								zIndex="10"
-								width="25px"
-								height="25px"
-								bgColor="gray.200"
-								display={'flex'}
-								justifyContent="center"
-								rounded="2xl"
-								opacity={`${isLength ? 1 : 0}`}
-								transition={'opacity .2s linear'}
-								fontWeight={600}
-								cursor="pointer"
-							>
-								<Text suppressHydrationWarning>
-									{cartState.items.length}
-								</Text>
-							</Box>
 						</Stack>
 						<MenuList p={[2, 5]} zIndex={20}>
 							{cartState.items.length === 0 ? (

@@ -33,7 +33,6 @@ const Menu = () => {
 			onHoverStart={() => setIsOpen(true)}
 			onHoverEnd={() => setIsOpen(false)}
 			py={5}
-			// my="10%"
 			roundedRight={20}
 		>
 			{menuItems

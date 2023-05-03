@@ -117,7 +117,10 @@ const Home: NextPage = () => {
 								)
 								.map((product) => (
 									<SwiperSlide key={product.id}>
-										<Center>
+										<Center
+											as={motion.div}
+											layoutId={product.id}
+										>
 											<ProductsCard
 												product={product}
 												image={<ProductImage />}
