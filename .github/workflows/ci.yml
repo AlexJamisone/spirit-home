@@ -1,5 +1,4 @@
 name: Prettier
-
 on: [push]
 
 jobs:
