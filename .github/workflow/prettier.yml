@@ -3,7 +3,8 @@ name: Prettier
 on: push
 
 jobs:
-    prettier:
+    build:
+		name: Prettier
         runs-on: ubuntu-latest
         steps:
             - name: Checkout code
