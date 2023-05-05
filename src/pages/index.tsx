@@ -110,16 +110,25 @@ const Home: NextPage = () => {
 							</AbsoluteCenter>
 						) : (
 							products
-								.filter((product) =>
-									product.name
-										.toLowerCase()
-										.includes(search.toLowerCase())
+								.filter(
+									(product) =>
+										product.name
+											.toLowerCase()
+											.includes(search.toLowerCase()) &&
+										!product.archived
 								)
 								.map((product) => (
 									<SwiperSlide key={product.id}>
 										<Center
 											as={motion.div}
-											layoutId={product.id}
+											initial={{ opacity: 0 }}
+											whileInView={{
+												opacity: 1,
+												transition: {
+													type: 'spring',
+													duration: 0.5,
+												},
+											}}
 										>
 											<ProductsCard
 												product={product}

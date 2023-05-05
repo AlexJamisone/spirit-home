@@ -1,10 +1,17 @@
-import { Center, Image } from '@chakra-ui/react';
-import { Pagination } from 'swiper';
+import { Center, Image, type CenterProps } from '@chakra-ui/react';
+import { Pagination, Zoom } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import 'swiper/css/zoom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useProductCardContext } from '~/context/productCardContext';
-const ProductImage = () => {
+
+type ProductImageProps = {
+	container?: CenterProps;
+	zoom?: boolean;
+};
+
+const ProductImage = ({ container, zoom }: ProductImageProps) => {
 	const { product } = useProductCardContext();
 	const path = `${
 		process.env.NEXT_PUBLIC_SUPABASE_URL as string
@@ -14,21 +21,26 @@ const ProductImage = () => {
 		<Center
 			as={Swiper}
 			direction="horizontal"
-			modules={[Pagination]}
-			pagination={{ enabled: true, clickable: true }}
-			justifyContent="space-around"
+			modules={[Pagination, Zoom]}
+			pagination={{ enabled: true, clickable: zoom ? false : true }}
 			w="100%"
 			h="100%"
+			zoom={zoom}
+			{...container}
 		>
 			{product.image.map((src) => (
 				<SwiperSlide key={src}>
-					<Center>
+					<Center
+						className={zoom ? 'swiper-zoom-container' : ''}
+						onClick={(e) => e.stopPropagation()}
+						cursor={zoom ? 'zoom-in' : 'default'}
+					>
 						<Image
 							alt="product"
 							src={path + src}
 							objectFit="cover"
-							w={[100, 150]}
-							h={[100, 150]}
+							w={[zoom ? 200 : 100, zoom ? 200 : 150]}
+							h={[zoom ? 200 : 100, zoom ? 200 : 150]}
 						/>
 					</Center>
 				</SwiperSlide>

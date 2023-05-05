@@ -1,10 +1,20 @@
-import { Button, Icon, IconButton, Spinner } from '@chakra-ui/react';
+import {
+	Button,
+	Icon,
+	IconButton,
+	Spinner,
+	type ButtonProps,
+} from '@chakra-ui/react';
 import type { IconType } from 'react-icons';
 import { BiArchiveIn, BiArchiveOut } from 'react-icons/bi';
 import { useProductCardContext } from '~/context/productCardContext';
 import Overlay from '../NoData/Overlay';
 
-const ProductAction = () => {
+type ProductActionProps = {
+	container?: ButtonProps;
+};
+
+const ProductAction = ({ container }: ProductActionProps) => {
 	const { product, admin, handlAddToCart, handleArchivedProduct, isLoading } =
 		useProductCardContext();
 	const handlArchiveButton = (icon: IconType) => {
@@ -50,6 +60,7 @@ const ProductAction = () => {
 				</>
 			) : (
 				<Button
+					{...container}
 					variant="outline"
 					size={['sm', 'md']}
 					onClick={(e) => handlAddToCart?.(e)}
