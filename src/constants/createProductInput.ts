@@ -31,11 +31,5 @@ export const createProductInput = (
 			value: input.price,
 			name: 'price',
 		},
-		{
-			type: 'number',
-			placeholder: 'Кол-во',
-			value: input.quantity,
-			name: 'quantity',
-		},
 	];
 };

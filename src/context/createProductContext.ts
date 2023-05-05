@@ -1,3 +1,4 @@
+import type { Size } from '@prisma/client';
 import {
 	createContext,
 	useContext,
@@ -10,6 +11,7 @@ import type { UploadResult } from '~/utils/uploadImage';
 type CreateProductContext = {
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
 	handlDeletImage: (path: UploadResult, index: number) => void;
+	size: Size[] | undefined
 	form: FormProductState;
 	edit: boolean;
 	dispatch: (value: Action) => void;

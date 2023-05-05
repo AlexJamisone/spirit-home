@@ -51,13 +51,30 @@ model Product {
     name          String
     description   String
     image         String[]
-    quantity      Int
+    archived      Boolean               @default(false)
     categoryTitle String?
     comments      Comment[]
     category      Catergory?            @relation(fields: [categoryTitle], references: [title])
     orders        OrderItem[]
     priceHistory  ProductPriceHistory[]
-    archived      Boolean               @default(false)
+    size          Size[]
+    quantity      Quantity[]
+}
+
+model Size {
+    id       String     @id @unique @default(cuid())
+    size     String
+    product  Product[]
+    quantity Quantity[]
+}
+
+model Quantity {
+    id        String  @id @default(cuid())
+    value     Int
+    size      Size    @relation(fields: [sizeId], references: [id])
+    sizeId    String
+    product   Product @relation(fields: [productId], references: [id])
+    productId String
 }
 
 model ProductPriceHistory {

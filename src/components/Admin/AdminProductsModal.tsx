@@ -16,6 +16,7 @@ import CreateProductContext from '~/context/createProductContext';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
 import type { UploadResult } from '~/utils/uploadImage';
+import Size from './AdminCreateProducts/Size';
 
 type AdminProductsModalProps = {
 	isOpen: boolean;
@@ -57,6 +58,8 @@ const AdminProductsModal = ({
 	const { mutate: update, isLoading: isLoadingUpdate } =
 		api.products.update.useMutation();
 
+	const { data: size } = api.size.get.useQuery();
+
 	const { mutate: deletImg } = api.products.deletImage.useMutation();
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -67,9 +70,6 @@ const AdminProductsModal = ({
 				break;
 			case 'price':
 				dispatch({ type: 'SET_PRICE', payload: Number(value) });
-				break;
-			case 'quantity':
-				dispatch({ type: 'SET_QT', payload: Number(value) });
 				break;
 			default:
 				break;
@@ -85,6 +85,7 @@ const AdminProductsModal = ({
 					name: form.name,
 					price: form.price,
 					image: form.image.map((item) => item.path),
+					size: form.size,
 				},
 				{
 					onSuccess: () => {
@@ -107,7 +108,7 @@ const AdminProductsModal = ({
 					category: form.category,
 					image: form.image.map((item) => item.path),
 					price: form.price,
-					quantity: form.quantity,
+					size: form.size,
 				},
 				{
 					onSuccess: () => {
@@ -184,6 +185,7 @@ const AdminProductsModal = ({
 					path: form.image,
 					setEdit,
 					toggleAlert,
+					size,
 				}}
 			>
 				<ModalOverlay />
@@ -201,6 +203,7 @@ const AdminProductsModal = ({
 								{images}
 								{drag}
 								{inputs}
+								<Size />
 								{categories}
 							</Stack>
 							<ModalFooter gap={5}>{action}</ModalFooter>

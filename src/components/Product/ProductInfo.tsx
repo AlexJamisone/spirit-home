@@ -1,6 +1,5 @@
 import { Stack, Tag, Text } from '@chakra-ui/react';
 import { useProductCardContext } from '~/context/productCardContext';
-
 type ProductInfoProps = {
 	full?: boolean;
 };
@@ -27,7 +26,19 @@ const ProductInfo = ({ full }: ProductInfoProps) => {
 			{admin === 'USER' ? null : (
 				<>
 					<Tag>{product.categoryTitle}</Tag>
-					<Text>{`${product.quantity} шт`}</Text>
+					<Stack direction="row">
+						{product.size
+							.sort((a, b) =>
+								a.size.localeCompare(b.size, undefined, {
+									numeric: true,
+								})
+							)
+							.map(({ id, quantity, size }) => (
+								<Tag key={id}>
+									{size} - {quantity[0]?.value} шт
+								</Tag>
+							))}
+					</Stack>
 				</>
 			)}
 		</>

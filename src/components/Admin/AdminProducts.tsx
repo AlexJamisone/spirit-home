@@ -1,5 +1,5 @@
 import { Button, Icon, Stack, Text, useDisclosure } from '@chakra-ui/react';
-import type { Product, ProductPriceHistory } from '@prisma/client';
+import type { Product, ProductPriceHistory, Size } from '@prisma/client';
 import { useReducer, useState } from 'react';
 
 import { IoIosAddCircleOutline } from 'react-icons/io';
@@ -27,7 +27,14 @@ const AdminProducts = () => {
 	if (!products) return null;
 
 	const handlEdit = (
-		product: Product & { priceHistory: ProductPriceHistory[] }
+		product: Product & {
+			priceHistory: ProductPriceHistory[];
+			size: (Size & {
+				quantity: {
+					value: number;
+				}[];
+			})[];
+		}
 	) => {
 		setEdit(true);
 		dispatch({
@@ -39,12 +46,18 @@ const AdminProducts = () => {
 				image: product.image.map((path) => ({ path, error: null })),
 				name: product.name,
 				price: product.priceHistory[0]?.price as number,
-				quantity: 5,
+				size: product.size.map(({ id, quantity, size }) => {
+					return {
+						id,
+						quantity: quantity[0]?.value,
+						name: size
+					};
+				}),
 			},
 		});
 		onToggle();
 	};
-
+	console.log(form.size);
 	return (
 		<Stack
 			direction="row"
@@ -61,6 +74,14 @@ const AdminProducts = () => {
 				onClick={() => onToggle()}
 			>
 				Добавить новый товар
+			</Button>
+			<Button
+				h="300px"
+				variant="outline"
+				rightIcon={<Icon as={IoIosAddCircleOutline} boxSize={8} />}
+				onClick={() => onToggle()}
+			>
+				Добавить новый размер
 			</Button>
 			{products.length === 0 ? (
 				<Text>Пока что нету Товаров</Text>

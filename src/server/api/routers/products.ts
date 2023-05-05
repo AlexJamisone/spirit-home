@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { Size } from '~/reducer/FormReducer';
 import {
 	adminProcedure,
 	createTRPCRouter,
@@ -17,6 +18,15 @@ export const productsRouter = createTRPCRouter({
 						effectiveFrom: 'desc',
 					},
 				},
+				size: {
+					include: {
+						quantity: {
+							select: {
+								value: true,
+							},
+						},
+					},
+				},
 			},
 		});
 		return products;
@@ -29,10 +39,14 @@ export const productsRouter = createTRPCRouter({
 				price: z.number().nonnegative(),
 				image: z.array(z.string()),
 				category: z.string().nonempty(),
-				quantity: z.number(),
+				size: z.custom<Size[]>(),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
+			const size = input.size.map(({ quantity, id }) => ({
+				value: quantity ?? 0,
+				sizeId: id,
+			}));
 			const createProduct = await ctx.prisma.product.create({
 				data: {
 					name: input.name,
@@ -44,7 +58,11 @@ export const productsRouter = createTRPCRouter({
 					},
 					image: input.image,
 					categoryTitle: input.category,
-					quantity: input.quantity,
+					quantity: {
+						createMany: {
+							data: size,
+						},
+					},
 				},
 			});
 			return createProduct;
@@ -104,9 +122,14 @@ export const productsRouter = createTRPCRouter({
 				price: z.number().nonnegative(),
 				image: z.array(z.string()),
 				category: z.string().nonempty(),
+				size: z.custom<Size[]>(),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
+			const size = input.size.map(({ quantity, id }) => ({
+				value: quantity ?? 0,
+				sizeId: id,
+			}));
 			return await ctx.prisma.product.update({
 				where: {
 					id: input.id,
@@ -121,6 +144,14 @@ export const productsRouter = createTRPCRouter({
 					},
 					image: input.image,
 					categoryTitle: input.category,
+					quantity: {
+						deleteMany: {
+							productId: input.id,
+						},
+						createMany: {
+							data: size,
+						},
+					},
 				},
 			});
 		}),
