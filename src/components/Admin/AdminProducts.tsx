@@ -15,9 +15,11 @@ import CreateProductInputs from './AdminCreateProducts/CreateProductInputs';
 import DragDrop from './AdminCreateProducts/Drag&Drop';
 import ProducCreateAction from './AdminCreateProducts/ProducCreateAction';
 import AdminProductsModal from './AdminProductsModal';
+import AdminCreateSize from './AdminCreateSize';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
+	const { isOpen: isOpenSize, onClose: onCloseSize, onToggle: onToggleSize } = useDisclosure();
 	const [edit, setEdit] = useState(false);
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 
@@ -57,7 +59,6 @@ const AdminProducts = () => {
 		});
 		onToggle();
 	};
-	console.log(form.size);
 	return (
 		<Stack
 			direction="row"
@@ -79,7 +80,7 @@ const AdminProducts = () => {
 				h="300px"
 				variant="outline"
 				rightIcon={<Icon as={IoIosAddCircleOutline} boxSize={8} />}
-				onClick={() => onToggle()}
+				onClick={() => onToggleSize()}
 			>
 				Добавить новый размер
 			</Button>
@@ -102,6 +103,7 @@ const AdminProducts = () => {
 					})
 					.reverse()
 			)}
+			<AdminCreateSize isOpen={isOpenSize} onClose={onCloseSize}/>
 			<AdminProductsModal
 				isOpen={isOpen}
 				onClose={onClose}
