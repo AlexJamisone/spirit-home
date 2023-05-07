@@ -55,17 +55,27 @@ const ProductsCard = ({
 		id: '',
 		name: '',
 	});
+	const [error, setError] = useState(false);
 	const { cartDispatch } = useCart();
 	const toast = useToast();
 	const handlAddToCart = (e: SyntheticEvent) => {
-		cartDispatch({
-			type: 'ADD_TO_CART',
-			payload: { ...product, selectedSize },
-		});
-		setSelectedtSize({
-			id: '',
-			name: '',
-		});
+		if (!selectedSize.id || !selectedSize.name) {
+			setError(true);
+			toast({
+				description: 'Выбери пожалуйста размер',
+				status: 'warning',
+				isClosable: true
+			})
+		} else {
+			cartDispatch({
+				type: 'ADD_TO_CART',
+				payload: { ...product, selectedSize },
+			});
+			setSelectedtSize({
+				id: '',
+				name: '',
+			});
+		}
 		e.stopPropagation();
 	};
 	const { isOpen, onClose, onToggle } = useDisclosure();
@@ -111,6 +121,8 @@ const ProductsCard = ({
 				isLoading,
 				selectedSize,
 				setSelectedtSize,
+				error,
+				setError,
 			}}
 		>
 			<Stack

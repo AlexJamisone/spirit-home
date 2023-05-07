@@ -8,9 +8,11 @@ type ProductSizeProps = {
 };
 
 const ProductSize = ({ isAdmin }: ProductSizeProps) => {
-	const { product, selectedSize, setSelectedtSize } = useProductCardContext();
+	const { product, selectedSize, setSelectedtSize, setError } =
+		useProductCardContext();
 	const handlSelect = (e: SyntheticEvent, id: string, name: string) => {
 		setSelectedtSize((prevSelected) => {
+			setError(false);
 			if (prevSelected.id === id) {
 				return { id: '', name: '' };
 			} else {
@@ -39,8 +41,9 @@ const ProductSize = ({ isAdmin }: ProductSizeProps) => {
 								numeric: true,
 							})
 						)
-						.map(({ id, size }) => (
+						.map(({ id, size, quantity }) => (
 							<ProductSizeButton
+								quantity={quantity[0]?.value}
 								size={size}
 								key={id}
 								isActive={id === selectedSize.id}
