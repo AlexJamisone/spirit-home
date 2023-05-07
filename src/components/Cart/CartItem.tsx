@@ -4,6 +4,7 @@ import {
 	Image,
 	Spinner,
 	Stack,
+	Tag,
 	Text,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
@@ -18,7 +19,7 @@ type CartItemProps = {
 };
 
 const CartItem = ({
-	item: { image, name, quantityInCart, id, priceHistory },
+	item: { image, name, quantityInCart, id, priceHistory, selectedSize },
 }: CartItemProps) => {
 	const { cartDispatch } = useCart();
 	const handlCount = (icon: IconType, action: 'plus' | 'minus') => {
@@ -30,7 +31,13 @@ const CartItem = ({
 				icon={<Icon as={icon} />}
 				onClick={(e) => {
 					if (quantityInCart === 1 && action === 'minus') {
-						cartDispatch({ type: 'REMOVE_FROM_CART', payload: id });
+						cartDispatch({
+							type: 'REMOVE_FROM_CART',
+							payload: {
+								id,
+								sizeId: selectedSize.id,
+							},
+						});
 					} else {
 						cartDispatch({
 							type: 'UPDATE_QT',
@@ -40,6 +47,7 @@ const CartItem = ({
 									action === 'plus'
 										? quantityInCart + 1
 										: quantityInCart - 1,
+								sizeId: selectedSize.id,
 							},
 						});
 					}
@@ -90,6 +98,10 @@ const CartItem = ({
 			>
 				{priceHistory[0]?.price} ₽
 			</Text>
+
+			<Stack>
+				<Tag textAlign="center">{selectedSize.name}</Tag>
+			</Stack>
 			<IconButton
 				variant="ghost"
 				size={['xs', 'sm']}
@@ -102,7 +114,13 @@ const CartItem = ({
 					/>
 				}
 				onClick={(e) => {
-					cartDispatch({ type: 'REMOVE_FROM_CART', payload: id });
+					cartDispatch({
+						type: 'REMOVE_FROM_CART',
+						payload: {
+							id,
+							sizeId: selectedSize.id,
+						},
+					});
 					e.stopPropagation();
 				}}
 			/>

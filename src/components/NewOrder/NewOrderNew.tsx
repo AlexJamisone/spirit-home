@@ -157,7 +157,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 				onClose();
 			}}
 			initialFocusRef={initialRef}
-			size={['xl', 'lg']}
+			size={['xl', '2xl']}
 		>
 			<ModalOverlay />
 			<ModalContent mx={[5, null]}>
@@ -197,7 +197,10 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 							<Stack direction="column" justifyContent="center">
 								<AnimatePresence>
 									{cartState.items.map((item) => (
-										<CartItem item={item} key={item.id} />
+										<CartItem
+											item={item}
+											key={item.id}
+										/>
 									))}
 								</AnimatePresence>
 							</Stack>

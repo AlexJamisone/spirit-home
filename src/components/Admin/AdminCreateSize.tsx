@@ -1,18 +1,18 @@
 import {
-Button,
-FormControl,
-FormErrorMessage,
-Input,
-Modal,
-ModalBody,
-ModalCloseButton,
-ModalContent,
-ModalFooter,
-ModalHeader,
-ModalOverlay,
-Stack,
-Tag,
-useToast,
+	Button,
+	FormControl,
+	FormErrorMessage,
+	Input,
+	Modal,
+	ModalBody,
+	ModalCloseButton,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+	Stack,
+	Tag,
+	useToast,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { api } from '~/utils/api';
@@ -29,7 +29,7 @@ const AdminCreateSize = ({ isOpen, onClose }: AdminCreateSizeProps) => {
 		isLoading,
 		isError,
 		error,
-        reset
+		reset,
 	} = api.size.create.useMutation();
 	const ctx = api.useContext();
 	const toast = useToast();
@@ -50,17 +50,20 @@ const AdminCreateSize = ({ isOpen, onClose }: AdminCreateSizeProps) => {
 					<Stack gap={5}>
 						<FormControl isInvalid={isError}>
 							<Input
-                                errorBorderColor='red.300'
+								errorBorderColor="red.300"
 								placeholder="Укажи новый размер"
 								isDisabled={isLoading}
 								type="text"
 								onChange={(e) => {
-                                    reset()
-                                    setValue(e.target.value);
-                                }}
+									reset();
+									setValue(e.target.value);
+								}}
 								value={value}
 							/>
-							<FormErrorMessage textColor='red.300' fontWeight={600}>
+							<FormErrorMessage
+								textColor="red.300"
+								fontWeight={600}
+							>
 								{error?.data?.zodError?.fieldErrors.size?.[0]}
 							</FormErrorMessage>
 						</FormControl>
@@ -96,12 +99,17 @@ const AdminCreateSize = ({ isOpen, onClose }: AdminCreateSizeProps) => {
 										void ctx.size.invalidate();
 										setValue('');
 									},
-                                    onError: ({message}) => {
-                                        toast({
-                                            description: `${message}`,
-                                            status: 'error'
-                                        })
-                                    }
+									onError: ({ message }) => {
+										if (
+											message ===
+											'Данный размер уже существует'
+										) {
+											toast({
+												description: `${message}`,
+												status: 'error',
+											});
+										}
+									},
 								}
 							)
 						}

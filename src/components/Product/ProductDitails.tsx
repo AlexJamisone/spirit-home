@@ -14,6 +14,7 @@ import ProductAction from './ProductAction';
 import ProductImage from './ProductImage';
 import ProductInfo from './ProductInfo';
 import ProductPrice from './ProductPrice';
+import ProductSize from './ProductSize';
 
 type ProductDitailsProps = {
 	isOpen: boolean;
@@ -60,7 +61,9 @@ const ProductDitails = ({ isOpen, onClose }: ProductDitailsProps) => {
 									zoom={true}
 								/>
 							</GridItem>
-							<GridItem colStart={[1, 2]}>Size</GridItem>
+							<GridItem colStart={[1, 2]}>
+								<ProductSize />
+							</GridItem>
 							<GridItem colStart={[1, 2]} textAlign="center">
 								<ProductPrice />
 							</GridItem>

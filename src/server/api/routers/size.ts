@@ -1,9 +1,13 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
+import {
+	adminProcedure,
+	createTRPCRouter,
+	publicProcedure,
+} from '~/server/api/trpc';
 
 export const sizeRouter = createTRPCRouter({
-	get: adminProcedure.query(async ({ ctx }) => {
+	get: publicProcedure.query(async ({ ctx }) => {
 		return await ctx.prisma.size.findMany();
 	}),
 	create: adminProcedure

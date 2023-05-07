@@ -4,6 +4,7 @@
 import type { Product, ProductPriceHistory } from '@prisma/client';
 
 type ProductWithPriceHistory = Product & {
+	selectedSize: { id: string; name: string };
 	priceHistory: ProductPriceHistory[];
 };
 export interface CartItem extends ProductWithPriceHistory {
@@ -22,12 +23,12 @@ interface SetAddToCart {
 
 interface SetRemoveFromCart {
 	type: 'REMOVE_FROM_CART';
-	payload: string;
+	payload: { id: string; sizeId: string };
 }
 
 interface SetUpdateQtCart {
 	type: 'UPDATE_QT';
-	payload: { id: string; quantity: number };
+	payload: { id: string; quantity: number; sizeId: string };
 }
 interface SetClearCart {
 	type: 'CLER_CART';
@@ -69,7 +70,9 @@ export const cartReducer = (
 	switch (action.type) {
 		case 'ADD_TO_CART': {
 			const itemsIndex = state.items.findIndex(
-				(item) => item.id === action.payload.id
+				(item) =>
+					(item.id && item.selectedSize) ===
+					(action.payload.id && action.payload.selectedSize)
 			);
 			if (itemsIndex === -1) {
 				const newItem: CartItem = {
@@ -105,14 +108,18 @@ export const cartReducer = (
 		}
 		case 'REMOVE_FROM_CART': {
 			const itemIndex = state.items.findIndex(
-				(item) => item.id === action.payload
+				(item) =>
+					item.id === action.payload.id &&
+					item.selectedSize.id === action.payload.sizeId
 			);
 			if (itemIndex === -1) {
 				return state;
 			} else {
 				const removedItem = state.items[itemIndex];
 				const updatedItems = state.items.filter(
-					(item) => item.id !== action.payload
+					(item) =>
+						item.id !== action.payload.id ||
+						item.selectedSize.id !== action.payload.sizeId
 				);
 				const price = removedItem?.priceHistory[0]?.price;
 				if (!price) return state;
@@ -128,7 +135,9 @@ export const cartReducer = (
 		}
 		case 'UPDATE_QT': {
 			const itemIndex = state.items.findIndex(
-				(item) => item.id === action.payload.id
+				(item) =>
+					item.id === action.payload.id &&
+					item.selectedSize.id === action.payload.sizeId
 			);
 			if (itemIndex === -1 || action.payload.quantity < 1) {
 				return state;

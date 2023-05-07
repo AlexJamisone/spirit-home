@@ -1,5 +1,11 @@
 import type { Product, ProductPriceHistory, Role, Size } from '@prisma/client';
-import { createContext, useContext, type SyntheticEvent } from 'react';
+import {
+	createContext,
+	useContext,
+	type Dispatch,
+	type SetStateAction,
+	type SyntheticEvent,
+} from 'react';
 
 const ProductCardContext = createContext<{
 	product: Product & {
@@ -11,6 +17,8 @@ const ProductCardContext = createContext<{
 		})[];
 	};
 	admin?: Role;
+	selectedSize: { id: string; name: string };
+	setSelectedtSize: Dispatch<SetStateAction<{ id: string; name: string }>>;
 	handlAddToCart?: (e: SyntheticEvent) => void;
 	handleArchivedProduct?: (
 		id: string,

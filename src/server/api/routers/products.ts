@@ -31,7 +31,7 @@ export const productsRouter = createTRPCRouter({
 		});
 		return products;
 	}),
-	create: privetProcedure
+	create: adminProcedure
 		.input(
 			z.object({
 				name: z.string().nonempty(),
@@ -47,6 +47,9 @@ export const productsRouter = createTRPCRouter({
 				value: quantity ?? 0,
 				sizeId: id,
 			}));
+			const sizeId = input.size.map(({id}) => ({
+				id
+			}))
 			const createProduct = await ctx.prisma.product.create({
 				data: {
 					name: input.name,
@@ -63,6 +66,9 @@ export const productsRouter = createTRPCRouter({
 							data: size,
 						},
 					},
+					size: {
+						connect: sizeId
+					}
 				},
 			});
 			return createProduct;

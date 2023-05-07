@@ -1,17 +1,18 @@
 import {
-Stack,
-useDisclosure,
-useMediaQuery,
-useToast,
+	Stack,
+	useDisclosure,
+	useMediaQuery,
+	useToast,
 } from '@chakra-ui/react';
-import type { Product,ProductPriceHistory,Role,Size } from '@prisma/client';
+import type { Product, ProductPriceHistory, Role, Size } from '@prisma/client';
 import { motion } from 'framer-motion';
-import type { ReactNode,SyntheticEvent } from 'react';
+import { useState, type ReactNode, type SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';
 import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
 import ProductDitails from './ProductDitails';
 import ProductPrice from './ProductPrice';
+import ProductSize from './ProductSize';
 
 type ProductProps = {
 	image?: ReactNode;
@@ -50,10 +51,21 @@ const ProductsCard = ({
 	const { mutate: archivedProduct, isLoading } =
 		api.products.archived.useMutation();
 	const ctx = api.useContext();
+	const [selectedSize, setSelectedtSize] = useState({
+		id: '',
+		name: '',
+	});
 	const { cartDispatch } = useCart();
 	const toast = useToast();
 	const handlAddToCart = (e: SyntheticEvent) => {
-		cartDispatch({ type: 'ADD_TO_CART', payload: product });
+		cartDispatch({
+			type: 'ADD_TO_CART',
+			payload: { ...product, selectedSize },
+		});
+		setSelectedtSize({
+			id: '',
+			name: '',
+		});
 		e.stopPropagation();
 	};
 	const { isOpen, onClose, onToggle } = useDisclosure();
@@ -97,6 +109,8 @@ const ProductsCard = ({
 				handlAddToCart,
 				handleArchivedProduct,
 				isLoading,
+				selectedSize,
+				setSelectedtSize,
 			}}
 		>
 			<Stack
@@ -134,6 +148,7 @@ const ProductsCard = ({
 			>
 				{image}
 				{info}
+				{admin === 'USER' ? <ProductSize /> : null}
 				<Stack
 					w="100%"
 					direction={admin === 'USER' ? 'row' : 'column'}
