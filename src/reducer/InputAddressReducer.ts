@@ -9,7 +9,6 @@ export interface InputAddressState {
 	email: string;
 	password: string;
 	idAddress: string;
-	size: string;
 }
 
 interface SetIdAction {
@@ -59,10 +58,6 @@ interface SetAllAction {
 	type: 'SET_ALL';
 	payload: InputAddressState;
 }
-interface SetSizeAction {
-	type: 'SET_SIZE';
-	payload: string;
-}
 
 export type Action =
 	| SetPhoneAction
@@ -76,8 +71,7 @@ export type Action =
 	| SetSaveAccAction
 	| SetEmailAction
 	| SetPasswordAction
-	| SetIdAddressAction
-	| SetSizeAction;
+	| SetIdAddressAction;
 
 export const initialState: InputAddressState = {
 	id: '',
@@ -90,7 +84,6 @@ export const initialState: InputAddressState = {
 	password: '',
 	idAddress: '',
 	saveAcc: false,
-	size: '',
 };
 
 export const InputAddressReducer = (
@@ -118,8 +111,7 @@ export const InputAddressReducer = (
 			return { ...state, password: action.payload };
 		case 'SET_ID_ADDRESS':
 			return { ...state, idAddress: action.payload };
-		case 'SET_SIZE':
-			return { ...state, size: action.payload };
+
 		case 'SET_CLEAR':
 			return {
 				id: '',
@@ -132,7 +124,6 @@ export const InputAddressReducer = (
 				password: '',
 				idAddress: '',
 				saveAcc: false,
-				size: '',
 			};
 		case 'SET_ALL':
 			return {
