@@ -10,41 +10,90 @@ import {
 	publicProcedure,
 } from '~/server/api/trpc';
 
+type ContextType = {
+	prisma: PrismaClient<
+		Prisma.PrismaClientOptions,
+		never,
+		Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
+	>;
+	userId: string | null;
+};
+
 function getAllProductsFromCart(cart: CartState): {
 	productId: string;
 	quantity: number;
+	selectedSizeId: string;
 }[] {
-	return cart.items.map(({ id, quantityInCart }) => ({
+	return cart.items.map(({ id, quantityInCart, selectedSize }) => ({
 		productId: id,
 		quantity: quantityInCart,
+		selectedSizeId: selectedSize.id,
 	}));
 }
 
-// async function operationWithProducts(
-// 	ctx: {
-// 		prisma: PrismaClient<
-// 			Prisma.PrismaClientOptions,
-// 			never,
-// 			Prisma.RejectOnNotFound | Prisma.RejectPerOperation | undefined
-// 		>;
-// 		userId: string | null;
-// 	},
-// 	productId: string,
-// 	quantity: number,
-// 	operation: 'plus' | 'minus'
-// ) {
-// 	return await ctx.prisma.product.update({
-// 		where: {
-// 			id: productId,
-// 		},
-// 		data: {
-// 			quantity: {
-// 				decrement: operation === 'minus' ? quantity : undefined,
-// 				increment: operation === 'plus' ? quantity : undefined,
-// 			},
-// 		},
-// 	});
-// }
+async function handlUpdateProduct(
+	ctx: ContextType,
+	orderId: string,
+	operation: 'plus' | 'minus'
+) {
+	const returnCount = await ctx.prisma.order.findUnique({
+		where: {
+			id: orderId,
+		},
+		select: {
+			orderItem: {
+				include: {
+					product: {
+						select: {
+							quantity: true,
+						},
+					},
+				},
+			},
+		},
+	});
+	return returnCount?.orderItem.map(
+		async ({ productId, quantity, selectedSizeId }) =>
+			await operationWithProducts(
+				ctx,
+				productId,
+				quantity,
+				operation,
+				selectedSizeId
+			)
+	);
+}
+
+async function operationWithProducts(
+	ctx: ContextType,
+	productId: string,
+	quantity: number,
+	operation: 'plus' | 'minus',
+	sizeId: string
+) {
+	return await ctx.prisma.product.update({
+		where: {
+			id: productId,
+		},
+		data: {
+			quantity: {
+				update: {
+					data: {
+						value: {
+							decrement:
+								operation === 'minus' ? quantity : undefined,
+							increment:
+								operation === 'plus' ? quantity : undefined,
+						},
+					},
+					where: {
+						sizeId,
+					},
+				},
+			},
+		},
+	});
+}
 
 export const ordersRouter = createTRPCRouter({
 	get: adminProcedure.query(async ({ ctx }) => {
@@ -59,6 +108,7 @@ export const ordersRouter = createTRPCRouter({
 										effectiveFrom: 'desc',
 									},
 								},
+								size: true
 							},
 						},
 					},
@@ -83,52 +133,17 @@ export const ordersRouter = createTRPCRouter({
 	changeStatus: adminProcedure
 		.input(z.object({ status: z.custom<OrderStatus>(), id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
-			const returnCount = await ctx.prisma.order.findUnique({
-				where: {
-					id: input.id,
-				},
-				select: {
-					orderItem: {
-						include: {
-							product: {
-								select: {
-									quantity: true,
-								},
-							},
-						},
+			if (input.status === 'CANCELLED') {
+				await handlUpdateProduct(ctx, input.id, 'plus');
+				return await ctx.prisma.order.update({
+					where: {
+						id: input.id,
 					},
-				},
-			});
-			// switch (input.status) {
-			// 	case 'CANCELLED':
-			// 		returnCount?.orderItem.map(
-			// 			async ({ productId, quantity }) =>
-			// 				await operationWithProducts(
-			// 					ctx,
-			// 					productId,
-			// 					quantity,
-			// 					'plus'
-			// 				)
-			// 		);
-			// 		return await ctx.prisma.order.update({
-			// 			where: {
-			// 				id: input.id,
-			// 			},
-			// 			data: {
-			// 				status: input.status,
-			// 			},
-			// 		});
-			// 	case 'COMPLETED':
-			// 		returnCount?.orderItem.map(
-			// 			async ({ productId, quantity }) =>
-			// 				await operationWithProducts(
-			// 					ctx,
-			// 					productId,
-			// 					quantity,
-			// 					'minus'
-			// 				)
-			// 		);
-			// }
+					data: {
+						status: input.status,
+					},
+				});
+			}
 			return await ctx.prisma.order.update({
 				where: {
 					id: input.id,
@@ -146,7 +161,7 @@ export const ordersRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			return await ctx.prisma.order.create({
+			const create = await ctx.prisma.order.create({
 				data: {
 					addressId: input.idAddress,
 					orderItem: {
@@ -157,6 +172,7 @@ export const ordersRouter = createTRPCRouter({
 					userId: ctx.userId,
 				},
 			});
+			return await handlUpdateProduct(ctx, create.id, 'minus');
 		}),
 	createNoAddressIsAuth: publicProcedure
 		.input(
@@ -188,32 +204,28 @@ export const ordersRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			if (!ctx.userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
-			return await ctx.prisma.user.update({
-				where: {
-					id: ctx.userId,
-				},
+			const updateUserAddress = await ctx.prisma.address.create({
 				data: {
-					orders: {
-						create: {
-							address: {
-								create: {
-									city: input.address.city,
-									contactPhone: input.address.contactPhone,
-									firstName: input.address.firstName,
-									lastName: input.address.lastName,
-									point: input.address.point,
-									userId: ctx.userId,
-								},
-							},
-							orderItem: {
-								createMany: {
-									data: getAllProductsFromCart(input.cart),
-								},
-							},
-						},
-					},
+					userId: ctx.userId,
+					city: input.address.city,
+					contactPhone: input.address.contactPhone,
+					firstName: input.address.firstName,
+					lastName: input.address.lastName,
+					point: input.address.point,
 				},
 			});
+			const createOrder = await ctx.prisma.order.create({
+				data: {
+					addressId: updateUserAddress.id,
+					orderItem: {
+						createMany: {
+							data: getAllProductsFromCart(input.cart),
+						},
+					},
+					userId: ctx.userId,
+				},
+			});
+			return await handlUpdateProduct(ctx, createOrder.id, 'minus');
 		}),
 	createNoAuth: publicProcedure
 		.input(
@@ -271,31 +283,19 @@ export const ordersRouter = createTRPCRouter({
 					firstName: input.address.firstName,
 					lastName: input.address.lastName,
 				});
-				return await ctx.prisma.user.create({
+				const createUser = await ctx.prisma.user.create({
 					data: {
 						id: createUserClerk.id,
 						email: createUserClerk.emailAddresses[0]?.emailAddress,
 						firstName: createUserClerk.firstName,
 						lastName: createUserClerk.lastName,
-						orders: {
-							create: {
-								address: {
-									create: {
-										city: input.address.city,
-										contactPhone:
-											input.address.contactPhone,
-										firstName: input.address.firstName,
-										lastName: input.address.lastName,
-										point: input.address.point,
-									},
-								},
-								orderItem: {
-									createMany: {
-										data: getAllProductsFromCart(
-											input.cart
-										),
-									},
-								},
+					},
+				});
+				const createOrder = await ctx.prisma.order.create({
+					data: {
+						orderItem: {
+							createMany: {
+								data: getAllProductsFromCart(input.cart),
 							},
 						},
 						address: {
@@ -305,12 +305,24 @@ export const ordersRouter = createTRPCRouter({
 								firstName: input.address.firstName,
 								lastName: input.address.lastName,
 								point: input.address.point,
+								userId: createUser.id,
 							},
 						},
 					},
 				});
+				await ctx.prisma.user.update({
+					where: {
+						id: createUser.id,
+					},
+					data: {
+						orders: {
+							connect: { id: createOrder.id },
+						},
+					},
+				});
+				return await handlUpdateProduct(ctx, createOrder.id, 'minus');
 			} else {
-				return await ctx.prisma.order.create({
+				const createOrder = await ctx.prisma.order.create({
 					data: {
 						address: {
 							create: {
@@ -328,6 +340,7 @@ export const ordersRouter = createTRPCRouter({
 						},
 					},
 				});
+				return handlUpdateProduct(ctx, createOrder.id, 'minus');
 			}
 		}),
 });

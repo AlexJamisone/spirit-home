@@ -64,7 +64,7 @@ const CartItem = ({
 				opacity: 1,
 				transition: { type: 'spring', duration: 0.3 },
 			}}
-			exit={{ opacity: 0, transition: { type: 'spring' } }}
+			exit={{ opacity: 0, transition: { type: 'tween' } }}
 			direction="row"
 			gap={[0, 3]}
 			alignItems="center"

@@ -53,8 +53,8 @@ const Home: NextPage = () => {
 							opacity: 1,
 							transition: {
 								type: 'spring',
-								duration: 500,
-								delay: 0.1,
+								duration: 2.5,
+								delay: 0.5,
 							},
 						}}
 					/>

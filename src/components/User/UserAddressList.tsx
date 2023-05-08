@@ -6,7 +6,7 @@ import UserAddressCard from './UserAddressCard';
 
 const UserAddressList = () => {
 	const { data: user } = api.users.get.useQuery();
-	const { input, dispatch } = useNewOrderContext();
+	const { input, dispatch, isError } = useNewOrderContext();
 	if (!user) return null;
 	return (
 		<>
@@ -24,7 +24,11 @@ const UserAddressList = () => {
 						{user.address
 							?.filter((address) => !address.archived)
 							?.map((address) => (
-								<Radio key={address.id} value={address.id}>
+								<Radio
+									key={address.id}
+									value={address.id}
+									isInvalid={isError}
+								>
 									<UserAddressCard
 										address={address}
 										email={user.email}

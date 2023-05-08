@@ -5,6 +5,7 @@ import type {
 	OrderStatus,
 	Product,
 	ProductPriceHistory,
+	Size,
 	User,
 } from '@prisma/client';
 import { useState, type ReactNode } from 'react';
@@ -23,6 +24,7 @@ type AdminOrdersCardProps = {
 		orderItem: (OrderItem & {
 			product: Product & {
 				priceHistory: ProductPriceHistory[];
+				size: Size[]
 			};
 		})[];
 		id: string;

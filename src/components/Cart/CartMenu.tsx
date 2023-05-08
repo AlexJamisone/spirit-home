@@ -11,7 +11,7 @@ import {
 	Text,
 	useDisclosure,
 } from '@chakra-ui/react';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { SlHandbag } from 'react-icons/sl';
 import { useCart } from '~/context/cartContext';
@@ -57,14 +57,21 @@ const CartMenu = () => {
 								}}
 							/>
 						</Stack>
-						<MenuList p={[2, 5]} zIndex={20}>
+						<MenuList
+							p={[2, 5]}
+							zIndex={20}
+							as={motion.div}
+							initial={{ height: 'auto' }}
+							animate={{ height: 'auto' }}
+							exit={{ height: 0 }}
+						>
 							{cartState.items.length === 0 ? (
 								<Text>Ваша Корзина пуста</Text>
 							) : (
 								<AnimatePresence>
-									{cartState.items.map((item) => (
+									{cartState.items.map((item, index) => (
 										<MenuItem
-											key={item.id}
+											key={index}
 											justifyContent="center"
 										>
 											<CartItem item={item} />

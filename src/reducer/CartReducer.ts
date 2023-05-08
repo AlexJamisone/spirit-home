@@ -71,8 +71,8 @@ export const cartReducer = (
 		case 'ADD_TO_CART': {
 			const itemsIndex = state.items.findIndex(
 				(item) =>
-					(item.id && item.selectedSize) ===
-					(action.payload.id && action.payload.selectedSize)
+					item.id === action.payload.id &&
+					item.selectedSize.id === action.payload.selectedSize.id
 			);
 			if (itemsIndex === -1) {
 				const newItem: CartItem = {

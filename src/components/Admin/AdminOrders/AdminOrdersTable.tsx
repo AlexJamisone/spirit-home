@@ -2,11 +2,13 @@ import {
 	Table,
 	TableCaption,
 	TableContainer,
+	Tag,
 	Tbody,
 	Td,
 	Text,
 	Th,
 	Thead,
+	Tooltip,
 	Tr,
 } from '@chakra-ui/react';
 import { useCardOrderContext } from '~/context/ordersCardsContext';
@@ -42,21 +44,43 @@ const AdminOrdersTable = () => {
 							<Text fontSize={10}>Кол-во</Text>
 						</Th>
 						<Th>
-							<Text fontSize={10}>Сумма</Text>
+							<Text fontSize={10}>Размер</Text>
 						</Th>
 					</Tr>
 				</Thead>
 				<Tbody>
 					{orderItem.map(
-						({ product: { id, name, priceHistory }, quantity }) => (
+						({
+							product: { name, priceHistory, size },
+							quantity,
+							selectedSizeId,
+							id,
+						}) => (
 							<Tr key={id}>
-								<Td textAlign="left">{name}</Td>
+								<Td textAlign="left">
+									<Tooltip
+										label={`${
+											(priceHistory.find(
+												(history) =>
+													history.effectiveFrom <=
+													createdAt
+											)?.price ?? 0) * quantity
+										} ₽`}
+									>
+										{name}
+									</Tooltip>
+								</Td>
 								<Td>{quantity} шт.</Td>
 								<Td>
-									{(priceHistory.find(
-										(history) =>
-											history.effectiveFrom <= createdAt
-									)?.price ?? 0) * quantity}
+									{size
+										.filter(
+											(size) => size.id === selectedSizeId
+										)
+										.map(({ size }) => (
+											<Tag key={selectedSizeId}>
+												{size}
+											</Tag>
+										))}
 								</Td>
 							</Tr>
 						)
