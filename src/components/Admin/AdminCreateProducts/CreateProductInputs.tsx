@@ -4,7 +4,7 @@ import { useCreateProductContext } from '~/context/createProductContext';
 import { api } from '~/utils/api';
 
 const CreateProductInputs = () => {
-	const {} = api.size.get.useQuery()
+	const {} = api.size.get.useQuery();
 	const { form, dispatch, handleInputChange } = useCreateProductContext();
 	return (
 		<>

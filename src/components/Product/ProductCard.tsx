@@ -1,18 +1,18 @@
 import {
-Stack,
-useDisclosure,
-useMediaQuery,
-useToast,
+	Stack,
+	useDisclosure,
+	useMediaQuery,
+	useToast,
 } from '@chakra-ui/react';
 import type {
-Product,
-ProductPriceHistory,
-Quantity,
-Role,
-Size,
+	Product,
+	ProductPriceHistory,
+	Quantity,
+	Role,
+	Size,
 } from '@prisma/client';
 import { motion } from 'framer-motion';
-import { useState,type ReactNode,type SyntheticEvent } from 'react';
+import { useState, type ReactNode, type SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';
 import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';

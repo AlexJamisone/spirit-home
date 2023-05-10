@@ -197,10 +197,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 							<Stack direction="column" justifyContent="center">
 								<AnimatePresence>
 									{cartState.items.map((item) => (
-										<CartItem
-											item={item}
-											key={item.id}
-										/>
+										<CartItem item={item} key={item.id} />
 									))}
 								</AnimatePresence>
 							</Stack>

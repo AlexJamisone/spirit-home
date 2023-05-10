@@ -1,4 +1,4 @@
-import { Stack,Tag } from '@chakra-ui/react';
+import { Stack, Tag } from '@chakra-ui/react';
 import type { SyntheticEvent } from 'react';
 import { useProductCardContext } from '~/context/productCardContext';
 import ProductSizeButton from './ProductSizeButton';

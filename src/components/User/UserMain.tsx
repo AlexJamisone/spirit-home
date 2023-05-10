@@ -78,7 +78,6 @@ const UserMain = () => {
 				idAddress: input.idAddress,
 				password: '',
 				saveAcc: false,
-				
 			},
 		});
 		setEdit(true);
