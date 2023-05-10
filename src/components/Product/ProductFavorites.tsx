@@ -1,7 +1,7 @@
 import { Box, Icon, useToast } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import type { SyntheticEvent } from 'react';
-import { ImHeart } from 'react-icons/im';
+import { TiHeartOutline } from 'react-icons/ti';
 import { useProductCardContext } from '~/context/productCardContext';
 import { api } from '~/utils/api';
 const ProductFavorites = () => {
@@ -41,13 +41,13 @@ const ProductFavorites = () => {
 			position="absolute"
 			top={5}
 			right={5}
-			zIndex={20}
+			zIndex={10}
 			h="24px"
 			onClick={handlFavorites}
 		>
 			<Icon
-				as={ImHeart}
-				boxSize={5}
+				as={TiHeartOutline}
+				boxSize={6}
 				color={
 					user.favorites?.some(
 						({ productId }) => productId === product.id

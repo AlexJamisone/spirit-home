@@ -157,6 +157,7 @@ const ProductsCard = ({
 				}}
 				cursor="pointer"
 				position="relative"
+				zIndex={0}
 				onClick={() =>
 					admin === 'USER'
 						? onToggle()

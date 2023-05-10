@@ -27,7 +27,7 @@ const Category = () => {
 				>
 					Категории
 				</MenuButton>
-				<MenuList zIndex={20} mt={[3, null]}>
+				<MenuList position="relative" zIndex={30} mt={[3, null]}>
 					{isLoading ? (
 						<>
 							<MenuItem>
@@ -43,6 +43,8 @@ const Category = () => {
 					) : null}
 					{categories?.map(({ id, path, title }) => (
 						<MenuItem
+							position="relative"
+							zIndex={30}
 							bgColor={path === query.path ? 'gray.200' : ''}
 							key={id}
 							as={Link}
