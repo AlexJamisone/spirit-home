@@ -62,19 +62,20 @@ model Product {
 }
 
 model Size {
-    id        String      @id @unique @default(cuid())
-    size      String
-    product   Product[]
-    quantity  Quantity[]
-    OrderItem OrderItem[]
+    id       String     @id @default(cuid())
+    size     String
+    product  Product[]
+    quantity Quantity[]
 }
 
 model Quantity {
-    sizeId    String  @id
+    id        String      @id @default(cuid())
+    sizeId    String
     value     Int
-    size      Size    @relation(fields: [sizeId], references: [id])
-    product   Product @relation(fields: [productId], references: [id])
+    size      Size        @relation(fields: [sizeId], references: [id])
+    product   Product     @relation(fields: [productId], references: [id])
     productId String
+    orderItem OrderItem[]
 }
 
 model ProductPriceHistory {
@@ -97,14 +98,14 @@ model Order {
 }
 
 model OrderItem {
-    id             String  @id @default(cuid())
-    quantity       Int
-    product        Product @relation(fields: [productId], references: [id])
-    productId      String
-    order          Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
-    orderId        String
-    selectedSize   Size    @relation(fields: [selectedSizeId], references: [id], onDelete: Cascade)
-    selectedSizeId String
+    id           String   @id @default(cuid())
+    quantity     Int
+    product      Product  @relation(fields: [productId], references: [id])
+    productId    String
+    order        Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+    orderId      String
+    selectedQt   Quantity @relation(fields: [selectedQtId], references: [id], onDelete: Cascade)
+    selectedQtId String
 }
 
 model Comment {

@@ -34,7 +34,6 @@ const AdminCreateSize = ({ isOpen, onClose }: AdminCreateSizeProps) => {
 	const ctx = api.useContext();
 	const toast = useToast();
 	if (!size) return null;
-	console.log();
 	return (
 		<Modal
 			isOpen={isOpen}

@@ -1,4 +1,10 @@
-import type { Product, ProductPriceHistory, Role, Size } from '@prisma/client';
+import type {
+	Product,
+	ProductPriceHistory,
+	Quantity,
+	Role,
+	Size,
+} from '@prisma/client';
 import {
 	createContext,
 	useContext,
@@ -10,10 +16,8 @@ import {
 const ProductCardContext = createContext<{
 	product: Product & {
 		priceHistory: ProductPriceHistory[];
-		size: (Size & {
-			quantity: {
-				value: number;
-			}[];
+		quantity: (Quantity & {
+			size: Size;
 		})[];
 	};
 	admin?: Role;

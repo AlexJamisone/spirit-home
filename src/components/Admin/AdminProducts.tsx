@@ -1,5 +1,10 @@
 import { Button, Icon, Stack, Text, useDisclosure } from '@chakra-ui/react';
-import type { Product, ProductPriceHistory, Size } from '@prisma/client';
+import type {
+	Product,
+	ProductPriceHistory,
+	Quantity,
+	Size,
+} from '@prisma/client';
 import { useReducer, useState } from 'react';
 
 import { IoIosAddCircleOutline } from 'react-icons/io';
@@ -14,12 +19,16 @@ import CategoriesSelector from './AdminCreateProducts/CategoriesSelector';
 import CreateProductInputs from './AdminCreateProducts/CreateProductInputs';
 import DragDrop from './AdminCreateProducts/Drag&Drop';
 import ProducCreateAction from './AdminCreateProducts/ProducCreateAction';
-import AdminProductsModal from './AdminProductsModal';
 import AdminCreateSize from './AdminCreateSize';
+import AdminProductsModal from './AdminProductsModal';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
-	const { isOpen: isOpenSize, onClose: onCloseSize, onToggle: onToggleSize } = useDisclosure();
+	const {
+		isOpen: isOpenSize,
+		onClose: onCloseSize,
+		onToggle: onToggleSize,
+	} = useDisclosure();
 	const [edit, setEdit] = useState(false);
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 
@@ -31,10 +40,8 @@ const AdminProducts = () => {
 	const handlEdit = (
 		product: Product & {
 			priceHistory: ProductPriceHistory[];
-			size: (Size & {
-				quantity: {
-					value: number;
-				}[];
+			quantity: (Quantity & {
+				size: Size;
 			})[];
 		}
 	) => {
@@ -48,13 +55,14 @@ const AdminProducts = () => {
 				image: product.image.map((path) => ({ path, error: null })),
 				name: product.name,
 				price: product.priceHistory[0]?.price as number,
-				size: product.size.map(({ id, quantity, size }) => {
-					return {
+				quantity: product.quantity.map(
+					({ id, value, size: { size: name, id: sizeId } }) => ({
 						id,
-						quantity: quantity[0]?.value,
-						name: size
-					};
-				}),
+						quantity: value,
+						name,
+						sizeId,
+					})
+				),
 			},
 		});
 		onToggle();
@@ -103,7 +111,7 @@ const AdminProducts = () => {
 					})
 					.reverse()
 			)}
-			<AdminCreateSize isOpen={isOpenSize} onClose={onCloseSize}/>
+			<AdminCreateSize isOpen={isOpenSize} onClose={onCloseSize} />
 			<AdminProductsModal
 				isOpen={isOpen}
 				onClose={onClose}

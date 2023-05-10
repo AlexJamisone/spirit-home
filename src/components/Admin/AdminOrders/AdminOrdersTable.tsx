@@ -51,10 +51,10 @@ const AdminOrdersTable = () => {
 				<Tbody>
 					{orderItem.map(
 						({
-							product: { name, priceHistory, size },
+							product: { name, priceHistory, quantity: qt },
 							quantity,
-							selectedSizeId,
 							id,
+							selectedQtId,
 						}) => (
 							<Tr key={id}>
 								<Td textAlign="left">
@@ -72,13 +72,14 @@ const AdminOrdersTable = () => {
 								</Td>
 								<Td>{quantity} шт.</Td>
 								<Td>
-									{size
+									{qt
 										.filter(
-											(size) => size.id === selectedSizeId
+											(quantity) =>
+												quantity.id === selectedQtId
 										)
 										.map(({ size }) => (
-											<Tag key={selectedSizeId}>
-												{size}
+											<Tag key={selectedQtId}>
+												{size.size}
 											</Tag>
 										))}
 								</Td>

@@ -23,11 +23,12 @@ const SizeCard = ({ size }: SizeCardProps) => {
 						setInput(!input);
 					} else {
 						dispatch({
-							type: 'ADD_SIZE',
+							type: 'ADD_QT',
 							payload: {
-								id: size.id,
+								id: '',
 								quantity: 0,
 								name: size.size,
+								sizeId: size.id,
 							},
 						});
 					}
@@ -40,11 +41,12 @@ const SizeCard = ({ size }: SizeCardProps) => {
 				<Input
 					onChange={(e) =>
 						dispatch({
-							type: 'UPDATE_SIZE',
+							type: 'UPDATE_QT',
 							payload: {
-								id: size.id,
+								id: '',
 								quantity: +e.target.value,
 								name: size.size,
+								sizeId: size.id,
 							},
 						})
 					}

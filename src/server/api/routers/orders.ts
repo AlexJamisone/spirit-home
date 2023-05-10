@@ -22,12 +22,12 @@ type ContextType = {
 function getAllProductsFromCart(cart: CartState): {
 	productId: string;
 	quantity: number;
-	selectedSizeId: string;
+	selectedQtId: string;
 }[] {
 	return cart.items.map(({ id, quantityInCart, selectedSize }) => ({
 		productId: id,
 		quantity: quantityInCart,
-		selectedSizeId: selectedSize.id,
+		selectedQtId: selectedSize.id,
 	}));
 }
 
@@ -53,13 +53,13 @@ async function handlUpdateProduct(
 		},
 	});
 	return returnCount?.orderItem.map(
-		async ({ productId, quantity, selectedSizeId }) =>
+		async ({ productId, quantity, selectedQtId }) =>
 			await operationWithProducts(
 				ctx,
 				productId,
 				quantity,
 				operation,
-				selectedSizeId
+				selectedQtId
 			)
 	);
 }
@@ -69,7 +69,7 @@ async function operationWithProducts(
 	productId: string,
 	quantity: number,
 	operation: 'plus' | 'minus',
-	sizeId: string
+	qtId: string
 ) {
 	return await ctx.prisma.product.update({
 		where: {
@@ -87,7 +87,7 @@ async function operationWithProducts(
 						},
 					},
 					where: {
-						sizeId,
+						id: qtId,
 					},
 				},
 			},
@@ -108,7 +108,11 @@ export const ordersRouter = createTRPCRouter({
 										effectiveFrom: 'desc',
 									},
 								},
-								size: true
+								quantity: {
+									include: {
+										size: true,
+									},
+								},
 							},
 						},
 					},

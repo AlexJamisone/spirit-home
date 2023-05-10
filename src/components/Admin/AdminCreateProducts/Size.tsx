@@ -8,14 +8,14 @@ const Size = () => {
 		<Stack direction="row">
 			{edit ? (
 				<>
-					{form.size.map(({ id, quantity, name }) => (
+					{form.quantity.map(({ id, quantity, name }) => (
 						<Stack key={id} w="60px">
 							<Button>{name}</Button>
 							<Input
 								value={quantity}
 								onChange={(e) =>
 									dispatch({
-										type: 'UPDATE_SIZE',
+										type: 'UPDATE_QT',
 										payload: {
 											id,
 											quantity: +e.target.value,

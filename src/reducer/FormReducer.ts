@@ -1,9 +1,10 @@
 import type { UploadResult } from '~/utils/uploadImage';
 
-export type Size = {
+export type Quantity = {
 	id: string;
-	quantity?: number;
-	name: string
+	quantity: number;
+	name: string;
+	sizeId: string;
 };
 
 export interface FormProductState {
@@ -13,7 +14,7 @@ export interface FormProductState {
 	image: UploadResult[];
 	category: string;
 	price: number;
-	size: Size[];
+	quantity: Quantity[];
 }
 
 interface SetIdAction {
@@ -48,13 +49,13 @@ interface SetAllAction {
 	type: 'SET_ALL';
 	payload: FormProductState;
 }
-interface SetSizeAction {
-	type: 'ADD_SIZE';
-	payload: Size;
+interface SetQTAction {
+	type: 'ADD_QT';
+	payload: Quantity;
 }
-interface SetUpdateSizeAction {
-	type: 'UPDATE_SIZE';
-	payload: { id: string; quantity?: number, name: string};
+interface SetUpdateQTAction {
+	type: 'UPDATE_QT';
+	payload: { id: string; quantity: number; name: string; sizeId: string };
 }
 interface SetRemoveSizeAction {
 	type: 'REMOVE_SIZE';
@@ -70,8 +71,8 @@ export type Action =
 	| SetClearAction
 	| SetAllAction
 	| SetIdAction
-	| SetSizeAction
-	| SetUpdateSizeAction
+	| SetQTAction
+	| SetUpdateQTAction
 	| SetRemoveSizeAction;
 
 export const initialState: FormProductState = {
@@ -81,7 +82,7 @@ export const initialState: FormProductState = {
 	image: [],
 	category: '',
 	price: 0,
-	size: [],
+	quantity: [],
 };
 
 export const FormProductReducer = (
@@ -101,24 +102,30 @@ export const FormProductReducer = (
 			return { ...state, category: action.payload };
 		case 'SET_PRICE':
 			return { ...state, price: action.payload };
-		case 'ADD_SIZE':
+		case 'ADD_QT':
 			return {
 				...state,
-				size: [...state.size, action.payload],
+				quantity: [...state.quantity, action.payload],
 			};
-		case 'UPDATE_SIZE':
+		case 'UPDATE_QT':
 			return {
 				...state,
-				size: state.size.map((size) =>
-					size.id === action.payload.id
-						? { ...size, quantity: action.payload.quantity, name: action.payload.name }
-						: size
+				quantity: state.quantity.map((qt) =>
+					qt.id === action.payload.id
+						? {
+								...qt,
+								quantity: action.payload.quantity,
+								name: action.payload.name,
+						  }
+						: qt
 				),
 			};
 		case 'REMOVE_SIZE':
 			return {
 				...state,
-				size: state.size.filter((size) => size.id !== action.payload),
+				quantity: state.quantity.filter(
+					(qt) => qt.id !== action.payload
+				),
 			};
 		case 'SET_CLEAR':
 			return {
@@ -128,7 +135,7 @@ export const FormProductReducer = (
 				image: [],
 				name: '',
 				price: 0,
-				size: [],
+				quantity: [],
 			};
 		case 'SET_ALL':
 			return {

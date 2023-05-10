@@ -1,4 +1,4 @@
-import { Stack, Tag } from '@chakra-ui/react';
+import { Stack,Tag } from '@chakra-ui/react';
 import type { SyntheticEvent } from 'react';
 import { useProductCardContext } from '~/context/productCardContext';
 import ProductSizeButton from './ProductSizeButton';
@@ -24,30 +24,30 @@ const ProductSize = ({ isAdmin }: ProductSizeProps) => {
 	return (
 		<Stack direction="row">
 			{isAdmin
-				? product.size
+				? product.quantity
 						.sort((a, b) =>
-							a.size.localeCompare(b.size, undefined, {
+							a.size.size.localeCompare(b.size.size, undefined, {
 								numeric: true,
 							})
 						)
-						.map(({ id, quantity, size }) => (
+						.map(({ id, value, size }) => (
 							<Tag key={id} textAlign="center">
-								{size} - {quantity[0]?.value} шт
+								{size.size} - {value} шт
 							</Tag>
 						))
-				: product.size
+				: product.quantity
 						.sort((a, b) =>
-							a.size.localeCompare(b.size, undefined, {
+							a.size.size.localeCompare(b.size.size, undefined, {
 								numeric: true,
 							})
 						)
-						.map(({ id, size, quantity }) => (
+						.map(({ id, size, value }) => (
 							<ProductSizeButton
-								quantity={quantity[0]?.value}
-								size={size}
+								quantity={value}
+								size={size.size}
 								key={id}
 								isActive={id === selectedSize.id}
-								onClick={(e) => handlSelect(e, id, size)}
+								onClick={(e) => handlSelect(e, id, size.size)}
 							/>
 						))}
 		</Stack>

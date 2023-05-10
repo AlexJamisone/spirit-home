@@ -85,7 +85,7 @@ const AdminProductsModal = ({
 					name: form.name,
 					price: form.price,
 					image: form.image.map((item) => item.path),
-					size: form.size,
+					quantity: form.quantity,
 				},
 				{
 					onSuccess: () => {
@@ -108,7 +108,10 @@ const AdminProductsModal = ({
 					category: form.category,
 					image: form.image.map((item) => item.path),
 					price: form.price,
-					size: form.size,
+					quantity: form.quantity.map(({ quantity, sizeId }) => ({
+						quantity,
+						sizeId,
+					})),
 				},
 				{
 					onSuccess: () => {
@@ -154,7 +157,6 @@ const AdminProductsModal = ({
 			},
 		});
 	};
-
 	return (
 		<Modal
 			isOpen={isOpen}

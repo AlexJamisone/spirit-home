@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { Size } from '~/reducer/FormReducer';
 import {
 	adminProcedure,
 	createTRPCRouter,
@@ -18,13 +17,9 @@ export const productsRouter = createTRPCRouter({
 						effectiveFrom: 'desc',
 					},
 				},
-				size: {
+				quantity: {
 					include: {
-						quantity: {
-							select: {
-								value: true,
-							},
-						},
+						size: true,
 					},
 				},
 			},
@@ -39,17 +34,22 @@ export const productsRouter = createTRPCRouter({
 				price: z.number().nonnegative(),
 				image: z.array(z.string()),
 				category: z.string().nonempty(),
-				size: z.custom<Size[]>(),
+				quantity: z.array(
+					z.object({
+						sizeId: z.string(),
+						quantity: z.number(),
+					})
+				),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			const size = input.size.map(({ quantity, id }) => ({
-				value: quantity ?? 0,
-				sizeId: id,
+			const quantity = input.quantity.map(({ quantity, sizeId }) => ({
+				value: quantity,
+				sizeId,
 			}));
-			const sizeId = input.size.map(({id}) => ({
-				id
-			}))
+			const sizeId = input.quantity.map(({ sizeId }) => ({
+				id: sizeId,
+			}));
 			const createProduct = await ctx.prisma.product.create({
 				data: {
 					name: input.name,
@@ -63,12 +63,12 @@ export const productsRouter = createTRPCRouter({
 					categoryTitle: input.category,
 					quantity: {
 						createMany: {
-							data: size,
+							data: quantity,
 						},
 					},
 					size: {
-						connect: sizeId
-					}
+						connect: sizeId,
+					},
 				},
 			});
 			return createProduct;
@@ -128,14 +128,26 @@ export const productsRouter = createTRPCRouter({
 				price: z.number().nonnegative(),
 				image: z.array(z.string()),
 				category: z.string().nonempty(),
-				size: z.custom<Size[]>(),
+				quantity: z.array(
+					z.object({
+						id: z.string(),
+						sizeId: z.string(),
+						quantity: z.number(),
+					})
+				),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			const size = input.size.map(({ quantity, id }) => ({
-				value: quantity ?? 0,
-				sizeId: id,
-			}));
+			input.quantity.map(async ({ quantity, id }) => {
+				return await ctx.prisma.quantity.update({
+					data: {
+						value: quantity,
+					},
+					where: {
+						id,
+					},
+				});
+			});
 			return await ctx.prisma.product.update({
 				where: {
 					id: input.id,
@@ -150,14 +162,6 @@ export const productsRouter = createTRPCRouter({
 					},
 					image: input.image,
 					categoryTitle: input.category,
-					quantity: {
-						deleteMany: {
-							productId: input.id,
-						},
-						createMany: {
-							data: size,
-						},
-					},
 				},
 			});
 		}),

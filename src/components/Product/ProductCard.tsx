@@ -1,12 +1,18 @@
 import {
-	Stack,
-	useDisclosure,
-	useMediaQuery,
-	useToast,
+Stack,
+useDisclosure,
+useMediaQuery,
+useToast,
 } from '@chakra-ui/react';
-import type { Product, ProductPriceHistory, Role, Size } from '@prisma/client';
+import type {
+Product,
+ProductPriceHistory,
+Quantity,
+Role,
+Size,
+} from '@prisma/client';
 import { motion } from 'framer-motion';
-import { useState, type ReactNode, type SyntheticEvent } from 'react';
+import { useState,type ReactNode,type SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';
 import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
@@ -20,20 +26,16 @@ type ProductProps = {
 	action?: ReactNode;
 	product: Product & {
 		priceHistory: ProductPriceHistory[];
-		size: (Size & {
-			quantity: {
-				value: number;
-			}[];
+		quantity: (Quantity & {
+			size: Size;
 		})[];
 	};
 	admin?: Role;
 	handlEdit?: (
 		product: Product & {
 			priceHistory: ProductPriceHistory[];
-			size: (Size & {
-				quantity: {
-					value: number;
-				}[];
+			quantity: (Quantity & {
+				size: Size;
 			})[];
 		}
 	) => void;
@@ -64,8 +66,8 @@ const ProductsCard = ({
 			toast({
 				description: 'Выбери пожалуйста размер',
 				status: 'warning',
-				isClosable: true
-			})
+				isClosable: true,
+			});
 		} else {
 			cartDispatch({
 				type: 'ADD_TO_CART',

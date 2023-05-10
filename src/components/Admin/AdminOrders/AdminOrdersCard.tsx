@@ -5,6 +5,7 @@ import type {
 	OrderStatus,
 	Product,
 	ProductPriceHistory,
+	Quantity,
 	Size,
 	User,
 } from '@prisma/client';
@@ -24,7 +25,9 @@ type AdminOrdersCardProps = {
 		orderItem: (OrderItem & {
 			product: Product & {
 				priceHistory: ProductPriceHistory[];
-				size: Size[]
+				quantity: (Quantity & {
+					size: Size;
+				})[];
 			};
 		})[];
 		id: string;

@@ -4,6 +4,7 @@ import type {
 	OrderStatus,
 	Product,
 	ProductPriceHistory,
+	Quantity,
 	Size,
 	User,
 } from '@prisma/client';
@@ -24,7 +25,9 @@ interface CardOrderContext {
 	orderItem: (OrderItem & {
 		product: Product & {
 			priceHistory: ProductPriceHistory[];
-			size: Size[]
+			quantity: (Quantity & {
+				size: Size;
+			})[];
 		};
 	})[];
 	checkOrderStatus: (
