@@ -28,8 +28,8 @@ const ProfilePage = () => {
 				return <UserOrders />;
 			case 'settings':
 				return <UserProfile />;
-			case "favorites":
-				return <UserFavorites/>
+			case 'favorites':
+				return <UserFavorites />;
 		}
 	};
 	return (
