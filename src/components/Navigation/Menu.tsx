@@ -9,7 +9,7 @@ import { api } from '~/utils/api';
 const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const router = useRouter();
-	const { data: user } = api.users.get.useQuery();
+	const { data: user } = api.users.getUserForFav.useQuery();
 	if (!user) return null;
 	const pathFromRoutes = router.query;
 	return (
@@ -63,6 +63,27 @@ const Menu = () => {
 						}
 						overflowX="hidden"
 						transition="all .5s ease-in-out"
+						_before={{
+							content: `'${user.favorites.length}'`,
+							position: 'absolute',
+							bottom: isOpen ? 0 : 3,
+							right: isOpen ? 3 : 0,
+							width: '20px',
+							height: '20px',
+							bgColor: 'whiteAlpha.500',
+							rounded: 'full',
+							opacity:
+								title === 'Избранное' &&
+								user.favorites.length !== 0
+									? 1
+									: 0,
+							lineHeight: 1.3,
+							fontSize: '14px',
+							fontWeight: 600,
+							textAlign: 'center',
+							tranistion: 'all .3s ease-in-out',
+						}}
+						position="relative"
 					>
 						{isOpen ? (
 							<Stack

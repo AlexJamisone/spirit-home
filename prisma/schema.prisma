@@ -22,6 +22,7 @@ model User {
     categories Catergory[]
     address    Address[]
     updateAt   DateTime    @default(now()) @updatedAt
+    favorites  Favorites[]
 }
 
 model Address {
@@ -59,6 +60,7 @@ model Product {
     priceHistory  ProductPriceHistory[]
     size          Size[]
     quantity      Quantity[]
+    favorites     Favorites[]
 }
 
 model Size {
@@ -66,6 +68,13 @@ model Size {
     size     String
     product  Product[]
     quantity Quantity[]
+}
+
+model Favorites {
+    productId String  @id
+    product   Product @relation(fields: [productId], references: [id])
+    user      User    @relation(fields: [userId], references: [id])
+    userId    String
 }
 
 model Quantity {

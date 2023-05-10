@@ -4,6 +4,7 @@ import {
 	useMediaQuery,
 	useToast,
 } from '@chakra-ui/react';
+import { useAuth } from '@clerk/nextjs';
 import type {
 	Product,
 	ProductPriceHistory,
@@ -24,6 +25,7 @@ type ProductProps = {
 	image?: ReactNode;
 	info?: ReactNode;
 	action?: ReactNode;
+	favorites?: ReactNode;
 	product: Product & {
 		priceHistory: ProductPriceHistory[];
 		quantity: (Quantity & {
@@ -48,6 +50,7 @@ const ProductsCard = ({
 	product,
 	admin,
 	handlEdit,
+	favorites,
 }: ProductProps) => {
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	const { mutate: archivedProduct, isLoading } =
@@ -57,6 +60,7 @@ const ProductsCard = ({
 		id: '',
 		name: '',
 	});
+	const { isSignedIn } = useAuth();
 	const [error, setError] = useState(false);
 	const { cartDispatch } = useCart();
 	const toast = useToast();
@@ -136,8 +140,9 @@ const ProductsCard = ({
 				}}
 				exit={{
 					opacity: 0,
-					transition: { type: 'spring', duration: 500 },
+					transition: { type: 'spring', duration: 0.5 },
 				}}
+				layout
 				maxW={['300px']}
 				h={['350px', '425px']}
 				direction="column"
@@ -160,6 +165,7 @@ const ProductsCard = ({
 						: handlEdit?.(product)
 				}
 			>
+				{isSignedIn ? favorites : null}
 				{image}
 				{info}
 				{admin === 'USER' ? <ProductSize /> : null}

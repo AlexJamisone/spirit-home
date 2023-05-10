@@ -8,7 +8,7 @@ const Size = () => {
 		<Stack direction="row">
 			{edit ? (
 				<>
-					{form.quantity.map(({ id, quantity, name }) => (
+					{form.quantity.map(({ id, quantity, name, sizeId }) => (
 						<Stack key={id} w="60px">
 							<Button>{name}</Button>
 							<Input
@@ -20,6 +20,7 @@ const Size = () => {
 											id,
 											quantity: +e.target.value,
 											name,
+											sizeId,
 										},
 									})
 								}

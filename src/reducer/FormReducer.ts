@@ -111,7 +111,7 @@ export const FormProductReducer = (
 			return {
 				...state,
 				quantity: state.quantity.map((qt) =>
-					qt.id === action.payload.id
+					qt.sizeId === action.payload.sizeId
 						? {
 								...qt,
 								quantity: action.payload.quantity,
@@ -124,7 +124,7 @@ export const FormProductReducer = (
 			return {
 				...state,
 				quantity: state.quantity.filter(
-					(qt) => qt.id !== action.payload
+					(qt) => qt.sizeId !== action.payload
 				),
 			};
 		case 'SET_CLEAR':

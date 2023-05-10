@@ -10,6 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import NoData from '~/components/NoData/NoData';
 import ProductAction from '~/components/Product/ProductAction';
 import ProductsCard from '~/components/Product/ProductCard';
+import ProductFavorites from '~/components/Product/ProductFavorites';
 import ProductImage from '~/components/Product/ProductImage';
 import ProductInfo from '~/components/Product/ProductInfo';
 import SearchInput from '~/components/SearchInput';
@@ -135,6 +136,7 @@ const Home: NextPage = () => {
 												image={<ProductImage />}
 												info={<ProductInfo />}
 												action={<ProductAction />}
+												favorites={<ProductFavorites />}
 												admin="USER"
 											/>
 										</Center>

@@ -140,7 +140,7 @@ const AdminProductsModal = ({
 			);
 		}
 	};
-
+	console.log(form.quantity)
 	const handlDeletImage = (path: UploadResult, index: number) => {
 		deletImg([path], {
 			onSuccess: () => {
