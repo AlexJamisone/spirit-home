@@ -1,5 +1,7 @@
+import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { createTRPCRouter, privetProcedure } from '~/server/api/trpc';
+import { ratelimit } from '~/server/helpers/ratelimits';
 
 export const favoritesRouter = createTRPCRouter({
 	handlAddOrRemoveFav: privetProcedure
@@ -9,6 +11,13 @@ export const favoritesRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
+			if (!ctx.userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
+			const { success } = await ratelimit.favorites.limit(ctx.userId);
+			if (!success)
+				throw new TRPCError({
+					code: 'TOO_MANY_REQUESTS',
+					message: 'Слишком много запросов❌',
+				});
 			const existingFav = await ctx.prisma.favorites.findUnique({
 				where: {
 					productId: input.id,

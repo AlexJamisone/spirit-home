@@ -9,6 +9,7 @@ import {
 	createTRPCRouter,
 	publicProcedure,
 } from '~/server/api/trpc';
+import { ratelimit } from '~/server/helpers/ratelimits';
 
 type ContextType = {
 	prisma: PrismaClient<
@@ -165,6 +166,9 @@ export const ordersRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
+			if (!ctx.userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
+			const { success } = await ratelimit.orders.limit(ctx.userId);
+			if (!success) throw new TRPCError({ code: 'TOO_MANY_REQUESTS' });
 			const create = await ctx.prisma.order.create({
 				data: {
 					addressId: input.idAddress,
@@ -208,6 +212,8 @@ export const ordersRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			if (!ctx.userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
+			const { success } = await ratelimit.orders.limit(ctx.userId);
+			if (!success) throw new TRPCError({ code: 'TOO_MANY_REQUESTS' });
 			const updateUserAddress = await ctx.prisma.address.create({
 				data: {
 					userId: ctx.userId,

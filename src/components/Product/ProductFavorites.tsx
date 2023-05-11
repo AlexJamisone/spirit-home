@@ -28,6 +28,14 @@ const ProductFavorites = () => {
 					void ctx.users.getUserForFav.invalidate();
 					void ctx.users.getUserForFavProduct.invalidate();
 				},
+				onError: ({ message }) => {
+					toast({
+						description: `${message}`,
+						status: 'error',
+						isClosable: true,
+						position: 'top-right',
+					});
+				},
 			}
 		);
 		e.stopPropagation();
