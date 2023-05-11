@@ -22,7 +22,7 @@ export const productsRouter = createTRPCRouter({
 						size: true,
 					},
 				},
-				category: true
+				category: true,
 			},
 		});
 		return products;
@@ -149,21 +149,47 @@ export const productsRouter = createTRPCRouter({
 					},
 				});
 			});
-			return await ctx.prisma.product.update({
+			const product = await ctx.prisma.product.findUnique({
 				where: {
 					id: input.id,
 				},
-				data: {
-					name: input.name,
-					description: input.description,
+				include: {
 					priceHistory: {
-						create: {
-							price: input.price,
+						orderBy: {
+							effectiveFrom: 'desc',
 						},
 					},
-					image: input.image,
-					categoryTitle: input.category,
 				},
 			});
+			if (input.price === product?.priceHistory[0]?.price) {
+				return await ctx.prisma.product.update({
+					where: {
+						id: input.id,
+					},
+					data: {
+						name: input.name,
+						description: input.description,
+						image: input.image,
+						categoryTitle: input.category,
+					},
+				});
+			} else {
+				return await ctx.prisma.product.update({
+					where: {
+						id: input.id,
+					},
+					data: {
+						name: input.name,
+						description: input.description,
+						image: input.image,
+						categoryTitle: input.category,
+						priceHistory: {
+							create: {
+								price: input.price,
+							},
+						},
+					},
+				});
+			}
 		}),
 });

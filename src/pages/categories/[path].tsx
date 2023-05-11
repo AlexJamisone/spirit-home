@@ -19,7 +19,7 @@ const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
 	if (!categories) return null;
 	if (!products) return <NoData text="Пусто" icon={BsWind} />;
 	return (
-		<Center pt={160} gap={5} flexWrap='wrap'>
+		<Center pt={160} gap={5} flexWrap="wrap">
 			{products
 				.filter(({ category }) => category?.path === path)
 				.map((product) => (
@@ -30,7 +30,7 @@ const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
 						action={<ProductAction />}
 						info={<ProductInfo />}
 						image={<ProductImage />}
-						favorites={<ProductFavorites/>}
+						favorites={<ProductFavorites />}
 					/>
 				))}
 		</Center>
