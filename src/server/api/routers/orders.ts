@@ -1,10 +1,7 @@
 import { clerkClient } from '@clerk/nextjs/server';
 import type { OrderStatus, Prisma, PrismaClient } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
-import dayjs from 'dayjs';
 import { z } from 'zod';
-require('dayjs/locale/ru');
-dayjs().locale('ru').format();
 
 import type { CartState } from '~/reducer/CartReducer';
 import {
@@ -137,97 +134,6 @@ export const ordersRouter = createTRPCRouter({
 			},
 		});
 		return orders;
-	}),
-	getForCharts: adminProcedure.query(async ({ ctx }) => {
-		const now = new Date();
-		const startOfMount = new Date(now.getFullYear(), now.getMonth(), 1);
-		const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
-		const dates = [];
-		for (
-			let date = new Date(startOfMount);
-			date <= endOfMonth;
-			date.setDate(date.getDate() + 1)
-		) {
-			dates.push(dayjs(date).format('D MMM'));
-		}
-		const orders = ctx.prisma.order.findMany({
-			where: {
-				createdAt: {
-					gte: startOfMount,
-					lte: endOfMonth,
-				},
-			},
-			select: {
-				createdAt: true,
-				status: true,
-			},
-		});
-		const stat = ctx.prisma.order.findMany({
-			where: {
-				createdAt: {
-					gte: startOfMount,
-				},
-				NOT: {
-					status: 'CANCELLED',
-				},
-			},
-			include: {
-				orderItem: {
-					include: {
-						product: {
-							include: {
-								priceHistory: true,
-							},
-						},
-					},
-				},
-			},
-		});
-
-		const [charts, statictic] = await ctx.prisma.$transaction([
-			orders,
-			stat,
-		]);
-		//stat
-		let jamisonRevenue = 0;
-		let todayRevenue = 0;
-		statictic.forEach((order) => {
-			let orderRevenu = 0;
-			order.orderItem.forEach((orderItem) => {
-				const findPrice = orderItem.product.priceHistory.find(
-					(price) =>
-						price.effectiveFrom.getDate() <=
-						order.createdAt.getDate()
-				);
-				const price = findPrice ? findPrice.price : 0;
-				orderRevenu += orderItem.quantity * price;
-			});
-			if (order.createdAt.getDate() === now.getDate()) {
-				todayRevenue += orderRevenu;
-			}
-			jamisonRevenue += orderRevenu;
-		});
-
-		//charts
-		const counts: { [key: string]: number } = {};
-		const canceledCounts: { [key: string]: number } = {};
-		charts.forEach((order) => {
-			const date = dayjs(order.createdAt).format('D MMM');
-			if (order.status === 'CANCELLED') {
-				canceledCounts[date] = (canceledCounts[date] || 0) + 1;
-			}
-			counts[date] = (counts[date] || 0) + 1;
-		});
-		const chartData = dates.map((date) => ({
-			date,
-			'Количество заказов': counts[date] || 0,
-			'Отменёные заказы': canceledCounts[date] || 0,
-		}));
-		return {
-			data: chartData,
-			today: todayRevenue,
-			jamison: jamisonRevenue * 0.1,
-		};
 	}),
 	changeStatus: adminProcedure
 		.input(z.object({ status: z.custom<OrderStatus>(), id: z.string() }))

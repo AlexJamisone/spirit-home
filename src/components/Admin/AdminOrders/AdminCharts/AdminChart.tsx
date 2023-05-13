@@ -1,4 +1,12 @@
-import { Spinner, Stack, Stat, StatLabel, StatNumber } from '@chakra-ui/react';
+import {
+	Spinner,
+	Stack,
+	Stat,
+	StatArrow,
+	StatHelpText,
+	StatLabel,
+	StatNumber,
+} from '@chakra-ui/react';
 import {
 	CartesianGrid,
 	Legend,
@@ -10,10 +18,12 @@ import {
 	YAxis,
 } from 'recharts';
 import { api } from '~/utils/api';
+import AnimatedCounter from './AnimatedCounter';
 
 const AdminChart = () => {
-	const { data: orders, isLoading } = api.orders.getForCharts.useQuery();
-	if (!orders || isLoading) return <Spinner />;
+	const { data: orders, isLoading } = api.charts.get.useQuery();
+	if (!orders || isLoading) return <Spinner size="lg" />;
+	console.log();
 	return (
 		<Stack w="80%" justifyContent="center">
 			<ResponsiveContainer width={'80%'} height={300}>
@@ -38,11 +48,21 @@ const AdminChart = () => {
 			</ResponsiveContainer>
 			<Stat>
 				<StatLabel>Jamison.Comp</StatLabel>
-				<StatNumber>{orders.jamison} ₽</StatNumber>
+				<StatNumber>
+					<AnimatedCounter from={0} to={orders.jamison} /> ₽
+				</StatNumber>
 			</Stat>
 			<Stat>
 				<StatLabel>Выручка за сегодня</StatLabel>
-				<StatNumber>{orders.today} ₽</StatNumber>
+				<StatNumber>
+					<AnimatedCounter from={0} to={orders.today} /> ₽
+				</StatNumber>
+				<StatHelpText>
+					<StatArrow
+						type={orders.todayDifr >= 0 ? 'increase' : 'decrease'}
+					/>
+					<AnimatedCounter from={0} to={orders.todayDifr} /> %
+				</StatHelpText>
 			</Stat>
 		</Stack>
 	);
