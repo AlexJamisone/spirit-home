@@ -200,7 +200,6 @@ export const ordersRouter = createTRPCRouter({
 						order.createdAt.getDate()
 				);
 				const price = findPrice ? findPrice.price : 0;
-				console.log(findPrice);
 				orderRevenu += orderItem.quantity * price;
 			});
 			if (order.createdAt.getDate() === now.getDate()) {
