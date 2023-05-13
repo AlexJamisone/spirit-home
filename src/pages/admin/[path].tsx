@@ -1,7 +1,7 @@
 import { Center } from '@chakra-ui/react';
-import { UserProfile } from '@clerk/nextjs';
 import { useRouter } from 'next/router';
 import AdminCategorys from '~/components/Admin/AdminCategorys';
+import AdminChart from '~/components/Admin/AdminOrders/AdminCharts/AdminChart';
 import AdminOrders from '~/components/Admin/AdminOrders/AdminOrders';
 import AdminProducts from '~/components/Admin/AdminProducts';
 import ProtectionRoutes from '~/guards/ProtectionRoutes';
@@ -12,7 +12,7 @@ const Admin = () => {
 	const handlAdmin = () => {
 		switch (path) {
 			case 'statictic':
-				return <UserProfile />;
+				return <AdminChart />;
 			case 'categorys':
 				return <AdminCategorys />;
 			case 'product':
