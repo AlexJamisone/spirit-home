@@ -1,7 +1,9 @@
-import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
-import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
+import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
+import { adminProcedure,createTRPCRouter } from '~/server/api/trpc';
 dayjs.extend(isBetween);
+dayjs.extend(isSameOrAfter);
+import dayjs from 'dayjs';
 dayjs().locale('ru').format();
 
 export const chartsRouter = createTRPCRouter({
@@ -11,6 +13,7 @@ export const chartsRouter = createTRPCRouter({
 		const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0);
 		const prevMonthStart = dayjs().subtract(1, 'month').startOf('month');
 		const prevMothEnd = dayjs().subtract(1, 'month').endOf('month');
+		const thisMonthStart = dayjs().startOf('month');
 
 		const dates = [];
 		for (
@@ -83,17 +86,65 @@ export const chartsRouter = createTRPCRouter({
 				},
 			},
 		});
+		const thisMonthsOrdersWithItems = ctx.prisma.order.findMany({
+			where: {
+				createdAt: {
+					gte: thisMonthStart.toDate(),
+				},
+				NOT: {
+					status: 'CANCELLED',
+				},
+			},
+			include: {
+				orderItem: {
+					include: {
+						product: {
+							include: {
+								priceHistory: {
+									orderBy: {
+										effectiveFrom: 'desc',
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		});
 
-		const [charts, statictic, prevMonth] = await ctx.prisma.$transaction([
-			orders,
-			stat,
-			prevMonthOrders,
-		]);
+		const [charts, statictic, prevMonth, thismMOrderItems] =
+			await ctx.prisma.$transaction([
+				orders,
+				stat,
+				prevMonthOrders,
+				thisMonthsOrdersWithItems,
+			]);
 
 		let jamisonRevenue = 0;
 		let todayRevenue = 0;
 		let todayDifrByDay = 0;
 		let todayDifrByJamison = 0;
+		let monthRevenue = 0;
+		//monthRevenu
+
+		const thisMonthOrders = thismMOrderItems.filter((order) => {
+			const orderData = dayjs(order.createdAt);
+			return (
+				orderData.isSameOrAfter(thisMonthStart, 'day') &&
+				orderData.isBefore(dayjs(), 'day') &&
+				order.status !== 'CANCELLED'
+			);
+		});
+		const thisMonthRevenu = thisMonthOrders.reduce((total, order) => {
+			return total + order.orderItem.reduce((orderTotal, orderItem) => {
+				const product = orderItem.product
+				const findPrice = product.priceHistory.find(price => price.effectiveFrom <= order.createdAt)
+				const price = findPrice ? findPrice.price : 0
+				return orderTotal + (orderItem.quantity * price)
+			}, 0);
+		}, 0);
+		monthRevenue = thisMonthRevenu
+
 		//stat
 		statictic.forEach((order) => {
 			let orderRevenu = 0;
@@ -136,7 +187,6 @@ export const chartsRouter = createTRPCRouter({
 
 		//compair of month Jamison
 		const prevMontsOrder = prevMonth.filter((order) => {
-			console.log(order);
 			return (
 				dayjs(order.createdAt).isBetween(
 					prevMonthStart,
@@ -184,6 +234,7 @@ export const chartsRouter = createTRPCRouter({
 			todayDifrByDay,
 			jamison: jamisonRevenue * 0.1,
 			todayDifrByJamison,
+			monthRevenue,
 		};
 	}),
 });
