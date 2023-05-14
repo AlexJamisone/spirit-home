@@ -20,7 +20,10 @@ const AnimatedCounter = ({ from, to }: AnimatedCounterProps) => {
 
 	useEffect(() => {
 		if (inView) {
-			void animate(count, to, { duration: 2 });
+			void animate(count, to, {
+				duration: Math.floor(Math.random() * 3) + 1,
+				delay: 0.2,
+			});
 		}
 	}, [count, inView, to]);
 	return <motion.span ref={ref}>{rounded}</motion.span>;
