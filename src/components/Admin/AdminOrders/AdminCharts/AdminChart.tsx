@@ -51,6 +51,17 @@ const AdminChart = () => {
 				<StatNumber>
 					<AnimatedCounter from={0} to={orders.jamison} /> ₽
 				</StatNumber>
+				<StatHelpText>
+					<StatArrow
+						type={
+							orders.todayDifrByJamison >= 0
+								? 'increase'
+								: 'decrease'
+						}
+					/>
+					<AnimatedCounter from={0} to={orders.todayDifrByJamison} />{' '}
+					%
+				</StatHelpText>
 			</Stat>
 			<Stat>
 				<StatLabel>Выручка за сегодня</StatLabel>
@@ -59,9 +70,11 @@ const AdminChart = () => {
 				</StatNumber>
 				<StatHelpText>
 					<StatArrow
-						type={orders.todayDifr >= 0 ? 'increase' : 'decrease'}
+						type={
+							orders.todayDifrByDay >= 0 ? 'increase' : 'decrease'
+						}
 					/>
-					<AnimatedCounter from={0} to={orders.todayDifr} /> %
+					<AnimatedCounter from={0} to={orders.todayDifrByDay} /> %
 				</StatHelpText>
 			</Stat>
 		</Stack>

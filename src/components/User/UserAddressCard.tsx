@@ -16,14 +16,12 @@ type UserAddressCardProps = {
 const UserAddressCard = ({
 	address,
 	email,
-	firstName,
 	handlDeletAddress,
 	handlEdit,
-	lastName,
 	isLoading,
 	cantEdit,
 }: UserAddressCardProps) => {
-	const { city, contactPhone, id, point } = address;
+	const { city, contactPhone, id, point, firstName, lastName } = address;
 	return (
 		<Stack
 			as={motion.div}
