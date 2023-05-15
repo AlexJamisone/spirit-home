@@ -42,6 +42,19 @@ export const chartsRouter = createTRPCRouter({
 				select: {
 					createdAt: true,
 					status: true,
+					orderItem: {
+						include: {
+							product: {
+								include: {
+									priceHistory: {
+										orderBy: {
+											effectiveFrom: 'desc',
+										},
+									},
+								},
+							},
+						},
+					},
 				},
 			});
 			const stat = ctx.prisma.order.findMany({
@@ -232,19 +245,41 @@ export const chartsRouter = createTRPCRouter({
 			}
 
 			//charts
-			const counts: { [key: string]: number } = {};
-			const canceledCounts: { [key: string]: number } = {};
+			const counts: {
+				[key: string]: {
+					revenu: number;
+					orders: number;
+					cancelOrders: number;
+				};
+			} = {};
+			// const canceledCounts: { [key: string]: number } = {};
 			charts.forEach((order) => {
 				const date = dayjs(order.createdAt).format('D MMM');
+				const orderStats = counts[date] || {
+					revenu: 0,
+					orders: 0,
+					cancelOrders: 0,
+				};
 				if (order.status === 'CANCELLED') {
-					canceledCounts[date] = (canceledCounts[date] || 0) + 1;
+					// canceledCounts[date] = (canceledCounts[date] || 0) + 1;
+					orderStats.cancelOrders++;
+				} else {
+					order.orderItem.forEach((orderItem) => {
+						const findPrice = orderItem.product.priceHistory.find(
+							(price) => price.effectiveFrom <= order.createdAt
+						);
+						const price = findPrice ? findPrice.price : 0;
+						orderStats.revenu += orderItem.quantity * price;
+					});
+					orderStats.orders++;
 				}
-				counts[date] = (counts[date] || 0) + 1;
+				counts[date] = orderStats;
 			});
 			const chartData = dates.map((date) => ({
 				date,
-				'Количество заказов': counts[date] || 0,
-				'Отменёные заказы': canceledCounts[date] || 0,
+				Заказы: counts[date]?.orders || 0,
+				'Отмененые заказы': counts[date]?.cancelOrders || 0,
+				Выручка: counts[date]?.revenu ?? 0,
 			}));
 			return {
 				data: chartData,
