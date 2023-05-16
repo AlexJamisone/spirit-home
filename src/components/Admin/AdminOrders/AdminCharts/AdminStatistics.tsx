@@ -1,20 +1,20 @@
-import { Icon, IconButton, Spinner, Stack } from '@chakra-ui/react';
-import { RangeDatepicker } from 'chakra-dayzed-datepicker';
+import { Spinner, Stack } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { useState, type ReactNode } from 'react';
-import { MdDone } from 'react-icons/md';
 import ChartsContext from '~/context/chartsContext';
 import { api } from '~/utils/api';
 import AdminCharts from './AdminCharts';
+import AdminDatePick from './AdminDatePick';
 import AdminStat from './AdminStat';
 dayjs().locale('ru').format();
 
 type AdminStatisticsProps = {
 	stat?: ReactNode;
 	charts?: ReactNode;
+	pick?: ReactNode;
 };
 
-const AdminStatistics = ({ stat, charts }: AdminStatisticsProps) => {
+const AdminStatistics = ({ stat, charts, pick }: AdminStatisticsProps) => {
 	const [selectedDate, setSelectedDate] = useState<Date[]>([
 		dayjs().startOf('month').toDate(),
 		dayjs().endOf('month').toDate(),
@@ -29,40 +29,16 @@ const AdminStatistics = ({ stat, charts }: AdminStatisticsProps) => {
 		<ChartsContext.Provider
 			value={{
 				orders,
+				isDate,
+				selectedDate,
+				send,
+				setSelectedDate,
+				setSend,
+				setIsDate,
 			}}
 		>
 			<Stack justifyContent="center" w={'90%'}>
-				<Stack direction="row" justifyContent="center">
-					<RangeDatepicker
-						selectedDates={selectedDate}
-						onDateChange={(date) => {
-							if (selectedDate.length === 2) {
-								setIsDate(false);
-							} else {
-								setIsDate(true);
-							}
-							setSelectedDate(date);
-						}}
-						configs={{
-							dateFormat: 'dd/MM/yyyy',
-						}}
-						propsConfigs={{
-							inputProps: {
-								cursor: 'pointer',
-								w: '300px',
-							},
-						}}
-					/>
-					{isDate ? (
-						<IconButton
-							aria-label="save-date-pick"
-							colorScheme="teal"
-							icon={<Icon as={MdDone} boxSize={5} />}
-							onClick={() => setSend(selectedDate)}
-						/>
-					) : null}
-				</Stack>
-
+				{pick}
 				{charts}
 				{stat}
 			</Stack>
@@ -70,6 +46,7 @@ const AdminStatistics = ({ stat, charts }: AdminStatisticsProps) => {
 	);
 };
 
+AdminStatistics.Pick = AdminDatePick;
 AdminStatistics.Charts = AdminCharts;
 AdminStatistics.Stat = AdminStat;
 

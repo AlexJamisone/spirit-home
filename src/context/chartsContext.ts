@@ -1,4 +1,9 @@
-import { createContext, useContext } from 'react';
+import {
+	createContext,
+	useContext,
+	type Dispatch,
+	type SetStateAction,
+} from 'react';
 
 type ChartsContextProps = {
 	orders:
@@ -16,6 +21,12 @@ type ChartsContextProps = {
 				monthRevenue: number;
 		  }
 		| undefined;
+	selectedDate: Date[];
+	setSelectedDate: Dispatch<SetStateAction<Date[]>>;
+	isDate: boolean;
+	setIsDate: Dispatch<SetStateAction<boolean>>;
+	send: Date[];
+	setSend: Dispatch<SetStateAction<Date[]>>;
 };
 
 const ChartsContext = createContext<ChartsContextProps | null>(null);
