@@ -17,7 +17,11 @@ import { useState, type ReactNode, type SyntheticEvent } from 'react';
 import { useCart } from '~/context/cartContext';
 import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
+import ProductAction from './ProductAction';
 import ProductDitails from './ProductDitails';
+import ProductFavorites from './ProductFavorites';
+import ProductImage from './ProductImage';
+import ProductInfo from './ProductInfo';
 import ProductPrice from './ProductPrice';
 import ProductSize from './ProductSize';
 
@@ -184,5 +188,10 @@ const ProductsCard = ({
 		</ProductCardContext.Provider>
 	);
 };
+
+ProductsCard.Favorites = ProductFavorites;
+ProductsCard.Image = ProductImage;
+ProductsCard.Info = ProductInfo;
+ProductsCard.Action = ProductAction;
 
 export default ProductsCard;

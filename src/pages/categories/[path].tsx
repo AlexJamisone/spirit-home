@@ -4,11 +4,7 @@ import type { GetStaticProps, NextPage } from 'next';
 import { BsWind } from 'react-icons/bs';
 import superjson from 'superjson';
 import NoData from '~/components/NoData/NoData';
-import ProductAction from '~/components/Product/ProductAction';
 import ProductsCard from '~/components/Product/ProductCard';
-import ProductFavorites from '~/components/Product/ProductFavorites';
-import ProductImage from '~/components/Product/ProductImage';
-import ProductInfo from '~/components/Product/ProductInfo';
 import { appRouter } from '~/server/api/root';
 import { prisma } from '~/server/db';
 import { api } from '~/utils/api';
@@ -27,10 +23,10 @@ const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
 						key={product.id}
 						product={product}
 						admin="USER"
-						action={<ProductAction />}
-						info={<ProductInfo />}
-						image={<ProductImage />}
-						favorites={<ProductFavorites />}
+						action={<ProductsCard.Action />}
+						info={<ProductsCard.Info />}
+						image={<ProductsCard.Image />}
+						favorites={<ProductsCard.Favorites />}
 					/>
 				))}
 		</Center>

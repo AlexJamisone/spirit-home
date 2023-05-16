@@ -3,11 +3,7 @@ import { AnimatePresence } from 'framer-motion';
 import { BsWind } from 'react-icons/bs';
 import { api } from '~/utils/api';
 import NoData from '../NoData/NoData';
-import ProductAction from '../Product/ProductAction';
 import ProductsCard from '../Product/ProductCard';
-import ProductFavorites from '../Product/ProductFavorites';
-import ProductImage from '../Product/ProductImage';
-import ProductInfo from '../Product/ProductInfo';
 
 const UserFavorites = () => {
 	const { data: user } = api.users.getUserForFavProduct.useQuery();
@@ -23,10 +19,10 @@ const UserFavorites = () => {
 							<ProductsCard
 								key={product.id}
 								product={product}
-								action={<ProductAction />}
-								image={<ProductImage />}
-								info={<ProductInfo />}
-								favorites={<ProductFavorites />}
+								action={<ProductsCard.Action />}
+								image={<ProductsCard.Image />}
+								info={<ProductsCard.Info />}
+								favorites={<ProductsCard.Favorites />}
 								admin="USER"
 							/>
 						))}

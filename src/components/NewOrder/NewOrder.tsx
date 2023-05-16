@@ -22,6 +22,8 @@ import {
 } from '~/reducer/InputAddressReducer';
 import { api } from '~/utils/api';
 import CartItem from '../Cart/CartItem';
+import NewOrderAction from './NewOrderAction';
+import NewOrderAddress from './NewOrderAddress';
 type NewOrderProps = {
 	isOpen: boolean;
 	onClose: () => void;
@@ -209,5 +211,8 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 		</Modal>
 	);
 };
+
+NewOrder.Action = NewOrderAction;
+NewOrder.Address = NewOrderAddress;
 
 export default NewOrder;

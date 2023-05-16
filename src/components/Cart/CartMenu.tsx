@@ -15,9 +15,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { SlHandbag } from 'react-icons/sl';
 import { useCart } from '~/context/cartContext';
-import NewOrderAction from '../NewOrder/NewOrderAction';
-import NewOrderAddress from '../NewOrder/NewOrderAddress';
-import NewOrder from '../NewOrder/NewOrderNew';
+import NewOrder from '../NewOrder/NewOrder';
 import CartItem from './CartItem';
 const CartMenu = () => {
 	const [isLength, setIsLength] = useState(false);
@@ -105,8 +103,8 @@ const CartMenu = () => {
 									<NewOrder
 										isOpen={isOpen}
 										onClose={onClose}
-										address={<NewOrderAddress />}
-										action={<NewOrderAction />}
+										address={<NewOrder.Address />}
+										action={<NewOrder.Action />}
 									/>
 								</>
 							)}

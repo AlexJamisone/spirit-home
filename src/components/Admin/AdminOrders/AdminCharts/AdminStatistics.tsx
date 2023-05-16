@@ -31,8 +31,8 @@ const AdminStatistics = ({ stat, charts }: AdminStatisticsProps) => {
 				orders,
 			}}
 		>
-			<Stack w="80%" justifyContent="center">
-				<Stack direction="row">
+			<Stack justifyContent="center" w={'90%'}>
+				<Stack direction="row" justifyContent="center">
 					<RangeDatepicker
 						selectedDates={selectedDate}
 						onDateChange={(date) => {

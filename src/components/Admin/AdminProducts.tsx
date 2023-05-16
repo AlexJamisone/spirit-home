@@ -10,10 +10,7 @@ import { useReducer, useState } from 'react';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
-import ProductAction from '../Product/ProductAction';
 import ProductsCard from '../Product/ProductCard';
-import ProductImage from '../Product/ProductImage';
-import ProductInfo from '../Product/ProductInfo';
 import AdminCreateProductsImages from './AdminCreateProducts/AdminCreateProductsImages';
 import CategoriesSelector from './AdminCreateProducts/CategoriesSelector';
 import CreateProductInputs from './AdminCreateProducts/CreateProductInputs';
@@ -102,10 +99,10 @@ const AdminProducts = () => {
 								key={product.id}
 								admin={user?.role}
 								product={product}
-								image={<ProductImage />}
-								info={<ProductInfo />}
+								image={<ProductsCard.Image />}
+								info={<ProductsCard.Info />}
 								handlEdit={handlEdit}
-								action={<ProductAction />}
+								action={<ProductsCard.Action />}
 							/>
 						);
 					})
