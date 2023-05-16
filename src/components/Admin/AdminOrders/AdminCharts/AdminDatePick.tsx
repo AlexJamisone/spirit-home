@@ -3,7 +3,6 @@ import { RangeDatepicker } from 'chakra-dayzed-datepicker';
 import { motion } from 'framer-motion';
 import { MdDone } from 'react-icons/md';
 import { useChartsContext } from '~/context/chartsContext';
-
 const AdminDatePick = () => {
 	const { isDate, selectedDate, setSelectedDate, setIsDate, setSend } =
 		useChartsContext();
@@ -20,7 +19,12 @@ const AdminDatePick = () => {
 					setSelectedDate(date);
 				}}
 				configs={{
-					dateFormat: 'dd/MM/yyyy',
+					dateFormat: 'd MMM',
+					monthNames:
+						'Январь Февраль Март Апрель Май Июнь Июль Август Сетябрь Октябрь Ноябрь Декабрь'.split(
+							' '
+						),
+					dayNames: 'Вс Пн Вт Ср Чт Пт Сб'.split(' '),
 				}}
 				propsConfigs={{
 					inputProps: {

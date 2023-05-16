@@ -7,9 +7,12 @@ import {
 	StatLabel,
 	StatNumber,
 } from '@chakra-ui/react';
+import dayjs from 'dayjs';
+import 'dayjs/locale/ru';
 import { motion } from 'framer-motion';
 import { useChartsContext } from '~/context/chartsContext';
 import AnimatedCounter from './AnimatedCounter';
+dayjs.locale('ru');
 
 const AdminStat = () => {
 	const { orders } = useChartsContext();
@@ -44,7 +47,7 @@ const AdminStat = () => {
 					</StatHelpText>
 				</Stat>
 				<Stat>
-					<StatLabel>Сегодня</StatLabel>
+					<StatLabel>Сегодня {dayjs().format('D MMM')}</StatLabel>
 					<StatNumber>
 						<AnimatedCounter from={0} to={orders.today} /> ₽
 					</StatNumber>

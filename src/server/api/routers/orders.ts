@@ -11,7 +11,7 @@ import {
 } from '~/server/api/trpc';
 import { ratelimit } from '~/server/helpers/ratelimits';
 
-type ContextType = {
+export type ContextType = {
 	prisma: PrismaClient<
 		Prisma.PrismaClientOptions,
 		never,
