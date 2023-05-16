@@ -1,11 +1,52 @@
+import type {
+	Order,
+	OrderItem,
+	Product,
+	ProductPriceHistory,
+} from '@prisma/client';
 import dayjs from 'dayjs';
 import isBetween from 'dayjs/plugin/isBetween';
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
 import { z } from 'zod';
 import { adminProcedure, createTRPCRouter } from '~/server/api/trpc';
+
 dayjs.extend(isBetween);
 dayjs.extend(isSameOrAfter);
 dayjs().locale('ru').format();
+
+function findEffectivePrice(
+	orders: (Order & {
+		orderItem: (OrderItem & {
+			product: Product & {
+				priceHistory: ProductPriceHistory[];
+			};
+		})[];
+	})[],
+	monthsStart: dayjs.Dayjs
+): number {
+	return orders
+		.filter((order) => {
+			const orderDate = dayjs(order.createdAt);
+			return (
+				orderDate.isSameOrAfter(monthsStart, 'day') &&
+				orderDate.isBefore(dayjs(), 'day') &&
+				order.status !== 'CANCELLED'
+			);
+		})
+		.reduce((total, order) => {
+			return (
+				total +
+				order.orderItem.reduce((orderTotal, orderItem) => {
+					const product = orderItem.product;
+					const findPrice = product.priceHistory.find(
+						(price) => price.effectiveFrom <= order.createdAt
+					);
+					const price = findPrice ? findPrice.price : 0;
+					return orderTotal + orderItem.quantity * price;
+				}, 0)
+			);
+		}, 0);
+}
 
 export const chartsRouter = createTRPCRouter({
 	get: adminProcedure
@@ -147,31 +188,9 @@ export const chartsRouter = createTRPCRouter({
 			let todayDifrByDay = 0;
 			let todayDifrByJamison = 0;
 			let monthRevenue = 0;
+			let prevMonthCompare = 0;
 			//monthRevenu
-
-			const thisMonthOrders = thismMOrderItems.filter((order) => {
-				const orderData = dayjs(order.createdAt);
-				return (
-					orderData.isSameOrAfter(thisMonthStart, 'day') &&
-					orderData.isBefore(dayjs(), 'day') &&
-					order.status !== 'CANCELLED'
-				);
-			});
-			const thisMonthRevenu = thisMonthOrders.reduce((total, order) => {
-				return (
-					total +
-					order.orderItem.reduce((orderTotal, orderItem) => {
-						const product = orderItem.product;
-						const findPrice = product.priceHistory.find(
-							(price) => price.effectiveFrom <= order.createdAt
-						);
-						const price = findPrice ? findPrice.price : 0;
-						return orderTotal + orderItem.quantity * price;
-					}, 0)
-				);
-			}, 0);
-			monthRevenue = thisMonthRevenu;
-
+			monthRevenue = findEffectivePrice(thismMOrderItems, thisMonthStart);
 			//stat
 			statictic.forEach((order) => {
 				let orderRevenu = 0;
@@ -189,60 +208,28 @@ export const chartsRouter = createTRPCRouter({
 			});
 			//compair with prev day
 			const yestaday = dayjs().subtract(1, 'day');
-			const yestadayOrders = statictic.filter((order) => {
-				return (
-					dayjs(order.createdAt).isSame(yestaday, 'day') &&
-					order.status !== 'CANCELLED'
-				);
-			});
-			const yestadayTotal = yestadayOrders.reduce((total, order) => {
-				return (
-					total +
-					order.orderItem.reduce((acc, current) => {
-						const effectivePrice =
-							current.product.priceHistory.find(
-								(history) =>
-									history.effectiveFrom <= order.createdAt
-							);
-						const price = effectivePrice ? effectivePrice.price : 0;
-						return acc + price * current.quantity;
-					}, 0)
-				);
-			}, 0);
+
+			const yestadayTotal = findEffectivePrice(statictic, yestaday);
 			if (yestadayTotal > 0) {
 				const different = todayRevenue - yestadayTotal;
 				todayDifrByDay = (different / yestadayTotal) * 100;
 			}
 
 			//compair of month Jamison
-			const prevMontsOrder = prevMonth.filter((order) => {
-				return (
-					dayjs(order.createdAt).isBetween(
-						prevMonthStart,
-						prevMothEnd,
-						null,
-						'[]'
-					) && order.status !== 'CANCELLED'
-				);
-			});
-			const prevMonthTotal = prevMontsOrder.reduce((total, order) => {
-				return (
-					total +
-					order.orderItem.reduce((acc, current) => {
-						const effectivePrice =
-							current.product.priceHistory.find(
-								(history) =>
-									history.effectiveFrom <= order.createdAt
-							);
-						const price = effectivePrice ? effectivePrice.price : 0;
-						return acc + price * current.quantity;
-					}, 0)
-				);
-			}, 0);
+
+			const prevMonthTotal = findEffectivePrice(
+				prevMonth,
+				prevMonthStart
+			);
 			if (prevMonthTotal > 0) {
-				const different = jamisonRevenue * 0.1 - prevMonthTotal * 0.1;
-				todayDifrByJamison = (different / (prevMonthTotal * 0.1)) * 100;
+				const differentJamison =
+					jamisonRevenue * 0.1 - prevMonthTotal * 0.1;
+				const differentRevenu = monthRevenue - prevMonthTotal;
+				todayDifrByJamison =
+					(differentJamison / (prevMonthTotal * 0.1)) * 100;
+				prevMonthCompare = (differentRevenu / prevMonthTotal) * 100;
 			}
+			//compaier of month Revenu
 
 			//charts
 			const counts: {
@@ -288,6 +275,7 @@ export const chartsRouter = createTRPCRouter({
 				jamison: jamisonRevenue * 0.1,
 				todayDifrByJamison,
 				monthRevenue,
+				prevMonthCompare,
 			};
 		}),
 });

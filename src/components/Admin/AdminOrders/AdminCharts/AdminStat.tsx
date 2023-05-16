@@ -65,6 +65,20 @@ const AdminStat = () => {
 					<StatNumber>
 						<AnimatedCounter from={0} to={orders.monthRevenue} /> ₽
 					</StatNumber>
+					<StatHelpText fontSize={[12, 14]}>
+						<StatArrow
+							type={
+								orders.prevMonthCompare >= 0
+									? 'increase'
+									: 'decrease'
+							}
+						/>
+						<AnimatedCounter
+							from={0}
+							to={orders.prevMonthCompare}
+						/>{' '}
+						% чем за прошлый месяц
+					</StatHelpText>
 				</Stat>
 			</StatGroup>
 		</Stack>

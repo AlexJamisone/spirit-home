@@ -1,10 +1,11 @@
 import { Icon, IconButton, Stack } from '@chakra-ui/react';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
+import { motion } from 'framer-motion';
 import { MdDone } from 'react-icons/md';
 import { useChartsContext } from '~/context/chartsContext';
 
 const AdminDatePick = () => {
-	const { isDate, selectedDate, send, setSelectedDate, setIsDate, setSend } =
+	const { isDate, selectedDate, setSelectedDate, setIsDate, setSend } =
 		useChartsContext();
 	return (
 		<Stack direction="row" justifyContent="center">
@@ -30,6 +31,16 @@ const AdminDatePick = () => {
 			/>
 			{isDate ? (
 				<IconButton
+					as={motion.button}
+					initial={{ opacity: 0, x: -25 }}
+					animate={{
+						opacity: 1,
+						x: 0,
+						transition: {
+							type: 'spring',
+							duration: 0.5,
+						},
+					}}
 					aria-label="save-date-pick"
 					colorScheme="teal"
 					icon={<Icon as={MdDone} boxSize={5} />}

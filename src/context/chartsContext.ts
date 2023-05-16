@@ -19,6 +19,7 @@ type ChartsContextProps = {
 				jamison: number;
 				todayDifrByJamison: number;
 				monthRevenue: number;
+				prevMonthCompare: number;
 		  }
 		| undefined;
 	selectedDate: Date[];
