@@ -9,6 +9,7 @@ import type {
 	Size,
 	User,
 } from '@prisma/client';
+import { motion } from 'framer-motion';
 import { useState, type ReactNode } from 'react';
 import Overlay from '~/components/NoData/Overlay';
 import CardOrderContext from '~/context/ordersCardsContext';
@@ -34,6 +35,7 @@ type AdminOrdersCardProps = {
 		userId: string | null;
 		status: OrderStatus;
 		createdAt: Date;
+		viewed: boolean;
 	};
 	info?: ReactNode;
 	table?: ReactNode;
@@ -56,7 +58,7 @@ const AdminOrdersCard = ({
 	const [valueStatus, setValueStatus] = useState<'COMPLETED' | 'CANCELLED'>(
 		'COMPLETED'
 	);
-	const { address, createdAt, id, orderItem, status, user } = order;
+	const { address, createdAt, id, orderItem, status, user, viewed } = order;
 
 	const handlChangeStatus = (value: OrderStatus, id: string) => {
 		changeStatus(
@@ -107,6 +109,7 @@ const AdminOrdersCard = ({
 				createdAt,
 				status,
 				id,
+				viewed,
 			}}
 		>
 			<Stack
@@ -121,6 +124,13 @@ const AdminOrdersCard = ({
 				boxShadow="2xl"
 				position="relative"
 				cursor="pointer"
+				as={motion.div}
+				layout
+				initial={{ opacity: 0 }}
+				animate={{
+					opacity: 1,
+					transition: { type: 'spring', duration: 0.3 },
+				}}
 			>
 				{status === 'COMPLETED' || status === 'CANCELLED' ? (
 					<Overlay />

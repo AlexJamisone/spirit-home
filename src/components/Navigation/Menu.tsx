@@ -10,7 +10,9 @@ const Menu = () => {
 	const [isOpen, setIsOpen] = useState(false);
 	const router = useRouter();
 	const { data: user } = api.users.getUserForFav.useQuery();
+	const { data: notViewdOrders } = api.orders.getNotViewd.useQuery();
 	if (!user) return null;
+	if (!notViewdOrders) return null;
 	const pathFromRoutes = router.query;
 	return (
 		<Box
@@ -75,6 +77,26 @@ const Menu = () => {
 							opacity:
 								title === 'Избранное' &&
 								user.favorites.length !== 0
+									? 1
+									: 0,
+							lineHeight: 1.3,
+							fontSize: '14px',
+							fontWeight: 600,
+							textAlign: 'center',
+							tranistion: 'all .3s ease-in-out',
+						}}
+						_after={{
+							content: `'${notViewdOrders.length}'`,
+							position: 'absolute',
+							bottom: 3.5,
+							right: isOpen ? 3 : 0,
+							width: '20px',
+							height: '20px',
+							bgColor: 'whiteAlpha.500',
+							rounded: 'full',
+							opacity:
+								title === 'Заказы' &&
+								notViewdOrders.length !== 0
 									? 1
 									: 0,
 							lineHeight: 1.3,

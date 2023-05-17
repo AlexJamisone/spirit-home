@@ -254,8 +254,6 @@ export const chartsRouter = createTRPCRouter({
 			//compair with prev day
 
 			const yestadayTotal = findEffectivePrice(yestadayOrders);
-			// console.log(yestadayOrders)
-			console.log(yestadayTotal, 'вчера');
 			if (yestadayTotal > 0) {
 				const different = todayRevenue - yestadayTotal;
 				todayDifrByDay = (different / yestadayTotal) * 100;

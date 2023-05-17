@@ -19,4 +19,9 @@ export const ratelimit = {
 		ephemeralCache: new Map(),
 		analytics: true,
 	}),
+	orderView: new Ratelimit({
+		redis,
+		limiter: Ratelimit.slidingWindow(7, '10 s'),
+		analytics: true,
+	}),
 };

@@ -43,6 +43,7 @@ interface CardOrderContext {
 	setValueStatus: Dispatch<SetStateAction<'COMPLETED' | 'CANCELLED'>>;
 	id: string;
 	createdAt: Date;
+	viewed: boolean;
 }
 
 const CardOrderContext = createContext<CardOrderContext | null>(null);

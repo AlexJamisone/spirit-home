@@ -1,4 +1,5 @@
 import {
+	Icon,
 	Stack,
 	useDisclosure,
 	useMediaQuery,
@@ -14,6 +15,7 @@ import type {
 } from '@prisma/client';
 import { motion } from 'framer-motion';
 import { useState, type ReactNode, type SyntheticEvent } from 'react';
+import { TbShoppingCartPlus } from 'react-icons/tb';
 import { useCart } from '~/context/cartContext';
 import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
@@ -77,6 +79,19 @@ const ProductsCard = ({
 				isClosable: true,
 			});
 		} else {
+			toast({
+				description: 'Товар добавлен в корзину!',
+				status: 'info',
+				icon: (
+					<Icon
+						as={TbShoppingCartPlus}
+						boxSize={6}
+						textAlign="center"
+					/>
+				),
+				isClosable: true,
+				duration: 2000,
+			});
 			cartDispatch({
 				type: 'ADD_TO_CART',
 				payload: { ...product, selectedSize },

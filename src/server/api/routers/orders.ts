@@ -7,6 +7,7 @@ import type { CartState } from '~/reducer/CartReducer';
 import {
 	adminProcedure,
 	createTRPCRouter,
+	privetProcedure,
 	publicProcedure,
 } from '~/server/api/trpc';
 import { ratelimit } from '~/server/helpers/ratelimits';
@@ -122,6 +123,7 @@ export const ordersRouter = createTRPCRouter({
 				createdAt: true,
 				id: true,
 				status: true,
+				viewed: true,
 				user: {
 					include: {
 						address: true,
@@ -353,4 +355,28 @@ export const ordersRouter = createTRPCRouter({
 				return handlUpdateProduct(ctx, createOrder.id, 'minus');
 			}
 		}),
+	changeViewd: adminProcedure
+		.input(z.object({ viewed: z.boolean(), id: z.string() }))
+		.mutation(async ({ ctx, input }) => {
+			if (!ctx.userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
+			const { success } = await ratelimit.orderView.limit(ctx.userId);
+			if (!success) throw new TRPCError({ code: 'TOO_MANY_REQUESTS' });
+			return await ctx.prisma.order.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					viewed: input.viewed,
+				},
+			});
+		}),
+	getNotViewd: privetProcedure.query(async ({ ctx }) => {
+		return ctx.prisma.order.findMany({
+			where: {
+				NOT: {
+					viewed: true,
+				},
+			},
+		});
+	}),
 });
