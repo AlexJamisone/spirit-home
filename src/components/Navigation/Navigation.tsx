@@ -114,7 +114,7 @@ const Navigation = () => {
 						<CartMenu />
 					</>
 				)}
-				{isTablet ? null : <UserButton />}
+				{isTablet ? null : <UserButton afterSignOutUrl="/signin" />}
 			</Stack>
 		</Stack>
 	);

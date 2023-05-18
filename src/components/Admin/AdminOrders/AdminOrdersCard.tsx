@@ -14,6 +14,10 @@ import { useState, type ReactNode } from 'react';
 import Overlay from '~/components/NoData/Overlay';
 import CardOrderContext from '~/context/ordersCardsContext';
 import { api } from '~/utils/api';
+import AdminChangeStatus from './AdminChangeStatus';
+import AdminOrderSum from './AdminOrderSum';
+import AdminOrdersInfo from './AdminOrdersInfo';
+import AdminOrdersTable from './AdminOrdersTable';
 
 type AdminOrdersCardProps = {
 	order: {
@@ -145,5 +149,10 @@ const AdminOrdersCard = ({
 		</CardOrderContext.Provider>
 	);
 };
+
+AdminOrdersCard.Info = AdminOrdersInfo;
+AdminOrdersCard.Table = AdminOrdersTable;
+AdminOrdersCard.Sum = AdminOrderSum;
+AdminOrdersCard.Status = AdminChangeStatus;
 
 export default AdminOrdersCard;
