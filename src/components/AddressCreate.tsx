@@ -1,9 +1,11 @@
 import { FormControl, FormErrorMessage, Input } from '@chakra-ui/react';
+import { Map, Placemark, YMaps } from '@pbe/react-yandex-maps';
 import { motion } from 'framer-motion';
 import type { ChangeEvent } from 'react';
 import { IMaskInput } from 'react-imask';
 import { inputFildsAddress } from '~/constants/inputFildsAddress';
 import { useNewOrderContext } from '~/context/orderContext';
+import { api } from '~/utils/api';
 import UserCreater from './User/UserCreater';
 
 const AddressCreate = () => {
@@ -17,6 +19,7 @@ const AddressCreate = () => {
 		error,
 		isError,
 	} = useNewOrderContext();
+	const { data: cdek } = api.cdek.get.useQuery();
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		switch (name) {
@@ -39,6 +42,7 @@ const AddressCreate = () => {
 				break;
 		}
 	};
+	console.log(cdek);
 	return (
 		<>
 			<>
@@ -90,6 +94,43 @@ const AddressCreate = () => {
 						</FormControl>
 					)
 				)}
+				<YMaps
+					query={{
+						lang: 'ru_RU',
+						apikey: '1c8b792a-9235-4dac-a91b-ca52ec78b63b',
+					}}
+				>
+					<Map
+						defaultState={{
+							center: [44.58, 33.52],
+							zoom: 10,
+							margin: [10, 10, 10, 10],
+						}}
+						height="400px"
+						width="600px"
+					>
+						{cdek?.map(({ location, name }, index) => (
+							<Placemark
+								key={index}
+								defaultGeometry={[
+									location.latitude,
+									location.longitude,
+								]}
+								modules={['geoObject.addon.balloon']}
+								properties={{
+									balloonContentHeader: `${name}`,
+									balloonContent: 'Content',
+									balloonContentFooter: 'Footer',
+								}}
+								options={{
+									pane: 'places',
+									balloonContent: 'Some of content',
+									balloonAutoPanUseMapMargin: false,
+								}}
+							/>
+						))}
+					</Map>
+				</YMaps>
 			</>
 
 			{isSignedIn ? null : <UserCreater />}

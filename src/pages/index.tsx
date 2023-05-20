@@ -14,6 +14,7 @@ import { api } from '~/utils/api';
 
 const Home: NextPage = () => {
 	const { data: products, isLoading } = api.products.get.useQuery();
+
 	const [search, setSearch] = useState('');
 
 	if (!products) return null;
