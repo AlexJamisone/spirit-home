@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react';
+import { Button, Tooltip } from '@chakra-ui/react';
 import type { MouseEventHandler } from 'react';
 import { useProductCardContext } from '~/context/productCardContext';
 
@@ -17,16 +17,23 @@ const ProductSizeButton = ({
 }: ProductSizeButtonProps) => {
 	const { error } = useProductCardContext();
 	return (
-		<Button
-			size={['sm']}
-			isActive={isActive}
-			onClick={onClick}
-			isDisabled={quantity! <= 0}
-			border={error ? '2px solid' : ''}
-			borderColor={error ? 'orange.200' : ''}
+		<Tooltip
+			label={
+				quantity ?? 0 <= 0
+					? `В Наличии ${quantity ?? 0}`
+					: 'Доступно под заказ от 14 до 20 дней'
+			}
 		>
-			{size}
-		</Button>
+			<Button
+				size={['xs']}
+				isActive={isActive}
+				onClick={onClick}
+				border={error ? '2px solid' : ''}
+				borderColor={error ? 'orange.200' : ''}
+			>
+				{size}
+			</Button>
+		</Tooltip>
 	);
 };
 

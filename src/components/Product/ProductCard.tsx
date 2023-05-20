@@ -32,6 +32,7 @@ type ProductProps = {
 	info?: ReactNode;
 	action?: ReactNode;
 	favorites?: ReactNode;
+	size?: ReactNode
 	product: Product & {
 		priceHistory: ProductPriceHistory[];
 		quantity: (Quantity & {
@@ -57,6 +58,7 @@ const ProductsCard = ({
 	admin,
 	handlEdit,
 	favorites,
+	size
 }: ProductProps) => {
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	const { mutate: archivedProduct, isLoading } =
@@ -188,7 +190,7 @@ const ProductsCard = ({
 				{isSignedIn ? favorites : null}
 				{image}
 				{info}
-				{admin === 'USER' ? <ProductSize /> : null}
+				{admin === 'USER' ? size : null}
 				<Stack
 					w="100%"
 					direction={admin === 'USER' ? 'row' : 'column'}
@@ -208,5 +210,6 @@ ProductsCard.Favorites = ProductFavorites;
 ProductsCard.Image = ProductImage;
 ProductsCard.Info = ProductInfo;
 ProductsCard.Action = ProductAction;
+ProductsCard.Size = ProductSize
 
 export default ProductsCard;

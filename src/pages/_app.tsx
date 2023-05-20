@@ -22,6 +22,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 			<Head>
 				<title>Spirit-Home</title>
 				<meta name="description" content="" />
+				<script
+					defer
+					data-domain="spirit-home.ru"
+					src="https://plausible.io/js/script.js"
+				></script>
 			</Head>
 			<ClerkProvider {...pageProps} localization={ruRU}>
 				<CartProvider>

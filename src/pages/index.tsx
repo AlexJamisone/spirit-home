@@ -135,6 +135,7 @@ const Home: NextPage = () => {
 												favorites={
 													<ProductsCard.Favorites />
 												}
+												size={<ProductsCard.Size />}
 												admin="USER"
 											/>
 										</Center>
