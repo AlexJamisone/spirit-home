@@ -32,7 +32,7 @@ type ProductProps = {
 	info?: ReactNode;
 	action?: ReactNode;
 	favorites?: ReactNode;
-	size?: ReactNode
+	size?: ReactNode;
 	product: Product & {
 		priceHistory: ProductPriceHistory[];
 		quantity: (Quantity & {
@@ -58,7 +58,7 @@ const ProductsCard = ({
 	admin,
 	handlEdit,
 	favorites,
-	size
+	size,
 }: ProductProps) => {
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	const { mutate: archivedProduct, isLoading } =
@@ -210,6 +210,6 @@ ProductsCard.Favorites = ProductFavorites;
 ProductsCard.Image = ProductImage;
 ProductsCard.Info = ProductInfo;
 ProductsCard.Action = ProductAction;
-ProductsCard.Size = ProductSize
+ProductsCard.Size = ProductSize;
 
 export default ProductsCard;

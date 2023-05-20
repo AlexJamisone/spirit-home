@@ -6,15 +6,22 @@ import { api } from '~/utils/api';
 import AdminCharts from './AdminCharts';
 import AdminDatePick from './AdminDatePick';
 import AdminStat from './AdminStat';
+import AdminVisitors from './AdminVisitors';
 dayjs().locale('ru').format();
 
 type AdminStatisticsProps = {
 	stat?: ReactNode;
 	charts?: ReactNode;
 	pick?: ReactNode;
+	visitors?: ReactNode;
 };
 
-const AdminStatistics = ({ stat, charts, pick }: AdminStatisticsProps) => {
+const AdminStatistics = ({
+	stat,
+	charts,
+	pick,
+	visitors,
+}: AdminStatisticsProps) => {
 	const [selectedDate, setSelectedDate] = useState<Date[]>([
 		dayjs().startOf('month').toDate(),
 		dayjs().endOf('month').toDate(),
@@ -41,6 +48,7 @@ const AdminStatistics = ({ stat, charts, pick }: AdminStatisticsProps) => {
 				{pick}
 				{charts}
 				{stat}
+				{visitors}
 			</Stack>
 		</ChartsContext.Provider>
 	);
@@ -49,5 +57,6 @@ const AdminStatistics = ({ stat, charts, pick }: AdminStatisticsProps) => {
 AdminStatistics.Pick = AdminDatePick;
 AdminStatistics.Charts = AdminCharts;
 AdminStatistics.Stat = AdminStat;
+AdminStatistics.Visitors = AdminVisitors;
 
 export default AdminStatistics;

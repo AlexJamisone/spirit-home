@@ -17,6 +17,7 @@ const Admin = () => {
 						charts={<AdminStatistics.Charts />}
 						stat={<AdminStatistics.Stat />}
 						pick={<AdminStatistics.Pick />}
+						visitors={<AdminStatistics.Visitors />}
 					/>
 				);
 			case 'categorys':
