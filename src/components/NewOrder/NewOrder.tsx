@@ -1,5 +1,4 @@
 import {
-	FormControl,
 	Modal,
 	ModalBody,
 	ModalCloseButton,
@@ -183,29 +182,23 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 								?.address,
 					}}
 				>
-					<FormControl
-						as="form"
-						onSubmit={(e) => {
-							e.preventDefault();
-							handlSubmit();
-						}}
+					<ModalHeader textAlign="center">Новый заказ</ModalHeader>
+					<ModalCloseButton />
+					<ModalBody
+						as={Stack}
+						justifyContent="center"
+						direction="column"
 					>
-						<ModalHeader textAlign="center">
-							Новый заказ
-						</ModalHeader>
-						<ModalCloseButton />
-						<ModalBody>
-							<Stack alignItems="center">{address}</Stack>
-							<Stack direction="column" justifyContent="center">
-								<AnimatePresence>
-									{cartState.items.map((item) => (
-										<CartItem item={item} key={item.id} />
-									))}
-								</AnimatePresence>
-							</Stack>
-							<ModalFooter gap={5}>{action}</ModalFooter>
-						</ModalBody>
-					</FormControl>
+						<Stack>{address}</Stack>
+						<Stack direction="column" justifyContent="center">
+							<AnimatePresence>
+								{cartState.items.map((item) => (
+									<CartItem item={item} key={item.id} />
+								))}
+							</AnimatePresence>
+						</Stack>
+						<ModalFooter>{action}</ModalFooter>
+					</ModalBody>
 				</NewOrderContext.Provider>
 			</ModalContent>
 		</Modal>

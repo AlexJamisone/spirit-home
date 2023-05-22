@@ -9,7 +9,7 @@ import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
 interface OrderContext {
 	input: InputAddressState;
 	dispatch: Dispatch<Action>;
-	handlSubmit: (idAddress: string) => void;
+	handlSubmit: () => void;
 	onClose: () => void;
 	isSignedIn?: boolean;
 	isError: boolean;

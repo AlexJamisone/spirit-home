@@ -14,16 +14,7 @@ import { api } from '~/utils/api';
 
 const Home: NextPage = () => {
 	const { data: products, isLoading } = api.products.get.useQuery();
-
 	const [search, setSearch] = useState('');
-
-	if (!products) return null;
-	if (isLoading)
-		return (
-			<Center>
-				<Spinner />
-			</Center>
-		);
 	return (
 		<Center
 			as={Swiper}
@@ -51,8 +42,8 @@ const Home: NextPage = () => {
 							opacity: 1,
 							transition: {
 								type: 'spring',
-								duration: 2.5,
-								delay: 0.5,
+								duration: 1.5,
+								delay: 1,
 							},
 						}}
 					/>
@@ -98,8 +89,13 @@ const Home: NextPage = () => {
 							disableOnInteraction: true,
 						}}
 						w="100%"
+						position="relative"
 					>
-						{products.length === 0 ? (
+						{!products || isLoading ? (
+							<AbsoluteCenter>
+								<Spinner />
+							</AbsoluteCenter>
+						) : products.length === 0 ? (
 							<AbsoluteCenter>
 								<NoData
 									text="Пока нет изделий"

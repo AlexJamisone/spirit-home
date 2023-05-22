@@ -1,23 +1,33 @@
-import { Button } from '@chakra-ui/react';
+import { Button, FormControl, Stack } from '@chakra-ui/react';
 import { useNewOrderContext } from '~/context/orderContext';
 
 const NewOrderAction = () => {
-	const { isLoading, onClose, dispatch } = useNewOrderContext();
+	const { isLoading, onClose, dispatch, handlSubmit } = useNewOrderContext();
 	return (
-		<>
-			<Button size={['sm', 'md']} type="submit" isLoading={isLoading}>
-				Оформить
-			</Button>
-			<Button
-				size={['sm', 'md']}
-				onClick={() => {
-					dispatch({ type: 'SET_CLEAR' });
-					onClose();
+		<Stack>
+			<FormControl
+				as="form"
+				onSubmit={(e) => {
+					e.preventDefault();
+					handlSubmit();
 				}}
+				display="flex"
+				gap={5}
 			>
-				Отмена
-			</Button>
-		</>
+				<Button size={['sm', 'md']} type="submit" isLoading={isLoading}>
+					Оформить
+				</Button>
+				<Button
+					size={['sm', 'md']}
+					onClick={() => {
+						dispatch({ type: 'SET_CLEAR' });
+						onClose();
+					}}
+				>
+					Отмена
+				</Button>
+			</FormControl>
+		</Stack>
 	);
 };
 
