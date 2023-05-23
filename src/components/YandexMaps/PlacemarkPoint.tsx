@@ -1,5 +1,5 @@
 import { Placemark } from '@pbe/react-yandex-maps';
-import { useAddressContext } from '~/context/addressContext';
+import { useNewOrderContext } from '~/context/orderContext';
 import type { Points } from '~/server/api/routers/cdek';
 
 type PlacemarkPointProps = {
@@ -7,21 +7,21 @@ type PlacemarkPointProps = {
 };
 
 const PlacemarkPoint = ({ point }: PlacemarkPointProps) => {
-	const { select, setSelect, setShowPVZ } = useAddressContext();
+	const { dispatch, input } = useNewOrderContext();
 	return (
 		<Placemark
 			geometry={[point.location.latitude, point.location.longitude]}
 			onClick={() => {
-				setSelect(point);
-				setShowPVZ(true);
+				dispatch({ type: 'SET_POINT', payload: point });
+				dispatch({ type: 'SET_PVZ', payload: true });
 			}}
 			preset=""
 			fillColor="ff0000"
 			options={{
 				preset:
-					select?.name === point.name
-						? 'islands#darkGreenDotIcon'
-						: 'islands#blueDotIcon',
+					input.point?.name === point.name
+						? 'islands#darkGreenCircleIcon'
+						: 'islands#blueCircleIcon',
 			}}
 		/>
 	);

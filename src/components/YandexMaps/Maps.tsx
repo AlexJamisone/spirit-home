@@ -1,18 +1,21 @@
 import { Map } from '@pbe/react-yandex-maps';
-import { useAddressContext } from '~/context/addressContext';
+import { useNewOrderContext } from '~/context/orderContext';
 import PlacemarkPoint from './PlacemarkPoint';
 
 const Maps = () => {
-	const { points, value } = useAddressContext();
+	const { input, valueSuggestion, points } = useNewOrderContext();
 	return (
 		<Map
 			state={{
 				center: [
-					Number(value?.data.geo_lat),
-					Number(value?.data.geo_lon),
+					input.point?.location
+						? Number(input.point?.location.latitude)
+						: Number(valueSuggestion?.data.geo_lat),
+					input.point?.location
+						? Number(input.point?.location.longitude)
+						: Number(valueSuggestion?.data.geo_lon),
 				],
 				zoom: 11,
-				margin: [10, 10, 10, 10],
 			}}
 			height="400px"
 			width="600px"

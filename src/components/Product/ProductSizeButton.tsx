@@ -19,9 +19,9 @@ const ProductSizeButton = ({
 	return (
 		<Tooltip
 			label={
-				quantity ?? 0 <= 0
-					? `В Наличии ${quantity ?? 0}`
-					: 'Доступно под заказ от 14 до 20 дней'
+				quantity! <= 0
+					? 'Доступно под заказ от 14 до 20 дней'
+					: `В Наличии ${quantity ?? 0}`
 			}
 		>
 			<Button

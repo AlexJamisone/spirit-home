@@ -31,7 +31,6 @@ model Address {
     userId       String?
     firstName    String
     lastName     String
-    city         String
     contactPhone String
     point        String
     archived     Boolean @default(false)

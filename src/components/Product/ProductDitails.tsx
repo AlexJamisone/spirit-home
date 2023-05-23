@@ -7,6 +7,7 @@ import {
 	ModalContent,
 	ModalHeader,
 	ModalOverlay,
+	Text,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useProductCardContext } from '~/context/productCardContext';
@@ -62,6 +63,13 @@ const ProductDitails = ({ isOpen, onClose }: ProductDitailsProps) => {
 								/>
 							</GridItem>
 							<GridItem colStart={[1, 2]}>
+								<Text
+									textAlign="center"
+									mb={5}
+									fontWeight={600}
+								>
+									Размеры
+								</Text>
 								<ProductSize />
 							</GridItem>
 							<GridItem colStart={[1, 2]} textAlign="center">

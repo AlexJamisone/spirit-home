@@ -1,5 +1,5 @@
 import { useNewOrderContext } from '~/context/orderContext';
-import AddressCreate from '../AddressCreate';
+import AddressCreate from '../User/Address/Address';
 import UserAddressList from '../User/UserAddressList';
 
 const NewOrderAddress = () => {

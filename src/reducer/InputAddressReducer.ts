@@ -1,14 +1,17 @@
+import type { Points } from '~/server/api/routers/cdek';
+
 export interface InputAddressState {
 	id: string;
 	firstName: string;
 	lastName: string;
-	citys: string;
 	contactPhone: string;
-	point: string;
+	point?: Points;
 	saveAcc: boolean;
 	email: string;
 	password: string;
 	idAddress: string;
+	showMap: boolean;
+	showPVZ: boolean;
 }
 
 interface SetIdAction {
@@ -39,17 +42,13 @@ interface SetLastNameAction {
 	type: 'SET_LAST_NAME';
 	payload: string;
 }
-interface SetCitysAction {
-	type: 'SET_CITY';
-	payload: string;
-}
 interface SetPhoneAction {
 	type: 'SET_PHONE';
 	payload: string;
 }
 interface SetPointAction {
 	type: 'SET_POINT';
-	payload: string;
+	payload: Points;
 }
 interface SetClearAction {
 	type: 'SET_CLEAR';
@@ -58,12 +57,19 @@ interface SetAllAction {
 	type: 'SET_ALL';
 	payload: InputAddressState;
 }
+interface SetShowMapAction {
+	type: 'SET_MAP';
+	payload: boolean;
+}
+interface SetPVZAction {
+	type: 'SET_PVZ';
+	payload: boolean;
+}
 
 export type Action =
 	| SetPhoneAction
 	| SetNameAction
 	| SetLastNameAction
-	| SetCitysAction
 	| SetPointAction
 	| SetClearAction
 	| SetAllAction
@@ -71,19 +77,21 @@ export type Action =
 	| SetSaveAccAction
 	| SetEmailAction
 	| SetPasswordAction
-	| SetIdAddressAction;
+	| SetIdAddressAction
+	| SetShowMapAction
+	| SetPVZAction;
 
 export const initialState: InputAddressState = {
 	id: '',
 	firstName: '',
 	lastName: '',
-	citys: '',
 	contactPhone: '',
-	point: '',
 	email: '',
 	password: '',
 	idAddress: '',
 	saveAcc: false,
+	showMap: false,
+	showPVZ: false,
 };
 
 export const InputAddressReducer = (
@@ -97,8 +105,6 @@ export const InputAddressReducer = (
 			return { ...state, firstName: action.payload };
 		case 'SET_LAST_NAME':
 			return { ...state, lastName: action.payload };
-		case 'SET_CITY':
-			return { ...state, citys: action.payload };
 		case 'SET_PHONE':
 			return { ...state, contactPhone: action.payload };
 		case 'SET_POINT':
@@ -111,19 +117,24 @@ export const InputAddressReducer = (
 			return { ...state, password: action.payload };
 		case 'SET_ID_ADDRESS':
 			return { ...state, idAddress: action.payload };
+		case 'SET_MAP':
+			return { ...state, showMap: action.payload };
+		case 'SET_PVZ':
+			return { ...state, showPVZ: action.payload };
 
 		case 'SET_CLEAR':
 			return {
 				id: '',
-				citys: '',
 				contactPhone: '',
 				firstName: '',
 				lastName: '',
-				point: '',
+				point: undefined,
 				email: '',
 				password: '',
 				idAddress: '',
 				saveAcc: false,
+				showMap: false,
+				showPVZ: false,
 			};
 		case 'SET_ALL':
 			return {

@@ -22,7 +22,12 @@ const ProductSize = ({ isAdmin }: ProductSizeProps) => {
 		e.stopPropagation();
 	};
 	return (
-		<Stack direction="row">
+		<Stack
+			direction="row"
+			flexWrap="wrap"
+			gap={[1, 2]}
+			justifyContent="center"
+		>
 			{isAdmin
 				? product.quantity
 						.sort((a, b) =>

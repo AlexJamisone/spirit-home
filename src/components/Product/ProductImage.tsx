@@ -23,8 +23,8 @@ const ProductImage = ({ container, zoom }: ProductImageProps) => {
 			direction="horizontal"
 			modules={[Pagination, Zoom]}
 			pagination={{ enabled: true, clickable: zoom ? false : true }}
-			w="100%"
-			h="100%"
+			w="175px"
+			h="175px"
 			zoom={zoom}
 			{...container}
 		>
@@ -38,9 +38,9 @@ const ProductImage = ({ container, zoom }: ProductImageProps) => {
 						<Image
 							alt="product"
 							src={path + src}
-							objectFit="cover"
-							w={[zoom ? 200 : 100, zoom ? 200 : 150]}
-							h={[zoom ? 200 : 100, zoom ? 200 : 150]}
+							objectFit="contain"
+							w={[zoom ? 200 : 125, zoom ? 200 : 175]}
+							h={[zoom ? 200 : 125, zoom ? 200 : 175]}
 						/>
 					</Center>
 				</SwiperSlide>

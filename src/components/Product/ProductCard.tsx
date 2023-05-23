@@ -165,9 +165,9 @@ const ProductsCard = ({
 				}}
 				layout
 				maxW={['300px']}
-				h={['350px', '425px']}
+				h={['350px', '450px']}
 				direction="column"
-				justifyContent="center"
+				justifyContent="space-between"
 				alignItems="center"
 				p={[3, 5]}
 				border="1px solid #CBD5E0"

@@ -1,4 +1,5 @@
 import {
+	FormControl,
 	Modal,
 	ModalBody,
 	ModalCloseButton,
@@ -12,7 +13,12 @@ import {
 import { useAuth } from '@clerk/nextjs';
 import type { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import { AnimatePresence } from 'framer-motion';
-import { useReducer, useRef, type ReactNode } from 'react';
+import { useReducer, useRef, useState, type ReactNode } from 'react';
+import type {
+	DaDataAddress,
+	DaDataAddressSuggestion,
+	DaDataSuggestion,
+} from 'react-dadata';
 import { useCart } from '~/context/cartContext';
 import NewOrderContext from '~/context/orderContext';
 import {
@@ -50,10 +56,15 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 		reset: resetNoAuth,
 		isLoading: isLoadingAnon,
 	} = api.orders.createNoAuth.useMutation();
+	const { mutate: getPoints, data: points } =
+		api.cdek.getPoints.useMutation();
 
 	const { cartState, cartDispatch } = useCart();
 	const { isSignedIn } = useAuth();
 	const [input, dispatch] = useReducer(InputAddressReducer, initialState);
+	const [valueSuggestion, setValueSuggestion] = useState<
+		DaDataAddressSuggestion | undefined
+	>();
 	const toast = useToast();
 	const ctx = api.useContext();
 	const initialRef = useRef<HTMLInputElement>(null);
@@ -71,6 +82,20 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 		dispatch({ type: 'SET_CLEAR' });
 		cartDispatch({ type: 'CLER_CART' });
 		onClose();
+	};
+
+	const handlPoints = (
+		suggestion: DaDataSuggestion<DaDataAddress> | undefined
+	) => {
+		setValueSuggestion(suggestion);
+		getPoints(
+			{ city: suggestion?.data.postal_code as string },
+			{
+				onSuccess: () => {
+					dispatch({ type: 'SET_MAP', payload: true });
+				},
+			}
+		);
 	};
 
 	const handlError = (code?: TRPC_ERROR_CODE_KEY) => {
@@ -107,11 +132,10 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 					{
 						cart: cartState,
 						address: {
-							city: input.citys,
 							contactPhone: input.contactPhone,
 							firstName: input.firstName,
 							lastName: input.lastName,
-							point: input.point,
+							point: input.point?.location.address_full as string,
 						},
 					},
 					{
@@ -129,11 +153,10 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 				{
 					createProfile: input.saveAcc,
 					address: {
-						city: input.citys,
 						contactPhone: input.contactPhone,
 						firstName: input.firstName,
 						lastName: input.lastName,
-						point: input.point,
+						point: input.point?.location.address_full as string,
 					},
 					cart: cartState,
 					email: input.saveAcc ? input.email : undefined,
@@ -180,25 +203,39 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 							errorAnon?.data?.zodError?.fieldErrors?.address ||
 							errorNoAddress?.data?.zodError?.fieldErrors
 								?.address,
+						handlPoints,
+						points,
+						valueSuggestion,
+						setValueSuggestion,
 					}}
 				>
 					<ModalHeader textAlign="center">Новый заказ</ModalHeader>
 					<ModalCloseButton />
-					<ModalBody
-						as={Stack}
-						justifyContent="center"
-						direction="column"
+					<FormControl
+						as="form"
+						onSubmit={(e) => {
+							e.preventDefault();
+							handlSubmit();
+						}}
+						display="flex"
+						gap={5}
 					>
-						<Stack>{address}</Stack>
-						<Stack direction="column" justifyContent="center">
-							<AnimatePresence>
-								{cartState.items.map((item) => (
-									<CartItem item={item} key={item.id} />
-								))}
-							</AnimatePresence>
-						</Stack>
-						<ModalFooter>{action}</ModalFooter>
-					</ModalBody>
+						<ModalBody
+							as={Stack}
+							justifyContent="center"
+							direction="column"
+						>
+							<Stack>{address}</Stack>
+							<Stack direction="column" justifyContent="center">
+								<AnimatePresence>
+									{cartState.items.map((item) => (
+										<CartItem item={item} key={item.id} />
+									))}
+								</AnimatePresence>
+							</Stack>
+							<ModalFooter gap={5}>{action}</ModalFooter>
+						</ModalBody>
+					</FormControl>
 				</NewOrderContext.Provider>
 			</ModalContent>
 		</Modal>

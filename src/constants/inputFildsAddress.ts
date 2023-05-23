@@ -31,12 +31,6 @@ export const inputFildsAddress = (
 			errorMessage: getErrorMessage(error, 'Нужо ввести свою фамилию.'),
 		},
 		{
-			placeholder: 'Город',
-			value: input.citys,
-			name: 'city',
-			errorMessage: getErrorMessage(error, 'Введи свой город.'),
-		},
-		{
 			placeholder: 'Телефон',
 			value: input.contactPhone,
 			name: 'phone',
@@ -44,12 +38,6 @@ export const inputFildsAddress = (
 				error,
 				'Неправельный номер телефона.'
 			),
-		},
-		{
-			placeholder: 'СДЭК ПВЗ',
-			value: input.point,
-			name: 'cdek',
-			errorMessage: getErrorMessage(error, 'Выбери пунт выдачи СДЭК.'),
 		},
 	];
 };

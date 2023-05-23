@@ -197,16 +197,12 @@ export const ordersRouter = createTRPCRouter({
 						.string()
 						.nonempty({ message: 'Нужо ввести свою фамилию.' })
 						.trim(),
-					city: z
-						.string()
-						.nonempty({ message: 'Введи свой город.' })
-						.trim(),
 					contactPhone: z
 						.string()
 						.min(16, { message: 'Неправельный номер телефона.' })
 						.trim(),
 					point: z
-						.string()
+						.string({ required_error: 'Выбери город доставки' })
 						.nonempty({ message: 'Выбери пунт выдачи СДЭК.' })
 						.trim(),
 				}),
@@ -219,7 +215,6 @@ export const ordersRouter = createTRPCRouter({
 			const updateUserAddress = await ctx.prisma.address.create({
 				data: {
 					userId: ctx.userId,
-					city: input.address.city,
 					contactPhone: input.address.contactPhone,
 					firstName: input.address.firstName,
 					lastName: input.address.lastName,
@@ -252,10 +247,6 @@ export const ordersRouter = createTRPCRouter({
 					lastName: z
 						.string()
 						.nonempty({ message: 'Нужо ввести свою фамилию.' })
-						.trim(),
-					city: z
-						.string()
-						.nonempty({ message: 'Введи свой город.' })
 						.trim(),
 					contactPhone: z
 						.string()
@@ -312,7 +303,6 @@ export const ordersRouter = createTRPCRouter({
 						},
 						address: {
 							create: {
-								city: input.address.city,
 								contactPhone: input.address.contactPhone,
 								firstName: input.address.firstName,
 								lastName: input.address.lastName,
@@ -338,7 +328,6 @@ export const ordersRouter = createTRPCRouter({
 					data: {
 						address: {
 							create: {
-								city: input.address.city,
 								contactPhone: input.address.contactPhone,
 								firstName: input.address.firstName,
 								lastName: input.address.lastName,

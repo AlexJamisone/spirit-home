@@ -14,7 +14,7 @@ const ProductInfo = ({ full }: ProductInfoProps) => {
 				<Text
 					fontSize={full ? [14, 16] : [12]}
 					textColor={full ? 'blackAlpha.900' : 'gray.500'}
-					h={full ? '100%' : '100px'}
+					maxH={full ? '100%' : '75px'}
 					borderBottom="none"
 					boxShadow={full ? undefined : 'inset 0 -10px 10px -10px'}
 					rounded="md"

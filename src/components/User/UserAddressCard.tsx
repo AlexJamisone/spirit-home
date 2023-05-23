@@ -21,7 +21,7 @@ const UserAddressCard = ({
 	isLoading,
 	cantEdit,
 }: UserAddressCardProps) => {
-	const { city, contactPhone, id, point, firstName, lastName } = address;
+	const { contactPhone, id, point, firstName, lastName } = address;
 	return (
 		<Stack
 			as={motion.div}
@@ -29,7 +29,7 @@ const UserAddressCard = ({
 			animate={{ opacity: 1, y: 0 }}
 			exit={{ opacity: 0 }}
 			whileHover={{
-				scale: 1.05,
+				scale: 1.01,
 				transition: { type: 'spring', duration: 0.1 },
 			}}
 			direction={['column']}
@@ -37,7 +37,7 @@ const UserAddressCard = ({
 			border="1px solid #CBD5E0"
 			rounded="2xl"
 			p={[3, 5]}
-			maxW={['100%']}
+			maxW="350px"
 			position="relative"
 			cursor="pointer"
 			transition="all .3s ease-in-out"
@@ -51,7 +51,6 @@ const UserAddressCard = ({
 			<Text>Фамилия: {lastName}</Text>
 			<Text>Email: {email}</Text>
 			<Text>Телефон: {contactPhone}</Text>
-			<Text>Город: {city}</Text>
 			<Text>СДЭК ПВЗ: {point}</Text>
 			{cantEdit ? null : (
 				<IconButton

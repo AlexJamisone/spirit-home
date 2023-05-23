@@ -1,7 +1,7 @@
 import { Radio, RadioGroup } from '@chakra-ui/react';
 import { useNewOrderContext } from '~/context/orderContext';
 import { api } from '~/utils/api';
-import AddressCreate from '../AddressCreate';
+import AddressCreate from './Address/Address';
 import UserAddressCard from './UserAddressCard';
 
 const UserAddressList = () => {
@@ -20,6 +20,9 @@ const UserAddressList = () => {
 							dispatch({ type: 'SET_ID_ADDRESS', payload: value })
 						}
 						value={input.idAddress}
+						justifyContent="center"
+						display="flex"
+						gap={7}
 					>
 						{user.address
 							?.filter((address) => !address.archived)
