@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
 import type { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
-import { AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useReducer, useRef, useState, type ReactNode } from 'react';
 import type {
 	DaDataAddress,
@@ -184,7 +184,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 			size={['xl', '2xl']}
 		>
 			<ModalOverlay />
-			<ModalContent mx={[5, null]}>
+			<ModalContent mx={[5, null]} as={motion.section} layout>
 				<NewOrderContext.Provider
 					value={{
 						input,

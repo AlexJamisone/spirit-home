@@ -15,7 +15,6 @@ const PlacemarkPoint = ({ point }: PlacemarkPointProps) => {
 				dispatch({ type: 'SET_POINT', payload: point });
 				dispatch({ type: 'SET_PVZ', payload: true });
 			}}
-			preset=""
 			fillColor="ff0000"
 			options={{
 				preset:

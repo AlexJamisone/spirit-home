@@ -100,7 +100,9 @@ const CartItem = ({
 			</Text>
 
 			<Stack>
-				<Tag textAlign="center">{selectedSize.name}</Tag>
+				<Tag size={['sm', 'md']} textAlign="center">
+					{selectedSize.name}
+				</Tag>
 			</Stack>
 			<IconButton
 				variant="ghost"

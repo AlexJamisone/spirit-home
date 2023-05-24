@@ -149,6 +149,7 @@ const AddressCreate = () => {
 						as={motion.div}
 						layout
 						minW="300px"
+						fontSize={[14, 16]}
 					>
 						<Text>ПВЗ: {input.point?.name}</Text>
 						<Text>Адресс: {input.point?.location.address}</Text>
@@ -165,6 +166,7 @@ const AddressCreate = () => {
 							bottom={3}
 							right={5}
 							zIndex={10}
+							ml={1}
 							onClick={() => {
 								resetNoAddress();
 								resetNoAuth();
