@@ -29,7 +29,6 @@ export const addressesRouter = createTRPCRouter({
 			});
 			return await ctx.prisma.address.create({
 				data: {
-					city: input.city,
 					contactPhone: input.contactPhone,
 					point: input.point,
 					userId: ctx.userId,
@@ -83,7 +82,6 @@ export const addressesRouter = createTRPCRouter({
 					id: input.id,
 				},
 				data: {
-					city: input.city,
 					contactPhone: input.contactPhone,
 					point: input.point,
 				},
