@@ -12,6 +12,8 @@ export interface InputAddressState {
 	idAddress: string;
 	showMap: boolean;
 	showPVZ: boolean;
+	selectedPVZ: boolean;
+	errorSelectedPVZ: boolean;
 }
 
 interface SetIdAction {
@@ -65,6 +67,14 @@ interface SetPVZAction {
 	type: 'SET_PVZ';
 	payload: boolean;
 }
+interface SetSelectedPVZAction {
+	type: 'SET_SELECTED_PVZ';
+	payload: boolean;
+}
+interface SetErrorSelectedPVZAction {
+	type: 'SET_ERROR_SELECTED_PVZ';
+	payload: boolean;
+}
 
 export type Action =
 	| SetPhoneAction
@@ -79,7 +89,9 @@ export type Action =
 	| SetPasswordAction
 	| SetIdAddressAction
 	| SetShowMapAction
-	| SetPVZAction;
+	| SetPVZAction
+	| SetSelectedPVZAction
+	| SetErrorSelectedPVZAction;
 
 export const initialState: InputAddressState = {
 	id: '',
@@ -92,6 +104,8 @@ export const initialState: InputAddressState = {
 	saveAcc: false,
 	showMap: false,
 	showPVZ: false,
+	selectedPVZ: false,
+	errorSelectedPVZ: false,
 };
 
 export const InputAddressReducer = (
@@ -121,7 +135,10 @@ export const InputAddressReducer = (
 			return { ...state, showMap: action.payload };
 		case 'SET_PVZ':
 			return { ...state, showPVZ: action.payload };
-
+		case 'SET_SELECTED_PVZ':
+			return { ...state, selectedPVZ: action.payload };
+		case 'SET_ERROR_SELECTED_PVZ':
+			return { ...state, errorSelectedPVZ: action.payload };
 		case 'SET_CLEAR':
 			return {
 				id: '',
@@ -135,6 +152,8 @@ export const InputAddressReducer = (
 				saveAcc: false,
 				showMap: false,
 				showPVZ: false,
+				selectedPVZ: false,
+				errorSelectedPVZ: false,
 			};
 		case 'SET_ALL':
 			return {

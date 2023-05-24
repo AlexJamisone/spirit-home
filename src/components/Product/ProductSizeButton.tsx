@@ -19,6 +19,7 @@ const ProductSizeButton = ({
 	return (
 		<Tooltip
 			label={
+				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				quantity! <= 0
 					? 'Доступно под заказ от 14 до 20 дней'
 					: `В Наличии ${quantity ?? 0}`

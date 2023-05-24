@@ -56,8 +56,11 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 		reset: resetNoAuth,
 		isLoading: isLoadingAnon,
 	} = api.orders.createNoAuth.useMutation();
-	const { mutate: getPoints, data: points } =
-		api.cdek.getPoints.useMutation();
+	const {
+		mutate: getPoints,
+		data: points,
+		isLoading: isLoadingCdek,
+	} = api.cdek.getPoints.useMutation();
 
 	const { cartState, cartDispatch } = useCart();
 	const { isSignedIn } = useAuth();
@@ -111,7 +114,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 		});
 	};
 	const handlSubmit = () => {
-		if (isSignedIn) {
+		if (isSignedIn && input.selectedPVZ) {
 			if (input.idAddress !== '') {
 				createWithId(
 					{
@@ -148,7 +151,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 					}
 				);
 			}
-		} else {
+		} else if (input.selectedPVZ) {
 			createNoAuth(
 				{
 					createProfile: input.saveAcc,
@@ -171,6 +174,16 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 					},
 				}
 			);
+		} else {
+			dispatch({
+				type: 'SET_ERROR_SELECTED_PVZ',
+				payload: !input.errorSelectedPVZ,
+			});
+			toast({
+				description: 'Подтвердите пункт выдачи!',
+				isClosable: true,
+				status: 'warning',
+			});
 		}
 	};
 	return (
@@ -207,6 +220,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 						points,
 						valueSuggestion,
 						setValueSuggestion,
+						isLoadingCdek,
 					}}
 				>
 					<ModalHeader textAlign="center">Новый заказ</ModalHeader>

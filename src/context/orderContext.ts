@@ -34,6 +34,7 @@ interface OrderContext {
 		SetStateAction<DaDataAddressSuggestion | undefined>
 	>;
 	points?: Points[];
+	isLoadingCdek: boolean;
 }
 
 const NewOrderContext = createContext<OrderContext | null>(null);

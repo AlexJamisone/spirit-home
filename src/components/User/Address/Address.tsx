@@ -3,6 +3,9 @@ import {
 	FormControl,
 	FormErrorMessage,
 	Input,
+	InputGroup,
+	InputRightElement,
+	Spinner,
 	Stack,
 	Text,
 } from '@chakra-ui/react';
@@ -29,6 +32,7 @@ const AddressCreate = () => {
 		isError,
 		handlPoints,
 		valueSuggestion,
+		isLoadingCdek,
 	} = useNewOrderContext();
 
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -56,6 +60,8 @@ const AddressCreate = () => {
 							key={name}
 							isInvalid={!errorMessage ? false : isError}
 							w="300px"
+							as={motion.div}
+							layout
 						>
 							<Input
 								inputRef={
@@ -95,7 +101,7 @@ const AddressCreate = () => {
 						</FormControl>
 					)
 				)}
-				<Stack w="300px">
+				<InputGroup w="300px" zIndex={10}>
 					<FormControl isInvalid={isError}>
 						<AddressSuggestions
 							token={process.env.NEXT_PUBLIC_API_DADATA as string}
@@ -103,6 +109,7 @@ const AddressCreate = () => {
 							onChange={(suggestion) => handlPoints(suggestion)}
 							inputProps={{
 								placeholder: 'Введите ваш город',
+								disabled: input.selectedPVZ,
 							}}
 							filterFromBound="city"
 							filterToBound="city"
@@ -110,6 +117,9 @@ const AddressCreate = () => {
 							autoload={true}
 							customInput={Input}
 						/>
+						<InputRightElement position="absolute">
+							{isLoadingCdek ? <Spinner size={['sm']} /> : null}
+						</InputRightElement>
 						<FormErrorMessage
 							as={motion.div}
 							initial={{ opacity: 0, y: 50 }}
@@ -131,11 +141,13 @@ const AddressCreate = () => {
 							)}
 						</FormErrorMessage>
 					</FormControl>
-				</Stack>
+				</InputGroup>
 				{input.showPVZ ? (
 					<Stack
 						border="1px solid"
-						borderColor="gray.300"
+						borderColor={
+							input.selectedPVZ ? 'green.300' : 'gray.300'
+						}
 						p={3}
 						rounded="3xl"
 						boxShadow="2xl"
@@ -167,6 +179,14 @@ const AddressCreate = () => {
 							right={5}
 							zIndex={10}
 							ml={1}
+							border={
+								input.errorSelectedPVZ ? '2px solid' : undefined
+							}
+							borderColor={
+								input.errorSelectedPVZ
+									? 'orange.200'
+									: undefined
+							}
 							onClick={() => {
 								resetNoAddress();
 								resetNoAuth();
@@ -174,6 +194,15 @@ const AddressCreate = () => {
 									type: 'SET_MAP',
 									payload: !input.showMap,
 								});
+								dispatch({
+									type: 'SET_SELECTED_PVZ',
+									payload: !input.selectedPVZ,
+								});
+								if (input.errorSelectedPVZ)
+									dispatch({
+										type: 'SET_ERROR_SELECTED_PVZ',
+										payload: false,
+									});
 							}}
 						>
 							{input.showMap ? 'Выбрать' : 'Изменить'}
