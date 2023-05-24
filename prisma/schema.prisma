@@ -32,9 +32,26 @@ model Address {
     firstName    String
     lastName     String
     contactPhone String
-    point        String
+    point        Point?
     archived     Boolean @default(false)
     Order        Order[]
+}
+
+model Point {
+    id              String  @id @default(cuid())
+    address         Address @relation(fields: [addressId], references: [id])
+    addressId       String  @unique
+    name            String
+    work_time       String
+    phone           String?
+    email           String
+    type            String
+    region          String
+    city            String
+    longitude       Float
+    latitude        Float
+    addressName     String
+    addressFullName String
 }
 
 model Catergory {

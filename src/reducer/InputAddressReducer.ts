@@ -1,11 +1,10 @@
-import type { Points } from '~/server/api/routers/cdek';
-
+import type { Point } from '@prisma/client';
 export interface InputAddressState {
 	id: string;
 	firstName: string;
 	lastName: string;
 	contactPhone: string;
-	point?: Points;
+	point?: Point;
 	saveAcc: boolean;
 	email: string;
 	password: string;
@@ -50,7 +49,7 @@ interface SetPhoneAction {
 }
 interface SetPointAction {
 	type: 'SET_POINT';
-	payload: Points;
+	payload: Point;
 }
 interface SetClearAction {
 	type: 'SET_CLEAR';

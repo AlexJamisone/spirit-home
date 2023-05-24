@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import type { Point } from '@prisma/client';
 import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
-export type Points = {
+export type PointFromApi = {
 	name: string;
 	work_time: string;
-	phone?: string;
+	phones?: [{ number: string }];
 	email: string;
 	type: string;
 	location: {
@@ -47,13 +48,13 @@ export const cdekRouter = createTRPCRouter({
 			});
 			const data = await response.json();
 
-			const points: Points[] = data.map(
+			const points: Point[] = data.map(
 				(value: {
 					name: string;
-					email: string;
-					phones: { number: string }[];
-					type: string;
 					work_time: string;
+					phones?: [{ number: string }];
+					email: string;
+					type: string;
 					location: {
 						region: string;
 						city: string;
@@ -68,7 +69,12 @@ export const cdekRouter = createTRPCRouter({
 					phone: value?.phones?.[0]?.number,
 					type: value.type,
 					work_time: value.work_time,
-					location: value.location,
+					region: value.location.region,
+					city: value.location.city,
+					longitude: value.location.longitude,
+					latitude: value.location.latitude,
+					addressName: value.location.address,
+					addressFullName: value.location.address_full,
 				})
 			);
 			return points;

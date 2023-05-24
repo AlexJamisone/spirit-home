@@ -1,9 +1,11 @@
 import { Icon, IconButton, Stack, Text } from '@chakra-ui/react';
-import type { Address } from '@prisma/client';
+import type { Address, Point } from '@prisma/client';
 import { motion } from 'framer-motion';
 import { BsTrashFill } from 'react-icons/bs';
 type UserAddressCardProps = {
-	address: Address;
+	address: Address & {
+		point: Point | null;
+	};
 	firstName: string | null;
 	lastName: string | null;
 	email: string | null | undefined;
@@ -51,7 +53,7 @@ const UserAddressCard = ({
 			<Text>Фамилия: {lastName}</Text>
 			<Text>Email: {email}</Text>
 			<Text>Телефон: {contactPhone}</Text>
-			<Text>СДЭК ПВЗ: {point}</Text>
+			<Text>СДЭК ПВЗ: {point?.addressFullName}</Text>
 			{cantEdit ? null : (
 				<IconButton
 					isLoading={isLoading}

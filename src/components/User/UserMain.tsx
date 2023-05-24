@@ -69,15 +69,17 @@ const UserMain = () => {
 			type: 'SET_ALL',
 			payload: {
 				id: address.id,
-				citys: address.city,
 				firstName: user.firstName ?? '',
 				contactPhone: address.contactPhone,
 				lastName: user.lastName ?? '',
-				point: address.point,
 				email: user.email ?? '',
 				idAddress: input.idAddress,
 				password: '',
 				saveAcc: false,
+				errorSelectedPVZ: false,
+				selectedPVZ: false,
+				showMap: false,
+				showPVZ: false,
 			},
 		});
 		setEdit(true);

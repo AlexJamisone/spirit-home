@@ -4,18 +4,14 @@ import { useNewOrderContext } from '~/context/orderContext';
 import PlacemarkPoint from './PlacemarkPoint';
 
 const Maps = () => {
-	const { input, valueSuggestion, points } = useNewOrderContext();
+	const { valueSuggestion, points } = useNewOrderContext();
 	const [isLowerThen900] = useMediaQuery(['(max-width: 900px)']);
 	return (
 		<Map
 			state={{
 				center: [
-					input.point?.location
-						? Number(input.point?.location.latitude)
-						: Number(valueSuggestion?.data.geo_lat),
-					input.point?.location
-						? Number(input.point?.location.longitude)
-						: Number(valueSuggestion?.data.geo_lon),
+					Number(valueSuggestion?.data.geo_lat),
+					Number(valueSuggestion?.data.geo_lon),
 				],
 				zoom: 11,
 			}}

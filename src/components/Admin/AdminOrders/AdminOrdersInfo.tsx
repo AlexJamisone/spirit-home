@@ -61,7 +61,7 @@ const AdminOrdersInfo = () => {
 			<Text>{`Email: ${
 				user?.email ? user.email : 'не зарегестрирован'
 			}`}</Text>
-			<Text>ПВЗ: {address.point}</Text>
+			<Text>ПВЗ: {address.point?.addressFullName}</Text>
 		</Stack>
 	);
 };

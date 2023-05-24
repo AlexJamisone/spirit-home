@@ -13,6 +13,7 @@ import {
 	Stack,
 	useToast,
 } from '@chakra-ui/react';
+import type { Point } from '@prisma/client';
 import React, {
 	type ChangeEvent,
 	type Dispatch,
@@ -58,15 +59,13 @@ const UserAddressesFormModal = ({
 			case 'lastName':
 				dispatch({ type: 'SET_LAST_NAME', payload: value });
 				break;
-			case 'city':
-				dispatch({ type: 'SET_CITY', payload: value });
 				break;
 			case 'phone':
 				dispatch({ type: 'SET_PHONE', payload: value });
 				break;
-			case 'cdek':
-				dispatch({ type: 'SET_POINT', payload: value });
-				break;
+			// case 'cdek':
+			// 	dispatch({ type: 'SET_POINT', payload: value });
+			// 	break;
 			default:
 				break;
 		}
@@ -76,9 +75,8 @@ const UserAddressesFormModal = ({
 			updateAddress(
 				{
 					id: input.id,
-					city: input.citys,
 					contactPhone: input.contactPhone,
-					point: input.point,
+					point: input.point as Point,
 					firstName: input.firstName,
 					lastName: input.lastName,
 				},
@@ -101,9 +99,8 @@ const UserAddressesFormModal = ({
 				{
 					firstName: input.firstName,
 					lastName: input.lastName,
-					city: input.citys,
 					contactPhone: input.contactPhone,
-					point: input.point,
+					point: input.point as Point,
 				},
 				{
 					onSuccess: () => {

@@ -2,6 +2,7 @@ import type {
 	Address,
 	OrderItem,
 	OrderStatus,
+	Point,
 	Product,
 	ProductPriceHistory,
 	Quantity,
@@ -16,7 +17,9 @@ import {
 } from 'react';
 
 interface CardOrderContext {
-	address: Address;
+	address: Address & {
+		point: Point | null;
+	};
 	user:
 		| (User & {
 				address: Address[];

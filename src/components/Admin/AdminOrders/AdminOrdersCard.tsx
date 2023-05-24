@@ -3,6 +3,7 @@ import type {
 	Address,
 	OrderItem,
 	OrderStatus,
+	Point,
 	Product,
 	ProductPriceHistory,
 	Quantity,
@@ -26,7 +27,9 @@ type AdminOrdersCardProps = {
 					address: Address[];
 			  })
 			| null;
-		address: Address;
+		address: Address & {
+			point: Point | null;
+		};
 		orderItem: (OrderItem & {
 			product: Product & {
 				priceHistory: ProductPriceHistory[];

@@ -164,7 +164,7 @@ const AddressCreate = () => {
 						fontSize={[14, 16]}
 					>
 						<Text>ПВЗ: {input.point?.name}</Text>
-						<Text>Адресс: {input.point?.location.address}</Text>
+						<Text>Адресс: {input.point?.addressName}</Text>
 						<Text>Режим работы: {input.point?.work_time}</Text>
 						<Text>Телефон: {input.point?.phone}</Text>
 						<Text>

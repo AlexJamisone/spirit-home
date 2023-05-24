@@ -1,5 +1,5 @@
 import { clerkClient } from '@clerk/nextjs/server';
-import type { OrderStatus, Prisma, PrismaClient } from '@prisma/client';
+import type { OrderStatus, Point, Prisma, PrismaClient } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
@@ -119,7 +119,11 @@ export const ordersRouter = createTRPCRouter({
 						},
 					},
 				},
-				address: true,
+				address: {
+					include: {
+						point: true,
+					},
+				},
 				createdAt: true,
 				id: true,
 				status: true,
@@ -201,10 +205,7 @@ export const ordersRouter = createTRPCRouter({
 						.string()
 						.min(16, { message: 'Неправельный номер телефона.' })
 						.trim(),
-					point: z
-						.string({ required_error: 'Выбери город доставки' })
-						.nonempty({ message: 'Выбери пунт выдачи СДЭК.' })
-						.trim(),
+					point: z.custom<Point>(),
 				}),
 			})
 		)
@@ -218,7 +219,22 @@ export const ordersRouter = createTRPCRouter({
 					contactPhone: input.address.contactPhone,
 					firstName: input.address.firstName,
 					lastName: input.address.lastName,
-					point: input.address.point,
+					point: {
+						create: {
+							name: input.address.point.name,
+							addressFullName:
+								input.address.point.addressFullName,
+							addressName: input.address.point.addressName,
+							city: input.address.point.city,
+							email: input.address.point.email,
+							region: input.address.point.region,
+							latitude: input.address.point.latitude,
+							longitude: input.address.point.longitude,
+							type: input.address.point.type,
+							work_time: input.address.point.work_time,
+							phone: input.address.point.phone,
+						},
+					},
 				},
 			});
 			const createOrder = await ctx.prisma.order.create({
@@ -252,10 +268,7 @@ export const ordersRouter = createTRPCRouter({
 						.string()
 						.min(16, { message: 'Неправельный номер телефона.' })
 						.trim(),
-					point: z
-						.string()
-						.nonempty({ message: 'Выбери пунт выдачи СДЭК.' })
-						.trim(),
+					point: z.custom<Point>(),
 				}),
 				email: z.optional(
 					z
@@ -306,7 +319,25 @@ export const ordersRouter = createTRPCRouter({
 								contactPhone: input.address.contactPhone,
 								firstName: input.address.firstName,
 								lastName: input.address.lastName,
-								point: input.address.point,
+								point: {
+									create: {
+										name: input.address.point.name,
+										addressFullName:
+											input.address.point.addressFullName,
+										addressName:
+											input.address.point.addressName,
+										city: input.address.point.city,
+										email: input.address.point.email,
+										region: input.address.point.region,
+										latitude: input.address.point.latitude,
+										longitude:
+											input.address.point.longitude,
+										type: input.address.point.type,
+										work_time:
+											input.address.point.work_time,
+										phone: input.address.point.phone,
+									},
+								},
 								userId: createUser.id,
 							},
 						},
@@ -331,7 +362,25 @@ export const ordersRouter = createTRPCRouter({
 								contactPhone: input.address.contactPhone,
 								firstName: input.address.firstName,
 								lastName: input.address.lastName,
-								point: input.address.point,
+								point: {
+									create: {
+										name: input.address.point.name,
+										addressFullName:
+											input.address.point.addressFullName,
+										addressName:
+											input.address.point.addressName,
+										city: input.address.point.city,
+										email: input.address.point.email,
+										region: input.address.point.region,
+										latitude: input.address.point.latitude,
+										longitude:
+											input.address.point.longitude,
+										type: input.address.point.type,
+										work_time:
+											input.address.point.work_time,
+										phone: input.address.point.phone,
+									},
+								},
 							},
 						},
 						orderItem: {

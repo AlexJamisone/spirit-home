@@ -1,4 +1,5 @@
 import { clerkClient } from '@clerk/nextjs/server';
+import type { Point } from '@prisma/client';
 import { z } from 'zod';
 import { createTRPCRouter, privetProcedure } from '~/server/api/trpc';
 
@@ -8,9 +9,8 @@ export const addressesRouter = createTRPCRouter({
 			z.object({
 				firstName: z.string().nonempty(),
 				lastName: z.string().nonempty(),
-				city: z.string().nonempty(),
 				contactPhone: z.string().nonempty().min(16),
-				point: z.string().nonempty(),
+				point: z.custom<Point>(),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -30,7 +30,21 @@ export const addressesRouter = createTRPCRouter({
 			return await ctx.prisma.address.create({
 				data: {
 					contactPhone: input.contactPhone,
-					point: input.point,
+					point: {
+						create: {
+							name: input.point.name,
+							addressFullName: input.point.addressFullName,
+							addressName: input.point.addressName,
+							city: input.point.city,
+							email: input.point.email,
+							region: input.point.region,
+							latitude: input.point.latitude,
+							longitude: input.point.longitude,
+							type: input.point.type,
+							work_time: input.point.work_time,
+							phone: input.point.phone,
+						},
+					},
 					userId: ctx.userId,
 					firstName: input.firstName,
 					lastName: input.lastName,
@@ -58,9 +72,8 @@ export const addressesRouter = createTRPCRouter({
 				id: z.string(),
 				firstName: z.string().nonempty().optional(),
 				lastName: z.string().nonempty().optional(),
-				city: z.string().nonempty(),
 				contactPhone: z.string().nonempty().min(12).max(12),
-				point: z.string().nonempty(),
+				point: z.custom<Point>(),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -83,7 +96,21 @@ export const addressesRouter = createTRPCRouter({
 				},
 				data: {
 					contactPhone: input.contactPhone,
-					point: input.point,
+					point: {
+						update: {
+							name: input.point.name,
+							addressFullName: input.point.addressFullName,
+							addressName: input.point.addressName,
+							city: input.point.city,
+							email: input.point.email,
+							region: input.point.region,
+							latitude: input.point.latitude,
+							longitude: input.point.longitude,
+							type: input.point.type,
+							work_time: input.point.work_time,
+							phone: input.point.phone,
+						},
+					},
 				},
 			});
 		}),

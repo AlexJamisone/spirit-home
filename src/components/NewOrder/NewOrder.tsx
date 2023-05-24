@@ -11,6 +11,7 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
+import type { Point } from '@prisma/client';
 import type { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useReducer, useRef, useState, type ReactNode } from 'react';
@@ -138,7 +139,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 							contactPhone: input.contactPhone,
 							firstName: input.firstName,
 							lastName: input.lastName,
-							point: input.point?.location.address_full as string,
+							point: input.point as Point,
 						},
 					},
 					{
@@ -159,7 +160,7 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 						contactPhone: input.contactPhone,
 						firstName: input.firstName,
 						lastName: input.lastName,
-						point: input.point?.location.address_full as string,
+						point: input.point as Point,
 					},
 					cart: cartState,
 					email: input.saveAcc ? input.email : undefined,

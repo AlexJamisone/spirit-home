@@ -1,3 +1,4 @@
+import type { Point } from '@prisma/client';
 import {
 	createContext,
 	useContext,
@@ -11,7 +12,6 @@ import type {
 	DaDataSuggestion,
 } from 'react-dadata';
 import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
-import type { Points } from '~/server/api/routers/cdek';
 
 interface OrderContext {
 	input: InputAddressState;
@@ -33,7 +33,7 @@ interface OrderContext {
 	setValueSuggestion: Dispatch<
 		SetStateAction<DaDataAddressSuggestion | undefined>
 	>;
-	points?: Points[];
+	points?: Point[];
 	isLoadingCdek: boolean;
 }
 

@@ -33,7 +33,11 @@ export const usersRouter = createTRPCRouter({
 					},
 				},
 				categories: true,
-				address: true,
+				address: {
+					include: {
+						point: true,
+					},
+				},
 				favorites: {
 					select: {
 						productId: true,

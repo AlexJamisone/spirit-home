@@ -1,16 +1,16 @@
 import { Placemark } from '@pbe/react-yandex-maps';
+import type { Point } from '@prisma/client';
 import { useNewOrderContext } from '~/context/orderContext';
-import type { Points } from '~/server/api/routers/cdek';
 
 type PlacemarkPointProps = {
-	point: Points;
+	point: Point;
 };
 
 const PlacemarkPoint = ({ point }: PlacemarkPointProps) => {
 	const { dispatch, input } = useNewOrderContext();
 	return (
 		<Placemark
-			geometry={[point.location.latitude, point.location.longitude]}
+			geometry={[point.latitude, point.longitude]}
 			onClick={() => {
 				dispatch({ type: 'SET_POINT', payload: point });
 				dispatch({ type: 'SET_PVZ', payload: true });
