@@ -1,24 +1,10 @@
-import {
-	Button,
-	FormControl,
-	FormErrorMessage,
-	Input,
-	InputGroup,
-	InputRightElement,
-	Spinner,
-	Stack,
-	Text,
-} from '@chakra-ui/react';
+import { Button, Stack, Text } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import type { ChangeEvent } from 'react';
-import { AddressSuggestions } from 'react-dadata';
-import 'react-dadata/dist/react-dadata.css';
-
-import { IMaskInput } from 'react-imask';
-import { inputFildsAddress } from '~/constants/inputFildsAddress';
 import { useNewOrderContext } from '~/context/orderContext';
 import YandexMap from '../../YandexMaps/YandexMap';
 import UserCreater from '../UserCreater';
+import AddressCitySelect from './AddressCitySelect';
+import AddressInput from './AddressInput';
 
 const AddressCreate = () => {
 	const {
@@ -34,114 +20,28 @@ const AddressCreate = () => {
 		valueSuggestion,
 		isLoadingCdek,
 	} = useNewOrderContext();
-
-	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		switch (name) {
-			case 'firstName':
-				dispatch({ type: 'SET_NAME', payload: value });
-				break;
-			case 'lastName':
-				dispatch({ type: 'SET_LAST_NAME', payload: value });
-				break;
-			case 'phone':
-				dispatch({ type: 'SET_PHONE', payload: value });
-				break;
-			default:
-				break;
-		}
-	};
 	return (
 		<>
 			<Stack justifyContent="center" alignItems="center" gap={3}>
-				{inputFildsAddress(input, error).map(
-					({ name, placeholder, value, errorMessage }, index) => (
-						<FormControl
-							key={name}
-							isInvalid={!errorMessage ? false : isError}
-							w="300px"
-							as={motion.div}
-							layout
-						>
-							<Input
-								inputRef={
-									name === 'firstName' ? initialRef : null
-								}
-								as={IMaskInput}
-								mask={
-									name === 'phone' ? '+{7}(000)000-00-00' : ''
-								}
-								type="text"
-								name={name}
-								placeholder={placeholder}
-								value={value ?? ''}
-								onChange={(e) => {
-									void resetNoAuth() || resetNoAddress();
-									handlInput(e);
-								}}
-							/>
-							<FormErrorMessage
-								as={motion.div}
-								initial={{ opacity: 0, y: 50 }}
-								animate={{
-									opacity: 1,
-									y: 0,
-									transition: {
-										type: 'spring',
-										duration: 0.5,
-										delay: 0.1 * index,
-									},
-								}}
-								exit={{ opacity: 0 }}
-								fontWeight={600}
-								fontSize={12}
-							>
-								{errorMessage}
-							</FormErrorMessage>
-						</FormControl>
-					)
-				)}
-				<InputGroup w="300px" zIndex={10}>
-					<FormControl isInvalid={isError}>
-						<AddressSuggestions
-							token={process.env.NEXT_PUBLIC_API_DADATA as string}
-							value={valueSuggestion}
-							onChange={(suggestion) => handlPoints(suggestion)}
-							inputProps={{
-								placeholder: 'Введите ваш город',
-								disabled: input.selectedPVZ,
-							}}
-							filterFromBound="city"
-							filterToBound="city"
-							renderOption={(suggestion) => suggestion.data.city}
-							autoload={true}
-							customInput={Input}
-						/>
-						<InputRightElement position="absolute">
-							{isLoadingCdek ? <Spinner size={['sm']} /> : null}
-						</InputRightElement>
-						<FormErrorMessage
-							as={motion.div}
-							initial={{ opacity: 0, y: 50 }}
-							animate={{
-								opacity: 1,
-								y: 0,
-								transition: {
-									type: 'spring',
-									duration: 0.5,
-									delay: 0.1,
-								},
-							}}
-							exit={{ opacity: 0 }}
-							fontWeight={600}
-							fontSize={12}
-						>
-							{error?.find(
-								(error) => error === 'Выбери город доставки'
-							)}
-						</FormErrorMessage>
-					</FormControl>
-				</InputGroup>
+				<AddressInput
+					input={input}
+					dispatch={dispatch}
+					error={error}
+					initialRef={initialRef}
+					isError={isError}
+					onChangeAction={() =>
+						void resetNoAuth() || void resetNoAddress()
+					}
+				/>
+				<AddressCitySelect
+					dispatch={dispatch}
+					handlPoints={handlPoints}
+					input={input}
+					valueSuggestion={valueSuggestion}
+					error={error}
+					isError={isError}
+					isLoadingCdek={isLoadingCdek}
+				/>
 				{input.showPVZ ? (
 					<Stack
 						border="1px solid"
