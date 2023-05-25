@@ -47,6 +47,7 @@ interface CardOrderContext {
 	id: string;
 	createdAt: Date;
 	viewed: boolean;
+	orderNumber: number;
 }
 
 const CardOrderContext = createContext<CardOrderContext | null>(null);

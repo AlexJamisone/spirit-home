@@ -4,10 +4,12 @@ import { motion } from 'framer-motion';
 import { FiEye } from 'react-icons/fi';
 import { useCardOrderContext } from '~/context/ordersCardsContext';
 import { api } from '~/utils/api';
+
 dayjs.locale('ru');
 
 const AdminOrdersInfo = () => {
-	const { address, user, createdAt, id, viewed } = useCardOrderContext();
+	const { address, user, createdAt, id, viewed, orderNumber } =
+		useCardOrderContext();
 	const toast = useToast();
 	const { mutate: changeViewd, isLoading } =
 		api.orders.changeViewd.useMutation();
@@ -51,6 +53,7 @@ const AdminOrdersInfo = () => {
 					exit={{ opacity: 0 }}
 				/>
 			)}
+			<Text>Заказ №{orderNumber}</Text>
 			<Text fontWeight={600}>
 				Дата cоздания: {dayjs(createdAt).format('DD.MM.YYYY HH:mm')}
 			</Text>

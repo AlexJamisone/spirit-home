@@ -39,7 +39,7 @@ model Address {
 
 model Point {
     id              String  @id @default(cuid())
-    address         Address @relation(fields: [addressId], references: [id])
+    address         Address @relation(fields: [addressId], references: [id], onDelete: Cascade)
     addressId       String  @unique
     name            String
     work_time       String
@@ -112,15 +112,16 @@ model ProductPriceHistory {
 }
 
 model Order {
-    id        String      @id @default(cuid())
-    user      User?       @relation(fields: [userId], references: [id])
-    address   Address     @relation(fields: [addressId], references: [id])
-    userId    String?
-    status    OrderStatus @default(PENDING)
-    createdAt DateTime    @default(now())
-    orderItem OrderItem[]
-    addressId String
-    viewed    Boolean     @default(false)
+    id          String      @id @default(cuid())
+    orderNumber Int         @default(autoincrement())
+    user        User?       @relation(fields: [userId], references: [id])
+    address     Address     @relation(fields: [addressId], references: [id])
+    userId      String?
+    status      OrderStatus @default(PENDING)
+    createdAt   DateTime    @default(now())
+    orderItem   OrderItem[]
+    addressId   String
+    viewed      Boolean     @default(false)
 }
 
 model OrderItem {

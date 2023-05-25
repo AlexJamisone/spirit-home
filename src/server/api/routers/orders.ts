@@ -134,6 +134,7 @@ export const ordersRouter = createTRPCRouter({
 					},
 				},
 				userId: true,
+				orderNumber: true,
 			},
 			orderBy: {
 				createdAt: 'desc',

@@ -43,6 +43,7 @@ type AdminOrdersCardProps = {
 		status: OrderStatus;
 		createdAt: Date;
 		viewed: boolean;
+		orderNumber: number;
 	};
 	info?: ReactNode;
 	table?: ReactNode;
@@ -65,7 +66,16 @@ const AdminOrdersCard = ({
 	const [valueStatus, setValueStatus] = useState<'COMPLETED' | 'CANCELLED'>(
 		'COMPLETED'
 	);
-	const { address, createdAt, id, orderItem, status, user, viewed } = order;
+	const {
+		address,
+		createdAt,
+		id,
+		orderItem,
+		status,
+		user,
+		viewed,
+		orderNumber,
+	} = order;
 
 	const handlChangeStatus = (value: OrderStatus, id: string) => {
 		changeStatus(
@@ -117,6 +127,7 @@ const AdminOrdersCard = ({
 				status,
 				id,
 				viewed,
+				orderNumber,
 			}}
 		>
 			<Stack
