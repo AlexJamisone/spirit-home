@@ -7,39 +7,28 @@ import {
 	Spinner,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import type { Dispatch } from 'react';
-import {
-	AddressSuggestions,
-	type DaDataAddress,
-	type DaDataAddressSuggestion,
-	type DaDataSuggestion,
-} from 'react-dadata';
+import { AddressSuggestions } from 'react-dadata';
 import 'react-dadata/dist/react-dadata.css';
-import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
+import { useCreateAddressContext } from '~/context/addressContext';
 
-type AddressCitySelectProps = {
-	input: InputAddressState;
-	dispatch: Dispatch<Action>;
-	isError?: boolean;
-	valueSuggestion: DaDataAddressSuggestion | undefined;
-	handlPoints?: (
-		suggestion: DaDataSuggestion<DaDataAddress> | undefined
-	) => void;
-	error?: string[];
-	isLoadingCdek?: boolean;
-};
-
-const AddressCitySelect = ({
-	input,
-	valueSuggestion,
-	isError,
-	handlPoints,
-	error,
-	isLoadingCdek,
-}: AddressCitySelectProps) => {
+const AddressCitySelect = () => {
+	const {
+		input,
+		isError,
+		error,
+		valueSuggestion,
+		handlPoints,
+		isLoadingCdek,
+	} = useCreateAddressContext();
 	return (
 		<InputGroup w="300px" zIndex={10}>
-			<FormControl isInvalid={isError}>
+			<FormControl
+				isInvalid={
+					isError &&
+					error?.find((error) => error === 'Выбери город доставки')
+						?.length === 0
+				}
+			>
 				<AddressSuggestions
 					token={process.env.NEXT_PUBLIC_API_DADATA as string}
 					value={valueSuggestion}

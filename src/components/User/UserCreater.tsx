@@ -10,16 +10,17 @@ import {
 	InputRightElement,
 	Stack,
 } from '@chakra-ui/react';
+import { useAuth } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import { BiHide, BiShow } from 'react-icons/bi';
 import { useNewOrderContext } from '~/context/orderContext';
 
 const UserCreater = () => {
+	const { isSignedIn } = useAuth();
 	const {
 		input,
 		dispatch,
-		isSignedIn,
 		isError,
 		resetNoAddress,
 		resetNoAuth,

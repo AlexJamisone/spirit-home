@@ -1,10 +1,10 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { Map } from '@pbe/react-yandex-maps';
-import { useNewOrderContext } from '~/context/orderContext';
+import { useCreateAddressContext } from '~/context/addressContext';
 import PlacemarkPoint from './PlacemarkPoint';
 
 const Maps = () => {
-	const { valueSuggestion, points } = useNewOrderContext();
+	const { valueSuggestion, points } = useCreateAddressContext();
 	const [isLowerThen900] = useMediaQuery(['(max-width: 900px)']);
 	return (
 		<Map

@@ -1,13 +1,13 @@
 import { Placemark } from '@pbe/react-yandex-maps';
 import type { Point } from '@prisma/client';
-import { useNewOrderContext } from '~/context/orderContext';
+import { useCreateAddressContext } from '~/context/addressContext';
 
 type PlacemarkPointProps = {
 	point: Point;
 };
 
 const PlacemarkPoint = ({ point }: PlacemarkPointProps) => {
-	const { dispatch, input } = useNewOrderContext();
+	const { dispatch, input } = useCreateAddressContext();
 	return (
 		<Placemark
 			geometry={[point.latitude, point.longitude]}

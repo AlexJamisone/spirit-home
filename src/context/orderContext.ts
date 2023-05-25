@@ -18,7 +18,6 @@ interface OrderContext {
 	dispatch: Dispatch<Action>;
 	handlSubmit: () => void;
 	onClose: () => void;
-	isSignedIn?: boolean;
 	isError: boolean;
 	error?: string[];
 	passwordLengthError?: string;

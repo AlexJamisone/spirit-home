@@ -1,27 +1,13 @@
 import { FormControl, FormErrorMessage, Input } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import { type ChangeEvent, type Dispatch, type RefObject } from 'react';
+import { type ChangeEvent } from 'react';
 import { IMaskInput } from 'react-imask';
 import { inputFildsAddress } from '~/constants/inputFildsAddress';
-import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
+import { useCreateAddressContext } from '~/context/addressContext';
 
-type AddressInputProps = {
-	input: InputAddressState;
-	dispatch: Dispatch<Action>;
-	error?: string[];
-	onChangeAction?: () => void;
-	isError?: boolean;
-	initialRef?: RefObject<HTMLInputElement>;
-};
-
-const AddressInput = ({
-	input,
-	error,
-	onChangeAction,
-	dispatch,
-	isError,
-	initialRef,
-}: AddressInputProps) => {
+const AddressInput = () => {
+	const { dispatch, input, error, initialRef, action, isError } =
+		useCreateAddressContext();
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const { name, value } = e.target;
 		switch (name) {
@@ -59,7 +45,7 @@ const AddressInput = ({
 							value={value ?? ''}
 							onChange={(e) => {
 								handlInput(e);
-								onChangeAction?.();
+								action?.();
 							}}
 						/>
 						<FormErrorMessage

@@ -204,7 +204,6 @@ const NewOrder = ({ isOpen, onClose, action, address }: NewOrderProps) => {
 						input,
 						dispatch,
 						handlSubmit,
-						isSignedIn,
 						onClose,
 						initialRef,
 						resetNoAuth,

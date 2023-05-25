@@ -6,13 +6,43 @@ import UserAddressCard from './UserAddressCard';
 
 const UserAddressList = () => {
 	const { data: user } = api.users.get.useQuery();
-	const { input, dispatch, isError } = useNewOrderContext();
+	const {
+		input,
+		dispatch,
+		isError,
+		handlPoints,
+		initialRef,
+		isLoadingCdek,
+		resetNoAddress,
+		resetNoAuth,
+		error,
+		points,
+		valueSuggestion,
+	} = useNewOrderContext();
 	if (!user) return null;
 	return (
 		<>
 			{user.address?.filter((address) => !address.archived).length ===
 			0 ? (
-				<AddressCreate />
+				<AddressCreate
+					dispatch={dispatch}
+					input={input}
+					isError={isError}
+					handlPoints={handlPoints}
+					isLoadingCdek={isLoadingCdek}
+					valueSuggestion={valueSuggestion}
+					initialRef={initialRef}
+					action={() => {
+						resetNoAddress();
+						resetNoAuth();
+					}}
+					error={error}
+					points={points}
+					citySelect={<AddressCreate.City />}
+					inputFilds={<AddressCreate.Input />}
+					map={<AddressCreate.Map />}
+					pointCard={<AddressCreate.Point />}
+				/>
 			) : (
 				<>
 					<RadioGroup
