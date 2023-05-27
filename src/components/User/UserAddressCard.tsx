@@ -10,7 +10,11 @@ type UserAddressCardProps = {
 	lastName: string | null;
 	email: string | null | undefined;
 	isLoading?: boolean;
-	handlEdit?: (address: Address) => void;
+	handlEdit?: (
+		address: Address & {
+			point: Point | null;
+		}
+	) => void;
 	handlDeletAddress?: (id: string) => void;
 	cantEdit?: boolean;
 };

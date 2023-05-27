@@ -8,9 +8,10 @@ import {
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
-import type { Address } from '@prisma/client';
+import type { Address, Point } from '@prisma/client';
 import { AnimatePresence } from 'framer-motion';
-import { useReducer, useState } from 'react';
+import { useReducer, useRef } from 'react';
+import type { AddressSuggestions } from 'react-dadata';
 import { FaAddressCard } from 'react-icons/fa';
 import {
 	InputAddressReducer,
@@ -24,13 +25,14 @@ import UserOrders from './UserOrders';
 
 const UserMain = () => {
 	const { data: user } = api.users.get.useQuery();
-	const [edit, setEdit] = useState(false);
 	const { mutate: archivedAddress, isLoading } =
 		api.addresses.archived.useMutation();
+
 	const ctx = api.useContext();
 	const { isOpen, onClose, onToggle } = useDisclosure();
-	const toast = useToast();
 
+	const toast = useToast();
+	const suggestionsRef = useRef<AddressSuggestions>(null);
 	const [input, dispatch] = useReducer(InputAddressReducer, initialState);
 	if (!user) return null;
 	const handlAdd = () => {
@@ -64,25 +66,30 @@ const UserMain = () => {
 			}
 		);
 	};
-	const handlEdit = (address: Address) => {
+	const handlEdit = (
+		address: Address & {
+			point: Point | null;
+		}
+	) => {
 		dispatch({
 			type: 'SET_ALL',
 			payload: {
 				id: address.id,
-				firstName: user.firstName ?? '',
+				firstName: address.firstName ?? '',
 				contactPhone: address.contactPhone,
-				lastName: user.lastName ?? '',
+				lastName: address.lastName ?? '',
 				email: user.email ?? '',
 				idAddress: input.idAddress,
 				password: '',
 				saveAcc: false,
 				errorSelectedPVZ: false,
-				selectedPVZ: false,
+				selectedPVZ: true,
 				showMap: false,
-				showPVZ: false,
+				showPVZ: true,
+				point: address.point as Point,
+				edit: true,
 			},
 		});
-		setEdit(true);
 		onToggle();
 	};
 	return (
@@ -126,10 +133,9 @@ const UserMain = () => {
 							<UserAddressesFormModal
 								isOpen={isOpen}
 								onClose={onClose}
-								dispatch={dispatch}
 								input={input}
-								edit={edit}
-								setEdit={setEdit}
+								dispatch={dispatch}
+								suggestionsRef={suggestionsRef}
 							/>
 							<AnimatePresence>
 								{user.address?.filter(

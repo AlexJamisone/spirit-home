@@ -1,14 +1,18 @@
 import {
 	FormControl,
 	FormErrorMessage,
+	FormHelperText,
+	Icon,
 	Input,
 	InputGroup,
 	InputRightElement,
 	Spinner,
+	Stack,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { AddressSuggestions } from 'react-dadata';
 import 'react-dadata/dist/react-dadata.css';
+import { RiErrorWarningLine } from 'react-icons/ri';
 import { useCreateAddressContext } from '~/context/addressContext';
 
 const AddressCitySelect = () => {
@@ -19,6 +23,7 @@ const AddressCitySelect = () => {
 		valueSuggestion,
 		handlPoints,
 		isLoadingCdek,
+		suggestionsRef,
 	} = useCreateAddressContext();
 	return (
 		<InputGroup w="300px" zIndex={10}>
@@ -31,8 +36,10 @@ const AddressCitySelect = () => {
 			>
 				<AddressSuggestions
 					token={process.env.NEXT_PUBLIC_API_DADATA as string}
+					onChange={(suggestion) => {
+						handlPoints?.(suggestion);
+					}}
 					value={valueSuggestion}
-					onChange={(suggestion) => handlPoints?.(suggestion)}
 					inputProps={{
 						placeholder: 'Введите ваш город',
 						disabled: input.selectedPVZ,
@@ -42,6 +49,8 @@ const AddressCitySelect = () => {
 					renderOption={(suggestion) => suggestion.data.city}
 					autoload={true}
 					customInput={Input}
+					ref={suggestionsRef}
+					selectOnBlur={true}
 				/>
 				<InputRightElement position="absolute">
 					{isLoadingCdek ? <Spinner size={['sm']} /> : null}
@@ -64,6 +73,19 @@ const AddressCitySelect = () => {
 				>
 					{error?.find((error) => error === 'Выбери город доставки')}
 				</FormErrorMessage>
+				{input.edit && !input.selectedPVZ ? (
+					<Stack
+						direction="row"
+						alignItems="center"
+						mt={3}
+						color="blackAlpha.600"
+					>
+						<Icon as={RiErrorWarningLine} boxSize={5} />
+						<FormHelperText textColor="blackAlpha.600">
+							Для изменения пункта выдачи введите город
+						</FormHelperText>
+					</Stack>
+				) : null}
 			</FormControl>
 		</InputGroup>
 	);

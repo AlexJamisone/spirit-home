@@ -10,7 +10,7 @@
 		"start": "next start",
 		"prettier": "prettier --config .prettierrc --ignore-path .gitignore --write \"**/*.{js,jsx,json,md,ts,tsx}\"",
 		"typecheck": "tsc --noEmit",
-		"precome": "npm run prettier && npm run typecheck && git add . && git commit"
+		"precommit": "npm run prettier && npm run typecheck && git add . && git commit"
 	},
 	"dependencies": {
 		"@chakra-ui/react": "^2.5.5",

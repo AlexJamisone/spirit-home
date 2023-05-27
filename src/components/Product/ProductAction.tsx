@@ -22,7 +22,7 @@ const ProductAction = ({ container }: ProductActionProps) => {
 			<IconButton
 				icon={<Icon as={icon} color="cyan.600" />}
 				aria-label="deletButton"
-				size="md"
+				size="sm"
 				position="absolute"
 				top={5}
 				right={5}

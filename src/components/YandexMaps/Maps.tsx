@@ -4,7 +4,7 @@ import { useCreateAddressContext } from '~/context/addressContext';
 import PlacemarkPoint from './PlacemarkPoint';
 
 const Maps = () => {
-	const { valueSuggestion, points } = useCreateAddressContext();
+	const { valueSuggestion, points, input } = useCreateAddressContext();
 	const [isLowerThen900] = useMediaQuery(['(max-width: 900px)']);
 	return (
 		<Map

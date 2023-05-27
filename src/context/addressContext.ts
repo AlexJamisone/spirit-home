@@ -6,6 +6,7 @@ import {
 	type RefObject,
 } from 'react';
 import type {
+	AddressSuggestions,
 	DaDataAddress,
 	DaDataAddressSuggestion,
 	DaDataSuggestion,
@@ -25,6 +26,7 @@ export interface CreateAddressContext {
 	isLoadingCdek: boolean;
 	valueSuggestion: DaDataAddressSuggestion | undefined;
 	points?: Point[];
+	suggestionsRef?: RefObject<AddressSuggestions>;
 }
 
 const AddressContext = createContext<CreateAddressContext | null>(null);

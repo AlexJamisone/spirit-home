@@ -13,6 +13,7 @@ export interface InputAddressState {
 	showPVZ: boolean;
 	selectedPVZ: boolean;
 	errorSelectedPVZ: boolean;
+	edit: boolean;
 }
 
 interface SetIdAction {
@@ -74,6 +75,10 @@ interface SetErrorSelectedPVZAction {
 	type: 'SET_ERROR_SELECTED_PVZ';
 	payload: boolean;
 }
+interface SetEditAction {
+	type: 'SET_EDIT';
+	payload: boolean;
+}
 
 export type Action =
 	| SetPhoneAction
@@ -90,7 +95,8 @@ export type Action =
 	| SetShowMapAction
 	| SetPVZAction
 	| SetSelectedPVZAction
-	| SetErrorSelectedPVZAction;
+	| SetErrorSelectedPVZAction
+	| SetEditAction;
 
 export const initialState: InputAddressState = {
 	id: '',
@@ -105,6 +111,7 @@ export const initialState: InputAddressState = {
 	showPVZ: false,
 	selectedPVZ: false,
 	errorSelectedPVZ: false,
+	edit: false,
 };
 
 export const InputAddressReducer = (
@@ -138,6 +145,8 @@ export const InputAddressReducer = (
 			return { ...state, selectedPVZ: action.payload };
 		case 'SET_ERROR_SELECTED_PVZ':
 			return { ...state, errorSelectedPVZ: action.payload };
+		case 'SET_EDIT':
+			return { ...state, edit: action.payload };
 		case 'SET_CLEAR':
 			return {
 				id: '',
@@ -153,6 +162,7 @@ export const InputAddressReducer = (
 				showPVZ: false,
 				selectedPVZ: false,
 				errorSelectedPVZ: false,
+				edit: false,
 			};
 		case 'SET_ALL':
 			return {

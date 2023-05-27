@@ -1,8 +1,6 @@
 import {
 	Button,
 	FormControl,
-	FormLabel,
-	Input,
 	Modal,
 	ModalBody,
 	ModalCloseButton,
@@ -10,28 +8,28 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
-	Stack,
 	useToast,
 } from '@chakra-ui/react';
 import type { Point } from '@prisma/client';
-import React, {
-	type ChangeEvent,
-	type Dispatch,
-	type SetStateAction,
-} from 'react';
-import { IMaskInput } from 'react-imask';
-import { inputFildsAddress } from '~/constants/inputFildsAddress';
+import { useRef, useState, type Dispatch, type RefObject } from 'react';
+import type {
+	AddressSuggestions,
+	DaDataAddress,
+	DaDataAddressSuggestion,
+	DaDataSuggestion,
+} from 'react-dadata';
 
+import { motion } from 'framer-motion';
 import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
 import { api } from '~/utils/api';
+import AddressCreate from './Address/Address';
 
 type UserAddressesFormModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
 	input: InputAddressState;
 	dispatch: Dispatch<Action>;
-	edit: boolean;
-	setEdit: Dispatch<SetStateAction<boolean>>;
+	suggestionsRef: RefObject<AddressSuggestions>;
 };
 
 const UserAddressesFormModal = ({
@@ -39,39 +37,37 @@ const UserAddressesFormModal = ({
 	onClose,
 	dispatch,
 	input,
-	edit,
-	setEdit,
+	suggestionsRef,
 }: UserAddressesFormModalProps) => {
-	const { mutate: createByUser, isLoading: createLoading } =
-		api.addresses.createByUser.useMutation();
-	const { mutate: updateAddress, isLoading: updateLoading } =
-		api.addresses.update.useMutation();
-
+	const {
+		mutate: createByUser,
+		isLoading: createLoading,
+		error: errorCreateAddrress,
+		isError: isErrorCreate,
+	} = api.addresses.createByUser.useMutation();
+	const {
+		mutate: updateAddress,
+		isLoading: updateLoading,
+		error: errorUpdateAddress,
+		isError: isErrorUpdate,
+	} = api.addresses.update.useMutation();
+	const {
+		mutate: getPoints,
+		data: points,
+		isLoading: isLoadingCdek,
+	} = api.cdek.getPoints.useMutation();
 	const toast = useToast();
-
+	const [valueSuggestion, setValueSuggestion] = useState<
+		DaDataAddressSuggestion | undefined
+	>();
 	const ctx = api.useContext();
-	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, value } = e.target;
-		switch (name) {
-			case 'firstName':
-				dispatch({ type: 'SET_NAME', payload: value });
-				break;
-			case 'lastName':
-				dispatch({ type: 'SET_LAST_NAME', payload: value });
-				break;
-				break;
-			case 'phone':
-				dispatch({ type: 'SET_PHONE', payload: value });
-				break;
-			// case 'cdek':
-			// 	dispatch({ type: 'SET_POINT', payload: value });
-			// 	break;
-			default:
-				break;
-		}
-	};
+	const error =
+		errorCreateAddrress?.data?.zodError?.fieldErrors?.address ||
+		errorUpdateAddress?.data?.zodError?.fieldErrors?.address;
+	const initialFocusRef = useRef<HTMLInputElement>(null);
+
 	const handleSubmit = () => {
-		if (edit) {
+		if (input.edit) {
 			updateAddress(
 				{
 					id: input.id,
@@ -89,7 +85,7 @@ const UserAddressesFormModal = ({
 						});
 						void ctx.users.invalidate();
 						dispatch({ type: 'SET_CLEAR' });
-						setEdit(false);
+						dispatch({ type: 'SET_EDIT', payload: false });
 						onClose();
 					},
 				}
@@ -117,6 +113,19 @@ const UserAddressesFormModal = ({
 			);
 		}
 	};
+	const handlPoints = (
+		suggestion: DaDataSuggestion<DaDataAddress> | undefined
+	) => {
+		setValueSuggestion(suggestion);
+		getPoints(
+			{ city: suggestion?.data.postal_code as string },
+			{
+				onSuccess: () => {
+					dispatch({ type: 'SET_MAP', payload: true });
+				},
+			}
+		);
+	};
 	return (
 		<Modal
 			isOpen={isOpen}
@@ -124,9 +133,10 @@ const UserAddressesFormModal = ({
 				dispatch({ type: 'SET_CLEAR' });
 				onClose();
 			}}
+			size={'2xl'}
 		>
 			<ModalOverlay />
-			<ModalContent>
+			<ModalContent as={motion.section} layout>
 				<FormControl
 					as="form"
 					onSubmit={(e) => {
@@ -139,40 +149,32 @@ const UserAddressesFormModal = ({
 					</ModalHeader>
 					<ModalCloseButton />
 					<ModalBody>
-						<Stack direction="column" gap={[1, 5]}>
-							{inputFildsAddress(input).map(
-								({ name, placeholder, value }) => (
-									<React.Fragment key={name}>
-										<FormLabel fontSize={[12, 16]}>
-											{placeholder}
-										</FormLabel>
-										<Input
-											as={IMaskInput}
-											mask={
-												name === 'phone'
-													? '+{7}(000)000-00-00'
-													: false
-											}
-											size={['sm', 'md']}
-											fontSize={[12, 16]}
-											type="text"
-											placeholder={placeholder}
-											value={value ?? ''}
-											name={name}
-											onChange={(e) => handlInput(e)}
-										/>
-									</React.Fragment>
-								)
-							)}
-						</Stack>
+						<AddressCreate
+							dispatch={dispatch}
+							input={input}
+							handlPoints={handlPoints}
+							isError={isErrorCreate || isErrorUpdate}
+							isLoadingCdek={isLoadingCdek}
+							valueSuggestion={valueSuggestion}
+							initialRef={initialFocusRef}
+							error={error}
+							points={points}
+							inputFilds={<AddressCreate.Input />}
+							citySelect={<AddressCreate.City />}
+							pointCard={<AddressCreate.Point />}
+							map={<AddressCreate.Map />}
+							suggestionsRef={suggestionsRef}
+						/>
 					</ModalBody>
 					<ModalFooter gap={5}>
 						<Button
 							size={['sm', 'md']}
-							isLoading={edit ? updateLoading : createLoading}
+							isLoading={
+								input.edit ? updateLoading : createLoading
+							}
 							type="submit"
 						>
-							{edit ? 'Обновить' : 'Сохранить'}
+							{input.edit ? 'Обновить' : 'Сохранить'}
 						</Button>
 						<Button
 							size={['sm', 'md']}
