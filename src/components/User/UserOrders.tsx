@@ -18,7 +18,7 @@ import { status as statusHelper } from '~/helpers/status';
 import { api } from '~/utils/api';
 import NoData from '../NoData/NoData';
 
-dayjs().locale('ru').format();
+dayjs.locale('ru');
 
 const UserOrders = () => {
 	const { data: user } = api.users.get.useQuery();
@@ -27,7 +27,6 @@ const UserOrders = () => {
 		<Stack
 			as={motion.div}
 			border={['none', '1px solid #CBD5E0']}
-			w={['100%']}
 			h={[null, '550px']}
 			rounded="2xl"
 			p={[0, 5]}

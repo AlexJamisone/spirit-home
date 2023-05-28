@@ -14,7 +14,7 @@
 	},
 	"dependencies": {
 		"@chakra-ui/react": "^2.5.5",
-		"@clerk/nextjs": "^4.13.0",
+		"@clerk/nextjs": "^4.19.0",
 		"@emotion/react": "^11.10.6",
 		"@emotion/styled": "^11.10.6",
 		"@pbe/react-yandex-maps": "^1.2.4",

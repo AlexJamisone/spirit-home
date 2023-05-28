@@ -1,8 +1,7 @@
 import { clerkClient } from '@clerk/nextjs/server';
 import { TRPCError } from '@trpc/server';
-import { filterUserForClient } from '~/server/helpers/filterUserForClient';
-
 import { createTRPCRouter, privetProcedure } from '~/server/api/trpc';
+import { filterUserForClient } from '~/server/helpers/filterUserForClient';
 
 export const usersRouter = createTRPCRouter({
 	get: privetProcedure.query(async ({ ctx }) => {
@@ -58,15 +57,15 @@ export const usersRouter = createTRPCRouter({
 			await ctx.prisma.user.create({
 				data: {
 					id: ctx.userId,
-					email: userClerk.email,
+					email: userClerk?.email,
 					firstName: user.firstName ?? '',
 					lastName: user.lastName ?? '',
 				},
 			});
 		}
 		return {
-			...userClerk,
 			...findUser,
+			...userClerk,
 		};
 	}),
 	getUserForFav: privetProcedure.query(async ({ ctx }) => {
