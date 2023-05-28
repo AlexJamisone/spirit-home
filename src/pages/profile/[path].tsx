@@ -23,7 +23,7 @@ const ProfilePage = () => {
 	const handlProfile = () => {
 		switch (path) {
 			case 'main':
-				return <UserMain />;
+				return <UserMain info={<UserMain.Info />} />;
 			case 'orders':
 				return <UserOrders />;
 			case 'settings':
