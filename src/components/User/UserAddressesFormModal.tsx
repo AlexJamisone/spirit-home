@@ -11,33 +11,26 @@ import {
 	useToast,
 } from '@chakra-ui/react';
 import type { Point } from '@prisma/client';
-import { useRef, useState, type Dispatch, type RefObject } from 'react';
+import { useRef, useState } from 'react';
 import type {
-	AddressSuggestions,
 	DaDataAddress,
 	DaDataAddressSuggestion,
 	DaDataSuggestion,
 } from 'react-dadata';
 
 import { motion } from 'framer-motion';
-import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
+import { useUserMainContext } from '~/context/userMainContext';
 import { api } from '~/utils/api';
 import AddressCreate from './Address/Address';
 
 type UserAddressesFormModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
-	input: InputAddressState;
-	dispatch: Dispatch<Action>;
-	suggestionsRef: RefObject<AddressSuggestions>;
 };
 
 const UserAddressesFormModal = ({
 	isOpen,
 	onClose,
-	dispatch,
-	input,
-	suggestionsRef,
 }: UserAddressesFormModalProps) => {
 	const {
 		mutate: createByUser,
@@ -56,6 +49,7 @@ const UserAddressesFormModal = ({
 		data: points,
 		isLoading: isLoadingCdek,
 	} = api.cdek.getPoints.useMutation();
+	const { dispatch, input, suggestionsRef } = useUserMainContext();
 	const toast = useToast();
 	const [valueSuggestion, setValueSuggestion] = useState<
 		DaDataAddressSuggestion | undefined

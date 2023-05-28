@@ -20,10 +20,6 @@ const UserInfo = () => {
 				y: 0,
 				transition: { type: 'spring', duration: 1 },
 			}}
-			whileHover={{
-				scale: 1.05,
-				transition: { type: 'spring', duration: 0.5 },
-			}}
 		>
 			<Input
 				type="file"

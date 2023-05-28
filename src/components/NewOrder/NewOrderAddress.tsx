@@ -1,7 +1,7 @@
 import { useAuth } from '@clerk/nextjs';
 import { useNewOrderContext } from '~/context/orderContext';
 import AddressCreate from '../User/Address/Address';
-import UserAddressList from '../User/UserAddressList';
+import UserAddressList from '../User/UserAddressRadio';
 
 const NewOrderAddress = () => {
 	const { isSignedIn } = useAuth();

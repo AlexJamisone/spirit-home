@@ -14,15 +14,14 @@ import {
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
 import { SiDatabricks } from 'react-icons/si';
+import { useUserMainContext } from '~/context/userMainContext';
 import { status as statusHelper } from '~/helpers/status';
-import { api } from '~/utils/api';
 import NoData from '../NoData/NoData';
 
 dayjs.locale('ru');
 
 const UserOrders = () => {
-	const { data: user } = api.users.get.useQuery();
-	if (!user) return null;
+	const { user } = useUserMainContext();
 	return (
 		<Stack
 			as={motion.div}

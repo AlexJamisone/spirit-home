@@ -1,5 +1,22 @@
-import type { Address, Catergory, Point, Role } from '@prisma/client';
-import { createContext, useContext, type ChangeEvent } from 'react';
+import type {
+	Address,
+	Catergory,
+	Order,
+	OrderItem,
+	Point,
+	Product,
+	ProductPriceHistory,
+	Role,
+} from '@prisma/client';
+import {
+	createContext,
+	useContext,
+	type ChangeEvent,
+	type Dispatch,
+	type RefObject,
+} from 'react';
+import type { AddressSuggestions } from 'react-dadata';
+import type { Action, InputAddressState } from '~/reducer/InputAddressReducer';
 
 interface UserMainContextProps {
 	user: {
@@ -12,9 +29,27 @@ interface UserMainContextProps {
 		firstName: string | null;
 		lastName: string | null;
 		address?: (Address & { point: Point | null })[];
+		orders?: (Order & {
+			orderItem: (OrderItem & {
+				product: Product & {
+					priceHistory: ProductPriceHistory[];
+				};
+			})[];
+		})[];
 		categories?: Catergory[];
 	};
 	handlAvatar: (e: ChangeEvent<HTMLInputElement>) => Promise<void>;
+	handlEdit: (
+		address: Address & {
+			point: Point | null;
+		}
+	) => void;
+	handlAdd: () => void;
+	handlDeletAddress: (id: string) => void;
+	suggestionsRef: RefObject<AddressSuggestions>;
+	input: InputAddressState;
+	dispatch: Dispatch<Action>;
+	isLoading: boolean;
 }
 
 const UserMainContext = createContext<UserMainContextProps | null>(null);
