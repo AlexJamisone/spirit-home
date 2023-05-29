@@ -39,11 +39,11 @@ const UserAddressCard = ({
 				transition: { type: 'spring', duration: 0.1 },
 			}}
 			direction={['column']}
-			gap={[1, 3]}
-			border="1px solid #CBD5E0"
+			gap={[1, 1]}
+			boxShadow="lg"
 			rounded="2xl"
 			p={[3, 5]}
-			maxW="350px"
+			maxW={'300px'}
 			position="relative"
 			cursor="pointer"
 			transition="all .3s ease-in-out"

@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { SiDatabricks } from 'react-icons/si';
 import { useUserMainContext } from '~/context/userMainContext';
 import { status as statusHelper } from '~/helpers/status';
@@ -25,19 +26,21 @@ const UserOrders = () => {
 	return (
 		<Stack
 			as={motion.div}
-			border={['none', '1px solid #CBD5E0']}
+			bgColor="whiteAlpha.900"
+			boxShadow="2xl"
 			h={[null, '550px']}
 			rounded="2xl"
-			p={[0, 5]}
+			px={[0, 3]}
 		>
 			{user.orders?.length === 0 ? (
 				<NoData icon={SiDatabricks} text="Пока что нет заказов" />
 			) : (
 				<TableContainer maxW={['100vw']}>
-					<Table size={['sm', 'md']}>
+					<Table size={['sm']}>
 						<TableCaption placement="top">Заказы</TableCaption>
 						<Thead>
 							<Tr>
+								<Th>Номер</Th>
 								<Th>Дата заказа</Th>
 								<Th>Статус</Th>
 								<Th>Заказ</Th>
@@ -45,7 +48,14 @@ const UserOrders = () => {
 							</Tr>
 						</Thead>
 						{user.orders?.map(
-							({ id, createdAt, status, orderItem }) => (
+							({
+								id,
+								createdAt,
+								status,
+								orderItem,
+								orderNumber,
+								viewed,
+							}) => (
 								<Tbody
 									key={id}
 									alignItems="center"
@@ -53,6 +63,11 @@ const UserOrders = () => {
 									px={[0, 5]}
 								>
 									<Tr>
+										<Td>
+											<Text textAlign="center">
+												{orderNumber}
+											</Text>
+										</Td>
 										<Td>
 											<Text>
 												{dayjs(createdAt).format(
@@ -78,6 +93,21 @@ const UserOrders = () => {
 												/>
 												<Text>
 													{statusHelper(status)?.text}
+												</Text>
+											</Stack>
+											<Stack direction="row">
+												<Icon
+													as={
+														viewed
+															? AiOutlineEye
+															: AiOutlineEyeInvisible
+													}
+													boxSize={4}
+												/>
+												<Text>
+													{viewed
+														? 'Просмотренно'
+														: 'Не просмотренно'}
 												</Text>
 											</Stack>
 										</Td>

@@ -131,26 +131,29 @@ const UserMain = ({ info, action, addressList, orders }: UserMainProps) => {
 				templateColumns={['repeat(1, 1fr)', null, 'repeat(2, 1fr)']}
 				gap={[5]}
 				justifyContent={['center', 'space-between']}
+				px={[0, 100]}
 			>
-				<GridItem w="100%">
-					<Stack gap={[5]}>
+				<GridItem>
+					<Stack
+						gap={[5]}
+						justifyContent="center"
+						alignItems="center"
+					>
 						{info}
-						<Stack justifyContent="center" alignItems="center">
-							<Stack
-								direction="row"
-								gap={5}
-								alignItems="center"
-								flexWrap="wrap"
-								justifyContent="center"
-							>
-								{action}
-								<UserAddressesFormModal
-									isOpen={isOpen}
-									onClose={onClose}
-								/>
-								{addressList}
-							</Stack>
+						{action}
+						<Stack
+							direction={['column', 'row']}
+							flexWrap="wrap"
+							justifyContent="center"
+							alignItems="center"
+							gap={2}
+						>
+							{addressList}
 						</Stack>
+						<UserAddressesFormModal
+							isOpen={isOpen}
+							onClose={onClose}
+						/>
 					</Stack>
 				</GridItem>
 				<GridItem>{orders}</GridItem>

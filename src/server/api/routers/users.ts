@@ -1,5 +1,6 @@
 import { clerkClient } from '@clerk/nextjs/server';
 import { TRPCError } from '@trpc/server';
+import { z } from 'zod';
 import { createTRPCRouter, privetProcedure } from '~/server/api/trpc';
 import { filterUserForClient } from '~/server/helpers/filterUserForClient';
 
@@ -105,4 +106,48 @@ export const usersRouter = createTRPCRouter({
 			},
 		});
 	}),
+	changeFirstName: privetProcedure
+		.input(
+			z.object({
+				name: z
+					.string()
+					.transform(
+						(val) =>
+							val.charAt(0).toUpperCase() +
+							val.slice(1).toLowerCase()
+					),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.user.update({
+				where: {
+					id: ctx.userId,
+				},
+				data: {
+					firstName: input.name,
+				},
+			});
+		}),
+	changeLastName: privetProcedure
+		.input(
+			z.object({
+				lastName: z
+					.string()
+					.transform(
+						(val) =>
+							val.charAt(0).toUpperCase() +
+							val.slice(1).toLowerCase()
+					),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.user.update({
+				where: {
+					id: ctx.userId,
+				},
+				data: {
+					lastName: input.lastName,
+				},
+			});
+		}),
 });
