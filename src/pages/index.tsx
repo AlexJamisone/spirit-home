@@ -1,4 +1,11 @@
-import { AbsoluteCenter, Center, Img, Spinner, Stack } from '@chakra-ui/react';
+import {
+	AbsoluteCenter,
+	Center,
+	Heading,
+	Img,
+	Spinner,
+	Stack,
+} from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { type NextPage } from 'next';
 import { useState } from 'react';
@@ -10,6 +17,8 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import NoData from '~/components/NoData/NoData';
 import ProductsCard from '~/components/Product/ProductCard';
 import SearchInput from '~/components/SearchInput';
+import Social from '~/components/Social';
+import MapsWidget from '~/components/YandexMaps/MapsWidget';
 import { api } from '~/utils/api';
 
 const Home: NextPage = () => {
@@ -141,6 +150,35 @@ const Home: NextPage = () => {
 						)}
 					</Center>
 				</Stack>
+			</SwiperSlide>
+			<SwiperSlide>
+				<Center
+					as={motion.footer}
+					pt={150}
+					justifyContent="space-evenly"
+					initial={{ opacity: 0, y: 50 }}
+					whileInView={{
+						opacity: 1,
+						y: 0,
+						transition: {
+							type: 'spring',
+							duration: 0.5,
+						},
+					}}
+					flexDirection="column"
+					gap={10}
+				>
+					<MapsWidget />
+					<Heading
+						fontSize="3xl"
+						fontWeight="extrabold"
+						bgGradient="linear(to-l, #9796f0, #fbc7d4)"
+						bgClip="text"
+					>
+						Подписывайтесь на нас в соц сетях!
+					</Heading>
+					<Social />
+				</Center>
 			</SwiperSlide>
 		</Center>
 	);
