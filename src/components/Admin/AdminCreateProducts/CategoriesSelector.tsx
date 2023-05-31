@@ -5,7 +5,7 @@ import { api } from '~/utils/api';
 
 const CategoriesSelector = () => {
 	const { dispatch, edit, form } = useCreateProductContext();
-	const { data: categories } = api.categorys.get.useQuery();
+	const { data: categories } = api.categorys.getSubCat.useQuery();
 
 	useEffect(() => {
 		dispatch({ type: 'SET_CATEG', payload: categories?.[0]?.title ?? '' });

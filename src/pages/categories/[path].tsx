@@ -11,13 +11,11 @@ import { api } from '~/utils/api';
 
 const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
 	const { data: products } = api.products.get.useQuery();
-	const { data: categories } = api.categorys.get.useQuery();
-	if (!categories) return null;
 	if (!products) return <NoData text="Пусто" icon={BsWind} />;
 	return (
 		<Center pt={160} gap={5} flexWrap="wrap">
 			{products
-				.filter(({ category }) => category?.path === path)
+				.filter(({ subCategory }) => subCategory?.path === path)
 				.map((product) => (
 					<ProductsCard
 						key={product.id}

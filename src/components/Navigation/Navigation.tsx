@@ -14,7 +14,7 @@ import { RxHamburgerMenu } from 'react-icons/rx';
 import Logo from '~/assets/Logo';
 import { links } from '~/constants/links';
 import CartMenu from '../Cart/CartMenu';
-import Category from '../Category';
+import CategoryMenu from '../Category/CategoryMenu';
 import MobileMenu from './MobileMenu';
 import MobileMenuAuth from './MobileMenuAuth';
 
@@ -73,7 +73,7 @@ const Navigation = () => {
 				<Logo size={isTablet ? 120 : 150} />
 			</ChakraLink>
 			<Stack direction="row" alignItems="center" gap={[1, 3, 5]}>
-				<Category />
+				<CategoryMenu />
 				{isTablet ? (
 					<>
 						<CartMenu />

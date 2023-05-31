@@ -1,6 +1,6 @@
 import type {
 	Address,
-	Catergory,
+	Category,
 	Order,
 	OrderItem,
 	Point,
@@ -36,7 +36,7 @@ interface UserMainContextProps {
 				};
 			})[];
 		})[];
-		categories?: Catergory[];
+		categories?: Category[];
 	};
 	handlAvatar: (e: ChangeEvent<HTMLInputElement>) => Promise<void>;
 	handlEdit: (

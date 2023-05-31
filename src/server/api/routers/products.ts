@@ -22,7 +22,11 @@ export const productsRouter = createTRPCRouter({
 						size: true,
 					},
 				},
-				category: true,
+				subCategory: {
+					include: {
+						category: true,
+					},
+				},
 			},
 		});
 		return products;

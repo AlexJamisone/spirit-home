@@ -19,7 +19,7 @@ model User {
     email      String?
     orders     Order[]
     comments   Comment[]
-    categories Catergory[]
+    categories Category[]
     address    Address[]
     updateAt   DateTime    @default(now()) @updatedAt
     favorites  Favorites[]
@@ -54,13 +54,22 @@ model Point {
     addressFullName String
 }
 
-model Catergory {
-    id          String    @id @unique @default(cuid())
-    title       String    @unique
+model Category {
+    id          String        @id @unique @default(cuid())
+    title       String        @unique
     path        String
-    createdBy   User      @relation(fields: [createdById], references: [id])
+    createdBy   User          @relation(fields: [createdById], references: [id])
     createdById String
-    product     Product[]
+    subCategory SubCategory[]
+}
+
+model SubCategory {
+    id         String    @id @unique @default(cuid())
+    title      String    @unique
+    path       String
+    category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+    categoryId String
+    product    Product[]
 }
 
 model Product {
@@ -71,7 +80,7 @@ model Product {
     archived      Boolean               @default(false)
     categoryTitle String?
     comments      Comment[]
-    category      Catergory?            @relation(fields: [categoryTitle], references: [title])
+    subCategory   SubCategory?          @relation(fields: [categoryTitle], references: [title])
     orders        OrderItem[]
     priceHistory  ProductPriceHistory[]
     size          Size[]
