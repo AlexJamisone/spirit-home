@@ -10,7 +10,7 @@ const Social = () => {
 			layout
 			direction="row"
 			boxShadow="2xl"
-			p={7}
+			p={[3, 5, 7]}
 			rounded="3xl"
 		>
 			{socialLinks.map(({ alt, href, icon, color }) => (

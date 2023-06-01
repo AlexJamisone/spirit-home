@@ -159,6 +159,7 @@ model Comment {
 enum Role {
     USER
     ADMIN
+    SUPERADMIN
 }
 
 enum OrderStatus {

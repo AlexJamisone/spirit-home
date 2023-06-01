@@ -1,7 +1,11 @@
-import { Stack } from '@chakra-ui/react';
+import { Stack, useMediaQuery } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
 const MapsWidget = () => {
+	const [isLowerThan650, isLowerThan420] = useMediaQuery([
+		'(max-width: 650px)',
+		'(max-width: 420px)',
+	]);
 	return (
 		<Stack
 			as={motion.div}
@@ -52,8 +56,20 @@ const MapsWidget = () => {
 			</a>
 			<iframe
 				src="https://yandex.ru/map-widget/v1/?ll=33.520807%2C44.601701&mode=poi&poi%5Bpoint%5D=33.520788%2C44.601678&poi%5Buri%5D=ymapsbm1%3A%2F%2Forg%3Foid%3D240442205889&z=15"
-				width="560"
-				height="400"
+				width={
+					isLowerThan420
+						? '300px'
+						: isLowerThan650
+						? '400px'
+						: '560px'
+				}
+				height={
+					isLowerThan420
+						? '200px'
+						: isLowerThan650
+						? '350px'
+						: '400px'
+				}
 				allowFullScreen={true}
 				style={{ position: 'relative' }}
 			></iframe>

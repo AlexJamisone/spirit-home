@@ -48,6 +48,7 @@ const Menu = () => {
 						href={path}
 						h={'50px'}
 						display="flex"
+						zIndex={100}
 						alignItems="center"
 						w={['80%']}
 						justifyContent="center"

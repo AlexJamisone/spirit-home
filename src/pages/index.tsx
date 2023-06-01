@@ -37,7 +37,7 @@ const Home: NextPage = () => {
 			w={'100vw'}
 		>
 			<SwiperSlide>
-				<Center>
+				<Center as="main">
 					<Img
 						as={motion.img}
 						h={'100vh'}
@@ -59,7 +59,7 @@ const Home: NextPage = () => {
 				</Center>
 			</SwiperSlide>
 			<SwiperSlide>
-				<Stack mt={150} mx={[0, 0, 0, 20]}>
+				<Stack mt={150} mx={[0, 0, 0, 20]} as="main">
 					<Center>
 						<SearchInput setSearch={setSearch} />
 					</Center>
@@ -170,7 +170,8 @@ const Home: NextPage = () => {
 				>
 					<MapsWidget />
 					<Heading
-						fontSize="3xl"
+						fontSize={['2xl', '3xl']}
+						textAlign="center"
 						fontWeight="extrabold"
 						bgGradient="linear(to-l, #9796f0, #fbc7d4)"
 						bgClip="text"
