@@ -25,11 +25,17 @@ import { api } from '~/utils/api';
 
 const AdminCategorys = () => {
 	const [cat, dispatch] = useReducer(AdminCategorysReducer, initialState);
+
 	const { data: categorys } = api.categorys.get.useQuery();
 	const { mutate: create, isLoading: loadingCreate } =
 		api.categorys.create.useMutation();
 	const { mutate: update, isLoading: loadingUpdate } =
 		api.categorys.update.useMutation();
+	const { mutate: createSubCategory, isLoading: loadingCreateSub } =
+		api.categorys.createSubCategory.useMutation();
+	const { mutate: updateSubCategory, isLoading: loadingUpdateSub } =
+		api.categorys.updateSubCategory.useMutation();
+
 	const toast = useToast();
 	const ctx = api.useContext();
 	const handlForm = () => {
@@ -133,11 +139,17 @@ const AdminCategorys = () => {
 						w="100%"
 						isLoading={loadingCreate}
 						type="submit"
-						colorScheme={cat.controls.edit ? 'telegram' : 'gray'}
+						colorScheme={
+							cat.controls.edit && !cat.controls.select
+								? 'telegram'
+								: 'gray'
+						}
 					>
-						{cat.controls.edit ? 'Обновить' : 'Создать'}
+						{cat.controls.edit && !cat.controls.select
+							? 'Обновить'
+							: 'Создать'}
 					</Button>
-					{cat.controls.edit ? (
+					{cat.controls.edit && !cat.controls.select ? (
 						<IconButton
 							colorScheme="red"
 							aria-label="cancel"
@@ -201,15 +213,36 @@ const AdminCategorys = () => {
 								/>
 							</Stack>
 							<Stack direction="column">
-								{subCategory.map(({ id, title }) => (
-									<Text
-										textAlign="center"
-										key={id}
-										cursor="pointer"
-									>
-										{title}
-									</Text>
-								))}
+								{subCategory.map(
+									({
+										id: subId,
+										title: subTitle,
+										path: subPath,
+									}) => (
+										<Text
+											textAlign="center"
+											key={subId}
+											cursor="pointer"
+											onClick={() => {
+												dispatch({
+													type: 'SET_ALL',
+													payload: {
+														...cat,
+														controls: {
+															edit: true,
+															select: true,
+														},
+														subId: subId,
+														subTitle: subTitle,
+														subPath: subPath,
+													},
+												});
+											}}
+										>
+											{subTitle}
+										</Text>
+									)
+								)}
 							</Stack>
 						</Stack>
 					))
@@ -224,6 +257,47 @@ const AdminCategorys = () => {
 					exit={{ opacity: 0 }}
 					onSubmit={(e) => {
 						e.preventDefault();
+						if (cat.controls.edit) {
+							updateSubCategory(
+								{
+									id: cat.subId,
+									subTitle: cat.subTitle,
+									subPath: cat.subPath,
+								},
+								{
+									onSuccess: () => {
+										void ctx.categorys.invalidate();
+										toast({
+											description: `Подкатегория ${cat.subTitle} обновленна!`,
+											isClosable: true,
+											status: 'success',
+										});
+										dispatch({
+											type: 'SET_CLEAR',
+										});
+									},
+								}
+							);
+						} else {
+							createSubCategory(
+								{
+									id: cat.id,
+									subPath: cat.subPath,
+									subTitle: cat.subTitle,
+								},
+								{
+									onSuccess: () => {
+										void ctx.categorys.invalidate();
+										toast({
+											description: `${cat.subTitle} успешно создана`,
+											isClosable: true,
+											status: 'success',
+										});
+										dispatch({ type: 'SET_CLEAR' });
+									},
+								}
+							);
+						}
 					}}
 				>
 					<FormLabel>Подкатегория</FormLabel>
@@ -249,18 +323,20 @@ const AdminCategorys = () => {
 						}
 					/>
 					<Stack direction="row" mt={5} justifyContent="flex-end">
-						<Button colorScheme="telegram" type="submit">
-							Создать
+						<Button
+							colorScheme="telegram"
+							type="submit"
+							isLoading={loadingCreateSub || loadingUpdateSub}
+						>
+							{cat.controls.edit && cat.controls.select
+								? 'Обновить'
+								: 'Создать'}
 						</Button>
 						<Button
 							colorScheme="red"
 							onClick={() =>
 								dispatch({
-									type: 'SET_CONTROLS',
-									payload: {
-										edit: false,
-										select: !cat.controls.select,
-									},
+									type: 'SET_CLEAR',
 								})
 							}
 						>

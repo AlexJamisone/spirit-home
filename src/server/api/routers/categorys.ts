@@ -1,6 +1,7 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import {
+	adminProcedure,
 	createTRPCRouter,
 	privetProcedure,
 	publicProcedure,
@@ -31,6 +32,56 @@ export const categorysRouter = createTRPCRouter({
 				},
 			});
 			return create;
+		}),
+	createSubCategory: adminProcedure
+		.input(
+			z.object({
+				id: z.string().nonempty(),
+				subTitle: z.string().trim(),
+				subPath: z
+					.string()
+					.trim()
+					.regex(/^[a-zA-Z]+$/, {
+						message: 'Только английскими буквами',
+					})
+					.nonempty({ message: 'Здесь пусто :(' })
+					.transform((val) => val.toLowerCase()),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.subCategory.create({
+				data: {
+					categoryId: input.id,
+					path: input.subPath,
+					title: input.subTitle,
+				},
+			});
+		}),
+	updateSubCategory: adminProcedure
+		.input(
+			z.object({
+				id: z.string().nonempty(),
+				subTitle: z.string().trim().nonempty(),
+				subPath: z
+					.string()
+					.trim()
+					.regex(/^[a-zA-Z]+$/, {
+						message: 'Только английскими буквами',
+					})
+					.nonempty({ message: 'Здесь пусто :(' })
+					.transform((val) => val.toLowerCase()),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.subCategory.update({
+				where: {
+					id: input.id,
+				},
+				data: {
+					title: input.subTitle,
+					path: input.subPath,
+				},
+			});
 		}),
 	delete: privetProcedure
 		.input(z.object({ id: z.string() }))
