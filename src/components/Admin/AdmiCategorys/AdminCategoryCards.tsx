@@ -1,10 +1,21 @@
-import { Box, Icon, IconButton, Stack, Text } from '@chakra-ui/react';
+import {
+	Box,
+	Icon,
+	IconButton,
+	Stack,
+	Text,
+	useDisclosure,
+} from '@chakra-ui/react';
+import { AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
 import { IoAddSharp } from 'react-icons/io5';
 import { useCreateCategoryContext } from '~/context/categoryCreateContext';
+import AdminCategoryAlert from './AdminCategoryAlert';
 
 const AdminCategoryCards = () => {
 	const { categorys, dispatch, cat, handleEdit } = useCreateCategoryContext();
+	const { isOpen, onToggle, onClose } = useDisclosure();
+
 	if (!categorys) return null;
 	return (
 		<Box display="flex" gap={5} flexWrap="wrap" justifyContent="center">
@@ -52,10 +63,27 @@ const AdminCategoryCards = () => {
 							<Text fontWeight={600}>{title}</Text>
 							<IconButton
 								size="xs"
-								aria-label={title}
+								aria-label={'edit'}
 								icon={<Icon as={FiEdit2} />}
 								onClick={() => handleEdit(id, title, path)}
 								colorScheme="twitter"
+							/>
+							<IconButton
+								size="xs"
+								aria-label={'delet'}
+								icon={<Icon as={AiOutlineDelete} />}
+								onClick={() => {
+									dispatch({
+										type: 'SET_ALL',
+										payload: {
+											...cat,
+											id,
+											title,
+										},
+									});
+									onToggle();
+								}}
+								colorScheme="red"
 							/>
 						</Stack>
 						<Stack direction="column">
@@ -93,6 +121,12 @@ const AdminCategoryCards = () => {
 					</Stack>
 				))
 			)}
+			<AdminCategoryAlert
+				isOpen={isOpen}
+				onClose={onClose}
+				header="Удалить категорию?"
+				body="Потвердите что хотите удалить категорию, это не обратить, так же удаляться все подкатегории, если они есть"
+			/>
 		</Box>
 	);
 };

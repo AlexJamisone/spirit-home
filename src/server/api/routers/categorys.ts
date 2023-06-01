@@ -3,7 +3,6 @@ import { z } from 'zod';
 import {
 	adminProcedure,
 	createTRPCRouter,
-	privetProcedure,
 	publicProcedure,
 } from '~/server/api/trpc';
 
@@ -15,7 +14,7 @@ export const categorysRouter = createTRPCRouter({
 			},
 		});
 	}),
-	create: privetProcedure
+	create: adminProcedure
 		.input(
 			z.object({
 				title: z.string().nonempty(),
@@ -23,12 +22,11 @@ export const categorysRouter = createTRPCRouter({
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			const { userId } = ctx;
 			const create = await ctx.prisma.category.create({
 				data: {
 					path: input.path,
 					title: input.title,
-					createdById: userId,
+					createdById: ctx.userId as string,
 				},
 			});
 			return create;
@@ -83,22 +81,29 @@ export const categorysRouter = createTRPCRouter({
 				},
 			});
 		}),
-	delete: privetProcedure
-		.input(z.object({ id: z.string() }))
+	delete: adminProcedure
+		.input(z.object({ id: z.string().nonempty() }))
 		.mutation(async ({ ctx, input }) => {
-			const deleteCategory = await ctx.prisma.category.delete({
+			return await ctx.prisma.category.delete({
 				where: {
 					id: input.id,
 				},
 			});
-			if (!deleteCategory)
-				return new TRPCError({
-					code: 'NOT_FOUND',
-					message: "Can't delet category",
-				});
-			return deleteCategory;
 		}),
-	update: privetProcedure
+	deletSubCat: adminProcedure
+		.input(
+			z.object({
+				subId: z.string().nonempty(),
+			})
+		)
+		.mutation(async ({ ctx, input }) => {
+			return await ctx.prisma.subCategory.delete({
+				where: {
+					id: input.subId,
+				},
+			});
+		}),
+	update: adminProcedure
 		.input(
 			z.object({
 				title: z.string().nonempty(),

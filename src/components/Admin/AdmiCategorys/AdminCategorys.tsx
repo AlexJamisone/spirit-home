@@ -23,7 +23,6 @@ const AdminCategorys = ({
 	const [cat, dispatch] = useReducer(AdminCategorysReducer, initialState);
 
 	const { data: categorys } = api.categorys.get.useQuery();
-
 	const handleEdit = (id: string, title: string, path: string) => {
 		dispatch({
 			type: 'SET_ALL',

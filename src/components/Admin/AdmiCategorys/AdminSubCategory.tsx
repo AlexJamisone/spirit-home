@@ -2,16 +2,23 @@ import {
 	Button,
 	FormControl,
 	FormLabel,
+	Icon,
+	IconButton,
 	Input,
 	Stack,
+	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
+import { AiOutlineDelete } from 'react-icons/ai';
 import { useCreateCategoryContext } from '~/context/categoryCreateContext';
 import { api } from '~/utils/api';
+import AdminCategoryAlert from './AdminCategoryAlert';
 
 const AdminSubCategory = () => {
 	const { cat, dispatch } = useCreateCategoryContext();
+	const { isOpen, onClose, onToggle } = useDisclosure();
+
 	const { mutate: updateSubCategory, isLoading: loadingUpdateSub } =
 		api.categorys.updateSubCategory.useMutation();
 	const { mutate: createSubCategory, isLoading: loadingCreateSub } =
@@ -114,7 +121,20 @@ const AdminSubCategory = () => {
 						>
 							Отмена
 						</Button>
+						<IconButton
+							aria-label="delet"
+							colorScheme="red"
+							icon={<Icon as={AiOutlineDelete} />}
+							onClick={onToggle}
+						/>
 					</Stack>
+					<AdminCategoryAlert
+						isOpen={isOpen}
+						onClose={onClose}
+						sub={true}
+						header="Удалить подкатегорию?"
+						body={`Потвердите удаление подкатегории: ${cat.subTitle}`}
+					/>
 				</FormControl>
 			) : null}
 		</>

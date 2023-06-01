@@ -35,7 +35,6 @@ const AdminProducts = () => {
 	const { data: products } = api.products.get.useQuery();
 
 	if (!products) return null;
-	console.log();
 	const handlEdit = (
 		product: Product & {
 			priceHistory: ProductPriceHistory[];
