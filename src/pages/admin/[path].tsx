@@ -1,6 +1,6 @@
 import { Center } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import AdminCategorys from '~/components/Admin/AdminCategorys';
+import AdminCategorys from '~/components/Admin/AdmiCategorys/AdminCategorys';
 import AdminStatistics from '~/components/Admin/AdminCharts/AdminStatistics';
 import AdminOrders from '~/components/Admin/AdminOrders/AdminOrders';
 import AdminProducts from '~/components/Admin/AdminProducts';
@@ -21,7 +21,13 @@ const Admin = () => {
 					/>
 				);
 			case 'categorys':
-				return <AdminCategorys />;
+				return (
+					<AdminCategorys
+						catCards={<AdminCategorys.Cards />}
+						subCategory={<AdminCategorys.SubCat />}
+						mainCategory={<AdminCategorys.MainCat />}
+					/>
+				);
 			case 'product':
 				return <AdminProducts />;
 			case 'orders':

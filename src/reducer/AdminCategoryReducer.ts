@@ -1,4 +1,4 @@
-type AdminCategoryState = {
+export type AdminCategoryState = {
 	id: string;
 	title: string;
 	path: string;
@@ -50,7 +50,7 @@ interface SetClearAction {
 	type: 'SET_CLEAR';
 }
 
-type Action =
+export type Action =
 	| SetIdAction
 	| SetTitleAction
 	| SetPathAction
