@@ -26,7 +26,9 @@ const ProductInfo = ({ full }: ProductInfoProps) => {
 			</Stack>
 			{admin === 'USER' ? null : (
 				<>
-					<Tag>{product.categoryTitle}</Tag>
+					<Tag>
+						{product.categoryTitle ?? product.subCategoryTitle}
+					</Tag>
 					<ProductSize isAdmin={true} />
 				</>
 			)}

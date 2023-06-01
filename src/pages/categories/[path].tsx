@@ -15,7 +15,10 @@ const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
 	return (
 		<Center pt={160} gap={5} flexWrap="wrap">
 			{products
-				.filter(({ subCategory }) => subCategory?.path === path)
+				.filter(
+					({ subCategory, category }) =>
+						(subCategory?.path || category?.path) === path
+				)
 				.map((product) => (
 					<ProductsCard
 						key={product.id}

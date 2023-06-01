@@ -14,9 +14,6 @@ export const categorysRouter = createTRPCRouter({
 			},
 		});
 	}),
-	getSubCat: publicProcedure.query(async ({ ctx, input }) => {
-		return await ctx.prisma.subCategory.findMany();
-	}),
 	create: privetProcedure
 		.input(
 			z.object({

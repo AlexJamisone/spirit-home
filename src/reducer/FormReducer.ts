@@ -12,7 +12,11 @@ export interface FormProductState {
 	name: string;
 	description: string;
 	image: UploadResult[];
-	category: string;
+	category: {
+		id: string;
+		title: string;
+		sub: boolean;
+	};
 	price: number;
 	quantity: Quantity[];
 }
@@ -35,7 +39,7 @@ interface SetImageAction {
 }
 interface SetCategoryAction {
 	type: 'SET_CATEG';
-	payload: string;
+	payload: { id: string; title: string; sub: boolean };
 }
 interface SetPriceAction {
 	type: 'SET_PRICE';
@@ -80,7 +84,11 @@ export const initialState: FormProductState = {
 	name: '',
 	description: '',
 	image: [],
-	category: '',
+	category: {
+		id: '',
+		title: '',
+		sub: false,
+	},
 	price: 0,
 	quantity: [],
 };
@@ -99,7 +107,14 @@ export const FormProductReducer = (
 		case 'SET_IMG':
 			return { ...state, image: action.payload };
 		case 'SET_CATEG':
-			return { ...state, category: action.payload };
+			return {
+				...state,
+				category: {
+					id: action.payload.id,
+					title: action.payload.title,
+					sub: action.payload.sub,
+				},
+			};
 		case 'SET_PRICE':
 			return { ...state, price: action.payload };
 		case 'ADD_QT':
@@ -130,7 +145,11 @@ export const FormProductReducer = (
 		case 'SET_CLEAR':
 			return {
 				id: '',
-				category: '',
+				category: {
+					id: '',
+					title: '',
+					sub: false,
+				},
 				description: '',
 				image: [],
 				name: '',

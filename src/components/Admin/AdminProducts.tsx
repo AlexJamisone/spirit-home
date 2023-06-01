@@ -1,9 +1,11 @@
 import { Button, Icon, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import type {
+	Category,
 	Product,
 	ProductPriceHistory,
 	Quantity,
 	Size,
+	SubCategory,
 } from '@prisma/client';
 import { useReducer, useState } from 'react';
 
@@ -33,13 +35,15 @@ const AdminProducts = () => {
 	const { data: products } = api.products.get.useQuery();
 
 	if (!products) return null;
-
+	console.log();
 	const handlEdit = (
 		product: Product & {
 			priceHistory: ProductPriceHistory[];
 			quantity: (Quantity & {
 				size: Size;
 			})[];
+			category: Category | null;
+			subCategory: SubCategory | null;
 		}
 	) => {
 		setEdit(true);
@@ -47,7 +51,15 @@ const AdminProducts = () => {
 			type: 'SET_ALL',
 			payload: {
 				id: product.id,
-				category: product.categoryTitle as string,
+				category: {
+					id:
+						product.category?.id ||
+						(product.subCategory?.id as string),
+					title:
+						product.categoryTitle ||
+						(product.subCategoryTitle as string),
+					sub: product.category ? false : true,
+				},
 				description: product.description,
 				image: product.image.map((path) => ({ path, error: null })),
 				name: product.name,

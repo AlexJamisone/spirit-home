@@ -99,6 +99,8 @@ export const usersRouter = createTRPCRouter({
 										size: true,
 									},
 								},
+								category: true,
+								subCategory: true,
 							},
 						},
 					},

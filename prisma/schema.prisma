@@ -61,6 +61,7 @@ model Category {
     createdBy   User          @relation(fields: [createdById], references: [id])
     createdById String
     subCategory SubCategory[]
+    product     Product[]
 }
 
 model SubCategory {
@@ -73,19 +74,21 @@ model SubCategory {
 }
 
 model Product {
-    id            String                @id @default(cuid())
-    name          String
-    description   String
-    image         String[]
-    archived      Boolean               @default(false)
-    categoryTitle String?
-    comments      Comment[]
-    subCategory   SubCategory?          @relation(fields: [categoryTitle], references: [title])
-    orders        OrderItem[]
-    priceHistory  ProductPriceHistory[]
-    size          Size[]
-    quantity      Quantity[]
-    favorites     Favorites[]
+    id               String                @id @default(cuid())
+    name             String
+    description      String
+    image            String[]
+    archived         Boolean               @default(false)
+    comments         Comment[]
+    subCategory      SubCategory?          @relation(fields: [subCategoryTitle], references: [title])
+    subCategoryTitle String?
+    category         Category?             @relation(fields: [categoryTitle], references: [title])
+    categoryTitle    String?
+    orders           OrderItem[]
+    priceHistory     ProductPriceHistory[]
+    size             Size[]
+    quantity         Quantity[]
+    favorites        Favorites[]
 }
 
 model Size {

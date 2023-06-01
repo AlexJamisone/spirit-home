@@ -27,6 +27,7 @@ export const productsRouter = createTRPCRouter({
 						category: true,
 					},
 				},
+				category: true,
 			},
 		});
 		return products;
@@ -38,7 +39,10 @@ export const productsRouter = createTRPCRouter({
 				description: z.string().nonempty(),
 				price: z.number().nonnegative(),
 				image: z.array(z.string()),
-				category: z.string().nonempty(),
+				category: z.object({
+					id: z.string().nonempty(),
+					sub: z.boolean(),
+				}),
 				quantity: z.array(
 					z.object({
 						sizeId: z.string(),
@@ -55,28 +59,59 @@ export const productsRouter = createTRPCRouter({
 			const sizeId = input.quantity.map(({ sizeId }) => ({
 				id: sizeId,
 			}));
-			const createProduct = await ctx.prisma.product.create({
-				data: {
-					name: input.name,
-					description: input.description,
-					priceHistory: {
-						create: {
-							price: input.price,
+			if (input.category.sub) {
+				return await ctx.prisma.product.create({
+					data: {
+						name: input.name,
+						description: input.description,
+						priceHistory: {
+							create: {
+								price: input.price,
+							},
+						},
+						image: input.image,
+						quantity: {
+							createMany: {
+								data: quantity,
+							},
+						},
+						size: {
+							connect: sizeId,
+						},
+						subCategory: {
+							connect: {
+								id: input.category.id,
+							},
 						},
 					},
-					image: input.image,
-					categoryTitle: input.category,
-					quantity: {
-						createMany: {
-							data: quantity,
+				});
+			} else {
+				return await ctx.prisma.product.create({
+					data: {
+						name: input.name,
+						description: input.description,
+						priceHistory: {
+							create: {
+								price: input.price,
+							},
+						},
+						image: input.image,
+						quantity: {
+							createMany: {
+								data: quantity,
+							},
+						},
+						size: {
+							connect: sizeId,
+						},
+						category: {
+							connect: {
+								id: input.category.id,
+							},
 						},
 					},
-					size: {
-						connect: sizeId,
-					},
-				},
-			});
-			return createProduct;
+				});
+			}
 		}),
 	archived: adminProcedure
 		.input(
@@ -132,7 +167,10 @@ export const productsRouter = createTRPCRouter({
 				description: z.string().nonempty(),
 				price: z.number().nonnegative(),
 				image: z.array(z.string()),
-				category: z.string().nonempty(),
+				category: z.object({
+					id: z.string().nonempty(),
+					sub: z.boolean(),
+				}),
 				quantity: z.array(
 					z.object({
 						id: z.string(),
@@ -165,35 +203,94 @@ export const productsRouter = createTRPCRouter({
 					},
 				},
 			});
-			if (input.price === product?.priceHistory[0]?.price) {
-				return await ctx.prisma.product.update({
-					where: {
-						id: input.id,
-					},
-					data: {
-						name: input.name,
-						description: input.description,
-						image: input.image,
-						categoryTitle: input.category,
-					},
-				});
-			} else {
-				return await ctx.prisma.product.update({
-					where: {
-						id: input.id,
-					},
-					data: {
-						name: input.name,
-						description: input.description,
-						image: input.image,
-						categoryTitle: input.category,
-						priceHistory: {
-							create: {
-								price: input.price,
+
+			if (input.category.sub) {
+				if (input.price === product?.priceHistory[0]?.price) {
+					return await ctx.prisma.product.update({
+						where: {
+							id: input.id,
+						},
+						data: {
+							name: input.name,
+							description: input.description,
+							image: input.image,
+							subCategory: {
+								connect: {
+									id: input.category.id,
+								},
+							},
+							category: {
+								disconnect: true,
 							},
 						},
-					},
-				});
+					});
+				} else {
+					return await ctx.prisma.product.update({
+						where: {
+							id: input.id,
+						},
+						data: {
+							name: input.name,
+							description: input.description,
+							image: input.image,
+							priceHistory: {
+								create: {
+									price: input.price,
+								},
+							},
+							subCategory: {
+								connect: {
+									id: input.category.id,
+								},
+							},
+						},
+					});
+				}
+			} else {
+				if (input.price === product?.priceHistory[0]?.price) {
+					return await ctx.prisma.product.update({
+						where: {
+							id: input.id,
+						},
+						data: {
+							name: input.name,
+							description: input.description,
+							image: input.image,
+							category: {
+								connect: {
+									id: input.category.id,
+								},
+							},
+							subCategory: {
+								disconnect: true,
+							},
+						},
+					});
+				} else {
+					return await ctx.prisma.product.update({
+						where: {
+							id: input.id,
+						},
+						data: {
+							name: input.name,
+							description: input.description,
+							image: input.image,
+							priceHistory: {
+								create: {
+									price: input.price,
+								},
+							},
+							category: {
+								connect: {
+									id: input.category.id,
+								},
+							},
+							subCategory: {
+								disconnect: true,
+							},
+						},
+					});
+				}
 			}
 		}),
 });

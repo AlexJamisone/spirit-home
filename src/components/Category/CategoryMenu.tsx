@@ -8,7 +8,7 @@ import CategoryMenuInner from './CategoryMenuInner';
 const CategoryMenu = () => {
 	const { data: categories, isLoading } = api.categorys.get.useQuery();
 	return (
-		<Menu autoSelect={false}>
+		<Menu autoSelect={false} placement={'bottom-end'}>
 			{({ onClose }) => (
 				<>
 					<MenuButton
@@ -24,6 +24,7 @@ const CategoryMenu = () => {
 						zIndex={30}
 						mt={[3, null]}
 						p={1}
+						minW={['150px', null]}
 					>
 						{isLoading ? (
 							<>

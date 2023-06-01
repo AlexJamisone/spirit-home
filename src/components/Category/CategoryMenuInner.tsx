@@ -32,6 +32,7 @@ const CategoryMenuInner = ({
 					<Stack>
 						{subCategory?.length ?? 0 > 0 ? (
 							<MenuButton
+								size={['sm', 'md']}
 								textAlign="left"
 								as={Button}
 								variant="ghost"
@@ -55,11 +56,12 @@ const CategoryMenuInner = ({
 									bgColor: 'gray.100',
 								}}
 								fontWeight={600}
-								py={2}
-								px={4}
+								py={[1, 2]}
+								px={[3, 4]}
+								fontSize={[14, 16]}
 								rounded="md"
 								as={Link}
-								href={path}
+								href={`/categories/${path}`}
 								onClick={closeMain}
 							>
 								{title}
@@ -67,7 +69,7 @@ const CategoryMenuInner = ({
 						)}
 					</Stack>
 
-					<MenuList>
+					<MenuList minW={['100px', null]}>
 						{subCategory?.map(({ id, title, path: subPath }) => (
 							<MenuItem
 								key={id}
@@ -77,6 +79,7 @@ const CategoryMenuInner = ({
 									onClose();
 									closeMain();
 								}}
+								fontSize={[14, 16]}
 							>
 								{title}
 							</MenuItem>

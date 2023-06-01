@@ -7,11 +7,13 @@ import {
 } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
 import type {
+	Category,
 	Product,
 	ProductPriceHistory,
 	Quantity,
 	Role,
 	Size,
+	SubCategory,
 } from '@prisma/client';
 import { motion } from 'framer-motion';
 import { useState, type ReactNode, type SyntheticEvent } from 'react';
@@ -38,6 +40,8 @@ type ProductProps = {
 		quantity: (Quantity & {
 			size: Size;
 		})[];
+		category: Category | null;
+		subCategory: SubCategory | null;
 	};
 	admin?: Role;
 	handlEdit?: (
@@ -46,6 +50,8 @@ type ProductProps = {
 			quantity: (Quantity & {
 				size: Size;
 			})[];
+			category: Category | null;
+			subCategory: SubCategory | null;
 		}
 	) => void;
 };
