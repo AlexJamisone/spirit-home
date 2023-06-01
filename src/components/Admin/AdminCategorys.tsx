@@ -1,41 +1,43 @@
 import {
 	Box,
 	Button,
+	ButtonGroup,
 	FormControl,
 	FormHelperText,
 	FormLabel,
+	Icon,
+	IconButton,
 	Input,
 	Stack,
-	Tag,
-	TagLabel,
-	TagLeftIcon,
 	Text,
 	useToast,
 } from '@chakra-ui/react';
-import { useState } from 'react';
-import { GrFormClose } from 'react-icons/gr';
+import { motion } from 'framer-motion';
+import { useReducer } from 'react';
+import { FiEdit2 } from 'react-icons/fi';
+import { IoAddSharp } from 'react-icons/io5';
+import { RxCross2 } from 'react-icons/rx';
+import {
+	AdminCategorysReducer,
+	initialState,
+} from '~/reducer/AdminCategoryReducer';
 import { api } from '~/utils/api';
 
 const AdminCategorys = () => {
-	const [form, setForm] = useState({
-		id: '',
-		title: '',
-		path: '',
-	});
-	const [edit, setEdit] = useState(false);
+	const [cat, dispatch] = useReducer(AdminCategorysReducer, initialState);
 	const { data: categorys } = api.categorys.get.useQuery();
 	const { mutate: create, isLoading: loadingCreate } =
 		api.categorys.create.useMutation();
-	const { mutate: deleteCategory } = api.categorys.delete.useMutation();
 	const { mutate: update, isLoading: loadingUpdate } =
 		api.categorys.update.useMutation();
 	const toast = useToast();
 	const ctx = api.useContext();
-	const handlForm = (form: { title: string; path: string }) => {
+	const handlForm = () => {
 		create(
-			{ title: form.title, path: form.path },
+			{ title: cat.title, path: cat.path },
 			{
 				onSuccess: () => {
+					dispatch({ type: 'SET_CLEAR' });
 					toast({
 						description: 'Категория успешно созданна!🙌',
 						isClosable: true,
@@ -43,41 +45,28 @@ const AdminCategorys = () => {
 					});
 					void ctx.categorys.invalidate();
 				},
-				onSettled: () => {
-					setForm({ title: '', path: '', id: '' });
-				},
 			}
 		);
 	};
-	const deletHandler = (id: string, title: string) => {
-		deleteCategory(
-			{ id },
-			{
-				onSuccess: () => {
-					toast({
-						description: `Категория ${title} успешно удалена!✌`,
-						status: 'success',
-						isClosable: true,
-					});
-					void ctx.categorys.invalidate();
-				},
-				onError: () => {
-					toast({
-						description: `Ошибка`,
-						status: 'error',
-						isClosable: true,
-					});
-				},
-			}
-		);
-	};
+
 	const handleEdit = (id: string, title: string, path: string) => {
-		setEdit(true);
-		setForm({ title, path, id });
+		dispatch({
+			type: 'SET_CONTROLS',
+			payload: {
+				edit: true,
+				select: false,
+			},
+		});
+		dispatch({
+			type: 'SET_ID',
+			payload: id,
+		});
+		dispatch({ type: 'SET_TITLE', payload: title });
+		dispatch({ type: 'SET_PATH', payload: path });
 	};
 	const handleUpdate = () => {
 		update(
-			{ id: form.id, title: form.title, path: form.path },
+			{ id: cat.id, title: cat.title, path: cat.path },
 			{
 				onSuccess: () => {
 					toast({
@@ -85,8 +74,14 @@ const AdminCategorys = () => {
 						status: 'info',
 						isClosable: true,
 					});
-					setForm({ id: '', path: '', title: '' });
-					setEdit(false);
+					dispatch({ type: 'SET_CLEAR' });
+					dispatch({
+						type: 'SET_CONTROLS',
+						payload: {
+							edit: false,
+							select: false,
+						},
+					});
 					void ctx.categorys.invalidate();
 				},
 			}
@@ -94,81 +89,186 @@ const AdminCategorys = () => {
 	};
 	if (!categorys) return null;
 	return (
-		<Stack direction="column" w={['300px']} gap={5}>
+		<Stack
+			direction="column"
+			alignItems="center"
+			w={['300px', '100%']}
+			gap={5}
+		>
 			<FormControl
 				as="form"
 				onSubmit={(e) => {
 					e.preventDefault();
-					handlForm(form);
+					if (cat.controls.edit) {
+						handleUpdate();
+					} else {
+						handlForm();
+					}
 				}}
+				w={'300px'}
 			>
 				<FormLabel>Категория</FormLabel>
 				<Input
 					type="text"
 					isDisabled={loadingCreate || loadingUpdate}
 					placeholder="Одежда"
-					value={form.title}
+					value={cat.title}
 					onChange={(e) =>
-						setForm({ ...form, title: e.target.value })
+						dispatch({ type: 'SET_TITLE', payload: e.target.value })
 					}
 				/>
 				<FormLabel>Путь</FormLabel>
 				<Input
 					isDisabled={loadingCreate || loadingUpdate}
-					onChange={(e) => setForm({ ...form, path: e.target.value })}
-					value={form.path}
+					onChange={(e) =>
+						dispatch({ type: 'SET_PATH', payload: e.target.value })
+					}
+					value={cat.path}
 					type="text"
 					placeholder="cloth"
 				/>
 				<FormHelperText>Обязательно на английском языке</FormHelperText>
-				{edit ? null : (
+				<ButtonGroup isAttached w={'100%'} mt={3}>
 					<Button
-						w={'100%'}
-						mt={3}
+						w="100%"
 						isLoading={loadingCreate}
 						type="submit"
+						colorScheme={cat.controls.edit ? 'telegram' : 'gray'}
 					>
-						Создать
+						{cat.controls.edit ? 'Обновить' : 'Создать'}
 					</Button>
-				)}
+					{cat.controls.edit ? (
+						<IconButton
+							colorScheme="red"
+							aria-label="cancel"
+							icon={<Icon as={RxCross2} />}
+							onClick={() => {
+								dispatch({ type: 'SET_CLEAR' });
+							}}
+						/>
+					) : null}
+				</ButtonGroup>
 			</FormControl>
-			{edit ? (
-				<Button
-					onClick={() => handleUpdate()}
-					isLoading={loadingUpdate}
-				>
-					Сохранить
-				</Button>
-			) : null}
 			<Box display="flex" gap={5} flexWrap="wrap" justifyContent="center">
 				{categorys.length === 0 ? (
 					<Text>Пока что категорий нет</Text>
 				) : (
-					categorys.map(({ id, title, path }) => (
-						<Tag
+					categorys.map(({ id, title, path, subCategory }) => (
+						<Stack
 							key={id}
-							display="flex"
-							alignItems="center"
-							px={3}
-							gap={2}
-							variant="subtle"
+							bgColor="gray.200"
+							p={2}
+							rounded="2xl"
+							h="fit-content"
+							border={
+								cat.controls.select && cat.id === id
+									? '2px solid'
+									: undefined
+							}
+							borderColor={
+								cat.controls.select && cat.id === id
+									? 'green.300'
+									: undefined
+							}
 						>
-							<TagLabel
-								cursor="pointer"
-								onClick={() => handleEdit(id, title, path)}
-							>
-								{title}
-							</TagLabel>
-							<TagLeftIcon
-								boxSize={5}
-								as={GrFormClose}
-								cursor="pointer"
-								onClick={() => deletHandler(id, title)}
-							/>
-						</Tag>
+							<Stack direction="row" alignItems="center">
+								<IconButton
+									size="xs"
+									aria-label={title}
+									icon={<Icon as={IoAddSharp} />}
+									colorScheme="teal"
+									onClick={() => {
+										dispatch({
+											type: 'SET_CONTROLS',
+											payload: {
+												edit: false,
+												select: true,
+											},
+										});
+										dispatch({
+											type: 'SET_ID',
+											payload: id,
+										});
+									}}
+								/>
+								<Text fontWeight={600}>{title}</Text>
+								<IconButton
+									size="xs"
+									aria-label={title}
+									icon={<Icon as={FiEdit2} />}
+									onClick={() => handleEdit(id, title, path)}
+									colorScheme="twitter"
+								/>
+							</Stack>
+							<Stack direction="column">
+								{subCategory.map(({ id, title }) => (
+									<Text
+										textAlign="center"
+										key={id}
+										cursor="pointer"
+									>
+										{title}
+									</Text>
+								))}
+							</Stack>
+						</Stack>
 					))
 				)}
 			</Box>
+			{cat.controls.select ? (
+				<FormControl
+					w="300px"
+					as={motion.form}
+					initial={{ opacity: 0, y: 50 }}
+					animate={{ opacity: 1, y: 0 }}
+					exit={{ opacity: 0 }}
+					onSubmit={(e) => {
+						e.preventDefault();
+					}}
+				>
+					<FormLabel>Подкатегория</FormLabel>
+					<Input
+						onChange={(e) =>
+							dispatch({
+								type: 'SET_SUB_TITLE',
+								payload: e.target.value,
+							})
+						}
+						value={cat.subTitle}
+						type="text"
+					/>
+					<FormLabel>Путь Подкатегории</FormLabel>
+					<Input
+						type="text"
+						value={cat.subPath}
+						onChange={(e) =>
+							dispatch({
+								type: 'SET_SUB_PATH',
+								payload: e.target.value,
+							})
+						}
+					/>
+					<Stack direction="row" mt={5} justifyContent="flex-end">
+						<Button colorScheme="telegram" type="submit">
+							Создать
+						</Button>
+						<Button
+							colorScheme="red"
+							onClick={() =>
+								dispatch({
+									type: 'SET_CONTROLS',
+									payload: {
+										edit: false,
+										select: !cat.controls.select,
+									},
+								})
+							}
+						>
+							Отмена
+						</Button>
+					</Stack>
+				</FormControl>
+			) : null}
 		</Stack>
 	);
 };
