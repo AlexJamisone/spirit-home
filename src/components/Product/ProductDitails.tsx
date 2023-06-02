@@ -52,11 +52,11 @@ const ProductDitails = ({ isOpen, onClose }: ProductDitailsProps) => {
 								'repeat(2, 1fr)',
 							]}
 							gap={[2, 3]}
+							justifyContent="center"
 						>
-							<GridItem h="200px" position="relative">
+							<GridItem h="100%" position="relative">
 								<ProductImage
 									container={{
-										position: 'absolute',
 										zIndex: 10,
 									}}
 									zoom={true}

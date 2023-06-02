@@ -197,11 +197,45 @@ export const ordersRouter = createTRPCRouter({
 					firstName: z
 						.string()
 						.nonempty({ message: 'Нужно ввести своё имя.' })
-						.trim(),
+						.trim()
+						.transform((value) => {
+							if (
+								value.split(' ').length >= 2 &&
+								value.split(' ').length !== 0
+							) {
+								const [firstName] = value.split(' ');
+								if (firstName !== undefined) {
+									return (
+										firstName.charAt(0).toUpperCase() +
+										firstName.slice(1).toLowerCase()
+									);
+								}
+							} else {
+								value.charAt(0).toUpperCase() +
+									value.slice(1).toLowerCase();
+							}
+						}),
 					lastName: z
 						.string()
 						.nonempty({ message: 'Нужо ввести свою фамилию.' })
-						.trim(),
+						.trim()
+						.transform((value) => {
+							if (
+								value.split(' ').length >= 2 &&
+								value.split(' ').length !== 0
+							) {
+								const [firstName] = value.split(' ');
+								if (firstName !== undefined) {
+									return (
+										firstName.charAt(0).toUpperCase() +
+										firstName.slice(1).toLowerCase()
+									);
+								}
+							} else {
+								value.charAt(0).toUpperCase() +
+									value.slice(1).toLowerCase();
+							}
+						}),
 					contactPhone: z
 						.string()
 						.min(16, { message: 'Неправельный номер телефона.' })
@@ -218,8 +252,8 @@ export const ordersRouter = createTRPCRouter({
 				data: {
 					userId: ctx.userId,
 					contactPhone: input.address.contactPhone,
-					firstName: input.address.firstName,
-					lastName: input.address.lastName,
+					firstName: input.address.firstName as string,
+					lastName: input.address.lastName as string,
 					point: {
 						create: {
 							name: input.address.point.name,
@@ -260,14 +294,49 @@ export const ordersRouter = createTRPCRouter({
 					firstName: z
 						.string()
 						.nonempty({ message: 'Нужно ввести своё имя.' })
-						.trim(),
+						.trim()
+						.refine((value) => value.split(' ').length === 2)
+						.transform((value) => {
+							if (
+								value.split(' ').length >= 2 &&
+								value.split(' ').length !== 0
+							) {
+								const [firstName] = value.split(' ');
+								if (firstName !== undefined) {
+									return (
+										firstName.charAt(0).toUpperCase() +
+										firstName.slice(1).toLowerCase()
+									);
+								}
+							} else {
+								value.charAt(0).toUpperCase() +
+									value.slice(1).toLowerCase();
+							}
+						}),
 					lastName: z
 						.string()
 						.nonempty({ message: 'Нужо ввести свою фамилию.' })
-						.trim(),
+						.trim()
+						.transform((value) => {
+							if (
+								value.split(' ').length >= 2 &&
+								value.split(' ').length !== 0
+							) {
+								const [lastName] = value.split(' ');
+								if (lastName !== undefined) {
+									return (
+										lastName.charAt(0).toUpperCase() +
+										lastName.slice(1).toLowerCase()
+									);
+								}
+							} else {
+								value.charAt(0).toUpperCase() +
+									value.slice(1).toLowerCase();
+							}
+						}),
 					contactPhone: z
 						.string()
-						.min(16, { message: 'Неправельный номер телефона.' })
+						.min(16, { message: 'Неправильный номер телефона.' })
 						.trim(),
 					point: z.custom<Point>(),
 				}),
@@ -318,8 +387,8 @@ export const ordersRouter = createTRPCRouter({
 						address: {
 							create: {
 								contactPhone: input.address.contactPhone,
-								firstName: input.address.firstName,
-								lastName: input.address.lastName,
+								firstName: input.address.firstName as string,
+								lastName: input.address.lastName as string,
 								point: {
 									create: {
 										name: input.address.point.name,
@@ -361,8 +430,8 @@ export const ordersRouter = createTRPCRouter({
 						address: {
 							create: {
 								contactPhone: input.address.contactPhone,
-								firstName: input.address.firstName,
-								lastName: input.address.lastName,
+								firstName: input.address.firstName as string,
+								lastName: input.address.lastName as string,
 								point: {
 									create: {
 										name: input.address.point.name,

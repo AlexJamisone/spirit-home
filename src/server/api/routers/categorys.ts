@@ -18,7 +18,14 @@ export const categorysRouter = createTRPCRouter({
 		.input(
 			z.object({
 				title: z.string().nonempty(),
-				path: z.string().nonempty(),
+				path: z
+					.string()
+					.trim()
+					.regex(/^[a-zA-Z]+$/, {
+						message: 'Только английскими буквами',
+					})
+					.nonempty({ message: 'Здесь пусто :(' })
+					.transform((val) => val.toLowerCase()),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
