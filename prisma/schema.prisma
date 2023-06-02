@@ -156,6 +156,14 @@ model Comment {
     value     String
 }
 
+model Accordion {
+    id        String   @id @unique @default(cuid())
+    title     String
+    content   String
+    createdAt DateTime @default(now())
+    updateAt  DateTime @updatedAt
+}
+
 enum Role {
     USER
     ADMIN

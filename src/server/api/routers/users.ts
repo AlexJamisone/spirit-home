@@ -1,7 +1,11 @@
 import { clerkClient } from '@clerk/nextjs/server';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { createTRPCRouter, privetProcedure } from '~/server/api/trpc';
+import {
+	createTRPCRouter,
+	privetProcedure,
+	publicProcedure,
+} from '~/server/api/trpc';
 import { filterUserForClient } from '~/server/helpers/filterUserForClient';
 
 export const usersRouter = createTRPCRouter({
@@ -152,4 +156,14 @@ export const usersRouter = createTRPCRouter({
 				},
 			});
 		}),
+	getUserRole: publicProcedure.query(async ({ ctx }) => {
+		if (!ctx.userId) return null;
+		const user = await ctx.prisma.user.findUnique({
+			where: {
+				id: ctx.userId,
+			},
+		});
+		if (!user) return undefined;
+		return user.role;
+	}),
 });

@@ -1,5 +1,6 @@
 import { usersRouter } from '~/server/api/routers/users';
 import { createTRPCRouter } from '~/server/api/trpc';
+import { accordionsRouter } from './routers/accordions';
 import { addressesRouter } from './routers/addresses';
 import { categorysRouter } from './routers/categorys';
 import { cdekRouter } from './routers/cdek';
@@ -24,6 +25,7 @@ export const appRouter = createTRPCRouter({
 	favorites: favoritesRouter,
 	charts: chartsRouter,
 	cdek: cdekRouter,
+	accordions: accordionsRouter,
 });
 
 // export type definition of API
