@@ -8,19 +8,12 @@ import {
 	DrawerContent,
 	DrawerHeader,
 	DrawerOverlay,
-	Icon,
-	IconButton,
 	Stack,
 	Text,
 } from '@chakra-ui/react';
 import { SignOutButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { useState } from 'react';
-import {
-	MdOutlineNotificationsActive,
-	MdOutlineNotificationsOff,
-} from 'react-icons/md';
 import { menuItems } from '~/constants/menuItem';
 import { api } from '~/utils/api';
 
@@ -32,21 +25,8 @@ type ModileMenuAuthProps = {
 
 const MobileMenuAuth = ({ isOpen, onClose, links }: ModileMenuAuthProps) => {
 	const { data: user } = api.users.get.useQuery();
-	const [notificationEnabled, setNotificationEnabled] = useState(false);
 	const router = useRouter();
 	const pathFromRoutes = router.query;
-
-	const enebelNotification = async () => {
-		setNotificationEnabled(true);
-		if (Notification.permission !== 'granted') {
-			const permission = await Notification.requestPermission();
-			if (permission === 'granted') {
-				new Notification('Уведомления успешно включены ✔');
-			}
-		} else {
-			setNotificationEnabled(false);
-		}
-	};
 
 	return (
 		<Drawer isOpen={isOpen} onClose={onClose}>
@@ -56,24 +36,6 @@ const MobileMenuAuth = ({ isOpen, onClose, links }: ModileMenuAuthProps) => {
 				<DrawerHeader>
 					<Stack direction="row" gap={5}>
 						<Text>Меню</Text>
-						{user?.role === 'ADMIN' ? (
-							<IconButton
-								size="sm"
-								variant="outline"
-								aria-label="notification"
-								onClick={enebelNotification}
-								icon={
-									<Icon
-										as={
-											notificationEnabled
-												? MdOutlineNotificationsActive
-												: MdOutlineNotificationsOff
-										}
-										boxSize={5}
-									/>
-								}
-							/>
-						) : null}
 					</Stack>
 				</DrawerHeader>
 				<DrawerBody>
