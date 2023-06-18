@@ -6,16 +6,15 @@ export type NotificationProps = {
 };
 //make this better
 const AdminNotification = () => {
-	const [notification, setNotification] = useState<NotificationProps>({
-		city: '',
-		name: '',
-	});
+	const [notification, setNotification] = useState<
+		NotificationProps | undefined
+	>(undefined);
 	const channel = pusherFront.subscribe('order');
 	channel.bind('new-order', (payload: NotificationProps) => {
 		setNotification(payload);
 	});
 	useEffect(() => {
-		if (Notification.permission === 'granted') {
+		if (Notification.permission === 'granted' && notification) {
 			new Notification(`Новый заказ от ${notification.name}`, {
 				body: `В город ${notification.city} `,
 			});
