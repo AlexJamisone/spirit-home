@@ -11,12 +11,14 @@ import { api } from '~/utils/api';
 import '../styles/globals.css';
 
 import Head from 'next/head';
+import AdminNotification from '~/components/Admin/AdminNotification';
 import Menu from '~/components/Navigation/Menu';
 import Navigation from '~/components/Navigation/Navigation';
 import { CartProvider } from '~/context/cartContext';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
+	const { data: role } = api.users.getUserRole.useQuery();
 	return (
 		<ChakraProvider theme={theme}>
 			<Head>
@@ -31,6 +33,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 			<ClerkProvider {...pageProps} localization={ruRU}>
 				<CartProvider>
 					<SignedIn>
+						{role === 'ADMIN' && <AdminNotification />}
 						{isTablet ? null : <Menu />}
 						<Navigation />
 						<Component {...pageProps} />

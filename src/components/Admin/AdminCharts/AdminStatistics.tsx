@@ -5,6 +5,7 @@ import ChartsContext from '~/context/chartsContext';
 import { api } from '~/utils/api';
 import AdminCharts from './AdminCharts';
 import AdminDatePick from './AdminDatePick';
+import AdminNotificationButton from './AdminNotificationButton';
 import AdminStat from './AdminStat';
 import AdminVisitors from './AdminVisitors';
 dayjs().locale('ru').format();
@@ -14,6 +15,7 @@ type AdminStatisticsProps = {
 	charts?: ReactNode;
 	pick?: ReactNode;
 	visitors?: ReactNode;
+	notification?: ReactNode;
 };
 
 const AdminStatistics = ({
@@ -21,6 +23,7 @@ const AdminStatistics = ({
 	charts,
 	pick,
 	visitors,
+	notification,
 }: AdminStatisticsProps) => {
 	const [selectedDate, setSelectedDate] = useState<Date[]>([
 		dayjs().startOf('month').toDate(),
@@ -45,7 +48,14 @@ const AdminStatistics = ({
 			}}
 		>
 			<Stack justifyContent="center" w={'90%'}>
-				{pick}
+				<Stack
+					direction="row"
+					justifyContent="center"
+					alignItems="center"
+				>
+					{pick}
+					{notification}
+				</Stack>
 				{charts}
 				{stat}
 				{visitors}
@@ -58,5 +68,6 @@ AdminStatistics.Pick = AdminDatePick;
 AdminStatistics.Charts = AdminCharts;
 AdminStatistics.Stat = AdminStat;
 AdminStatistics.Visitors = AdminVisitors;
+AdminStatistics.NotificationButton = AdminNotificationButton;
 
 export default AdminStatistics;

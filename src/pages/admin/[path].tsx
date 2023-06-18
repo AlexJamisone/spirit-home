@@ -18,6 +18,7 @@ const Admin = () => {
 						stat={<AdminStatistics.Stat />}
 						pick={<AdminStatistics.Pick />}
 						visitors={<AdminStatistics.Visitors />}
+						notification={<AdminStatistics.NotificationButton />}
 					/>
 				);
 			case 'categorys':

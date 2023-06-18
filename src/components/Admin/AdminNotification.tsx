@@ -3,14 +3,12 @@ import { pusherFront } from '~/lib/pusherFront';
 export type NotificationProps = {
 	name: string;
 	city: string;
-	sum: number;
 };
-
+//make this better
 const AdminNotification = () => {
 	const [notification, setNotification] = useState<NotificationProps>({
 		city: '',
 		name: '',
-		sum: 0,
 	});
 	const channel = pusherFront.subscribe('order');
 	channel.bind('new-order', (payload: NotificationProps) => {
@@ -20,10 +18,10 @@ const AdminNotification = () => {
 		if (Notification.permission === 'granted') {
 			new Notification(`Новый заказ от ${notification.name}`, {
 				body: `В город ${notification.city} `,
-				tag: `На сумму ${notification.sum}`,
 			});
 		}
 	}, [notification]);
+	return <></>;
 };
 
 export default AdminNotification;

@@ -2,6 +2,7 @@ import { clerkClient } from '@clerk/nextjs/server';
 import type { OrderStatus, Point, Prisma, PrismaClient } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
+import { pusherServer } from '~/server/pusher';
 
 import type { CartState } from '~/reducer/CartReducer';
 import {
@@ -186,6 +187,17 @@ export const ordersRouter = createTRPCRouter({
 					},
 					userId: ctx.userId,
 				},
+				include: {
+					address: {
+						include: {
+							point: true,
+						},
+					},
+				},
+			});
+			await pusherServer.trigger('order', 'new-order', {
+				name: create.address.firstName,
+				city: create.address.point?.city,
 			});
 			return await handlUpdateProduct(ctx, create.id, 'minus');
 		}),
@@ -197,45 +209,11 @@ export const ordersRouter = createTRPCRouter({
 					firstName: z
 						.string()
 						.nonempty({ message: 'Нужно ввести своё имя.' })
-						.trim()
-						.transform((value) => {
-							if (
-								value.split(' ').length >= 2 &&
-								value.split(' ').length !== 0
-							) {
-								const [firstName] = value.split(' ');
-								if (firstName !== undefined) {
-									return (
-										firstName.charAt(0).toUpperCase() +
-										firstName.slice(1).toLowerCase()
-									);
-								}
-							} else {
-								value.charAt(0).toUpperCase() +
-									value.slice(1).toLowerCase();
-							}
-						}),
+						.trim(),
 					lastName: z
 						.string()
 						.nonempty({ message: 'Нужо ввести свою фамилию.' })
-						.trim()
-						.transform((value) => {
-							if (
-								value.split(' ').length >= 2 &&
-								value.split(' ').length !== 0
-							) {
-								const [firstName] = value.split(' ');
-								if (firstName !== undefined) {
-									return (
-										firstName.charAt(0).toUpperCase() +
-										firstName.slice(1).toLowerCase()
-									);
-								}
-							} else {
-								value.charAt(0).toUpperCase() +
-									value.slice(1).toLowerCase();
-							}
-						}),
+						.trim(),
 					contactPhone: z
 						.string()
 						.min(16, { message: 'Неправельный номер телефона.' })
@@ -252,8 +230,8 @@ export const ordersRouter = createTRPCRouter({
 				data: {
 					userId: ctx.userId,
 					contactPhone: input.address.contactPhone,
-					firstName: input.address.firstName as string,
-					lastName: input.address.lastName as string,
+					firstName: input.address.firstName,
+					lastName: input.address.lastName,
 					point: {
 						create: {
 							name: input.address.point.name,
@@ -283,6 +261,10 @@ export const ordersRouter = createTRPCRouter({
 					userId: ctx.userId,
 				},
 			});
+			await pusherServer.trigger('order', 'new-order', {
+				name: input.address.firstName,
+				city: input.address.point.city,
+			});
 			return await handlUpdateProduct(ctx, createOrder.id, 'minus');
 		}),
 	createNoAuth: publicProcedure
@@ -294,46 +276,11 @@ export const ordersRouter = createTRPCRouter({
 					firstName: z
 						.string()
 						.nonempty({ message: 'Нужно ввести своё имя.' })
-						.trim()
-						.refine((value) => value.split(' ').length === 2)
-						.transform((value) => {
-							if (
-								value.split(' ').length >= 2 &&
-								value.split(' ').length !== 0
-							) {
-								const [firstName] = value.split(' ');
-								if (firstName !== undefined) {
-									return (
-										firstName.charAt(0).toUpperCase() +
-										firstName.slice(1).toLowerCase()
-									);
-								}
-							} else {
-								value.charAt(0).toUpperCase() +
-									value.slice(1).toLowerCase();
-							}
-						}),
+						.trim(),
 					lastName: z
 						.string()
 						.nonempty({ message: 'Нужо ввести свою фамилию.' })
-						.trim()
-						.transform((value) => {
-							if (
-								value.split(' ').length >= 2 &&
-								value.split(' ').length !== 0
-							) {
-								const [lastName] = value.split(' ');
-								if (lastName !== undefined) {
-									return (
-										lastName.charAt(0).toUpperCase() +
-										lastName.slice(1).toLowerCase()
-									);
-								}
-							} else {
-								value.charAt(0).toUpperCase() +
-									value.slice(1).toLowerCase();
-							}
-						}),
+						.trim(),
 					contactPhone: z
 						.string()
 						.min(16, { message: 'Неправильный номер телефона.' })
@@ -387,8 +334,8 @@ export const ordersRouter = createTRPCRouter({
 						address: {
 							create: {
 								contactPhone: input.address.contactPhone,
-								firstName: input.address.firstName as string,
-								lastName: input.address.lastName as string,
+								firstName: input.address.firstName,
+								lastName: input.address.lastName,
 								point: {
 									create: {
 										name: input.address.point.name,
@@ -423,6 +370,10 @@ export const ordersRouter = createTRPCRouter({
 						},
 					},
 				});
+				await pusherServer.trigger('order', 'new-order', {
+					name: input.address.firstName,
+					city: input.address.point.city,
+				});
 				return await handlUpdateProduct(ctx, createOrder.id, 'minus');
 			} else {
 				const createOrder = await ctx.prisma.order.create({
@@ -430,8 +381,8 @@ export const ordersRouter = createTRPCRouter({
 						address: {
 							create: {
 								contactPhone: input.address.contactPhone,
-								firstName: input.address.firstName as string,
-								lastName: input.address.lastName as string,
+								firstName: input.address.firstName,
+								lastName: input.address.lastName,
 								point: {
 									create: {
 										name: input.address.point.name,
@@ -459,6 +410,10 @@ export const ordersRouter = createTRPCRouter({
 							},
 						},
 					},
+				});
+				await pusherServer.trigger('order', 'new-order', {
+					name: input.address.firstName,
+					city: input.address.point.city,
 				});
 				return handlUpdateProduct(ctx, createOrder.id, 'minus');
 			}
