@@ -15,7 +15,7 @@ import {
 	initialState,
 } from '~/reducer/InputAddressReducer';
 import { api } from '~/utils/api';
-import UserAction from './Action/UserAction';
+import UserAction from '../../UI/User/Action/UserAction';
 import UserInfo from './Info/UserInfo';
 import UserAddressList from './UserAddressList';
 import UserAddressesFormModal from './UserAddressesFormModal';

@@ -1,9 +1,9 @@
 import { Stack } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
 import { BsWind } from 'react-icons/bs';
+import NoData from '~/components/NoData/NoData';
 import { api } from '~/utils/api';
-import NoData from '../NoData/NoData';
-import ProductsCard from '../Product/ProductCard';
+import ProductsCard from '../../UI/Product/ProductCard';
 
 const UserFavorites = () => {
 	const { data: user } = api.users.getUserForFavProduct.useQuery();

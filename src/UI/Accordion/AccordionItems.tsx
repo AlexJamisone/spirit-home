@@ -13,9 +13,9 @@ import {
 import { AiOutlineDelete } from 'react-icons/ai';
 import { BsBox } from 'react-icons/bs';
 import { FiEdit2 } from 'react-icons/fi';
+import NoData from '~/components/NoData/NoData';
 import { useAccordionContext } from '~/context/accardionsContext';
 import { api } from '~/utils/api';
-import NoData from '../NoData/NoData';
 
 const AccordionItems = () => {
 	const { data: accordions, isLoading } = api.accordions.get.useQuery();

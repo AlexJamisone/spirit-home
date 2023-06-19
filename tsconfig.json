@@ -28,7 +28,7 @@
 		"**/*.tsx",
 		"**/*.cjs",
 		"**/*.mjs",
-		"src/components/YandexMaps/Maps.tsx"
+		"src/UI/YandexMaps/Maps.tsx"
 	],
 	"exclude": ["node_modules"]
 }

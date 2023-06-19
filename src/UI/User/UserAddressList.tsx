@@ -1,7 +1,7 @@
 import { AnimatePresence } from 'framer-motion';
 import { FaAddressCard } from 'react-icons/fa';
+import NoData from '~/components/NoData/NoData';
 import { useUserMainContext } from '~/context/userMainContext';
-import NoData from '../NoData/NoData';
 import UserAddressCard from './UserAddressCard';
 
 const UserAddressList = () => {

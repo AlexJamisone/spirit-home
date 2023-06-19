@@ -8,7 +8,7 @@ import {
 import type { IconType } from 'react-icons';
 import { BiArchiveIn, BiArchiveOut } from 'react-icons/bi';
 import { useProductCardContext } from '~/context/productCardContext';
-import Overlay from '../NoData/Overlay';
+import Overlay from '../../components/NoData/Overlay';
 
 type ProductActionProps = {
 	container?: ButtonProps;

@@ -11,9 +11,9 @@ import { api } from '~/utils/api';
 import '../styles/globals.css';
 
 import Head from 'next/head';
-import AdminNotification from '~/components/Admin/AdminNotification';
-import Menu from '~/components/Navigation/Menu';
-import Navigation from '~/components/Navigation/Navigation';
+import AdminNotification from '~/UI/Admin/AdminNotification';
+import Menu from '~/UI/Navigation/Menu';
+import Navigation from '~/UI/Navigation/Navigation';
 import { CartProvider } from '~/context/cartContext';
 
 const MyApp: AppType = ({ Component, pageProps }) => {

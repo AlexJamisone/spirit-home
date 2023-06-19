@@ -1,8 +1,8 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
 import { IoIosArrowDown } from 'react-icons/io';
 
+import Placholder from '~/components/NoData/Placholder';
 import { api } from '~/utils/api';
-import Placholder from '../NoData/Placholder';
 import CategoryMenuInner from './CategoryMenuInner';
 
 const CategoryMenu = () => {

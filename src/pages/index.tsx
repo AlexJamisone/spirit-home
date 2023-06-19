@@ -14,11 +14,11 @@ import { Autoplay, Keyboard, Mousewheel, Pagination } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import ProductsCard from '~/UI/Product/ProductCard';
+import MapsWidget from '~/UI/YandexMaps/MapsWidget';
 import NoData from '~/components/NoData/NoData';
-import ProductsCard from '~/components/Product/ProductCard';
 import SearchInput from '~/components/SearchInput';
 import Social from '~/components/Social';
-import MapsWidget from '~/components/YandexMaps/MapsWidget';
 import { api } from '~/utils/api';
 
 const Home: NextPage = () => {

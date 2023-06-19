@@ -15,9 +15,9 @@ import dayjs from 'dayjs';
 import { motion } from 'framer-motion';
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai';
 import { SiDatabricks } from 'react-icons/si';
+import NoData from '~/components/NoData/NoData';
 import { useUserMainContext } from '~/context/userMainContext';
 import { status as statusHelper } from '~/helpers/status';
-import NoData from '../NoData/NoData';
 
 dayjs.locale('ru');
 

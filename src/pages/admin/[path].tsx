@@ -1,9 +1,9 @@
 import { Center } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import AdminCategorys from '~/components/Admin/AdmiCategorys/AdminCategorys';
-import AdminStatistics from '~/components/Admin/AdminCharts/AdminStatistics';
-import AdminOrders from '~/components/Admin/AdminOrders/AdminOrders';
-import AdminProducts from '~/components/Admin/AdminProducts';
+import AdminCategorys from '~/UI/Admin/AdmiCategorys/AdminCategorys';
+import AdminStatistics from '~/UI/Admin/AdminCharts/AdminStatistics';
+import AdminOrders from '~/UI/Admin/AdminOrders/AdminOrders';
+import AdminProducts from '~/UI/Admin/AdminProducts';
 import ProtectionRoutes from '~/guards/ProtectionRoutes';
 
 const Admin = () => {

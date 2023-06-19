@@ -16,6 +16,11 @@ import CreateProductContext from '~/context/createProductContext';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
 import type { UploadResult } from '~/utils/uploadImage';
+import AdminCreateProductsImages from './AdminCreateProducts/AdminCreateProductsImages';
+import CategoriesSelector from './AdminCreateProducts/CategoriesSelector';
+import CreateProductInputs from './AdminCreateProducts/CreateProductInputs';
+import DragDrop from './AdminCreateProducts/Drag&Drop';
+import ProducCreateAction from './AdminCreateProducts/ProducCreateAction';
 import Size from './AdminCreateProducts/Size';
 
 type AdminProductsModalProps = {
@@ -215,5 +220,11 @@ const AdminProductsModal = ({
 		</Modal>
 	);
 };
+
+AdminProductsModal.Action = ProducCreateAction;
+AdminProductsModal.Images = AdminCreateProductsImages;
+AdminProductsModal.Inputs = CreateProductInputs;
+AdminProductsModal.Categories = CategoriesSelector;
+AdminProductsModal.Drag = DragDrop;
 
 export default AdminProductsModal;

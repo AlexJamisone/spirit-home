@@ -3,9 +3,9 @@ import { UserProfile } from '@clerk/nextjs';
 import { buildClerkProps, clerkClient, getAuth } from '@clerk/nextjs/server';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import UserFavorites from '~/components/User/UserFavorites';
-import UserMain from '~/components/User/UserMain';
-import UserOrders from '~/components/User/UserOrders';
+import UserFavorites from '~/UI/User/UserFavorites';
+import UserMain from '~/UI/User/UserMain';
+import UserOrders from '~/UI/User/UserOrders';
 import ProtectionRoutes from '~/guards/ProtectionRoutes';
 import { api } from '~/utils/api';
 const ProfilePage = () => {

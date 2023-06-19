@@ -1,4 +1,4 @@
-import Accordion from '~/components/Accordion/Accordion';
+import Accordion from '~/UI/Accordion/Accordion';
 
 const DevileryPage = () => {
 	return (

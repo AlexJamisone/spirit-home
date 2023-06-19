@@ -8,16 +8,11 @@ import type {
 	SubCategory,
 } from '@prisma/client';
 import { useReducer, useState } from 'react';
+import ProductsCard from '~/UI/Product/ProductCard';
 
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import { FormProductReducer, initialState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
-import ProductsCard from '../Product/ProductCard';
-import AdminCreateProductsImages from './AdminCreateProducts/AdminCreateProductsImages';
-import CategoriesSelector from './AdminCreateProducts/CategoriesSelector';
-import CreateProductInputs from './AdminCreateProducts/CreateProductInputs';
-import DragDrop from './AdminCreateProducts/Drag&Drop';
-import ProducCreateAction from './AdminCreateProducts/ProducCreateAction';
 import AdminCreateSize from './AdminCreateSize';
 import AdminProductsModal from './AdminProductsModal';
 
@@ -127,11 +122,11 @@ const AdminProducts = () => {
 				form={form}
 				dispatch={dispatch}
 				setEdit={setEdit}
-				action={<ProducCreateAction />}
-				images={<AdminCreateProductsImages />}
-				inputs={<CreateProductInputs />}
-				categories={<CategoriesSelector />}
-				drag={<DragDrop />}
+				action={<AdminProductsModal.Action />}
+				images={<AdminProductsModal.Images />}
+				inputs={<AdminProductsModal.Inputs />}
+				categories={<AdminProductsModal.Categories />}
+				drag={<AdminProductsModal.Drag />}
 			/>
 		</Stack>
 	);
