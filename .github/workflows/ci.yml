@@ -3,6 +3,10 @@ on: [push, pull_request]
 
 env:
     DATABASE_URL: "https://fake.com"
+    PUSHER_APP_ID: "23",
+    PUSHER_APP_SECRET: "999",
+    NEXT_PUBLIC_PUSHER_APP_KEY: "35",
+    NEXT_PUBLIC_PUSHER_CLUSTER: "36"
 
 jobs:
     build:
