@@ -28,8 +28,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 			</Head>
 			<Script
 				async
-				src="https://umami-production-62a7.up.railway.app/script.js"
-				data-website-id="469bcf54-2031-49fb-8f42-4c5dd987ecf3"
+				src="https://analytics.umami.is/script.js"
+				data-website-id="671dd393-6548-494c-acc4-ac101878e304"
 			/>
 			<ClerkProvider {...pageProps} localization={ruRU}>
 				<CartProvider>

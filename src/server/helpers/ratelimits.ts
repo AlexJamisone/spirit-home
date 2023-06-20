@@ -15,7 +15,7 @@ export const ratelimit = {
 	}),
 	baseAll: new Ratelimit({
 		redis,
-		limiter: Ratelimit.cachedFixedWindow(10, '10 s'),
+		limiter: Ratelimit.cachedFixedWindow(20, '10 s'),
 		ephemeralCache: new Map(),
 		analytics: true,
 	}),
