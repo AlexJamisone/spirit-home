@@ -57,8 +57,14 @@ const AdminStatistics = ({
 					{notification}
 				</Stack>
 				{charts}
-				{stat}
-				{visitors}
+				<Stack
+					direction="row"
+					justifyContent="center"
+					alignItems="center"
+				>
+					{stat}
+					{visitors}
+				</Stack>
 			</Stack>
 		</ChartsContext.Provider>
 	);
