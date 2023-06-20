@@ -1,6 +1,6 @@
-import { Box, Link as ChakraLink, Icon, Stack, Text } from '@chakra-ui/react';
+import { Link } from '@chakra-ui/next-js';
+import { Box, Icon, Stack, Text } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { menuItems } from '~/constants/menuItem';
@@ -40,11 +40,10 @@ const Menu = () => {
 			{menuItems
 				.filter(({ type }) => user.role === type)
 				.map(({ icon, path, title }) => (
-					<ChakraLink
+					<Link
 						rounded="50px"
 						variant="ghost"
 						key={title}
-						as={Link}
 						href={path}
 						h={'50px'}
 						display="flex"
@@ -128,7 +127,7 @@ const Menu = () => {
 						) : (
 							<Icon as={icon} boxSize={6} color="#261F1F" />
 						)}
-					</ChakraLink>
+					</Link>
 				))}
 		</Box>
 	);

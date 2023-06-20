@@ -1,5 +1,5 @@
+import { Link } from '@chakra-ui/next-js';
 import {
-	Link as ChakraLink,
 	Icon,
 	IconButton,
 	Stack,
@@ -8,7 +8,6 @@ import {
 } from '@chakra-ui/react';
 import { UserButton, useAuth } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { RxHamburgerMenu } from 'react-icons/rx';
 import Logo from '~/assets/Logo';
@@ -69,9 +68,9 @@ const Navigation = () => {
 			background={bgColor ? 'whiteAlpha.300' : ''}
 			backdropFilter={bgColor ? 'blur(4px)' : ''}
 		>
-			<ChakraLink as={Link} href="/" alignSelf="flex-start">
+			<Link href="/" alignSelf="flex-start">
 				<Logo size={isTablet ? 120 : 150} />
-			</ChakraLink>
+			</Link>
 			<Stack direction="row" alignItems="center" gap={[1, 3, 5]}>
 				<CategoryMenu />
 				{isTablet ? (
@@ -100,8 +99,7 @@ const Navigation = () => {
 				) : (
 					<>
 						{renderLinks.map(({ children, path }) => (
-							<ChakraLink
-								as={Link}
+							<Link
 								href={path}
 								key={path}
 								_hover={{
@@ -109,7 +107,7 @@ const Navigation = () => {
 								}}
 							>
 								{children}
-							</ChakraLink>
+							</Link>
 						))}
 						<CartMenu />
 					</>
