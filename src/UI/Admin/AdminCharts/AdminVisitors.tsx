@@ -1,8 +1,9 @@
+import { env } from '~/env.mjs';
 const AdminVisitors = () => {
 	return (
 		<>
 			<iframe
-				src={process.env.NEXT_PUBLIC_VISITORS_LINKS}
+				src={env.NEXT_PUBLIC_VISITORS_LINKS}
 				loading="lazy"
 				style={{
 					width: '1px',
@@ -17,7 +18,6 @@ const AdminVisitors = () => {
 					paddingBottom: '14px',
 				}}
 			></div>
-			<script async src="https://plausible.io/js/embed.host.js"></script>
 		</>
 	);
 };

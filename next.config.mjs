@@ -29,4 +29,4 @@ const config = {
 	},
 	swcMinify: true
 };
-export default config;
+export default config

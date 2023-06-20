@@ -1,10 +1,13 @@
-import { Icon, IconButton, Image, Spinner, Stack } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/next-js';
+import { Icon, IconButton, Stack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { TiDeleteOutline } from 'react-icons/ti';
 import { useCreateProductContext } from '~/context/createProductContext';
+import { env } from '~/env.mjs';
 
 const AdminCreateProductsImages = () => {
 	const { form, handlDeletImage } = useCreateProductContext();
+
 	return (
 		<>
 			{form.image.length === 0 ? null : (
@@ -15,7 +18,13 @@ const AdminCreateProductsImages = () => {
 					justifyContent="center"
 				>
 					{form.image.map((src, index) => (
-						<Stack key={index} position="relative">
+						<Stack
+							key={index}
+							position="relative"
+							as={motion.div}
+							initial={{ opacity: 0 }}
+							animate={{ opacity: 1 }}
+						>
 							<IconButton
 								variant="ghost"
 								as={motion.button}
@@ -26,11 +35,6 @@ const AdminCreateProductsImages = () => {
 								animate={{
 									opacity: 1,
 									rotate: 0,
-									transition: {
-										type: 'just',
-										duration: 0.5,
-										delay: 1,
-									},
 								}}
 								position="absolute"
 								right={-5}
@@ -47,21 +51,15 @@ const AdminCreateProductsImages = () => {
 								onClick={() => handlDeletImage(src, index)}
 							/>
 							<Image
-								initial={{ opacity: 0 }}
-								animate={{ opacity: 1 }}
 								transitionDuration="0.5s"
-								as={motion.img}
 								objectFit="cover"
-								fallback={<Spinner />}
-								src={`${
-									process.env
-										.NEXT_PUBLIC_SUPABASE_URL as string
-								}/storage/v1/object/public/products/${
-									src.path
-								}`}
+								src={`${env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/products/${src.path}`}
 								alt="product"
 								width={200}
 								height={200}
+								quality={100}
+								// placeholder={'blur'}
+								// blurDataURL={undefined}
 							/>
 						</Stack>
 					))}

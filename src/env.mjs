@@ -20,6 +20,8 @@ const server = z.object({
 const client = z.object({
 	NEXT_PUBLIC_PUSHER_APP_KEY: z.string().min(1),
 	NEXT_PUBLIC_PUSHER_CLUSTER: z.string().min(1),
+	NEXT_PUBLIC_VISITORS_LINKS: z.string().min(1),
+	NEXT_PUBLIC_SUPABASE_URL: z.string().min(1)
 });
 
 /**
@@ -34,7 +36,10 @@ const processEnv = {
 	NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
 	NEXT_PUBLIC_PUSHER_APP_KEY: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
 	PUSHER_APP_ID: process.env.PUSHER_APP_ID,
-	PUSHER_APP_SECRET: process.env.PUSHER_APP_SECRET
+	PUSHER_APP_SECRET: process.env.PUSHER_APP_SECRET,
+	NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+	NEXT_PUBLIC_VISITORS_LINKS: process.env.NEXT_PUBLIC_VISITORS_LINKS
+
 };
 
 // Don't touch the part below

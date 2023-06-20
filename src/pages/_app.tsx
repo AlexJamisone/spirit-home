@@ -1,5 +1,6 @@
 import { SignedIn, SignedOut } from '@clerk/nextjs';
 import { type AppType } from 'next/app';
+import Script from 'next/script';
 
 import { ChakraProvider, useMediaQuery } from '@chakra-ui/react';
 import { theme } from '~/chakra/theme';
@@ -24,12 +25,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 			<Head>
 				<title>Spirit-Home</title>
 				<meta name="description" content="" />
-				<script
-					defer
-					data-domain="spirit-home.ru"
-					src="https://plausible.io/js/script.js"
-				></script>
 			</Head>
+			<Script
+				async
+				src="https://analytics.umami.is/script.js"
+				data-website-id="a69581b8-3db7-4a05-898e-3ce26ce7c507"
+			/>
 			<ClerkProvider {...pageProps} localization={ruRU}>
 				<CartProvider>
 					<SignedIn>

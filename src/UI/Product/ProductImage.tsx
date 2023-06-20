@@ -1,4 +1,5 @@
-import { Center, Image, type CenterProps } from '@chakra-ui/react';
+import { Image } from '@chakra-ui/next-js';
+import { Center, type CenterProps } from '@chakra-ui/react';
 import { Pagination, Zoom } from 'swiper';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -39,8 +40,9 @@ const ProductImage = ({ container, zoom }: ProductImageProps) => {
 							alt="product"
 							src={path + src}
 							objectFit="contain"
-							w={[zoom ? 200 : 125, zoom ? 200 : 175]}
-							h={[zoom ? 200 : 125, zoom ? 200 : 175]}
+							width={175}
+							height={175}
+							quality={100}
 						/>
 					</Center>
 				</SwiperSlide>

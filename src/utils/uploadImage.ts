@@ -14,7 +14,7 @@ export function upload(files: File[]): Promise<UploadResult[]> {
 				.from('products')
 				.upload(`public/${uuidv4()}`, file);
 			if (error) {
-				return { path: '', error };
+				return { path: '', error, blureDataUrl: undefined };
 			}
 			return { path: data.path ?? '', error: null };
 		})

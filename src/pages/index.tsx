@@ -1,8 +1,8 @@
+import { Image } from '@chakra-ui/next-js';
 import {
 	AbsoluteCenter,
 	Center,
 	Heading,
-	Img,
 	Spinner,
 	Stack,
 } from '@chakra-ui/react';
@@ -37,24 +37,24 @@ const Home: NextPage = () => {
 			w={'100vw'}
 		>
 			<SwiperSlide>
-				<Center as="main">
-					<Img
-						as={motion.img}
-						h={'100vh'}
+				<Center
+					as={motion.main}
+					initial={{ opacity: 0 }}
+					animate={{
+						opacity: 1,
+						transition: {
+							type: 'spring',
+							duration: 1.5,
+						},
+					}}
+				>
+					<Image
 						objectFit="cover"
-						w="100%"
-						src="assets/3.jpg"
+						fill={true}
+						src="/assets/3.jpg"
 						alt="bg"
-						initial={{ scale: 1.2, opacity: 0 }}
-						animate={{
-							scale: 1,
-							opacity: 1,
-							transition: {
-								type: 'spring',
-								duration: 1.5,
-								delay: 1,
-							},
-						}}
+						quality={100}
+						loading="lazy"
 					/>
 				</Center>
 			</SwiperSlide>
