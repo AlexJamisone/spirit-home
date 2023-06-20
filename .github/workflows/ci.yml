@@ -2,25 +2,25 @@ name: Prettier
 on: [push, pull_request]
 
 env:
-    DATABASE_URL: "https://fake.com"
-	NEXT_PUBLIC_PUSHER_CLUSTER: "321312"
-	NEXT_PUBLIC_PUSHER_APP_KEY: "3213123"
-	PUSHER_APP_ID: "3123"
-	PUSHER_APP_SECRET: "3213"
-	NEXT_PUBLIC_SUPABASE_URL: "123213"
-	NEXT_PUBLIC_VISITORS_LINKS: "1231231"
+  DATABASE_URL: "https://fake.com"
+  NEXT_PUBLIC_PUSHER_CLUSTER: "321312"
+  NEXT_PUBLIC_PUSHER_APP_KEY: "3213123"
+  PUSHER_APP_ID: "3123"
+  PUSHER_APP_SECRET: "3213"
+  NEXT_PUBLIC_SUPABASE_URL: "123213"
+  NEXT_PUBLIC_VISITORS_LINKS: "1231231"
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-            - name: Install dependencies
-              run: npm install
-            - name: Run Prettier
-              run: npm run prettier
-            - name: Typecheck
-              run: npm run typecheck
-            - name: Lint
-              run: npm run lint
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Run Prettier
+        run: npm run prettier
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
