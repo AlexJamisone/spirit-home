@@ -1,5 +1,3 @@
-import type { UploadResult } from '~/utils/uploadImage';
-
 export type Quantity = {
 	id: string;
 	quantity: number;
@@ -11,7 +9,7 @@ export interface FormProductState {
 	id: string;
 	name: string;
 	description: string;
-	image: UploadResult[];
+	image: string[];
 	category: {
 		id: string;
 		title: string;
@@ -35,7 +33,7 @@ interface SetDescriptionAction {
 }
 interface SetImageAction {
 	type: 'SET_IMG';
-	payload: UploadResult[];
+	payload: string[];
 }
 interface SetCategoryAction {
 	type: 'SET_CATEG';

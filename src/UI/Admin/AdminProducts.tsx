@@ -55,7 +55,7 @@ const AdminProducts = () => {
 					sub: product.category ? false : true,
 				},
 				description: product.description,
-				image: product.image.map((path) => ({ path, error: null })),
+				image: product.image,
 				name: product.name,
 				price: product.priceHistory[0]?.price as number,
 				quantity: product.quantity.map(

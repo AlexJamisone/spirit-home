@@ -7,7 +7,6 @@ import { env } from '~/env.mjs';
 
 const AdminCreateProductsImages = () => {
 	const { form, handlDeletImage } = useCreateProductContext();
-
 	return (
 		<>
 			{form.image.length === 0 ? null : (
@@ -53,13 +52,11 @@ const AdminCreateProductsImages = () => {
 							<Image
 								transitionDuration="0.5s"
 								objectFit="cover"
-								src={`${env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/products/${src.path}`}
+								src={env.NEXT_PUBLIC_UPLOADTHING_URL + src}
 								alt="product"
 								width={200}
 								height={200}
 								quality={100}
-								// placeholder={'blur'}
-								// blurDataURL={undefined}
 							/>
 						</Stack>
 					))}

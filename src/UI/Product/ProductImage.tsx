@@ -6,6 +6,7 @@ import 'swiper/css/pagination';
 import 'swiper/css/zoom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { useProductCardContext } from '~/context/productCardContext';
+import { env } from '~/env.mjs';
 
 type ProductImageProps = {
 	container?: CenterProps;
@@ -14,10 +15,6 @@ type ProductImageProps = {
 
 const ProductImage = ({ container, zoom }: ProductImageProps) => {
 	const { product } = useProductCardContext();
-	const path = `${
-		process.env.NEXT_PUBLIC_SUPABASE_URL as string
-	}/storage/v1/object/public/products/`;
-
 	return (
 		<Center
 			as={Swiper}
@@ -38,7 +35,7 @@ const ProductImage = ({ container, zoom }: ProductImageProps) => {
 					>
 						<Image
 							alt="product"
-							src={path + src}
+							src={env.NEXT_PUBLIC_UPLOADTHING_URL + src}
 							objectFit="contain"
 							width={175}
 							height={175}

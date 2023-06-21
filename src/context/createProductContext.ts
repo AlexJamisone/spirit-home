@@ -6,11 +6,10 @@ import {
 	type SetStateAction,
 } from 'react';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
-import type { UploadResult } from '~/utils/uploadImage';
 
 type CreateProductContext = {
 	handleInputChange: (e: ChangeEvent<HTMLInputElement>) => void;
-	handlDeletImage: (path: UploadResult, index: number) => void;
+	handlDeletImage: (path: string, index: number) => void;
 	size: Size[] | undefined;
 	form: FormProductState;
 	edit: boolean;
@@ -20,7 +19,7 @@ type CreateProductContext = {
 	toggleAlert: () => void;
 	openAlert: boolean;
 	onCloseAlert: () => void;
-	path: UploadResult[];
+	path: string[];
 	isLoading: boolean;
 };
 

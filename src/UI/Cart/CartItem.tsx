@@ -12,6 +12,7 @@ import type { IconType } from 'react-icons';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { IoTrashOutline } from 'react-icons/io5';
 import { useCart } from '~/context/cartContext';
+import { env } from '~/env.mjs';
 import { CartItem } from '~/reducer/CartReducer';
 
 type CartItemProps = {
@@ -76,9 +77,7 @@ const CartItem = ({
 				w={[70, 75]}
 				h={[70, 75]}
 				objectFit="contain"
-				src={`${
-					process.env.NEXT_PUBLIC_SUPABASE_URL as string
-				}/storage/v1/object/public/products/${image[0] as string}`}
+				src={`${env.NEXT_PUBLIC_UPLOADTHING_URL}${image[0] as string}`}
 				alt={name}
 				fallback={<Spinner />}
 			/>

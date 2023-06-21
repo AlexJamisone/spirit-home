@@ -19,7 +19,7 @@ const config = {
 		defaultLocale: "ru",
 	},
 	images: {
-		domains: ['idmxkvjyjiiaohfdbsef.supabase.co']
+		domains: ['idmxkvjyjiiaohfdbsef.supabase.co', 'uploadthing.com']
 	},
 	typescript: {
 		ignoreBuildErrors: true
@@ -27,6 +27,9 @@ const config = {
 	eslint: {
 		ignoreDuringBuilds: true
 	},
-	swcMinify: true
+	swcMinify: true,
+	experimental: {
+		esmExternals: false
+	}
 };
 export default config

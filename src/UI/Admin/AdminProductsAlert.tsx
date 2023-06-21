@@ -9,7 +9,6 @@ import {
 import { useRef } from 'react';
 import { useCreateProductContext } from '~/context/createProductContext';
 import { api } from '~/utils/api';
-import type { UploadResult } from '~/utils/uploadImage';
 
 const AdminProductsAlert = () => {
 	const cancelRef = useRef<HTMLButtonElement>(null);
@@ -17,8 +16,8 @@ const AdminProductsAlert = () => {
 		useCreateProductContext();
 	const { mutate: deletImage, isLoading } =
 		api.products.deletImage.useMutation();
-	const handlDeletImage = (res: UploadResult[]) => {
-		deletImage(res, {
+	const handlDeletImage = (images: string[]) => {
+		deletImage(images, {
 			onSuccess: () => {
 				dispatch({ type: 'SET_CLEAR' });
 				onCloseAlert();

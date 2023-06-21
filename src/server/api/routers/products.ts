@@ -1,3 +1,4 @@
+import { utapi } from 'uploadthing/server';
 import { z } from 'zod';
 import {
 	adminProcedure,
@@ -5,8 +6,6 @@ import {
 	privetProcedure,
 	publicProcedure,
 } from '~/server/api/trpc';
-import { supabase } from '~/utils/supabase';
-import type { UploadResult } from '~/utils/uploadImage';
 
 export const productsRouter = createTRPCRouter({
 	get: publicProcedure.query(async ({ ctx }) => {
@@ -133,14 +132,12 @@ export const productsRouter = createTRPCRouter({
 	delete: adminProcedure
 		.input(
 			z.object({
-				path: z.array(z.custom<UploadResult>()),
+				path: z.array(z.string()),
 				id: z.string(),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			input.path.map(async ({ path }) => {
-				await supabase.storage.from('products').remove([path]);
-			});
+			await utapi.deleteFiles(input.path);
 
 			return await ctx.prisma.product.delete({
 				where: {
@@ -149,12 +146,11 @@ export const productsRouter = createTRPCRouter({
 			});
 		}),
 	deletImage: privetProcedure
-		.input(z.array(z.custom<UploadResult>()))
+		.input(z.array(z.string()))
 		.mutation(({ input }) => {
 			const res = Promise.all(
-				input.map(async ({ path }) => {
-					await supabase.storage.from('products').remove([path]);
-					return { path, error: null };
+				input.map(async (fileName) => {
+					await utapi.deleteFiles(fileName);
 				})
 			);
 			return res;

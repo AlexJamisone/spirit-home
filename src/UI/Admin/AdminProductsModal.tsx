@@ -15,7 +15,6 @@ import type { ChangeEvent, Dispatch, ReactNode, SetStateAction } from 'react';
 import CreateProductContext from '~/context/createProductContext';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
-import type { UploadResult } from '~/utils/uploadImage';
 import AdminCreateProductsImages from './AdminCreateProducts/AdminCreateProductsImages';
 import CategoriesSelector from './AdminCreateProducts/CategoriesSelector';
 import CreateProductInputs from './AdminCreateProducts/CreateProductInputs';
@@ -89,7 +88,7 @@ const AdminProductsModal = ({
 					id: form.id,
 					name: form.name,
 					price: form.price,
-					image: form.image.map((item) => item.path),
+					image: form.image,
 					quantity: form.quantity,
 				},
 				{
@@ -111,7 +110,7 @@ const AdminProductsModal = ({
 					name: form.name,
 					description: form.description,
 					category: form.category,
-					image: form.image.map((item) => item.path),
+					image: form.image,
 					price: form.price,
 					quantity: form.quantity.map(({ quantity, sizeId }) => ({
 						quantity,
@@ -145,8 +144,8 @@ const AdminProductsModal = ({
 			);
 		}
 	};
-	const handlDeletImage = (path: UploadResult, index: number) => {
-		deletImg([path], {
+	const handlDeletImage = (name: string, index: number) => {
+		deletImg([name], {
 			onSuccess: () => {
 				toast({
 					description: `Картинка удалена`,
