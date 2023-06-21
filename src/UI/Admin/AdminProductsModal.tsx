@@ -57,8 +57,13 @@ const AdminProductsModal = ({
 	const ctx = api.useContext();
 	const toast = useToast();
 
-	const { mutate: create, isLoading: isLoadingCreate } =
-		api.products.create.useMutation();
+	const {
+		mutate: create,
+		isLoading: isLoadingCreate,
+		error,
+		isError,
+		reset,
+	} = api.products.create.useMutation();
 	const { mutate: update, isLoading: isLoadingUpdate } =
 		api.products.update.useMutation();
 
@@ -67,6 +72,7 @@ const AdminProductsModal = ({
 	const { mutate: deletImg } = api.products.deletImage.useMutation();
 
 	const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+		reset();
 		const { name, value } = e.target;
 		switch (name) {
 			case 'name':
@@ -128,18 +134,6 @@ const AdminProductsModal = ({
 						void ctx.products.invalidate();
 						onClose();
 					},
-					onError: ({ data }) => {
-						const errorMessage =
-							data?.zodError?.fieldErrors?.description;
-						toast({
-							description: `Ошибка: ${
-								errorMessage?.[0] as string
-							}`,
-							status: 'error',
-							isClosable: true,
-							duration: 10000,
-						});
-					},
 				}
 			);
 		}
@@ -191,6 +185,9 @@ const AdminProductsModal = ({
 					setEdit,
 					toggleAlert,
 					size,
+					error: error?.data?.zodError?.fieldErrors,
+					isError,
+					reset,
 				}}
 			>
 				<ModalOverlay />

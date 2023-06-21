@@ -34,12 +34,21 @@ export const productsRouter = createTRPCRouter({
 	create: adminProcedure
 		.input(
 			z.object({
-				name: z.string().nonempty(),
-				description: z.string().nonempty(),
-				price: z.number().nonnegative(),
-				image: z.array(z.string()),
+				name: z
+					.string()
+					.nonempty({ message: 'Придумай название продукту' }),
+				description: z
+					.string()
+					.nonempty({ message: 'Заполни описание' }),
+				price: z
+					.number()
+					.nonnegative({ message: 'Укажи положительное число' }),
+				image: z.array(z.string()).min(1, {
+					message:
+						"Кажется ты не нажал кнопку 'Upload' или не добавил фото",
+				}),
 				category: z.object({
-					id: z.string().nonempty(),
+					id: z.string().nonempty({ message: 'Выберите категорию' }),
 					sub: z.boolean(),
 				}),
 				quantity: z.array(

@@ -12,7 +12,7 @@ import { api } from '~/utils/api';
 
 const AdminProductsAlert = () => {
 	const cancelRef = useRef<HTMLButtonElement>(null);
-	const { dispatch, onCloseAlert, path, onClose, openAlert } =
+	const { dispatch, onCloseAlert, path, onClose, openAlert, reset } =
 		useCreateProductContext();
 	const { mutate: deletImage, isLoading } =
 		api.products.deletImage.useMutation();
@@ -42,7 +42,10 @@ const AdminProductsAlert = () => {
 						colorScheme="red"
 						ref={cancelRef}
 						isLoading={isLoading}
-						onClick={() => handlDeletImage(path)}
+						onClick={() => {
+							reset();
+							handlDeletImage(path);
+						}}
 					>
 						Сбросить
 					</Button>

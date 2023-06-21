@@ -1,10 +1,15 @@
-import { FormLabel, Select } from '@chakra-ui/react';
+import {
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
+	Select,
+} from '@chakra-ui/react';
 import React, { type ChangeEvent } from 'react';
 import { useCreateProductContext } from '~/context/createProductContext';
 import { api } from '~/utils/api';
 
 const CategoriesSelector = () => {
-	const { dispatch, form } = useCreateProductContext();
+	const { dispatch, form, error, isError, reset } = useCreateProductContext();
 	const { data: categories } = api.categorys.get.useQuery();
 	const handlChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
 		const seletedValue = e.target.value;
@@ -28,11 +33,14 @@ const CategoriesSelector = () => {
 		});
 	};
 	return (
-		<>
+		<FormControl isInvalid={isError && error?.category !== undefined}>
 			<FormLabel>Категория</FormLabel>
 			<Select
 				placeholder="Выбери категорию"
-				onChange={(e) => handlChangeSelect(e)}
+				onChange={(e) => {
+					reset();
+					handlChangeSelect(e);
+				}}
 				defaultValue={form.category.title}
 			>
 				{categories?.map(({ id, title, subCategory }) => (
@@ -47,7 +55,10 @@ const CategoriesSelector = () => {
 					</React.Fragment>
 				))}
 			</Select>
-		</>
+			<FormErrorMessage fontWeight={600}>
+				{error?.category}
+			</FormErrorMessage>
+		</FormControl>
 	);
 };
 

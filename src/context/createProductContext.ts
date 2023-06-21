@@ -21,6 +21,15 @@ type CreateProductContext = {
 	onCloseAlert: () => void;
 	path: string[];
 	isLoading: boolean;
+	error:
+		| {
+				[x: string]: string[] | undefined;
+				[x: number]: string[] | undefined;
+				[x: symbol]: string[] | undefined;
+		  }
+		| undefined;
+	isError: boolean;
+	reset: () => void;
 };
 
 const CreateProductContext = createContext<CreateProductContext | null>(null);

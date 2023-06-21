@@ -1,39 +1,58 @@
-import { FormLabel, Input, Stack, Textarea } from '@chakra-ui/react';
+import {
+	FormControl,
+	FormErrorMessage,
+	FormLabel,
+	Input,
+	Textarea,
+} from '@chakra-ui/react';
 import { createProductInput } from '~/constants/createProductInput';
 import { useCreateProductContext } from '~/context/createProductContext';
-import { api } from '~/utils/api';
 
 const CreateProductInputs = () => {
-	const {} = api.size.get.useQuery();
-	const { form, dispatch, handleInputChange } = useCreateProductContext();
+	const { form, dispatch, handleInputChange, error, isError, reset } =
+		useCreateProductContext();
 	return (
 		<>
-			{createProductInput(form).map(
-				({ name, placeholder, type, value, textarea }) => (
-					<Stack key={placeholder}>
+			{createProductInput(form, error).map(
+				({ name, placeholder, type, value, textarea, error }) => (
+					<FormControl
+						key={placeholder}
+						isInvalid={isError && error !== undefined}
+					>
 						<FormLabel>{placeholder}</FormLabel>
 						{textarea ? (
-							<Textarea
-								placeholder={placeholder}
-								value={value}
-								h="200px"
-								onChange={(e) =>
-									dispatch({
-										type: 'SET_DESCR',
-										payload: e.target.value,
-									})
-								}
-							/>
+							<>
+								<Textarea
+									placeholder={placeholder}
+									value={value}
+									h="200px"
+									onChange={(e) => {
+										reset();
+										dispatch({
+											type: 'SET_DESCR',
+											payload: e.target.value,
+										});
+									}}
+								/>
+								<FormErrorMessage fontWeight={600}>
+									{error}
+								</FormErrorMessage>
+							</>
 						) : (
-							<Input
-								placeholder={placeholder}
-								type={type}
-								value={value}
-								name={name}
-								onChange={handleInputChange}
-							/>
+							<>
+								<Input
+									placeholder={placeholder}
+									type={type}
+									value={value}
+									name={name}
+									onChange={handleInputChange}
+								/>
+								<FormErrorMessage fontWeight={600}>
+									{error}
+								</FormErrorMessage>
+							</>
 						)}
-					</Stack>
+					</FormControl>
 				)
 			)}
 		</>

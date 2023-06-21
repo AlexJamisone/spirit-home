@@ -3,8 +3,16 @@ import { useCreateProductContext } from '~/context/createProductContext';
 import AdminProductsAlert from '../AdminProductsAlert';
 
 const ProducCreateAction = () => {
-	const { dispatch, onClose, toggleAlert, setEdit, edit, isLoading, form } =
-		useCreateProductContext();
+	const {
+		dispatch,
+		onClose,
+		toggleAlert,
+		setEdit,
+		edit,
+		isLoading,
+		form,
+		reset,
+	} = useCreateProductContext();
 	return (
 		<>
 			<Button type="submit" isLoading={isLoading}>
@@ -24,6 +32,7 @@ const ProducCreateAction = () => {
 				<Button
 					onClick={() => {
 						if (form.image.length === 0) {
+							reset();
 							dispatch({ type: 'SET_CLEAR' });
 							onClose();
 						} else {
