@@ -11,7 +11,7 @@ const AccordionAction = () => {
 				onClick={onToggle}
 				variant="outline"
 				icon={<Icon as={GoPlus} boxSize={5} color="pink.300" />}
-				w="500px"
+				w="100%"
 			/>
 			<AccordionCreate />
 		</>

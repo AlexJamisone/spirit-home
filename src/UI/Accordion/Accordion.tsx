@@ -1,4 +1,4 @@
-import { Center, useDisclosure } from '@chakra-ui/react';
+import { Stack, useDisclosure } from '@chakra-ui/react';
 import { useReducer, type ReactNode } from 'react';
 import AccordionContex from '~/context/accardionsContext';
 import { AccordionReducer, initialState } from '~/reducer/AccordionReducer';
@@ -25,16 +25,18 @@ const Accordion = ({ accordion, action }: AccordionProps) => {
 				onToggle,
 			}}
 		>
-			<Center
+			<Stack
 				as="main"
-				justifyContent="center"
+				alignItems="center"
 				pt={150}
 				flexDirection="column"
 				gap={5}
 			>
-				{accordion}
-				{role === 'ADMIN' ? action : null}
-			</Center>
+				<Stack w={['100%', 600]}>{accordion}</Stack>
+				<Stack maxW={100} minW={100}>
+					{role === 'ADMIN' && action}
+				</Stack>
+			</Stack>
 		</AccordionContex.Provider>
 	);
 };

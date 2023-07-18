@@ -47,7 +47,7 @@ const AccordionCreate = () => {
 							update(
 								{
 									id: state.id,
-									content: state.content,
+									content: state.content.split(/\n/g),
 									title: state.title,
 								},
 								{
@@ -66,7 +66,7 @@ const AccordionCreate = () => {
 						} else {
 							create(
 								{
-									content: state.content,
+									content: state.content.split(/\n/g),
 									title: state.title,
 								},
 								{

@@ -159,7 +159,7 @@ model Comment {
 model Accordion {
     id        String   @id @unique @default(cuid())
     title     String
-    content   String
+    content   String[]
     createdAt DateTime @default(now())
     updateAt  DateTime @updatedAt
 }

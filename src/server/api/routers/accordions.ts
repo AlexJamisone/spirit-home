@@ -7,22 +7,26 @@ import {
 
 export const accordionsRouter = createTRPCRouter({
 	get: publicProcedure.query(async ({ ctx }) => {
-		return await ctx.prisma.accordion.findMany();
+		return await ctx.prisma.accordion.findMany({
+			orderBy: {
+				createdAt: 'desc',
+			},
+		});
 	}),
 	create: adminProcedure
 		.input(
 			z.object({
 				title: z.string().nonempty({ message: 'Заполни строку' }),
 				content: z
-					.string()
-					.nonempty({ message: 'Не может быть с пустым контентом' }),
+					.array(z.string())
+					.min(1, { message: 'Не может быть с пустым контентом' }),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
 			return await ctx.prisma.accordion.create({
 				data: {
 					title: input.title,
-					content: input.content,
+					content: input.content.filter(Boolean),
 				},
 			});
 		}),
@@ -32,8 +36,8 @@ export const accordionsRouter = createTRPCRouter({
 				id: z.string().nonempty(),
 				title: z.string().nonempty({ message: 'Заполни строку' }),
 				content: z
-					.string()
-					.nonempty({ message: 'Не может быть с пустым контентом' }),
+					.array(z.string())
+					.min(1, { message: 'Не может быть с пустым контентом' }),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -43,7 +47,7 @@ export const accordionsRouter = createTRPCRouter({
 				},
 				data: {
 					title: input.title,
-					content: input.content,
+					content: input.content.filter(Boolean),
 				},
 			});
 		}),
