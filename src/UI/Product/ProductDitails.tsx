@@ -62,16 +62,18 @@ const ProductDitails = ({ isOpen, onClose }: ProductDitailsProps) => {
 									zoom={true}
 								/>
 							</GridItem>
-							<GridItem colStart={[1, 2]}>
-								<Text
-									textAlign="center"
-									mb={5}
-									fontWeight={600}
-								>
-									Размеры
-								</Text>
-								<ProductSize />
-							</GridItem>
+							{product.quantity.length !== 0 && (
+								<GridItem colStart={[1, 2]}>
+									<Text
+										textAlign="center"
+										mb={5}
+										fontWeight={600}
+									>
+										Размеры
+									</Text>
+									<ProductSize />
+								</GridItem>
+							)}
 							<GridItem colStart={[1, 2]} textAlign="center">
 								<ProductPrice />
 							</GridItem>
