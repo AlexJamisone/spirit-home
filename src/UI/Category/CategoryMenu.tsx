@@ -13,9 +13,11 @@ const CategoryMenu = () => {
 				<>
 					<MenuButton
 						as={Button}
-						variant="ghost"
+						variant="solid"
+						colorScheme="brand"
 						rightIcon={<IoIosArrowDown />}
 						size={['xs', 'sm', 'md']}
+						textColor="second"
 					>
 						Категории
 					</MenuButton>

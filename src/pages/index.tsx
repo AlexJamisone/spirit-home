@@ -25,7 +25,7 @@ const Home: NextPage = () => {
 				position="relative"
 				h="100vh"
 			>
-				<Sun top={0} left={'50%'} />
+				<Sun top={0} left={[null, null, '50%']} />
 			</Stack>
 		</Center>
 	);

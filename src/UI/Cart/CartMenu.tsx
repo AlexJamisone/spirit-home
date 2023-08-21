@@ -1,6 +1,7 @@
 import {
 	Box,
 	Button,
+	Icon,
 	IconButton,
 	Menu,
 	MenuButton,
@@ -17,6 +18,7 @@ import { SlHandbag } from 'react-icons/sl';
 import { useCart } from '~/context/cartContext';
 import NewOrder from '../NewOrder/NewOrder';
 import CartItem from './CartItem';
+
 const CartMenu = () => {
 	const [isLength, setIsLength] = useState(false);
 	const { cartState } = useCart();
@@ -33,12 +35,12 @@ const CartMenu = () => {
 							<MenuButton
 								as={IconButton}
 								fontSize={23}
-								icon={<SlHandbag />}
+								icon={<Icon as={SlHandbag} fill="second" />}
 								variant="ghost"
 								position="relative"
 								_before={{
 									content: `'${cartState.items.length}'`,
-									bgColor: 'gray.300',
+									bgColor: 'whiteAlpha.900',
 									width: '25px',
 									height: '25px',
 									rounded: '2xl',

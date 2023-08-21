@@ -47,12 +47,14 @@ const Navigation = () => {
 	}, [isSignedIn]);
 	return (
 		<Stack
+			roundedBottom="50px"
 			alignItems="center"
 			direction="row"
 			justifyContent={['center', 'space-between']}
 			px={[null, '100px']}
-			gap={2}
+			gap={5}
 			as={motion.nav}
+			bgColor="brand"
 			initial={{ opacity: 0, filter: 'blur(5px)' }}
 			animate={{
 				opacity: 1,
@@ -67,11 +69,23 @@ const Navigation = () => {
 			zIndex={5}
 			background={bgColor ? 'whiteAlpha.300' : ''}
 			backdropFilter={bgColor ? 'blur(4px)' : ''}
+			//make theperate element
+			_before={{
+				content: `''`,
+				display: 'block',
+				position: 'absolute',
+				left: 34,
+				w: '95%',
+				h: '140%',
+				border: '2px solid',
+				borderColor: 'second',
+				roundedBottom: '50px',
+			}}
 		>
 			<Link href="/" alignSelf="flex-start">
-				<Logo size={isTablet ? 120 : 150} />
+				<Logo size={isTablet ? 120 : 150} color="second" />
 			</Link>
-			<Stack direction="row" alignItems="center" gap={[1, 3, 5]}>
+			<Stack direction="row" alignItems="center" gap={[1, 3, 9]}>
 				<CategoryMenu />
 				{isTablet ? (
 					<>
@@ -105,6 +119,7 @@ const Navigation = () => {
 								_hover={{
 									textDecoration: 'none',
 								}}
+								textColor="second"
 							>
 								{children}
 							</Link>

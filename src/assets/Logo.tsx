@@ -1,6 +1,8 @@
+import { Icon } from '@chakra-ui/react';
+
 const Logo = (props: { size?: number; color?: string }) => {
 	return (
-		<svg
+		<Icon
 			version="1.1"
 			id="logo"
 			xmlns="http://www.w3.org/2000/svg"
@@ -100,7 +102,7 @@ const Logo = (props: { size?: number; color?: string }) => {
 		C208.1,269.4,202.6,263.8,195.6,263.8z"
 			/>
 			<path d="M310.7,263c-7.6,0-14,6.3-14,13.7c0,7.9,6.1,14.2,13.9,14.2c7.9,0,14.2-6,14.2-13.6C324.8,269.4,318.5,263,310.7,263z" />
-		</svg>
+		</Icon>
 	);
 };
 

@@ -11,4 +11,11 @@ const colors = {
 	second: '#000099',
 };
 
-export const theme = extendTheme({ defultTheme, colors });
+const theme = extendTheme({
+	defultTheme,
+	colors,
+});
+
+export default theme;
+
+export { theme };

@@ -113,19 +113,20 @@ const Menu = () => {
 								alignContent="center"
 								justifyContent="center"
 							>
-								<Icon as={icon} boxSize={6} color="#261F1F" />
+								<Icon as={icon} boxSize={6} color="second" />
 								<Text
 									overflowX="hidden"
 									as={motion.p}
 									initial={{ opacity: 0 }}
 									animate={{ opacity: 1, type: 'spring' }}
 									w={['100%']}
+									textColor="second"
 								>
 									{title}
 								</Text>
 							</Stack>
 						) : (
-							<Icon as={icon} boxSize={6} color="#261F1F" />
+							<Icon as={icon} boxSize={6} color="second" />
 						)}
 					</Link>
 				))}
