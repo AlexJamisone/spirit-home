@@ -6,4 +6,9 @@ const defultTheme: ThemeConfig = {
 	disableTransitionOnChange: true,
 };
 
-export const theme = extendTheme({ defultTheme });
+const colors = {
+	brand: '#FF99FF',
+	second: '#000099',
+};
+
+export const theme = extendTheme({ defultTheme, colors });

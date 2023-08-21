@@ -5,12 +5,13 @@
 	"scripts": {
 		"build": "next build",
 		"dev": "next dev",
-		"postinstall": "prisma generate",
+		"postinstall": "prisma generate && npm run gen:theme-typings",
 		"lint": "next lint",
 		"start": "next start",
 		"prettier": "prettier --config .prettierrc --ignore-path .gitignore --write \"**/*.{js,jsx,json,md,ts,tsx}\"",
 		"typecheck": "tsc --noEmit",
-		"precommit": "npm run prettier && npm run typecheck && git add . && git commit"
+		"precommit": "npm run prettier && npm run typecheck && git add . && git commit",
+		"gen:theme-typings": "chakra-cli tokens src/chakra/theme.ts"
 	},
 	"dependencies": {
 		"@chakra-ui/next-js": "^2.1.4",
@@ -55,6 +56,7 @@
 		"zod": "^3.21.4"
 	},
 	"devDependencies": {
+		"@chakra-ui/cli": "^2.4.1",
 		"@types/eslint": "^8.21.3",
 		"@types/fslightbox-react": "^1.7.1",
 		"@types/node": "^18.15.5",

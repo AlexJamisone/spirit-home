@@ -23,6 +23,7 @@ const CartItem = ({
 	item: { image, name, quantityInCart, id, priceHistory, selectedSize },
 }: CartItemProps) => {
 	const { cartDispatch } = useCart();
+
 	const handlCount = (icon: IconType, action: 'plus' | 'minus') => {
 		return (
 			<IconButton

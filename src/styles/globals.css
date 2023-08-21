@@ -19,3 +19,10 @@ a {
 .balloon_button {
 	background: red;
 }
+
+.cls-1 {
+	fill: none;
+	stroke: #009;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}

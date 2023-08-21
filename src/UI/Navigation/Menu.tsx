@@ -24,11 +24,11 @@ const Menu = () => {
 			alignItems="center"
 			cursor="pointer"
 			position="fixed"
-			top={'35%'}
+			top={'25%'}
 			zIndex={20}
-			gap={5}
+			gap={3}
 			w={isOpen ? ['200px'] : ['70px']}
-			bgColor="#FFCC99"
+			bgColor="brand"
 			transitionDuration="0.5s"
 			maxH={['100%']}
 			overflow="hidden"
