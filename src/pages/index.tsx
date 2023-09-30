@@ -1,7 +1,9 @@
 import { Center, Stack } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import { type NextPage } from 'next';
 import 'swiper/css';
 import 'swiper/css/pagination';
+import MainTitle from '~/UI/MainTitle/MainTitle';
 import Sun from '~/assets/Sun';
 
 const Home: NextPage = () => {
@@ -10,22 +12,25 @@ const Home: NextPage = () => {
 	return (
 		<Center overflow="hidden">
 			<Stack
+				as={motion.div}
 				direction="row"
 				justifyContent="space-between"
 				w="50%"
 				position="relative"
 				h="100vh"
 			>
-				<Sun top={0} right={'50%'} />
+				<Sun right={[null, null, '30%', '50%', '60%']} />
 			</Stack>
+			<MainTitle />
 			<Stack
+				as={motion.div}
 				direction="row"
 				justifyContent="space-between"
 				w="50%"
 				position="relative"
 				h="100vh"
 			>
-				<Sun top={0} left={[null, null, '50%']} />
+				<Sun left={[null, null, '30%', '50%', '60%']} />
 			</Stack>
 		</Center>
 	);

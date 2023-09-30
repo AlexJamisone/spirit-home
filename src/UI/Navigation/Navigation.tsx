@@ -66,7 +66,7 @@ const Navigation = () => {
 			}}
 			w={'100%'}
 			position="fixed"
-			zIndex={5}
+			zIndex={99}
 			background={bgColor ? 'whiteAlpha.300' : ''}
 			backdropFilter={bgColor ? 'blur(4px)' : ''}
 			//make theperate element
@@ -75,14 +75,15 @@ const Navigation = () => {
 				display: 'block',
 				position: 'absolute',
 				left: 34,
-				w: '95%',
+				w: '96%',
 				h: '140%',
 				border: '2px solid',
 				borderColor: 'second',
 				roundedBottom: '50px',
+				zIndex: -1,
 			}}
 		>
-			<Link href="/" alignSelf="flex-start">
+			<Link href="/" alignSelf="flex-start" cursor="pointer">
 				<Logo size={isTablet ? 120 : 150} color="second" />
 			</Link>
 			<Stack direction="row" alignItems="center" gap={[1, 3, 9]}>

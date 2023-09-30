@@ -5,8 +5,8 @@ const Sun = (props?: IconProps) => {
 		<Icon
 			xmlns="http://www.w3.org/2000/svg"
 			viewBox="0 0 1071.48 1071.48"
-			w={700}
-			h={750}
+			w={[800]}
+			h={[1000]}
 			position="absolute"
 			{...props}
 		>

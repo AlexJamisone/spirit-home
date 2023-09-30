@@ -11,9 +11,14 @@ const colors = {
 	second: '#000099',
 };
 
+const fonts = {
+	heading: `'Crimson Text', serif`,
+};
+
 const theme = extendTheme({
 	defultTheme,
 	colors,
+	fonts,
 });
 
 export default theme;

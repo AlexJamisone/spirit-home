@@ -24,7 +24,7 @@ const Menu = () => {
 			alignItems="center"
 			cursor="pointer"
 			position="fixed"
-			top={'25%'}
+			top={'38%'}
 			zIndex={20}
 			gap={3}
 			w={isOpen ? ['200px'] : ['70px']}
