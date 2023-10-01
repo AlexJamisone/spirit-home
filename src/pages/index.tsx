@@ -1,5 +1,4 @@
-import { Center, Stack } from '@chakra-ui/react';
-import { motion } from 'framer-motion';
+import { Stack } from '@chakra-ui/react';
 import { type NextPage } from 'next';
 import 'swiper/css';
 import 'swiper/css/pagination';
@@ -10,29 +9,41 @@ const Home: NextPage = () => {
 	// const { data: products, isLoading } = api.products.get.useQuery();
 	// const [search, setSearch] = useState('');
 	return (
-		<Center overflow="hidden">
-			<Stack
-				as={motion.div}
-				direction="row"
-				justifyContent="space-between"
-				w="50%"
-				position="relative"
-				h="100vh"
-			>
-				<Sun right={[null, null, '30%', '50%', '60%']} />
-			</Stack>
+		<Stack direction="row" overflow="hidden" justifyContent="space-between">
+			<Sun
+				containerProps={{
+					ml: '-500px',
+					initial: {
+						x: -500,
+					},
+					animate: {
+						x: 0,
+						rotate: 360,
+						transition: {
+							type: 'spring',
+							duration: 4,
+						},
+					},
+				}}
+			/>
 			<MainTitle />
-			<Stack
-				as={motion.div}
-				direction="row"
-				justifyContent="space-between"
-				w="50%"
-				position="relative"
-				h="100vh"
-			>
-				<Sun left={[null, null, '30%', '50%', '60%']} />
-			</Stack>
-		</Center>
+			<Sun
+				containerProps={{
+					mr: '-500px',
+					initial: {
+						x: 500,
+					},
+					animate: {
+						x: 0,
+						rotate: 360,
+						transition: {
+							type: 'spring',
+							duration: 4,
+						},
+					},
+				}}
+			/>
+		</Stack>
 	);
 };
 

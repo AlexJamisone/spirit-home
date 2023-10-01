@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 const SignInPage = () => {
 	return (
 		<Center
-			pt={150}
+			pt={250}
 			as={motion.div}
 			initial={{ opacity: 0, y: 50 }}
 			animate={{

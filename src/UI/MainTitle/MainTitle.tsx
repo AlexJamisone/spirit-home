@@ -1,15 +1,34 @@
 import { Heading, Text } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 
 const MainTitle = () => {
 	return (
 		<Heading
+			as={motion.h2}
+			initial={{
+				opacity: 0,
+				y: -50,
+				filter: 'blur(5px)',
+			}}
+			animate={{
+				opacity: 1,
+				y: 0,
+				filter: 'blur(0px)',
+				transition: {
+					type: 'spring',
+					duration: 1.5,
+					delay: 0.3,
+				},
+			}}
 			textTransform="uppercase"
 			lineHeight={1.5}
 			fontSize={54}
 			textAlign="center"
-			w={[null, null, null, 780, null, 630]}
+			w={[null, null, null, 780, null, 475]}
 			textColor="second"
 			fontWeight="thin"
+			pt={250}
+			cursor="default"
 		>
 			The Sun is Up, The Sky is Blue, It`s so beautiful, and so are{' '}
 			<Text
