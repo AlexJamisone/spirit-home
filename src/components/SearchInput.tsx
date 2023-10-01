@@ -16,7 +16,7 @@ type SearchInputProps = {
 const SearchInput = ({ setSearch }: SearchInputProps) => {
 	const [animationPlaceholder, setAnimationPlaceholder] = useState(true);
 	return (
-		<Center>
+		<Center my={0} mx="auto">
 			<InputGroup>
 				<InputLeftElement>
 					<Icon as={BsSearch} />

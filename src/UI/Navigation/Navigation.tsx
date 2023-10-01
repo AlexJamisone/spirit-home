@@ -1,5 +1,6 @@
 import { Link } from '@chakra-ui/next-js';
 import {
+	Box,
 	Icon,
 	IconButton,
 	Stack,
@@ -22,14 +23,11 @@ const Navigation = () => {
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	const { isOpen, onClose, onToggle } = useDisclosure();
 	const [renderLinks, setRenderLinks] = useState(links);
-	const [bgColor, setBgColor] = useState(false);
+	const [scrollY, setScrollY] = useState(0);
 	useEffect(() => {
+		console.log('hit');
 		const handleScroll = () => {
-			if (window.scrollY >= 50 || window.scrollY >= 50) {
-				setBgColor(true);
-			} else {
-				setBgColor(false);
-			}
+			setScrollY(window.scrollY);
 		};
 
 		window.addEventListener('scroll', handleScroll);
@@ -66,24 +64,34 @@ const Navigation = () => {
 			}}
 			w={'100%'}
 			position="fixed"
-			zIndex={99}
-			background={bgColor ? 'whiteAlpha.300' : ''}
-			backdropFilter={bgColor ? 'blur(4px)' : ''}
-			//make theperate element
-			_before={{
-				content: `''`,
-				display: 'block',
-				position: 'absolute',
-				left: 34,
-				w: '96%',
-				h: '140%',
-				border: '2px solid',
-				borderColor: 'second',
-				roundedBottom: '50px',
-				zIndex: -1,
-			}}
+			zIndex={200}
 		>
-			<Link href="/" alignSelf="flex-start" cursor="pointer">
+			<Box
+				as={motion.div}
+				position="absolute"
+				left={'50%'}
+				w="96%"
+				h="140%"
+				transform="translateX(-50%)"
+				border="2px solid"
+				borderColor="second"
+				roundedBottom="50px"
+				top={''}
+				animate={{
+					top: scrollY < 20 ? undefined : `-${scrollY}px`,
+					opacity: scrollY > 100 ? 0 : 1,
+					transition: {
+						duration: 1,
+						damping: 300,
+					},
+				}}
+			/>
+			<Link
+				href="/"
+				alignSelf="flex-start"
+				cursor="pointer"
+				position="relative"
+			>
 				<Logo size={isTablet ? 120 : 150} color="second" />
 			</Link>
 			<Stack direction="row" alignItems="center" gap={[1, 3, 9]}>
@@ -121,6 +129,7 @@ const Navigation = () => {
 									textDecoration: 'none',
 								}}
 								textColor="second"
+								position="relative"
 							>
 								{children}
 							</Link>

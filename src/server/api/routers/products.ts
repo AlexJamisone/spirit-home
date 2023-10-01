@@ -8,7 +8,35 @@ import {
 } from '~/server/api/trpc';
 
 export const productsRouter = createTRPCRouter({
-	get: publicProcedure.query(async ({ ctx }) => {
+	getForAll: publicProcedure.query(async ({ ctx }) => {
+		const products = await ctx.prisma.product.findMany({
+			include: {
+				priceHistory: {
+					orderBy: {
+						effectiveFrom: 'desc',
+					},
+				},
+				quantity: {
+					include: {
+						size: true,
+					},
+				},
+				subCategory: {
+					include: {
+						category: true,
+					},
+				},
+				category: true,
+			},
+			where: {
+				NOT: {
+					archived: true,
+				},
+			},
+		});
+		return products;
+	}),
+	getForAdmin: publicProcedure.query(async ({ ctx }) => {
 		const products = await ctx.prisma.product.findMany({
 			include: {
 				priceHistory: {

@@ -13,7 +13,6 @@ const Sun = ({ containerProps }: SumProps) => {
 				viewBox="0 0 1071.48 1071.48"
 				width={['1000px']}
 				height={['1000px']}
-				// filter="blur(2px)"
 			>
 				<line
 					className="cls-1"
