@@ -23,7 +23,7 @@ const UserFavorites = () => {
 								image={<ProductsCard.Image />}
 								info={<ProductsCard.Info />}
 								favorites={<ProductsCard.Favorites />}
-								admin="USER"
+								role="USER"
 							/>
 						))}
 					</AnimatePresence>

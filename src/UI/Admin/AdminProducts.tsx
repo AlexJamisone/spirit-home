@@ -27,7 +27,7 @@ const AdminProducts = () => {
 	const [form, dispatch] = useReducer(FormProductReducer, initialState);
 
 	const { data: user } = api.users.get.useQuery();
-	const { data: products } = api.products.get.useQuery();
+	const { data: products } = api.products.getForAdmin.useQuery();
 
 	if (!products) return null;
 	const handlEdit = (
@@ -98,21 +98,19 @@ const AdminProducts = () => {
 			{products.length === 0 ? (
 				<Text>Пока что нету Товаров</Text>
 			) : (
-				products
-					.map((product) => {
-						return (
-							<ProductsCard
-								key={product.id}
-								admin={user?.role}
-								product={product}
-								image={<ProductsCard.Image />}
-								info={<ProductsCard.Info />}
-								handlEdit={handlEdit}
-								action={<ProductsCard.Action />}
-							/>
-						);
-					})
-					.reverse()
+				products.map((product) => {
+					return (
+						<ProductsCard
+							key={product.id}
+							role={user?.role}
+							product={product}
+							image={<ProductsCard.Image />}
+							info={<ProductsCard.Info />}
+							handlEdit={handlEdit}
+							action={<ProductsCard.Action />}
+						/>
+					);
+				})
 			)}
 			<AdminCreateSize isOpen={isOpenSize} onClose={onCloseSize} />
 			<AdminProductsModal

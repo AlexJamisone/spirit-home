@@ -55,12 +55,7 @@ const ProductDitails = ({ isOpen, onClose }: ProductDitailsProps) => {
 							justifyContent="center"
 						>
 							<GridItem h="100%" position="relative">
-								<ProductImage
-									container={{
-										zIndex: 10,
-									}}
-									zoom={true}
-								/>
+								<ProductImage />
 							</GridItem>
 							{product.quantity.length !== 0 && (
 								<GridItem colStart={[1, 2]}>
@@ -85,7 +80,7 @@ const ProductDitails = ({ isOpen, onClose }: ProductDitailsProps) => {
 								/>
 							</GridItem>
 							<GridItem colSpan={2} textAlign="center">
-								<ProductInfo full={true} />
+								<ProductInfo />
 							</GridItem>
 						</Grid>
 					</ModalBody>

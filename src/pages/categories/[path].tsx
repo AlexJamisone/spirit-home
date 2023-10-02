@@ -10,7 +10,7 @@ import { prisma } from '~/server/db';
 import { api } from '~/utils/api';
 
 const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
-	const { data: products } = api.products.get.useQuery();
+	const { data: products } = api.products.getForAll.useQuery();
 	if (!products) return <NoData text="Пусто" icon={BsWind} />;
 	return (
 		<Center pt={160} gap={5} flexWrap="wrap">
@@ -23,7 +23,7 @@ const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
 					<ProductsCard
 						key={product.id}
 						product={product}
-						admin="USER"
+						role="USER"
 						action={<ProductsCard.Action />}
 						info={<ProductsCard.Info />}
 						image={<ProductsCard.Image />}

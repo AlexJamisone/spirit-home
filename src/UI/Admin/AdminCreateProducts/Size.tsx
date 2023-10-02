@@ -5,7 +5,7 @@ import SizeCard from './SizeCard';
 const Size = () => {
 	const { size, edit, dispatch, form } = useCreateProductContext();
 	return (
-		<Stack direction="row">
+		<Stack direction="row" flexWrap="wrap" justifyContent="center">
 			{edit ? (
 				<>
 					{form.quantity.map(({ id, quantity, name, sizeId }) => (

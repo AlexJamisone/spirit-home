@@ -1,49 +1,32 @@
 import { Image } from '@chakra-ui/next-js';
-import { Center, type CenterProps } from '@chakra-ui/react';
-import { Pagination, Zoom } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import 'swiper/css/zoom';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import { Box, Center, Stack } from '@chakra-ui/react';
+import useEmblaCarousel from 'embla-carousel-react';
 import { useProductCardContext } from '~/context/productCardContext';
 import { env } from '~/env.mjs';
 
-type ProductImageProps = {
-	container?: CenterProps;
-	zoom?: boolean;
-};
-
-const ProductImage = ({ container, zoom }: ProductImageProps) => {
+const ProductImage = () => {
 	const { product } = useProductCardContext();
+	const [emblaRef] = useEmblaCarousel();
 	return (
 		<Center
-			as={Swiper}
-			direction="horizontal"
-			modules={[Pagination, Zoom]}
-			pagination={{ enabled: true, clickable: zoom ? false : true }}
-			w="175px"
-			h="175px"
-			zoom={zoom}
-			{...container}
+			ref={emblaRef}
+			overflow="hidden"
+			onClick={(e) => e.stopPropagation()}
 		>
-			{product.image.map((src) => (
-				<SwiperSlide key={src}>
-					<Center
-						className={zoom ? 'swiper-zoom-container' : ''}
-						onClick={(e) => e.stopPropagation()}
-						cursor={zoom ? 'zoom-in' : 'default'}
-					>
+			<Stack direction="row">
+				{product.image.map((id) => (
+					<Box key={id} flex="0 0 100%" minW={0}>
 						<Image
-							alt="product"
-							src={env.NEXT_PUBLIC_UPLOADTHING_URL + src}
-							objectFit="contain"
-							width={175}
-							height={175}
+							alt={`product${id}`}
+							src={env.NEXT_PUBLIC_UPLOADTHING_URL + id}
+							width={300}
+							height={300}
 							quality={100}
+							objectFit="cover"
 						/>
-					</Center>
-				</SwiperSlide>
-			))}
+					</Box>
+				))}
+			</Stack>
 		</Center>
 	);
 };

@@ -15,14 +15,14 @@ const Home: NextPage = () => {
 		<Stack as="main" gap={10}>
 			<MainSection />
 			<SearchInput setSearch={setSearch} />
-			<Stack direction="row" justifyContent='center' gap={43} mb={10}>
+			<Stack direction="row" justifyContent="center" gap={43} mb={10}>
 				{products?.map((product) => (
 					<ProductsCard
 						product={product}
 						key={product.id}
 						image={<ProductsCard.Image />}
 						info={<ProductsCard.Info />}
-						admin="USER"
+						role="USER"
 						action={<ProductsCard.Action />}
 					/>
 				))}

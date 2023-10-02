@@ -15,7 +15,7 @@ type ProductActionProps = {
 };
 
 const ProductAction = ({ container }: ProductActionProps) => {
-	const { product, admin, handlAddToCart, handleArchivedProduct, isLoading } =
+	const { product, role, handlAddToCart, handleArchivedProduct, isLoading } =
 		useProductCardContext();
 	const handlArchiveButton = (icon: IconType) => {
 		return (
@@ -52,7 +52,7 @@ const ProductAction = ({ container }: ProductActionProps) => {
 					<Overlay />
 				</>
 			) : null}
-			{admin === 'ADMIN' ? (
+			{role === 'ADMIN' ? (
 				<>
 					{product.archived
 						? handlArchiveButton(BiArchiveOut)

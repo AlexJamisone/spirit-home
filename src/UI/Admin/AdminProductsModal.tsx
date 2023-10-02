@@ -192,7 +192,9 @@ const AdminProductsModal = ({
 			>
 				<ModalOverlay />
 				<ModalContent w={['500px']} maxW={'100%'}>
-					<ModalHeader>Создать новый товар</ModalHeader>
+					<ModalHeader>
+						{edit ? 'Обновить' : 'Создать'} товар
+					</ModalHeader>
 					<ModalBody>
 						<FormControl
 							as="form"

@@ -20,7 +20,7 @@ const ProductCardContext = createContext<{
 			size: Size;
 		})[];
 	};
-	admin?: Role;
+	role?: Role;
 	selectedSize: { id: string; name: string };
 	setSelectedtSize: Dispatch<SetStateAction<{ id: string; name: string }>>;
 	error: boolean;
