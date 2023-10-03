@@ -1,5 +1,5 @@
 import { Link } from '@chakra-ui/next-js';
-import { Card, CardBody, CardFooter, Icon, useToast } from '@chakra-ui/react';
+import { Card, CardFooter, Icon, useToast } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
 import type {
 	Category,
@@ -24,9 +24,7 @@ import ProductSize from './ProductSize';
 type ProductProps = {
 	image?: ReactNode;
 	info?: ReactNode;
-	action?: ReactNode;
 	favorites?: ReactNode;
-	size?: ReactNode;
 	product: Product & {
 		priceHistory: ProductPriceHistory[];
 		quantity: (Quantity & {
@@ -50,13 +48,11 @@ type ProductProps = {
 
 const ProductsCard = ({
 	image,
-	action,
 	info,
 	product,
 	role,
 	handlEdit,
 	favorites,
-	size,
 }: ProductProps) => {
 	const { mutate: archivedProduct, isLoading } =
 		api.products.archived.useMutation();
@@ -142,6 +138,7 @@ const ProductsCard = ({
 			}}
 		>
 			<Card
+				gap={1}
 				as={role === 'USER' || !role ? Link : undefined}
 				href={`/product/${product.id}`}
 				onClick={() =>
@@ -165,7 +162,7 @@ const ProductsCard = ({
 			>
 				{isSignedIn ? favorites : null}
 				{image}
-				<CardBody>{info}</CardBody>
+				{info}
 				<CardFooter>
 					<ProductPrice />
 				</CardFooter>

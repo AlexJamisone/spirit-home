@@ -1,5 +1,5 @@
 import { Image, Stack } from '@chakra-ui/react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useState, type MouseEvent } from 'react';
 import { useProductCardContext } from '~/context/productCardContext';
 import { env } from '~/env.mjs';
@@ -25,34 +25,26 @@ const ProductImagePreview = () => {
 			w={250}
 			overflow="hidden"
 		>
-			<AnimatePresence mode="wait">
-				{product.image.map((id, index) => (
-					<Image
-						as={motion.img}
-						key={`product${id}`}
-						src={env.NEXT_PUBLIC_UPLOADTHING_URL + id}
-						display={index === currentIndex ? 'block' : 'none'}
-						alt={`product${id}`}
-						width={300}
-						height={300}
-						objectFit="cover"
-						initial={{
-							opacity: 0,
-						}}
-						animate={{
-							opacity: index === currentIndex ? 1 : 0,
-							transition: {
-								type: 'spring',
-								duration: 0.5,
-								bounce: 0.25,
-							},
-						}}
-						exit={{
-							opacity: 0,
-						}}
-					/>
-				))}
-			</AnimatePresence>
+			{product.image.map((id, index) => (
+				<Image
+					as={motion.img}
+					key={`product${id}`}
+					src={env.NEXT_PUBLIC_UPLOADTHING_URL + id}
+					display={index === currentIndex ? 'block' : 'none'}
+					alt={`product${id}`}
+					width={300}
+					height={300}
+					objectFit="cover"
+					initial={{ opacity: index === currentIndex ? 1 : 0 }}
+					animate={{
+						opacity: index === currentIndex ? 1 : 0,
+						transition: {
+							type: 'spring',
+							duration: 0.5,
+						},
+					}}
+				/>
+			))}
 		</Stack>
 	);
 };

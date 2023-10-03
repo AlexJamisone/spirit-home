@@ -23,7 +23,7 @@ const Home: NextPage = () => {
 						image={<ProductsCard.Image />}
 						info={<ProductsCard.Info />}
 						role="USER"
-						action={<ProductsCard.Action />}
+						favorites={<ProductsCard.Favorites />}
 					/>
 				))}
 			</Stack>

@@ -19,7 +19,6 @@ const UserFavorites = () => {
 							<ProductsCard
 								key={product.id}
 								product={product}
-								action={<ProductsCard.Action />}
 								image={<ProductsCard.Image />}
 								info={<ProductsCard.Info />}
 								favorites={<ProductsCard.Favorites />}

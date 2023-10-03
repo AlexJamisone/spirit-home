@@ -16,6 +16,7 @@ import AdminNotification from '~/UI/Admin/AdminNotification';
 import Menu from '~/UI/Navigation/Menu';
 import Navigation from '~/UI/Navigation/Navigation';
 import { CartProvider } from '~/context/cartContext';
+import { FavoritesProvider } from '~/context/favoritesContext';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
@@ -32,18 +33,20 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 				data-website-id="671dd393-6548-494c-acc4-ac101878e304"
 			/>
 			<ClerkProvider {...pageProps} localization={ruRU}>
-				<CartProvider>
-					<SignedIn>
-						{role === 'ADMIN' && <AdminNotification />}
-						{isTablet ? null : <Menu />}
-						<Navigation />
-						<Component {...pageProps} />
-					</SignedIn>
-					<SignedOut>
-						<Navigation />
-						<Component {...pageProps} />
-					</SignedOut>
-				</CartProvider>
+				<FavoritesProvider>
+					<CartProvider>
+						<SignedIn>
+							{role === 'ADMIN' && <AdminNotification />}
+							{isTablet ? null : <Menu />}
+							<Navigation />
+							<Component {...pageProps} />
+						</SignedIn>
+						<SignedOut>
+							<Navigation />
+							<Component {...pageProps} />
+						</SignedOut>
+					</CartProvider>
+				</FavoritesProvider>
 			</ClerkProvider>
 		</ChakraProvider>
 	);

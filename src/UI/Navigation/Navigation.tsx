@@ -1,6 +1,5 @@
 import { Link } from '@chakra-ui/next-js';
 import {
-	Box,
 	Icon,
 	IconButton,
 	Stack,
@@ -16,7 +15,7 @@ import { links } from '~/constants/links';
 import CartMenu from '../Cart/CartMenu';
 import CategoryMenu from '../Category/CategoryMenu';
 import MobileMenu from './MobileMenu';
-import MobileMenuAuth from './MobileMenuAuth';
+import NavigationBarElement from './NavigationBarElement';
 
 const Navigation = () => {
 	const { isSignedIn } = useAuth();
@@ -65,33 +64,14 @@ const Navigation = () => {
 			position="fixed"
 			zIndex={200}
 		>
-			<Box
-				as={motion.div}
-				position="absolute"
-				left={'50%'}
-				w="96%"
-				h="140%"
-				transform="translateX(-50%)"
-				border="2px solid"
-				borderColor="second"
-				roundedBottom="50px"
-				top={''}
-				animate={{
-					top: scrollY < 20 ? undefined : `-${scrollY}px`,
-					opacity: scrollY > 100 ? 0 : 1,
-					transition: {
-						duration: 1,
-						damping: 300,
-					},
-				}}
-			/>
+			<NavigationBarElement />
 			<Link
 				href="/"
 				alignSelf="flex-start"
 				cursor="pointer"
 				position="relative"
 			>
-				<Logo size={isTablet ? 120 : 150} color="second" />
+				<Logo />
 			</Link>
 			<Stack direction="row" alignItems="center" gap={[1, 3, 9]}>
 				<CategoryMenu />
@@ -104,19 +84,11 @@ const Navigation = () => {
 							icon={<Icon as={RxHamburgerMenu} boxSize={6} />}
 							onClick={onToggle}
 						/>
-						{isSignedIn ? (
-							<MobileMenuAuth
-								links={renderLinks}
-								isOpen={isOpen}
-								onClose={onClose}
-							/>
-						) : (
-							<MobileMenu
-								links={renderLinks}
-								isOpen={isOpen}
-								onClose={onClose}
-							/>
-						)}
+						<MobileMenu
+							links={renderLinks}
+							isOpen={isOpen}
+							onClose={onClose}
+						/>
 					</>
 				) : (
 					<>
@@ -136,7 +108,7 @@ const Navigation = () => {
 						<CartMenu />
 					</>
 				)}
-				{isTablet ? null : <UserButton afterSignOutUrl="/signin" />}
+				{!isTablet && <UserButton afterSignOutUrl="/signin" />}
 			</Stack>
 		</Stack>
 	);
