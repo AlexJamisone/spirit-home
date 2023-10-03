@@ -1,13 +1,38 @@
-import { Icon, Stack, type StackProps } from '@chakra-ui/react';
-import { motion, type HTMLMotionProps } from 'framer-motion';
+import { Icon, chakra } from '@chakra-ui/react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { memo } from 'react';
 
-type SumProps = {
-	containerProps?: StackProps & HTMLMotionProps<'div'>;
+type SunProps = {
+	initialPositionX?: number;
+	mr?: string;
+	ml?: string;
 };
 
-const Sun = ({ containerProps }: SumProps) => {
+const Sun = memo(({ initialPositionX, ml, mr }: SunProps) => {
+	const { scrollYProgress } = useScroll();
+	const Container = chakra(motion.div);
+	const value = useTransform(scrollYProgress, [0, 1], [0, 360]);
 	return (
-		<Stack as={motion.div} {...containerProps}>
+		<Container
+			as={motion.div}
+			initial={{
+				x: initialPositionX,
+			}}
+			whileInView={{
+				x: 0,
+				rotate: 360,
+				transition: {
+					type: 'spring',
+					duration: 4,
+					damping: 100,
+				},
+			}}
+			mr={mr}
+			ml={ml}
+			style={{
+				rotate: value,
+			}}
+		>
 			<Icon
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 1071.48 1071.48"
@@ -1023,8 +1048,8 @@ const Sun = ({ containerProps }: SumProps) => {
 					y2="296.1"
 				/>
 			</Icon>
-		</Stack>
+		</Container>
 	);
-};
-
+});
+Sun.displayName = 'Sun';
 export default Sun;

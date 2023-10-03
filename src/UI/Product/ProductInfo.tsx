@@ -2,9 +2,14 @@ import { Stack, Text } from '@chakra-ui/react';
 import { useProductCardContext } from '~/context/productCardContext';
 
 const ProductInfo = () => {
-	const { product, role } = useProductCardContext();
+	const { product } = useProductCardContext();
 	return (
-		<Stack fontSize={16} textAlign="center">
+		<Stack
+			fontWeight={400}
+			textColor="second"
+			fontSize={16}
+			textAlign="center"
+		>
 			<Text>{product.name}</Text>
 		</Stack>
 	);
