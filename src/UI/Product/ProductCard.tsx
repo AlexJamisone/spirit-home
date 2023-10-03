@@ -1,5 +1,5 @@
 import { Link } from '@chakra-ui/next-js';
-import { Card, CardFooter, Icon, useToast } from '@chakra-ui/react';
+import { Card, CardBody, CardFooter, Icon, useToast } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
 import type {
 	Category,
@@ -16,7 +16,7 @@ import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
 import ProductAction from './ProductAction';
 import ProductFavorites from './ProductFavorites';
-import ProductImage from './ProductImage';
+import ProductImagePreview from './ProductImagePreview';
 import ProductInfo from './ProductInfo';
 import ProductPrice from './ProductPrice';
 import ProductSize from './ProductSize';
@@ -165,7 +165,7 @@ const ProductsCard = ({
 			>
 				{isSignedIn ? favorites : null}
 				{image}
-				{info}
+				<CardBody>{info}</CardBody>
 				<CardFooter>
 					<ProductPrice />
 				</CardFooter>
@@ -175,7 +175,7 @@ const ProductsCard = ({
 };
 
 ProductsCard.Favorites = ProductFavorites;
-ProductsCard.Image = ProductImage;
+ProductsCard.Image = ProductImagePreview;
 ProductsCard.Info = ProductInfo;
 ProductsCard.Action = ProductAction;
 ProductsCard.Size = ProductSize;

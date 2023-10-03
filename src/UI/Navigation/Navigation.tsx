@@ -25,7 +25,6 @@ const Navigation = () => {
 	const [renderLinks, setRenderLinks] = useState(links);
 	const [scrollY, setScrollY] = useState(0);
 	useEffect(() => {
-		console.log('hit');
 		const handleScroll = () => {
 			setScrollY(window.scrollY);
 		};
