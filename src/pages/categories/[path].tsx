@@ -24,7 +24,6 @@ const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
 						key={product.id}
 						product={product}
 						role="USER"
-						action={<ProductsCard.Action />}
 						info={<ProductsCard.Info />}
 						image={<ProductsCard.Image />}
 						favorites={<ProductsCard.Favorites />}

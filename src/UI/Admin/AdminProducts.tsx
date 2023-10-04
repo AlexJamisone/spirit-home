@@ -107,7 +107,6 @@ const AdminProducts = () => {
 							image={<ProductsCard.Image />}
 							info={<ProductsCard.Info />}
 							handlEdit={handlEdit}
-							action={<ProductsCard.Action />}
 						/>
 					);
 				})
