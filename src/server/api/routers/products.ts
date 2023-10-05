@@ -8,6 +8,43 @@ import {
 } from '~/server/api/trpc';
 
 export const productsRouter = createTRPCRouter({
+	getByFavorites: publicProcedure
+		.input(
+			z.object({
+				id: z.array(z.string()),
+			})
+		)
+		.query(async ({ ctx, input }) => {
+			if (input.id.length === 0) return null;
+			return await ctx.prisma.product.findMany({
+				where: {
+					id: {
+						in: input.id,
+					},
+					NOT: {
+						archived: true,
+					},
+				},
+				include: {
+					priceHistory: {
+						orderBy: {
+							effectiveFrom: 'desc',
+						},
+					},
+					quantity: {
+						include: {
+							size: true,
+						},
+					},
+					subCategory: {
+						include: {
+							category: true,
+						},
+					},
+					category: true,
+				},
+			});
+		}),
 	getSinglProduct: publicProcedure
 		.input(
 			z.object({

@@ -1,20 +1,10 @@
-import { Center } from '@chakra-ui/react';
 import { SignIn } from '@clerk/nextjs';
-import { motion } from 'framer-motion';
+import Layout from '~/components/Layout';
 const SignInPage = () => {
 	return (
-		<Center
-			pt={250}
-			as={motion.div}
-			initial={{ opacity: 0, y: 50 }}
-			animate={{
-				opacity: 1,
-				y: 0,
-				transition: { type: 'spring', duration: 2 },
-			}}
-		>
+		<Layout>
 			<SignIn signUpUrl="/signup" afterSignInUrl="/profile/main" />
-		</Center>
+		</Layout>
 	);
 };
 

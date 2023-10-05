@@ -160,7 +160,7 @@ const ProductsCard = ({
 				position="relative"
 				zIndex={0}
 			>
-				{isSignedIn ? favorites : null}
+				{favorites}
 				{image}
 				{info}
 				<CardFooter>

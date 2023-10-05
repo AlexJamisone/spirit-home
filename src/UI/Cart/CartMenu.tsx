@@ -15,6 +15,8 @@ import {
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { SlHandbag } from 'react-icons/sl';
+import ButtonsGroup from '~/components/ButtonsGroup';
+import Counter from '~/components/Counter';
 import { useCart } from '~/context/cartContext';
 import NewOrder from '../NewOrder/NewOrder';
 import CartItem from './CartItem';
@@ -31,32 +33,23 @@ const CartMenu = () => {
 			<Menu autoSelect={false}>
 				{({ onClose: closeCart }) => (
 					<>
-						<Stack position="relative">
+						<ButtonsGroup>
+							<Counter length={cartState.items.length} />
 							<MenuButton
 								as={IconButton}
-								fontSize={23}
-								icon={<Icon as={SlHandbag} fill="second" />}
-								variant="ghost"
+								icon={
+									<Icon
+										as={SlHandbag}
+										boxSize={6}
+										fill="second"
+									/>
+								}
+								variant="outline"
 								position="relative"
-								_before={{
-									content: `'${cartState.items.length}'`,
-									bgColor: 'whiteAlpha.900',
-									width: '25px',
-									height: '25px',
-									rounded: '2xl',
-									position: 'absolute',
-									bottom: '-10px',
-									right: '-10px',
-									cursor: 'pointer',
-									opacity: `${isLength ? 1 : 0}`,
-									transition: 'opacity .2s ease-in-out',
-									fontWeight: 600,
-									textAlign: 'center',
-									lineHeight: 1.5,
-									fontSize: '16px',
-								}}
+								borderColor="second"
 							/>
-						</Stack>
+						</ButtonsGroup>
+
 						<MenuList
 							p={[2, 5]}
 							zIndex={20}

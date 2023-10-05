@@ -14,6 +14,7 @@ import Logo from '~/assets/Logo';
 import { links } from '~/constants/links';
 import CartMenu from '../Cart/CartMenu';
 import CategoryMenu from '../Category/CategoryMenu';
+import FavoritesButton from './FavoritesButton';
 import MobileMenu from './MobileMenu';
 import NavigationBarElement from './NavigationBarElement';
 
@@ -106,6 +107,7 @@ const Navigation = () => {
 							</Link>
 						))}
 						<CartMenu />
+						<FavoritesButton />
 					</>
 				)}
 				{!isTablet && <UserButton afterSignOutUrl="/signin" />}
