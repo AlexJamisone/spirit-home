@@ -1,9 +1,9 @@
-import { Center } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import AdminCategorys from '~/UI/Admin/AdmiCategorys/AdminCategorys';
 import AdminStatistics from '~/UI/Admin/AdminCharts/AdminStatistics';
 import AdminOrders from '~/UI/Admin/AdminOrders/AdminOrders';
 import AdminProducts from '~/UI/Admin/AdminProducts';
+import Layout from '~/components/Layout';
 import ProtectionRoutes from '~/guards/ProtectionRoutes';
 
 const Admin = () => {
@@ -36,9 +36,9 @@ const Admin = () => {
 		}
 	};
 	return (
-		<Center flexWrap={'wrap'} pt={160} rowGap={5}>
+		<Layout>
 			<ProtectionRoutes type="ADMIN">{handlAdmin()}</ProtectionRoutes>
-		</Center>
+		</Layout>
 	);
 };
 

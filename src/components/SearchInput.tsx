@@ -26,6 +26,7 @@ const SearchInput = ({ setSearch }: SearchInputProps) => {
 					type="search"
 					placeholder="&nbsp;"
 					position="relative"
+					borderColor="second"
 					onChange={(e) => {
 						if (e.target.value.length === 0) {
 							setAnimationPlaceholder(true);
