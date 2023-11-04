@@ -9,8 +9,8 @@ const Logo = () => {
 			x="0px"
 			y="0px"
 			viewBox="0 0 807 373"
-			width={[120, 150]}
-			height={[120, 150]}
+			width={[75, 120, null, null]}
+			height={[75, 120, null, null]}
 			fill="second"
 		>
 			<path

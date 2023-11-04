@@ -102,6 +102,7 @@ const Navigation = () => {
 								}}
 								textColor="second"
 								position="relative"
+								fontSize={[14, null, null, 15]}
 							>
 								{children}
 							</Link>

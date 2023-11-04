@@ -37,16 +37,14 @@ const CartMenu = () => {
 							<Counter length={cartState.items.length} />
 							<MenuButton
 								as={IconButton}
-								icon={
-									<Icon
-										as={SlHandbag}
-										boxSize={6}
-										fill="second"
-									/>
-								}
+								icon={<Icon as={SlHandbag} fill="second" />}
 								variant="outline"
 								position="relative"
 								borderColor="second"
+								size={{
+									base: 'sm',
+									'2xl': 'md',
+								}}
 							/>
 						</ButtonsGroup>
 
