@@ -1,22 +1,17 @@
-import { SignedIn, SignedOut } from '@clerk/nextjs';
-import { type AppType } from 'next/app';
-import Script from 'next/script';
-
 import { ChakraProvider, useMediaQuery } from '@chakra-ui/react';
-import { theme } from '~/chakra/theme';
-
-import { ClerkProvider } from '@clerk/nextjs';
-import { ruRU } from '~/localization/ruRu';
-
-import { api } from '~/utils/api';
-import '../styles/globals.css';
-
+import { ruRU } from '@clerk/localizations';
+import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs';
+import { type AppType } from 'next/app';
 import Head from 'next/head';
+import Script from 'next/script';
 import AdminNotification from '~/UI/Admin/AdminNotification';
 import Menu from '~/UI/Navigation/Menu';
 import Navigation from '~/UI/Navigation/Navigation';
+import { theme } from '~/chakra/theme';
 import { CartProvider } from '~/context/cartContext';
 import { FavoritesProvider } from '~/context/favoritesContext';
+import { api } from '~/utils/api';
+import '../styles/globals.css';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
