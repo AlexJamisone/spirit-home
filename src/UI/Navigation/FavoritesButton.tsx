@@ -8,7 +8,7 @@ import { useFavorites } from '~/context/favoritesContext';
 
 const FavoritesButton = () => {
 	const { favoritesState } = useFavorites();
-	if (favoritesState.length === 0) return null;
+	// if (favoritesState.length === 0) return null;
 	return (
 		<Stack
 			as={motion.div}

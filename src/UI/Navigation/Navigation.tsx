@@ -1,25 +1,18 @@
 import { Link } from '@chakra-ui/next-js';
-import {
-	Icon,
-	IconButton,
-	Stack,
-	useDisclosure,
-	useMediaQuery,
-} from '@chakra-ui/react';
+import { Stack, useDisclosure, useMediaQuery } from '@chakra-ui/react';
 import { UserButton, useAuth } from '@clerk/nextjs';
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
-import { RxHamburgerMenu } from 'react-icons/rx';
+import { useEffect, useId, useState } from 'react';
 import Logo from '~/assets/Logo';
 import { links } from '~/constants/links';
 import CartMenu from '../Cart/CartMenu';
 import CategoryMenu from '../Category/CategoryMenu';
 import FavoritesButton from './FavoritesButton';
-import MobileMenu from './MobileMenu';
 import NavigationBarElement from './NavigationBarElement';
 
 const Navigation = () => {
 	const { isSignedIn } = useAuth();
+	const usrBtnId = useId();
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	const { isOpen, onClose, onToggle } = useDisclosure();
 	const [renderLinks, setRenderLinks] = useState(links);
@@ -35,83 +28,46 @@ const Navigation = () => {
 			window.removeEventListener('scroll', handleScroll);
 		};
 	}, []);
-	useEffect(() => {
-		const linksCopy = [...links];
-		if (isSignedIn) {
-			linksCopy.splice(2, 1);
-		}
-		setRenderLinks(linksCopy);
-	}, [isSignedIn]);
 	return (
 		<Stack
-			roundedBottom="50px"
-			alignItems="center"
-			direction="row"
-			justifyContent={['center', 'space-between']}
-			px={[null, '100px']}
-			gap={5}
-			as={motion.nav}
+			as="header"
 			bgColor="brand"
-			initial={{ opacity: 0, filter: 'blur(5px)' }}
-			animate={{
-				opacity: 1,
-				filter: 'blur(0px)',
-				transition: {
-					type: 'tween',
-					duration: 1,
-				},
-			}}
-			w={'100%'}
 			position="fixed"
-			zIndex={200}
+			w="100%"
+			zIndex={99}
 		>
-			<NavigationBarElement />
-			<Link
-				href="/"
-				alignSelf="flex-start"
-				cursor="pointer"
-				position="relative"
+			<Stack
+				as={motion.nav}
+				direction="row"
+				alignItems="center"
+				justifyContent="space-between"
+				gap={5}
+				mx={10}
 			>
+				<NavigationBarElement />
 				<Logo />
-			</Link>
-			<Stack direction="row" alignItems="center" gap={[1, 3, 9]}>
-				<CategoryMenu />
-				{isTablet ? (
-					<>
-						<CartMenu />
-						<IconButton
-							variant="outline"
-							aria-label="mobile-menu"
-							icon={<Icon as={RxHamburgerMenu} boxSize={6} />}
-							onClick={onToggle}
-						/>
-						<MobileMenu
-							links={renderLinks}
-							isOpen={isOpen}
-							onClose={onClose}
-						/>
-					</>
-				) : (
-					<>
-						{renderLinks.map(({ children, path }) => (
+				<Stack direction="row" gap={10} alignItems="center">
+					<CategoryMenu />
+					{renderLinks.map(({ path, children }) =>
+						isSignedIn && path === '/signin' ? (
+							<UserButton key={usrBtnId} />
+						) : (
 							<Link
 								href={path}
-								key={path}
+								key={children}
+								fontSize={14}
+								textColor="second"
 								_hover={{
 									textDecoration: 'none',
 								}}
-								textColor="second"
-								position="relative"
-								fontSize={[14, null, null, 15]}
 							>
 								{children}
 							</Link>
-						))}
-						<CartMenu />
-						<FavoritesButton />
-					</>
-				)}
-				{!isTablet && <UserButton afterSignOutUrl="/signin" />}
+						)
+					)}
+					<CartMenu />
+					<FavoritesButton />
+				</Stack>
 			</Stack>
 		</Stack>
 	);

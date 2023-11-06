@@ -12,7 +12,7 @@ const Layout = ({ children }: { children: ReactNode }) => {
 				y: 0,
 				transition: { type: 'spring', duration: 2 },
 			}}
-			pt={250}
+			pt={180}
 			direction="row"
 			gap={10}
 			layout

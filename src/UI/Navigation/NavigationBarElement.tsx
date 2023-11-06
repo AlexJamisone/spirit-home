@@ -2,6 +2,7 @@ import { Box } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 
 const NavigationBarElement = () => {
+	console.log(scrollY);
 	return (
 		<Box
 			as={motion.div}

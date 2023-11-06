@@ -16,7 +16,7 @@ const CategoryMenu = () => {
 						variant="solid"
 						colorScheme="brand"
 						rightIcon={<IoIosArrowDown />}
-						size={['xs', 'sm', 'md']}
+						size={['xs', 'sm']}
 						textColor="second"
 					>
 						Категории
