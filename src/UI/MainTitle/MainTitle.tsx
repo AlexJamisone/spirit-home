@@ -27,8 +27,10 @@ const MainTitle = () => {
 			w={[null, null, null, 780, null, 475]}
 			textColor="second"
 			fontWeight="thin"
-			pt={350}
+			pt={{ xl: 175, '2xl': 250 }}
 			cursor="default"
+			position="absolute"
+			maxW={475}
 		>
 			The Sun is Up, The Sky is Blue, It`s so beautiful, and so are{' '}
 			<Text

@@ -4,11 +4,9 @@ import { memo } from 'react';
 
 type SunProps = {
 	initialPositionX?: number;
-	mr?: string;
-	ml?: string;
 };
 
-const Sun = memo(({ initialPositionX, ml, mr }: SunProps) => {
+const Sun = memo(({ initialPositionX }: SunProps) => {
 	const { scrollYProgress } = useScroll();
 	const Container = chakra(motion.div);
 	const value = useTransform(scrollYProgress, [0, 1], [0, 360]);
@@ -18,7 +16,7 @@ const Sun = memo(({ initialPositionX, ml, mr }: SunProps) => {
 			initial={{
 				x: initialPositionX,
 			}}
-			whileInView={{
+			animate={{
 				x: 0,
 				rotate: 360,
 				transition: {
@@ -27,8 +25,8 @@ const Sun = memo(({ initialPositionX, ml, mr }: SunProps) => {
 					damping: 100,
 				},
 			}}
-			mr={mr}
-			ml={ml}
+			w={{ xl: 625, '2xl': 1000 }}
+			h={{ xl: 625, '2xl': 1000 }}
 			style={{
 				rotate: value,
 			}}
@@ -36,8 +34,11 @@ const Sun = memo(({ initialPositionX, ml, mr }: SunProps) => {
 			<Icon
 				xmlns="http://www.w3.org/2000/svg"
 				viewBox="0 0 1071.48 1071.48"
-				width={['1000px']}
-				height={['1000px']}
+				width={{
+					xl: '625px',
+					'2xl': '1000px',
+				}}
+				height={{ xl: '625px', '2xl': '1000px' }}
 			>
 				<line
 					className="cls-1"

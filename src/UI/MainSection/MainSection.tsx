@@ -4,10 +4,16 @@ import MainTitle from '../MainTitle/MainTitle';
 
 const MainSection = () => {
 	return (
-		<Stack direction="row" overflow="hidden" justifyContent="space-between">
-			<Sun ml="-500px" initialPositionX={-500} />
+		<Stack
+			direction="row"
+			overflow="hidden"
+			justifyContent="center"
+			position="relative"
+			gap={'750px'}
+		>
+			<Sun initialPositionX={-300} />
 			<MainTitle />
-			<Sun mr={'-500px'} initialPositionX={500} />
+			<Sun initialPositionX={300} />
 		</Stack>
 	);
 };
