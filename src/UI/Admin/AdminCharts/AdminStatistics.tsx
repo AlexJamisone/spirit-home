@@ -5,7 +5,6 @@ import ChartsContext from '~/context/chartsContext';
 import { api } from '~/utils/api';
 import AdminCharts from './AdminCharts';
 import AdminDatePick from './AdminDatePick';
-import AdminNotificationButton from './AdminNotificationButton';
 import AdminStat from './AdminStat';
 import AdminVisitors from './AdminVisitors';
 dayjs().locale('ru').format();
@@ -74,6 +73,5 @@ AdminStatistics.Pick = AdminDatePick;
 AdminStatistics.Charts = AdminCharts;
 AdminStatistics.Stat = AdminStat;
 AdminStatistics.Visitors = AdminVisitors;
-AdminStatistics.NotificationButton = AdminNotificationButton;
 
 export default AdminStatistics;

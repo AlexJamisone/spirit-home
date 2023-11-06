@@ -9,8 +9,6 @@ import {
 const server = z.object({
 	DATABASE_URL: z.string().url(),
 	NODE_ENV: z.enum(["development", "test", "production"]),
-	PUSHER_APP_ID: z.string().min(1),
-	PUSHER_APP_SECRET: z.string().min(1),
 	UPLOADTHING_SECRET: z.string(),
 	UPLOADTHING_APP_ID: z.string()
 });
@@ -20,8 +18,6 @@ const server = z.object({
  * built with invalid env vars. To expose them to the client, prefix them with `NEXT_PUBLIC_`.
  */
 const client = z.object({
-	NEXT_PUBLIC_PUSHER_APP_KEY: z.string().min(1),
-	NEXT_PUBLIC_PUSHER_CLUSTER: z.string().min(1),
 	NEXT_PUBLIC_VISITORS_LINKS: z.string().min(1),
 	NEXT_PUBLIC_UPLOADTHING_URL: z.string().min(1)
 });
@@ -35,13 +31,8 @@ const client = z.object({
 const processEnv = {
 	DATABASE_URL: process.env.DATABASE_URL,
 	NODE_ENV: process.env.NODE_ENV,
-	PUSHER_APP_ID: process.env.PUSHER_APP_ID,
 	UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
 	UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
-
-	NEXT_PUBLIC_PUSHER_CLUSTER: process.env.NEXT_PUBLIC_PUSHER_CLUSTER,
-	NEXT_PUBLIC_PUSHER_APP_KEY: process.env.NEXT_PUBLIC_PUSHER_APP_KEY,
-	PUSHER_APP_SECRET: process.env.PUSHER_APP_SECRET,
 	NEXT_PUBLIC_VISITORS_LINKS: process.env.NEXT_PUBLIC_VISITORS_LINKS,
 	NEXT_PUBLIC_UPLOADTHING_URL: process.env.NEXT_PUBLIC_UPLOADTHING_URL
 };

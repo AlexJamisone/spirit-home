@@ -10,7 +10,7 @@ import { filterUserForClient } from '~/server/helpers/filterUserForClient';
 
 export const usersRouter = createTRPCRouter({
 	get: publicProcedure.query(async ({ ctx }) => {
-		if(!ctx.userId) return null
+		if (!ctx.userId) return null;
 		const findUser = await ctx.prisma.user.findUnique({
 			where: {
 				id: ctx.userId,

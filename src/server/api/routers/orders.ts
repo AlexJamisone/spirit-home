@@ -2,7 +2,6 @@ import { clerkClient } from '@clerk/nextjs/server';
 import type { OrderStatus, Point, Prisma, PrismaClient } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { pusherServer } from '~/server/pusher';
 
 import type { CartState } from '~/reducer/CartReducer';
 import {
@@ -195,10 +194,7 @@ export const ordersRouter = createTRPCRouter({
 					},
 				},
 			});
-			await pusherServer.trigger('order', 'new-order', {
-				name: create.address.firstName,
-				city: create.address.point?.city,
-			});
+			//here bot notification
 			return await handlUpdateProduct(ctx, create.id, 'minus');
 		}),
 	createNoAddressIsAuth: publicProcedure
@@ -261,10 +257,7 @@ export const ordersRouter = createTRPCRouter({
 					userId: ctx.userId,
 				},
 			});
-			await pusherServer.trigger('order', 'new-order', {
-				name: input.address.firstName,
-				city: input.address.point.city,
-			});
+			//here bot notification
 			return await handlUpdateProduct(ctx, createOrder.id, 'minus');
 		}),
 	createNoAuth: publicProcedure
@@ -370,10 +363,7 @@ export const ordersRouter = createTRPCRouter({
 						},
 					},
 				});
-				await pusherServer.trigger('order', 'new-order', {
-					name: input.address.firstName,
-					city: input.address.point.city,
-				});
+				//here bot notification
 				return await handlUpdateProduct(ctx, createOrder.id, 'minus');
 			} else {
 				const createOrder = await ctx.prisma.order.create({
@@ -411,10 +401,7 @@ export const ordersRouter = createTRPCRouter({
 						},
 					},
 				});
-				await pusherServer.trigger('order', 'new-order', {
-					name: input.address.firstName,
-					city: input.address.point.city,
-				});
+				//hers bot notification
 				return handlUpdateProduct(ctx, createOrder.id, 'minus');
 			}
 		}),

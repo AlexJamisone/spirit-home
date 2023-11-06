@@ -4,7 +4,6 @@ import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs';
 import { type AppType } from 'next/app';
 import Head from 'next/head';
 import Script from 'next/script';
-import AdminNotification from '~/UI/Admin/AdminNotification';
 import Menu from '~/UI/Navigation/Menu';
 import Navigation from '~/UI/Navigation/Navigation';
 import { theme } from '~/chakra/theme';
@@ -15,7 +14,6 @@ import '../styles/globals.css';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
-	const { data: role } = api.users.getUserRole.useQuery();
 	return (
 		<ChakraProvider theme={theme}>
 			<Head>
@@ -31,7 +29,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 				<FavoritesProvider>
 					<CartProvider>
 						<SignedIn>
-							{role === 'ADMIN' && <AdminNotification />}
 							{isTablet ? null : <Menu />}
 							<Navigation />
 							<Component {...pageProps} />

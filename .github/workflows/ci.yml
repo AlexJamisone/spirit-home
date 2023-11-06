@@ -4,12 +4,8 @@ on: [push, pull_request]
 env:
   DATABASE_URL: "some fake string",
 	NODE_ENV: "some fake string",
-	PUSHER_APP_ID: "some fake string",
 	UPLOADTHING_APP_ID: "some fake string",
 	UPLOADTHING_SECRET: "some fake string",
-	NEXT_PUBLIC_PUSHER_CLUSTER: "some fake string",
-	NEXT_PUBLIC_PUSHER_APP_KEY: "some fake string",
-	PUSHER_APP_SECRET: "some fake string",
 	NEXT_PUBLIC_VISITORS_LINKS: "some fake string",
 	NEXT_PUBLIC_UPLOADTHING_URL: "some fake string"
 
