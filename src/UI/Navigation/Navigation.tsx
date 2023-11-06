@@ -34,7 +34,7 @@ const Navigation = () => {
 			bgColor="brand"
 			position="fixed"
 			w="100%"
-			zIndex={99}
+			zIndex={200}
 		>
 			<Stack
 				as={motion.nav}
@@ -42,7 +42,7 @@ const Navigation = () => {
 				alignItems="center"
 				justifyContent="space-between"
 				gap={5}
-				mx={10}
+				mx={'75px'}
 			>
 				<NavigationBarElement />
 				<Logo />
@@ -50,7 +50,7 @@ const Navigation = () => {
 					<CategoryMenu />
 					{renderLinks.map(({ path, children }) =>
 						isSignedIn && path === '/signin' ? (
-							<UserButton key={usrBtnId} />
+							<UserButton key={usrBtnId} afterSignOutUrl="/" />
 						) : (
 							<Link
 								href={path}
