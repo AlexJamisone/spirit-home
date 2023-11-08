@@ -5,7 +5,6 @@ import type {
 	OrderItem,
 	Point,
 	Product,
-	ProductPriceHistory,
 	Role,
 } from '@prisma/client';
 import {
@@ -31,9 +30,7 @@ interface UserMainContextProps {
 		address?: (Address & { point: Point | null })[];
 		orders?: (Order & {
 			orderItem: (OrderItem & {
-				product: Product & {
-					priceHistory: ProductPriceHistory[];
-				};
+				product: Product;
 			})[];
 		})[];
 		categories?: Category[];

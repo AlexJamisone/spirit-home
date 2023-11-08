@@ -1,15 +1,6 @@
 import { Link } from '@chakra-ui/next-js';
 import { Card, CardFooter, Icon, useToast } from '@chakra-ui/react';
-import { useAuth } from '@clerk/nextjs';
-import type {
-	Category,
-	Product,
-	ProductPriceHistory,
-	Quantity,
-	Role,
-	Size,
-	SubCategory,
-} from '@prisma/client';
+import type { Category, Product, Role, SubCategory } from '@prisma/client';
 import { useState, type ReactNode, type SyntheticEvent } from 'react';
 import { TbShoppingCartPlus } from 'react-icons/tb';
 import ProductCardContext from '~/context/productCardContext';
@@ -26,20 +17,12 @@ type ProductProps = {
 	info?: ReactNode;
 	favorites?: ReactNode;
 	product: Product & {
-		priceHistory: ProductPriceHistory[];
-		quantity: (Quantity & {
-			size: Size;
-		})[];
 		category: Category | null;
 		subCategory: SubCategory | null;
 	};
 	role?: Role;
 	handlEdit?: (
 		product: Product & {
-			priceHistory: ProductPriceHistory[];
-			quantity: (Quantity & {
-				size: Size;
-			})[];
 			category: Category | null;
 			subCategory: SubCategory | null;
 		}
@@ -63,7 +46,6 @@ const ProductsCard = ({
 		name: '',
 	});
 
-	const { isSignedIn } = useAuth();
 	const [error, setError] = useState(false);
 	const toast = useToast();
 	const handlAddToCart = (e: SyntheticEvent) => {
@@ -159,6 +141,10 @@ const ProductsCard = ({
 				cursor="pointer"
 				position="relative"
 				zIndex={0}
+				size={{
+					xl: 'sm',
+					'2xl': 'lg',
+				}}
 			>
 				{favorites}
 				{image}

@@ -1,10 +1,4 @@
-import type {
-	Product,
-	ProductPriceHistory,
-	Quantity,
-	Role,
-	Size,
-} from '@prisma/client';
+import type { Product, Role } from '@prisma/client';
 import {
 	createContext,
 	useContext,
@@ -14,12 +8,7 @@ import {
 } from 'react';
 
 const ProductCardContext = createContext<{
-	product: Product & {
-		priceHistory: ProductPriceHistory[];
-		quantity: (Quantity & {
-			size: Size;
-		})[];
-	};
+	product: Product;
 	role?: Role;
 	selectedSize: { id: string; name: string };
 	setSelectedtSize: Dispatch<SetStateAction<{ id: string; name: string }>>;

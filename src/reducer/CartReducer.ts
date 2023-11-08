@@ -1,15 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
-/* eslint-disable @typescript-eslint/restrict-plus-operands */
-import type { Product, ProductPriceHistory } from '@prisma/client';
-
-type ProductWithPriceHistory = Product & {
-	selectedSize: { id: string; name: string };
-	priceHistory: ProductPriceHistory[];
+export type CartItem = {
+	id: string;
+	quantity: number;
+	image: string;
+	price: number;
+	size: string;
 };
-export interface CartItem extends ProductWithPriceHistory {
-	quantityInCart: number;
-}
 
 export type CartState = {
 	items: CartItem[];
@@ -18,17 +13,17 @@ export type CartState = {
 
 interface SetAddToCart {
 	type: 'ADD_TO_CART';
-	payload: ProductWithPriceHistory;
+	payload: CartItem;
 }
 
 interface SetRemoveFromCart {
 	type: 'REMOVE_FROM_CART';
-	payload: { id: string; sizeId: string };
+	payload: { id: string; size: string };
 }
 
 interface SetUpdateQtCart {
 	type: 'UPDATE_QT';
-	payload: { id: string; quantity: number; sizeId: string };
+	payload: { id: string; quantity: number; size: string };
 }
 interface SetClearCart {
 	type: 'CLER_CART';
@@ -69,95 +64,38 @@ export const cartReducer = (
 ): CartState => {
 	switch (action.type) {
 		case 'ADD_TO_CART': {
-			const itemsIndex = state.items.findIndex(
+			const find = state.items.find(
 				(item) =>
 					item.id === action.payload.id &&
-					item.selectedSize.id === action.payload.selectedSize.id
+					item.size === action.payload.size
 			);
-			if (itemsIndex === -1) {
+			const newTotalPrice = state.totalPrice + action.payload.price;
+			if (!find) {
 				const newItem: CartItem = {
 					...action.payload,
-					quantityInCart: 1,
+					quantity: 1,
 				};
-				const price = action.payload.priceHistory[0]?.price;
-				if (!price) return state;
-				const newState = {
+				const newState: CartState = {
 					...state,
 					items: [...state.items, newItem],
-					totalPrice: state.totalPrice + price,
+					totalPrice: newTotalPrice,
 				};
 				saveCartToLocalStorage(newState);
 				return newState;
 			} else {
-				const updatedItem = {
-					...state.items[itemsIndex]!,
-					quantityInCart: state.items[itemsIndex]!.quantityInCart + 1,
-				};
-				const updatedItems = [...state.items];
-				updatedItems[itemsIndex] = updatedItem;
-				const price = updatedItem.priceHistory[0]?.price;
-				if (!price) return state;
-				const newState = {
-					...state,
-					items: updatedItems,
-					totalPrice: state.totalPrice + price,
-				};
-				saveCartToLocalStorage(newState);
-				return newState;
-			}
-		}
-		case 'REMOVE_FROM_CART': {
-			const itemIndex = state.items.findIndex(
-				(item) =>
-					item.id === action.payload.id &&
-					item.selectedSize.id === action.payload.sizeId
-			);
-			if (itemIndex === -1) {
-				return state;
-			} else {
-				const removedItem = state.items[itemIndex];
-				const updatedItems = state.items.filter(
-					(item) =>
-						item.id !== action.payload.id ||
-						item.selectedSize.id !== action.payload.sizeId
-				);
-				const price = removedItem?.priceHistory[0]?.price;
-				if (!price) return state;
-				const newState = {
-					...state,
-					items: updatedItems,
-					totalPrice:
-						state.totalPrice - price * removedItem.quantityInCart,
-				};
-				saveCartToLocalStorage(newState);
-				return newState;
-			}
-		}
-		case 'UPDATE_QT': {
-			const itemIndex = state.items.findIndex(
-				(item) =>
-					item.id === action.payload.id &&
-					item.selectedSize.id === action.payload.sizeId
-			);
-			if (itemIndex === -1 || action.payload.quantity < 1) {
-				return state;
-			} else {
-				const updatedItem = {
-					...state.items[itemIndex]!,
-					quantityInCart: action.payload.quantity,
-				};
-				const updatedItems = [...state.items];
-				updatedItems[itemIndex] = updatedItem;
-				const statePrice =
-					state.items[itemIndex]?.priceHistory[0]?.price;
-				if (!statePrice) return state;
-				const updatePrice = updatedItem.priceHistory[0]?.price;
-				if (!updatePrice) return state;
-				const newTotalPrice =
-					state.totalPrice -
-					statePrice * state.items[itemIndex]!.quantityInCart +
-					updatePrice * updatedItem.quantityInCart;
-				const newState = {
+				const updatedItems = state.items.map((item) => {
+					if (
+						item.id === action.payload.id &&
+						item.size === action.payload.size
+					) {
+						return {
+							...item,
+							quantity: item.quantity + 1,
+						};
+					}
+					return item;
+				});
+				const newState: CartState = {
 					...state,
 					items: updatedItems,
 					totalPrice: newTotalPrice,
@@ -166,10 +104,11 @@ export const cartReducer = (
 				return newState;
 			}
 		}
+		case 'REMOVE_FROM_CART': {
+		}
+		case 'UPDATE_QT': {
+		}
 		case 'CLER_CART': {
-			const newState = { ...state, items: [], totalPrice: 0 };
-			saveCartToLocalStorage(newState);
-			return newState;
 		}
 		default: {
 			return state;
