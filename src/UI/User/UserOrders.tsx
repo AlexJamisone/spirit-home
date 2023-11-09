@@ -115,8 +115,8 @@ const UserOrders = () => {
 											{orderItem.map(
 												({
 													id,
-													product: { name },
 													quantity,
+													product: { name },
 												}) => (
 													<Stack
 														key={id}
@@ -131,26 +131,9 @@ const UserOrders = () => {
 										</Td>
 										<Td>
 											<Text>
-												{orderItem.reduce(
-													(acc, current) => {
-														const effectivePrice =
-															current.product.priceHistory.find(
-																(history) =>
-																	history.effectiveFrom <=
-																	createdAt
-															);
-														const price =
-															effectivePrice
-																? effectivePrice.price
-																: 0;
-														return (
-															acc +
-															price *
-																current.quantity
-														);
-													},
-													0
-												)}{' '}
+												{orderItem.map(
+													(item) => item.price
+												)}
 												₽
 											</Text>
 										</Td>

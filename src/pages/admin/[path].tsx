@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import AdminCategorys from '~/UI/Admin/AdmiCategorys/AdminCategorys';
-import AdminStatistics from '~/UI/Admin/AdminCharts/AdminStatistics';
 import AdminOrders from '~/UI/Admin/AdminOrders/AdminOrders';
 import AdminProducts from '~/UI/Admin/AdminProducts';
 import Layout from '~/components/Layout';
@@ -13,12 +12,13 @@ const Admin = () => {
 		switch (path) {
 			case 'statictic':
 				return (
-					<AdminStatistics
-						charts={<AdminStatistics.Charts />}
-						stat={<AdminStatistics.Stat />}
-						pick={<AdminStatistics.Pick />}
-						visitors={<AdminStatistics.Visitors />}
-					/>
+					// <AdminStatistics
+					// 	charts={<AdminStatistics.Charts />}
+					// 	stat={<AdminStatistics.Stat />}
+					// 	pick={<AdminStatistics.Pick />}
+					// 	visitors={<AdminStatistics.Visitors />}
+					// />
+					<></>
 				);
 			case 'categorys':
 				return (

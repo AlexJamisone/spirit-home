@@ -69,13 +69,13 @@ const AdminCreateSize = ({ isOpen, onClose }: AdminCreateSizeProps) => {
 						<Stack direction="row" justifyContent="center">
 							{size
 								.sort((a, b) =>
-									a.size.localeCompare(b.size, undefined, {
+									a.value.localeCompare(b.value, undefined, {
 										numeric: true,
 									})
 								)
-								.map(({ id, size }) => (
+								.map(({ id, value }) => (
 									<Tag cursor="pointer" key={id}>
-										{size}
+										{value}
 									</Tag>
 								))}
 						</Stack>

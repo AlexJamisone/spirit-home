@@ -10,11 +10,8 @@ import {
 const ProductCardContext = createContext<{
 	product: Product;
 	role?: Role;
-	selectedSize: { id: string; name: string };
-	setSelectedtSize: Dispatch<SetStateAction<{ id: string; name: string }>>;
 	error: boolean;
 	setError: Dispatch<SetStateAction<boolean>>;
-	handlAddToCart?: (e: SyntheticEvent) => void;
 	handleArchivedProduct?: (
 		id: string,
 		name: string,

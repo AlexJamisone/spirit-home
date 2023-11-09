@@ -11,7 +11,7 @@ import {
 	useDisclosure,
 	useToast,
 } from '@chakra-ui/react';
-import type { ChangeEvent, Dispatch, ReactNode, SetStateAction } from 'react';
+import type { ChangeEvent, Dispatch, ReactNode } from 'react';
 import CreateProductContext from '~/context/createProductContext';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 import { api } from '~/utils/api';
@@ -25,10 +25,8 @@ import Size from './AdminCreateProducts/Size';
 type AdminProductsModalProps = {
 	isOpen: boolean;
 	onClose: () => void;
-	edit: boolean;
 	form: FormProductState;
 	dispatch: Dispatch<Action>;
-	setEdit: Dispatch<SetStateAction<boolean>>;
 	images?: ReactNode;
 	inputs?: ReactNode;
 	action?: ReactNode;
@@ -39,10 +37,9 @@ type AdminProductsModalProps = {
 const AdminProductsModal = ({
 	isOpen,
 	onClose,
-	edit,
 	form,
 	dispatch,
-	setEdit,
+
 	action,
 	drag,
 	images,
@@ -86,7 +83,7 @@ const AdminProductsModal = ({
 		}
 	};
 	const handleSubmit = () => {
-		if (edit) {
+		if (form.edit) {
 			update(
 				{
 					category: form.category,
@@ -95,7 +92,7 @@ const AdminProductsModal = ({
 					name: form.name,
 					price: form.price,
 					image: form.image,
-					quantity: form.quantity,
+					size: form.size,
 				},
 				{
 					onSuccess: () => {
@@ -106,7 +103,6 @@ const AdminProductsModal = ({
 						dispatch({ type: 'SET_CLEAR' });
 						void ctx.products.invalidate();
 						onClose();
-						setEdit(false);
 					},
 				}
 			);
@@ -118,10 +114,7 @@ const AdminProductsModal = ({
 					category: form.category,
 					image: form.image,
 					price: form.price,
-					quantity: form.quantity.map(({ quantity, sizeId }) => ({
-						quantity,
-						sizeId,
-					})),
+					size: form.size,
 				},
 				{
 					onSuccess: () => {
@@ -161,9 +154,8 @@ const AdminProductsModal = ({
 			closeOnOverlayClick={false}
 			closeOnEsc={false}
 			onEsc={() => {
-				if (edit) {
+				if (form.edit) {
 					dispatch({ type: 'SET_CLEAR' });
-					setEdit(false);
 					onClose();
 				} else {
 					toggleAlert();
@@ -175,14 +167,12 @@ const AdminProductsModal = ({
 					isLoading: isLoadingCreate || isLoadingUpdate,
 					dispatch,
 					form,
-					edit,
 					handlDeletImage,
 					handleInputChange,
 					onClose,
 					onCloseAlert,
 					openAlert,
 					path: form.image,
-					setEdit,
 					toggleAlert,
 					size,
 					error: error?.data?.zodError?.fieldErrors,
@@ -193,7 +183,7 @@ const AdminProductsModal = ({
 				<ModalOverlay />
 				<ModalContent w={['500px']} maxW={'100%'}>
 					<ModalHeader>
-						{edit ? 'Обновить' : 'Создать'} товар
+						{form.edit ? 'Обновить' : 'Создать'} товар
 					</ModalHeader>
 					<ModalBody>
 						<FormControl

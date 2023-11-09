@@ -32,6 +32,7 @@ export const productsRouter = createTRPCRouter({
 						},
 					},
 					category: true,
+					size: true,
 				},
 			});
 		}),
@@ -54,12 +55,9 @@ export const productsRouter = createTRPCRouter({
 	getForAll: publicProcedure.query(async ({ ctx }) => {
 		const products = await ctx.prisma.product.findMany({
 			include: {
-				subCategory: {
-					include: {
-						category: true,
-					},
-				},
+				size: true,
 				category: true,
+				subCategory: true,
 			},
 			where: {
 				NOT: {
@@ -78,6 +76,7 @@ export const productsRouter = createTRPCRouter({
 					},
 				},
 				category: true,
+				size: true,
 			},
 		});
 		return products;
@@ -102,18 +101,11 @@ export const productsRouter = createTRPCRouter({
 					id: z.string().nonempty({ message: 'Выберите категорию' }),
 					sub: z.boolean(),
 				}),
-				quantity: z.array(
-					z.object({
-						sizeId: z.string(),
-						quantity: z.number(),
-					})
-				),
+				size: z.array(z.string()),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			const sizeId = input.quantity.map(({ sizeId }) => ({
-				id: sizeId,
-			}));
+			const size = input.size.map((size) => ({ id: size }));
 			if (input.category.sub) {
 				return await ctx.prisma.product.create({
 					data: {
@@ -121,7 +113,7 @@ export const productsRouter = createTRPCRouter({
 						description: input.description,
 						image: input.image,
 						size: {
-							connect: sizeId,
+							connect: size,
 						},
 						subCategory: {
 							connect: {
@@ -138,7 +130,7 @@ export const productsRouter = createTRPCRouter({
 						description: input.description,
 						image: input.image,
 						size: {
-							connect: sizeId,
+							connect: size,
 						},
 						category: {
 							connect: {
@@ -193,7 +185,7 @@ export const productsRouter = createTRPCRouter({
 			);
 			return res;
 		}),
-	update: privetProcedure
+	update: adminProcedure
 		.input(
 			z.object({
 				id: z.string().nonempty(),
@@ -205,16 +197,11 @@ export const productsRouter = createTRPCRouter({
 					id: z.string().nonempty(),
 					sub: z.boolean(),
 				}),
-				quantity: z.array(
-					z.object({
-						id: z.string(),
-						sizeId: z.string(),
-						quantity: z.number(),
-					})
-				),
+				size: z.array(z.string()),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
+			const size = input.size.map((size) => ({ id: size }));
 			if (input.category.sub) {
 				return await ctx.prisma.product.update({
 					where: {
@@ -231,6 +218,9 @@ export const productsRouter = createTRPCRouter({
 						},
 						category: {
 							disconnect: true,
+						},
+						size: {
+							set: size,
 						},
 					},
 				});
@@ -250,6 +240,9 @@ export const productsRouter = createTRPCRouter({
 						},
 						subCategory: {
 							disconnect: true,
+						},
+						size: {
+							set: size,
 						},
 					},
 				});

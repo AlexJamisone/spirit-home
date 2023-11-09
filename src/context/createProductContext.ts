@@ -1,10 +1,5 @@
 import type { Size } from '@prisma/client';
-import {
-	createContext,
-	useContext,
-	type ChangeEvent,
-	type SetStateAction,
-} from 'react';
+import { createContext, useContext, type ChangeEvent } from 'react';
 import type { Action, FormProductState } from '~/reducer/FormReducer';
 
 type CreateProductContext = {
@@ -12,9 +7,7 @@ type CreateProductContext = {
 	handlDeletImage: (path: string, index: number) => void;
 	size: Size[] | undefined;
 	form: FormProductState;
-	edit: boolean;
 	dispatch: (value: Action) => void;
-	setEdit: (value: SetStateAction<boolean>) => void;
 	onClose: () => void;
 	toggleAlert: () => void;
 	openAlert: boolean;

@@ -1,8 +1,13 @@
 import { Link } from '@chakra-ui/next-js';
-import { Card, CardFooter, Icon, useToast } from '@chakra-ui/react';
-import type { Category, Product, Role, SubCategory } from '@prisma/client';
+import { Card, CardFooter, useToast } from '@chakra-ui/react';
+import type {
+	Category,
+	Product,
+	Role,
+	Size,
+	SubCategory,
+} from '@prisma/client';
 import { useState, type ReactNode, type SyntheticEvent } from 'react';
-import { TbShoppingCartPlus } from 'react-icons/tb';
 import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
 import ProductAction from './ProductAction';
@@ -10,19 +15,20 @@ import ProductFavorites from './ProductFavorites';
 import ProductImagePreview from './ProductImagePreview';
 import ProductInfo from './ProductInfo';
 import ProductPrice from './ProductPrice';
-import ProductSize from './ProductSize';
 
 type ProductProps = {
 	image?: ReactNode;
 	info?: ReactNode;
 	favorites?: ReactNode;
 	product: Product & {
+		size: Size[];
 		category: Category | null;
 		subCategory: SubCategory | null;
 	};
 	role?: Role;
 	handlEdit?: (
 		product: Product & {
+			size: Size[];
 			category: Category | null;
 			subCategory: SubCategory | null;
 		}
@@ -41,38 +47,9 @@ const ProductsCard = ({
 		api.products.archived.useMutation();
 
 	const ctx = api.useContext();
-	const [selectedSize, setSelectedtSize] = useState({
-		id: '',
-		name: '',
-	});
 
 	const [error, setError] = useState(false);
 	const toast = useToast();
-	const handlAddToCart = (e: SyntheticEvent) => {
-		if (!selectedSize.id || !selectedSize.name) {
-			setError(true);
-			toast({
-				description: 'Выбери пожалуйста размер',
-				status: 'warning',
-				isClosable: true,
-			});
-		} else {
-			toast({
-				description: 'Товар добавлен в корзину!',
-				status: 'info',
-				icon: (
-					<Icon
-						as={TbShoppingCartPlus}
-						boxSize={6}
-						textAlign="center"
-					/>
-				),
-				isClosable: true,
-				duration: 2000,
-			});
-		}
-		e.stopPropagation();
-	};
 	const handleArchivedProduct = (
 		id: string,
 		name: string,
@@ -110,11 +87,8 @@ const ProductsCard = ({
 			value={{
 				product,
 				role,
-				handlAddToCart,
 				handleArchivedProduct,
 				isLoading,
-				selectedSize,
-				setSelectedtSize,
 				error,
 				setError,
 			}}
@@ -161,6 +135,5 @@ ProductsCard.Favorites = ProductFavorites;
 ProductsCard.Image = ProductImagePreview;
 ProductsCard.Info = ProductInfo;
 ProductsCard.Action = ProductAction;
-ProductsCard.Size = ProductSize;
 
 export default ProductsCard;

@@ -3,7 +3,6 @@ import type { OrderStatus, Point, Prisma, PrismaClient } from '@prisma/client';
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 
-import type { CartState } from '~/reducer/CartReducer';
 import {
 	adminProcedure,
 	createTRPCRouter,
@@ -21,100 +20,36 @@ export type ContextType = {
 	userId: string | null;
 };
 
-function getAllProductsFromCart(cart: CartState): {
-	productId: string;
-	quantity: number;
-	selectedQtId: string;
-}[] {
-	return cart.items.map(({ id, quantityInCart, selectedSize }) => ({
-		productId: id,
-		quantity: quantityInCart,
-		selectedQtId: selectedSize.id,
+const cartInput = z.object({
+	items: z.array(
+		z.object({
+			id: z.string(),
+			quantity: z.number(),
+			price: z.number(),
+			size: z.string(),
+		})
+	),
+	totalPrice: z.number(),
+});
+
+function getFromCartItems(cart: (typeof cartInput)['_input']) {
+	return cart.items.map((item) => ({
+		price: item.price,
+		productId: item.id,
+		quantity: item.quantity,
+		size: item.size,
 	}));
-}
-
-async function handlUpdateProduct(
-	ctx: ContextType,
-	orderId: string,
-	operation: 'plus' | 'minus'
-) {
-	const returnCount = await ctx.prisma.order.findUnique({
-		where: {
-			id: orderId,
-		},
-		select: {
-			orderItem: {
-				include: {
-					product: {
-						select: {
-							quantity: true,
-						},
-					},
-				},
-			},
-		},
-	});
-	return returnCount?.orderItem.map(
-		async ({ productId, quantity, selectedQtId }) =>
-			await operationWithProducts(
-				ctx,
-				productId,
-				quantity,
-				operation,
-				selectedQtId
-			)
-	);
-}
-
-async function operationWithProducts(
-	ctx: ContextType,
-	productId: string,
-	quantity: number,
-	operation: 'plus' | 'minus',
-	qtId: string
-) {
-	return await ctx.prisma.product.update({
-		where: {
-			id: productId,
-		},
-		data: {
-			quantity: {
-				update: {
-					data: {
-						value: {
-							decrement:
-								operation === 'minus' ? quantity : undefined,
-							increment:
-								operation === 'plus' ? quantity : undefined,
-						},
-					},
-					where: {
-						id: qtId,
-					},
-				},
-			},
-		},
-	});
 }
 
 export const ordersRouter = createTRPCRouter({
 	get: adminProcedure.query(async ({ ctx }) => {
-		const orders = await ctx.prisma.order.findMany({
+		return await ctx.prisma.order.findMany({
 			select: {
 				orderItem: {
 					include: {
 						product: {
 							include: {
-								priceHistory: {
-									orderBy: {
-										effectiveFrom: 'desc',
-									},
-								},
-								quantity: {
-									include: {
-										size: true,
-									},
-								},
+								size: true,
 							},
 						},
 					},
@@ -140,13 +75,11 @@ export const ordersRouter = createTRPCRouter({
 				createdAt: 'desc',
 			},
 		});
-		return orders;
 	}),
 	changeStatus: adminProcedure
 		.input(z.object({ status: z.custom<OrderStatus>(), id: z.string() }))
 		.mutation(async ({ ctx, input }) => {
 			if (input.status === 'CANCELLED') {
-				await handlUpdateProduct(ctx, input.id, 'plus');
 				return await ctx.prisma.order.update({
 					where: {
 						id: input.id,
@@ -169,7 +102,7 @@ export const ordersRouter = createTRPCRouter({
 		.input(
 			z.object({
 				idAddress: z.string(),
-				cart: z.custom<CartState>(),
+				cart: cartInput,
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
@@ -181,7 +114,7 @@ export const ordersRouter = createTRPCRouter({
 					addressId: input.idAddress,
 					orderItem: {
 						createMany: {
-							data: getAllProductsFromCart(input.cart),
+							data: getFromCartItems(input.cart),
 						},
 					},
 					userId: ctx.userId,
@@ -195,12 +128,12 @@ export const ordersRouter = createTRPCRouter({
 				},
 			});
 			//here bot notification
-			return await handlUpdateProduct(ctx, create.id, 'minus');
+			return create;
 		}),
 	createNoAddressIsAuth: publicProcedure
 		.input(
 			z.object({
-				cart: z.custom<CartState>(),
+				cart: cartInput,
 				address: z.object({
 					firstName: z
 						.string()
@@ -251,19 +184,19 @@ export const ordersRouter = createTRPCRouter({
 					addressId: updateUserAddress.id,
 					orderItem: {
 						createMany: {
-							data: getAllProductsFromCart(input.cart),
+							data: getFromCartItems(input.cart),
 						},
 					},
 					userId: ctx.userId,
 				},
 			});
 			//here bot notification
-			return await handlUpdateProduct(ctx, createOrder.id, 'minus');
+			return createOrder;
 		}),
 	createNoAuth: publicProcedure
 		.input(
 			z.object({
-				cart: z.custom<CartState>(),
+				cart: cartInput,
 				createProfile: z.boolean(),
 				address: z.object({
 					firstName: z
@@ -321,7 +254,7 @@ export const ordersRouter = createTRPCRouter({
 					data: {
 						orderItem: {
 							createMany: {
-								data: getAllProductsFromCart(input.cart),
+								data: getFromCartItems(input.cart),
 							},
 						},
 						address: {
@@ -364,7 +297,7 @@ export const ordersRouter = createTRPCRouter({
 					},
 				});
 				//here bot notification
-				return await handlUpdateProduct(ctx, createOrder.id, 'minus');
+				return createOrder;
 			} else {
 				const createOrder = await ctx.prisma.order.create({
 					data: {
@@ -396,13 +329,13 @@ export const ordersRouter = createTRPCRouter({
 						},
 						orderItem: {
 							createMany: {
-								data: getAllProductsFromCart(input.cart),
+								data: getFromCartItems(input.cart),
 							},
 						},
 					},
 				});
 				//hers bot notification
-				return handlUpdateProduct(ctx, createOrder.id, 'minus');
+				return createOrder;
 			}
 		}),
 	changeViewd: adminProcedure

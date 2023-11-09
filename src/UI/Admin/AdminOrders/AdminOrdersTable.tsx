@@ -2,7 +2,6 @@ import {
 	Table,
 	TableCaption,
 	TableContainer,
-	Tag,
 	Tbody,
 	Td,
 	Text,
@@ -14,7 +13,7 @@ import {
 import { useCardOrderContext } from '~/context/ordersCardsContext';
 
 const AdminOrdersTable = () => {
-	const { orderItem, createdAt } = useCardOrderContext();
+	const { orderItem } = useCardOrderContext();
 	return (
 		<TableContainer
 			overflowY="auto"
@@ -50,39 +49,15 @@ const AdminOrdersTable = () => {
 				</Thead>
 				<Tbody>
 					{orderItem.map(
-						({
-							product: { name, priceHistory, quantity: qt },
-							quantity,
-							id,
-							selectedQtId,
-						}) => (
+						({ product: { name, price }, quantity, id }) => (
 							<Tr key={id}>
 								<Td textAlign="left">
-									<Tooltip
-										label={`${
-											(priceHistory.find(
-												(history) =>
-													history.effectiveFrom <=
-													createdAt
-											)?.price ?? 0) * quantity
-										} ₽`}
-									>
+									<Tooltip label={`${price * quantity} ₽`}>
 										{name}
 									</Tooltip>
 								</Td>
 								<Td>{quantity} шт.</Td>
-								<Td>
-									{qt
-										.filter(
-											(quantity) =>
-												quantity.id === selectedQtId
-										)
-										.map(({ size }) => (
-											<Tag key={selectedQtId}>
-												{size.size}
-											</Tag>
-										))}
-								</Td>
+								<Td>{quantity}</Td>
 							</Tr>
 						)
 					)}

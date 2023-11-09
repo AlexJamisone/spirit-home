@@ -1,6 +1,7 @@
 export type CartItem = {
 	id: string;
 	quantity: number;
+	title: string;
 	image: string;
 	price: number;
 	size: string;
@@ -105,8 +106,55 @@ export const cartReducer = (
 			}
 		}
 		case 'REMOVE_FROM_CART': {
+			const removedItem = state.items.find(
+				(item) =>
+					item.id === action.payload.id &&
+					item.size === action.payload.size
+			);
+			if (removedItem) {
+				const updatedItems = state.items.filter(
+					(item) =>
+						!(
+							item.id === action.payload.id &&
+							item.size === action.payload.size
+						)
+				);
+				const updatedTotalPrice =
+					state.totalPrice - removedItem.price * removedItem.quantity;
+				const newState: CartState = {
+					...state,
+					items: updatedItems,
+					totalPrice: updatedTotalPrice,
+				};
+				saveCartToLocalStorage(newState);
+				return newState;
+			}
+			return state;
 		}
 		case 'UPDATE_QT': {
+			const updatedItems = state.items.map((item) => {
+				if (
+					item.id === action.payload.id &&
+					item.size === action.payload.size
+				) {
+					return {
+						...item,
+						quantity: action.payload.quantity,
+					};
+				}
+				return item;
+			});
+			const updatedTotalPrice = updatedItems.reduce(
+				(total, item) => total + item.price * item.quantity,
+				0
+			);
+			const newState: CartState = {
+				...state,
+				items: updatedItems,
+				totalPrice: updatedTotalPrice,
+			};
+			saveCartToLocalStorage(newState);
+			return newState;
 		}
 		case 'CLER_CART': {
 		}

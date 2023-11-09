@@ -4,6 +4,7 @@ import type {
 	OrderStatus,
 	Point,
 	Product,
+	Size,
 	User,
 } from '@prisma/client';
 import {
@@ -23,7 +24,9 @@ interface CardOrderContext {
 		  })
 		| null;
 	orderItem: (OrderItem & {
-		product: Product;
+		product: Product & {
+			size: Size[];
+		};
 	})[];
 	checkOrderStatus: (
 		status: OrderStatus

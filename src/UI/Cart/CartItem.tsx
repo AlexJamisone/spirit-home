@@ -20,7 +20,7 @@ type CartItemProps = {
 };
 
 const CartItem = ({
-	item: { image, name, quantityInCart, id, priceHistory, selectedSize },
+	item: { image, title, quantity, id, price, size },
 }: CartItemProps) => {
 	const { cartDispatch } = useCart();
 
@@ -32,12 +32,12 @@ const CartItem = ({
 				aria-label={action}
 				icon={<Icon as={icon} />}
 				onClick={(e) => {
-					if (quantityInCart === 1 && action === 'minus') {
+					if (quantity === 1 && action === 'minus') {
 						cartDispatch({
 							type: 'REMOVE_FROM_CART',
 							payload: {
 								id,
-								sizeId: selectedSize.id,
+								size,
 							},
 						});
 					} else {
@@ -47,9 +47,9 @@ const CartItem = ({
 								id,
 								quantity:
 									action === 'plus'
-										? quantityInCart + 1
-										: quantityInCart - 1,
-								sizeId: selectedSize.id,
+										? quantity + 1
+										: quantity - 1,
+								size,
 							},
 						});
 					}
@@ -79,15 +79,15 @@ const CartItem = ({
 				h={[70, 75]}
 				objectFit="contain"
 				src={`${env.NEXT_PUBLIC_UPLOADTHING_URL}${image[0] as string}`}
-				alt={name}
+				alt={title}
 				fallback={<Spinner />}
 			/>
 			<Text display="inline-block" w="100%" textAlign="center">
-				{name}
+				{title}
 			</Text>
 			<Stack direction="row" alignItems="center">
 				{handlCount(IoIosArrowBack, 'minus')}
-				<Text>{quantityInCart}</Text>
+				<Text>{quantity}</Text>
 				{handlCount(IoIosArrowForward, 'plus')}
 			</Stack>
 			<Text
@@ -96,12 +96,12 @@ const CartItem = ({
 				textAlign="center"
 				fontSize={[12, 16]}
 			>
-				{priceHistory[0]?.price} ₽
+				{price} ₽
 			</Text>
 
 			<Stack>
 				<Tag size={['sm', 'md']} textAlign="center">
-					{selectedSize.name}
+					{size}
 				</Tag>
 			</Stack>
 			<IconButton
@@ -120,7 +120,7 @@ const CartItem = ({
 						type: 'REMOVE_FROM_CART',
 						payload: {
 							id,
-							sizeId: selectedSize.id,
+							size: size,
 						},
 					});
 					e.stopPropagation();

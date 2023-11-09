@@ -1,16 +1,12 @@
-import type { Product, Role } from '@prisma/client';
-import { createContext, useContext, type SyntheticEvent } from 'react';
+import type { Category, Product, Size, SubCategory } from '@prisma/client';
+import { createContext, useContext } from 'react';
 
 const ProductCardContext = createContext<{
-	product: Product;
-	admin?: Role;
-	handlAddToCart?: (e: SyntheticEvent) => void;
-	handleArchivedProduct?: (
-		id: string,
-		name: string,
-		e: SyntheticEvent
-	) => void;
-	isLoading?: boolean;
+	product: Product & {
+		size: Size[];
+		category: Category;
+		subCategory: SubCategory;
+	};
 } | null>(null);
 
 export function useProductCardContext() {

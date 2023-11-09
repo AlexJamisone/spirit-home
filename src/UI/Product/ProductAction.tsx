@@ -15,7 +15,7 @@ type ProductActionProps = {
 };
 
 const ProductAction = ({ container }: ProductActionProps) => {
-	const { product, role, handlAddToCart, handleArchivedProduct, isLoading } =
+	const { product, role, handleArchivedProduct, isLoading } =
 		useProductCardContext();
 	const handlArchiveButton = (icon: IconType) => {
 		return (
@@ -59,12 +59,7 @@ const ProductAction = ({ container }: ProductActionProps) => {
 						: handlArchiveButton(BiArchiveIn)}
 				</>
 			) : (
-				<Button
-					{...container}
-					variant="outline"
-					size={['sm', 'md']}
-					onClick={(e) => handlAddToCart?.(e)}
-				>
+				<Button {...container} variant="outline" size={['sm', 'md']}>
 					В корзину
 				</Button>
 			)}

@@ -3,27 +3,18 @@ import { useCreateProductContext } from '~/context/createProductContext';
 import AdminProductsAlert from '../AdminProductsAlert';
 
 const ProducCreateAction = () => {
-	const {
-		dispatch,
-		onClose,
-		toggleAlert,
-		setEdit,
-		edit,
-		isLoading,
-		form,
-		reset,
-	} = useCreateProductContext();
+	const { dispatch, onClose, toggleAlert, isLoading, form, reset } =
+		useCreateProductContext();
 	return (
 		<>
 			<Button type="submit" isLoading={isLoading}>
-				{edit ? 'Обновить' : 'Сохранить'}
+				{form.edit ? 'Обновить' : 'Сохранить'}
 			</Button>
-			{edit ? (
+			{form.edit ? (
 				<Button
 					onClick={() => {
 						onClose();
 						dispatch({ type: 'SET_CLEAR' });
-						setEdit(false);
 					}}
 				>
 					Отмена

@@ -23,8 +23,8 @@ export const sizeRouter = createTRPCRouter({
 		)
 		.mutation(async ({ ctx, input }) => {
 			const size = await ctx.prisma.size.findMany();
-			size.map(({ size }) => {
-				if (size === input.size) {
+			size.map(({ value }) => {
+				if (value === input.size) {
 					throw new TRPCError({
 						code: 'CONFLICT',
 						message: 'Данный размер уже существует',
@@ -33,7 +33,7 @@ export const sizeRouter = createTRPCRouter({
 			});
 			return await ctx.prisma.size.create({
 				data: {
-					size: input.size,
+					value: input.size,
 				},
 			});
 		}),

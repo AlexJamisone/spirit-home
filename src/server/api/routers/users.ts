@@ -21,15 +21,7 @@ export const usersRouter = createTRPCRouter({
 					include: {
 						orderItem: {
 							include: {
-								product: {
-									include: {
-										priceHistory: {
-											orderBy: {
-												effectiveFrom: 'desc',
-											},
-										},
-									},
-								},
+								product: true,
 							},
 						},
 					},
@@ -98,12 +90,7 @@ export const usersRouter = createTRPCRouter({
 					select: {
 						product: {
 							include: {
-								priceHistory: true,
-								quantity: {
-									include: {
-										size: true,
-									},
-								},
+								size: true,
 								category: true,
 								subCategory: true,
 							},

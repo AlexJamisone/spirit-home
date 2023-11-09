@@ -45,7 +45,9 @@ const Navigation = () => {
 				mx={'75px'}
 			>
 				<NavigationBarElement />
-				<Logo />
+				<Link href="/">
+					<Logo />
+				</Link>
 				<Stack direction="row" gap={10} alignItems="center">
 					<CategoryMenu />
 					{renderLinks.map(({ path, children }) =>

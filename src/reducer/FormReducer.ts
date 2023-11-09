@@ -1,10 +1,3 @@
-export type Quantity = {
-	id: string;
-	quantity: number;
-	name: string;
-	sizeId: string;
-};
-
 export interface FormProductState {
 	id: string;
 	name: string;
@@ -16,7 +9,8 @@ export interface FormProductState {
 		sub: boolean;
 	};
 	price: number;
-	quantity: Quantity[];
+	size: string[];
+	edit: boolean;
 }
 
 interface SetIdAction {
@@ -51,17 +45,13 @@ interface SetAllAction {
 	type: 'SET_ALL';
 	payload: FormProductState;
 }
-interface SetQTAction {
-	type: 'ADD_QT';
-	payload: Quantity;
-}
-interface SetUpdateQTAction {
-	type: 'UPDATE_QT';
-	payload: { id: string; quantity: number; name: string; sizeId: string };
-}
-interface SetRemoveSizeAction {
-	type: 'REMOVE_SIZE';
+interface SetSizeAction {
+	type: 'SET_SIZE';
 	payload: string;
+}
+interface SetEditAction {
+	type: 'SET_EDIT';
+	payload: boolean;
 }
 
 export type Action =
@@ -73,9 +63,8 @@ export type Action =
 	| SetClearAction
 	| SetAllAction
 	| SetIdAction
-	| SetQTAction
-	| SetUpdateQTAction
-	| SetRemoveSizeAction;
+	| SetSizeAction
+	| SetEditAction;
 
 export const initialState: FormProductState = {
 	id: '',
@@ -88,7 +77,8 @@ export const initialState: FormProductState = {
 		sub: false,
 	},
 	price: 0,
-	quantity: [],
+	size: [],
+	edit: false,
 };
 
 export const FormProductReducer = (
@@ -115,50 +105,29 @@ export const FormProductReducer = (
 			};
 		case 'SET_PRICE':
 			return { ...state, price: action.payload };
-		case 'ADD_QT':
-			return {
-				...state,
-				quantity: [...state.quantity, action.payload],
-			};
-		case 'UPDATE_QT':
-			return {
-				...state,
-				quantity: state.quantity.map((qt) =>
-					qt.sizeId === action.payload.sizeId
-						? {
-								...qt,
-								quantity: action.payload.quantity,
-								name: action.payload.name,
-						  }
-						: qt
-				),
-			};
-		case 'REMOVE_SIZE':
-			return {
-				...state,
-				quantity: state.quantity.filter(
-					(qt) => qt.sizeId !== action.payload
-				),
-			};
 		case 'SET_CLEAR':
-			return {
-				id: '',
-				category: {
-					id: '',
-					title: '',
-					sub: false,
-				},
-				description: '',
-				image: [],
-				name: '',
-				price: 0,
-				quantity: [],
-			};
+			return initialState;
 		case 'SET_ALL':
 			return {
 				...state,
 				...action.payload,
 			};
+		case 'SET_SIZE': {
+			const idx = state.size.findIndex((size) => size === action.payload);
+			if (idx === -1) {
+				return {
+					...state,
+					size: [...state.size, action.payload],
+				};
+			} else {
+				return {
+					...state,
+					size: state.size.filter(
+						(value) => value !== action.payload
+					),
+				};
+			}
+		}
 		default:
 			return state;
 	}
