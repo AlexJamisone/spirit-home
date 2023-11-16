@@ -9,6 +9,20 @@ import {
 import { filterUserForClient } from '~/server/helpers/filterUserForClient';
 
 export const usersRouter = createTRPCRouter({
+	getRole: privetProcedure.query(async ({ ctx }) => {
+		if (!ctx.userId) return null;
+		const user = await ctx.prisma.user.findUnique({
+			where: {
+				id: ctx.userId,
+			},
+		});
+		if (!user)
+			return new TRPCError({
+				code: 'NOT_FOUND',
+				message: 'User not found',
+			});
+		return user.role;
+	}),
 	get: publicProcedure.query(async ({ ctx }) => {
 		if (!ctx.userId) return null;
 		const findUser = await ctx.prisma.user.findUnique({

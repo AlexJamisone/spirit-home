@@ -15,7 +15,6 @@ const Navigation = () => {
 	const usrBtnId = useId();
 	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	const { isOpen, onClose, onToggle } = useDisclosure();
-	const [renderLinks, setRenderLinks] = useState(links);
 	const [scrollY, setScrollY] = useState(0);
 	useEffect(() => {
 		const handleScroll = () => {
@@ -50,7 +49,7 @@ const Navigation = () => {
 				</Link>
 				<Stack direction="row" gap={10} alignItems="center">
 					<CategoryMenu />
-					{renderLinks.map(({ path, children }) =>
+					{links.map(({ path, children }) =>
 						isSignedIn && path === '/signin' ? (
 							<UserButton key={usrBtnId} afterSignOutUrl="/" />
 						) : (

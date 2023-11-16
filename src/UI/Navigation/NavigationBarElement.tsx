@@ -14,6 +14,7 @@ const NavigationBarElement = () => {
 			borderColor="second"
 			roundedBottom="50px"
 			zIndex={-10}
+			rotate={180}
 			animate={{
 				top: scrollY < 20 ? undefined : `-${scrollY}px`,
 				opacity: scrollY > 100 ? 0 : 1,
