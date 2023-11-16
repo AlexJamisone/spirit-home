@@ -27,7 +27,7 @@ const Menu = () => {
 			position="fixed"
 			zIndex={20}
 			bgColor="brand"
-			top="34%"
+			top={{ xl: '30%', '2xl': '40%' }}
 			left={0}
 			p={3}
 			roundedRight="2xl"

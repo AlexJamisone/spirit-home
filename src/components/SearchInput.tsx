@@ -8,6 +8,7 @@ import {
 import { useState, type Dispatch, type SetStateAction } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import { TypeAnimation } from 'react-type-animation';
+import { scrollToComponent } from '~/utils/scrollToComponent';
 
 type SearchInputProps = {
 	setSearch: Dispatch<SetStateAction<string>>;
@@ -22,6 +23,7 @@ const SearchInput = ({ setSearch }: SearchInputProps) => {
 					<Icon as={BsSearch} />
 				</InputLeftElement>
 				<Input
+					onFocus={() => scrollToComponent('content')}
 					w={['300px']}
 					type="search"
 					placeholder="&nbsp;"

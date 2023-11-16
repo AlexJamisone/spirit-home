@@ -1,6 +1,6 @@
 import { Button, Menu, MenuButton, MenuItem, MenuList } from '@chakra-ui/react';
-import { IoIosArrowDown } from 'react-icons/io';
 
+import { IoIosArrowDown } from 'react-icons/io';
 import Placholder from '~/components/NoData/Placholder';
 import { api } from '~/utils/api';
 import CategoryMenuInner from './CategoryMenuInner';
@@ -13,8 +13,7 @@ const CategoryMenu = () => {
 				<>
 					<MenuButton
 						as={Button}
-						variant="solid"
-						colorScheme="brand"
+						variant="ghost"
 						rightIcon={<IoIosArrowDown />}
 						size={['xs', 'sm']}
 						textColor="second"

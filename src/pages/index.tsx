@@ -13,7 +13,7 @@ const Home: NextPage = () => {
 	const [search, setSearch] = useState('');
 	return (
 		<>
-			<Stack as="main" gap={10}>
+			<Stack as="main" gap={10} id="content">
 				<MainSection />
 				<SearchInput setSearch={setSearch} />
 				<Stack direction="row" justifyContent="center" gap={43} mb={10}>

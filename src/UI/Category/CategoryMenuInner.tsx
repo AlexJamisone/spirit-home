@@ -1,6 +1,6 @@
+import { Link } from '@chakra-ui/next-js';
 import {
 	Button,
-	Link as ChakraLink,
 	Icon,
 	Menu,
 	MenuButton,
@@ -9,7 +9,6 @@ import {
 	Stack,
 } from '@chakra-ui/react';
 import type { SubCategory } from '@prisma/client';
-import Link from 'next/link';
 import { MdKeyboardArrowRight } from 'react-icons/md';
 
 type CategoryMenuInnerProps = {
@@ -26,31 +25,24 @@ const CategoryMenuInner = ({
 	closeMain,
 }: CategoryMenuInnerProps) => {
 	return (
-		<Menu placement="right" autoSelect={false}>
+		<Menu placement="right-end" autoSelect={false}>
 			{({ onClose }) => (
 				<>
-					<Stack>
+					<Stack w="container">
 						{subCategory?.length ?? 0 > 0 ? (
 							<MenuButton
+								w="100%"
 								size={['sm', 'md']}
 								textAlign="left"
 								as={Button}
 								variant="ghost"
 								position="relative"
-								rightIcon={
-									<Icon
-										as={MdKeyboardArrowRight}
-										boxSize={5}
-										position="absolute"
-										top="25%"
-										right="5%"
-									/>
-								}
+								rightIcon={<Icon as={MdKeyboardArrowRight} />}
 							>
 								{title}
 							</MenuButton>
 						) : (
-							<ChakraLink
+							<Link
 								_hover={{
 									textDecoration: 'none',
 									bgColor: 'gray.100',
@@ -60,28 +52,30 @@ const CategoryMenuInner = ({
 								px={[3, 4]}
 								fontSize={[14, 16]}
 								rounded="md"
-								as={Link}
 								href={`/categories/${path}`}
 								onClick={closeMain}
 							>
 								{title}
-							</ChakraLink>
+							</Link>
 						)}
 					</Stack>
 
-					<MenuList minW={['100px', null]}>
+					<MenuList display="flex" flexDirection="column">
 						{subCategory?.map(({ id, title, path: subPath }) => (
-							<MenuItem
-								key={id}
-								as={Link}
-								href={`/categories/${subPath}`}
-								onClick={() => {
-									onClose();
-									closeMain();
-								}}
-								fontSize={[14, 16]}
-							>
-								{title}
+							<MenuItem key={id}>
+								<Link
+									_hover={{
+										textDecoration: 'none',
+									}}
+									href={`/categories/${subPath}`}
+									onClick={() => {
+										onClose();
+										closeMain();
+									}}
+									fontSize={[14, 16]}
+								>
+									{title}
+								</Link>
 							</MenuItem>
 						))}
 					</MenuList>
