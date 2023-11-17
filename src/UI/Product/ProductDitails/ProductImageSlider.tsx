@@ -6,6 +6,7 @@ import {
 	MdOutlineKeyboardArrowLeft,
 	MdOutlineKeyboardArrowRight,
 } from 'react-icons/md';
+import ImageFallback from '~/components/NoData/ImageFallback';
 import { useProductContext } from '~/context/productContext';
 import { env } from '~/env.mjs';
 
@@ -75,6 +76,7 @@ const ProductImageSlider = () => {
 				<Stack direction="row">
 					{image.map((src, index) => (
 						<Image
+							fallback={<ImageFallback isSlider />}
 							key={index}
 							alt={`${src}`}
 							src={env.NEXT_PUBLIC_UPLOADTHING_URL + src}
@@ -102,6 +104,7 @@ const ProductImageSlider = () => {
 			>
 				{image.map((src, index) => (
 					<Image
+						fallback={<ImageFallback width="100px" height="90px" />}
 						alt={`${src}`}
 						src={env.NEXT_PUBLIC_UPLOADTHING_URL + src}
 						key={src}

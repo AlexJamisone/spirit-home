@@ -1,5 +1,6 @@
 import { Stack } from '@chakra-ui/react';
 import { useReducer } from 'react';
+import ProductPlaceholder from '~/components/NoData/ProductPlaceholder';
 import ProductContext from '~/context/productContext';
 import {
 	initial,
@@ -17,7 +18,9 @@ const ProductDitails = ({ query }: { query: string }) => {
 		productDitailsReducer,
 		initial
 	);
-	if (!product) return null;
+	if (!product || isLoading) {
+		return <ProductPlaceholder />;
+	}
 	return (
 		<ProductContext.Provider
 			value={{ product, productDitalState, prodAction }}

@@ -64,7 +64,7 @@ const MapsWidget = () => {
 						? '200px'
 						: isLowerThan650
 						? '350px'
-						: '290px'
+						: '200px'
 				}
 				allowFullScreen={true}
 				style={{ position: 'relative' }}

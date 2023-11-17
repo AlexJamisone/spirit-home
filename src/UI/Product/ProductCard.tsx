@@ -11,6 +11,7 @@ import { useState, type ReactNode, type SyntheticEvent } from 'react';
 import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
 import ProductAction from './ProductAction';
+import ProductCategory from './ProductCategory';
 import ProductFavorites from './ProductFavorites';
 import ProductImagePreview from './ProductImagePreview';
 import ProductInfo from './ProductInfo';
@@ -20,6 +21,7 @@ type ProductProps = {
 	image?: ReactNode;
 	info?: ReactNode;
 	favorites?: ReactNode;
+	tag?: ReactNode;
 	product: Product & {
 		size: Size[];
 		category: Category | null;
@@ -42,6 +44,7 @@ const ProductsCard = ({
 	role,
 	handlEdit,
 	favorites,
+	tag,
 }: ProductProps) => {
 	const { mutate: archivedProduct, isLoading } =
 		api.products.archived.useMutation();
@@ -123,6 +126,7 @@ const ProductsCard = ({
 				{favorites}
 				{image}
 				{info}
+				{role === 'ADMIN' && tag}
 				<CardFooter>
 					<ProductPrice />
 				</CardFooter>
@@ -135,5 +139,6 @@ ProductsCard.Favorites = ProductFavorites;
 ProductsCard.Image = ProductImagePreview;
 ProductsCard.Info = ProductInfo;
 ProductsCard.Action = ProductAction;
+ProductsCard.Tag = ProductCategory;
 
 export default ProductsCard;

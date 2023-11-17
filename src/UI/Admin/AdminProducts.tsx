@@ -88,6 +88,7 @@ const AdminProducts = () => {
 							product={product}
 							image={<ProductsCard.Image />}
 							info={<ProductsCard.Info />}
+							tag={<ProductsCard.Tag />}
 							handlEdit={handlEdit}
 						/>
 					);

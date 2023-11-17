@@ -251,4 +251,36 @@ export const productsRouter = createTRPCRouter({
 				});
 			}
 		}),
+	getByCategory: publicProcedure
+		.input(
+			z.object({
+				category: z.string(),
+			})
+		)
+		.query(async ({ ctx, input }) => {
+			return await ctx.prisma.product.findMany({
+				where: {
+					OR: [
+						{
+							category: {
+								path: input.category,
+							},
+						},
+						{
+							subCategory: {
+								path: input.category,
+							},
+						},
+					],
+					NOT: {
+						archived: true,
+					},
+				},
+				include: {
+					size: true,
+					category: true,
+					subCategory: true,
+				},
+			});
+		}),
 });

@@ -9,6 +9,7 @@ const ProductContext = createContext<{
 	product: Product & {
 		size: Size[];
 	};
+
 	productDitalState: ProductDitailState;
 	prodAction: Dispatch<Action>;
 } | null>(null);

@@ -10,25 +10,23 @@ import { prisma } from '~/server/db';
 import { api } from '~/utils/api';
 
 const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
-	const { data: products } = api.products.getForAll.useQuery();
+	const { data: products } = api.products.getByCategory.useQuery({
+		category: path,
+	});
 	if (!products) return <NoData text="Пусто" icon={BsWind} />;
+	console.log(path);
 	return (
 		<Center pt={160} gap={5} flexWrap="wrap">
-			{products
-				.filter(
-					({ subCategory, category }) =>
-						(subCategory?.path || category?.path) === path
-				)
-				.map((product) => (
-					<ProductsCard
-						key={product.id}
-						product={product}
-						role="USER"
-						info={<ProductsCard.Info />}
-						image={<ProductsCard.Image />}
-						favorites={<ProductsCard.Favorites />}
-					/>
-				))}
+			{products.map((product) => (
+				<ProductsCard
+					key={product.id}
+					product={product}
+					role="USER"
+					info={<ProductsCard.Info />}
+					image={<ProductsCard.Image />}
+					favorites={<ProductsCard.Favorites />}
+				/>
+			))}
 		</Center>
 	);
 };
