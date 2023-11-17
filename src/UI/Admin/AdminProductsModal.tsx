@@ -110,7 +110,7 @@ const AdminProductsModal = ({
 			create(
 				{
 					name: form.name,
-					description: form.description,
+					description: form.description.split(/\n/g),
 					category: form.category,
 					image: form.image,
 					price: form.price,

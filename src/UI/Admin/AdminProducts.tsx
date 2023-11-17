@@ -42,7 +42,7 @@ const AdminProducts = () => {
 						(product.subCategoryTitle as string),
 					sub: product.category ? false : true,
 				},
-				description: product.description,
+				description: product.description.join('\n\n'),
 				image: product.image,
 				name: product.name,
 				price: product.price,

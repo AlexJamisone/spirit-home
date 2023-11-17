@@ -14,7 +14,13 @@ export type CartState = {
 
 interface SetAddToCart {
 	type: 'ADD_TO_CART';
-	payload: CartItem;
+	payload: {
+		id: string;
+		title: string;
+		size: string;
+		price: number;
+		image: string;
+	};
 }
 
 interface SetRemoveFromCart {

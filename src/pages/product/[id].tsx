@@ -1,12 +1,15 @@
 import { useRouter } from 'next/router';
-import { api } from '~/utils/api';
+import ProductDitails from '~/UI/Product/ProductDitails';
+import Layout from '~/components/Layout';
 
 const ProductPage = () => {
 	const { query } = useRouter();
-	const { data: product } = api.products.getSinglProduct.useQuery({
-		id: query.id as string,
-	});
-	return <div>ProductPage</div>;
+
+	return (
+		<Layout>
+			<ProductDitails query={query.id as string} />
+		</Layout>
+	);
 };
 
 export default ProductPage;

@@ -78,7 +78,7 @@ const CartItem = ({
 				w={[70, 75]}
 				h={[70, 75]}
 				objectFit="contain"
-				src={`${env.NEXT_PUBLIC_UPLOADTHING_URL}${image[0] as string}`}
+				src={`${env.NEXT_PUBLIC_UPLOADTHING_URL}${image}`}
 				alt={title}
 				fallback={<Spinner />}
 			/>

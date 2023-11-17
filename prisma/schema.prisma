@@ -76,7 +76,7 @@ model SubCategory {
 model Product {
     id               String       @id @default(cuid())
     name             String
-    description      String
+    description      String[]
     image            String[]
     archived         Boolean      @default(false)
     subCategoryTitle String?

@@ -50,6 +50,9 @@ export const productsRouter = createTRPCRouter({
 						archived: true,
 					},
 				},
+				include: {
+					size: true,
+				},
 			});
 		}),
 	getForAll: publicProcedure.query(async ({ ctx }) => {
@@ -88,8 +91,8 @@ export const productsRouter = createTRPCRouter({
 					.string()
 					.nonempty({ message: 'Придумай название продукту' }),
 				description: z
-					.string()
-					.nonempty({ message: 'Заполни описание' }),
+					.array(z.string())
+					.min(1, { message: 'Заполни описание!' }),
 				price: z
 					.number()
 					.nonnegative({ message: 'Укажи положительное число' }),
@@ -110,7 +113,7 @@ export const productsRouter = createTRPCRouter({
 				return await ctx.prisma.product.create({
 					data: {
 						name: input.name,
-						description: input.description,
+						description: input.description.filter(Boolean),
 						image: input.image,
 						size: {
 							connect: size,
