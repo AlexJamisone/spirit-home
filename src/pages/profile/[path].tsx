@@ -3,9 +3,6 @@ import { UserProfile } from '@clerk/nextjs';
 import { buildClerkProps, clerkClient, getAuth } from '@clerk/nextjs/server';
 import type { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import UserFavorites from '~/UI/User/UserFavorites';
-import UserMain from '~/UI/User/UserMain';
-import UserOrders from '~/UI/User/UserOrders';
 import ProtectionRoutes from '~/guards/ProtectionRoutes';
 import { api } from '~/utils/api';
 const ProfilePage = () => {
@@ -23,20 +20,20 @@ const ProfilePage = () => {
 	const handlProfile = () => {
 		switch (path) {
 			case 'main':
-				return (
-					<UserMain
-						info={<UserMain.Info />}
-						addressList={<UserMain.AddressList />}
-						orders={<UserMain.Orders />}
-						action={<UserMain.Action />}
-					/>
-				);
+			// return (
+			// <UserMain
+			// 	info={<UserMain.Info />}
+			// 	addressList={<UserMain.AddressList />}
+			// 	orders={<UserMain.Orders />}
+			// 	action={<UserMain.Action />}
+			// />
+			// );
 			case 'orders':
-				return <UserOrders />;
+			// return <UserOrders />;
 			case 'settings':
 				return <UserProfile />;
 			case 'favorites':
-				return <UserFavorites />;
+			// return <UserFavorites />;
 		}
 	};
 	return (

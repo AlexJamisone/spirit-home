@@ -1,4 +1,4 @@
-import { Image, Stack } from '@chakra-ui/react';
+import { Image, Skeleton, Stack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useState, type MouseEvent } from 'react';
 import { useProductCardContext } from '~/context/productCardContext';
@@ -27,6 +27,7 @@ const ProductImagePreview = () => {
 		>
 			{product.image.map((id, index) => (
 				<Image
+					fallback={<Skeleton w={300} h={300} />}
 					as={motion.img}
 					key={`product${id}`}
 					src={env.NEXT_PUBLIC_UPLOADTHING_URL + id}

@@ -1,3 +1,4 @@
+import { Link } from '@chakra-ui/next-js';
 import {
 	Box,
 	Button,
@@ -10,7 +11,6 @@ import {
 	MenuList,
 	Stack,
 	Text,
-	useDisclosure,
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
@@ -18,13 +18,11 @@ import { SlHandbag } from 'react-icons/sl';
 import ButtonsGroup from '~/components/ButtonsGroup';
 import Counter from '~/components/Counter';
 import { useCart } from '~/context/cartContext';
-import NewOrder from '../NewOrder/NewOrder';
 import CartItem from './CartItem';
 
 const CartMenu = () => {
 	const [isLength, setIsLength] = useState(false);
 	const { cartState } = useCart();
-	const { isOpen, onClose, onToggle } = useDisclosure();
 	useEffect(() => {
 		setIsLength(cartState.items.length > 0);
 	}, [isLength, cartState.items.length]);
@@ -89,20 +87,18 @@ const CartMenu = () => {
 									</Stack>
 									<MenuDivider />
 									<Button
+										as={Link}
 										w="100%"
+										href={'/new-order'}
+										_hover={{
+											textDecoration: 'none',
+										}}
 										onClick={() => {
 											closeCart();
-											onToggle();
 										}}
 									>
 										Оформить заказ
 									</Button>
-									<NewOrder
-										isOpen={isOpen}
-										onClose={onClose}
-										address={<NewOrder.Address />}
-										action={<NewOrder.Action />}
-									/>
 								</>
 							)}
 						</MenuList>

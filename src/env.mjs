@@ -10,7 +10,9 @@ const server = z.object({
 	DATABASE_URL: z.string().url(),
 	NODE_ENV: z.enum(["development", "test", "production"]),
 	UPLOADTHING_SECRET: z.string(),
-	UPLOADTHING_APP_ID: z.string()
+	UPLOADTHING_APP_ID: z.string(),
+	CDEK_ID: z.string().min(1),
+	CDEK_SECRET: z.string().min(1)
 });
 
 /**
@@ -34,7 +36,9 @@ const processEnv = {
 	UPLOADTHING_APP_ID: process.env.UPLOADTHING_APP_ID,
 	UPLOADTHING_SECRET: process.env.UPLOADTHING_SECRET,
 	NEXT_PUBLIC_VISITORS_LINKS: process.env.NEXT_PUBLIC_VISITORS_LINKS,
-	NEXT_PUBLIC_UPLOADTHING_URL: process.env.NEXT_PUBLIC_UPLOADTHING_URL
+	NEXT_PUBLIC_UPLOADTHING_URL: process.env.NEXT_PUBLIC_UPLOADTHING_URL,
+	CDEK_ID: process.env.CDEK_ID,
+	CDEK_SECRET: process.env.CDEK_SECRET
 };
 
 // Don't touch the part below

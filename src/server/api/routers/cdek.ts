@@ -1,11 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import type { Point } from '@prisma/client';
+import axios from 'axios';
 import { z } from 'zod';
 import { createTRPCRouter, publicProcedure } from '~/server/api/trpc';
 
-export type PointFromApi = {
+type PointFromApi = {
 	name: string;
 	work_time: string;
 	phones?: [{ number: string }];
@@ -19,6 +16,23 @@ export type PointFromApi = {
 		address: string;
 		address_full: string;
 	};
+};
+export type FiltredPoint = {
+	name: string;
+	work_time: string;
+	phone?: string;
+	email: string;
+	type: string;
+	region: string;
+	city: string;
+	longitude: number;
+	latitude: number;
+	addressName: string;
+	addressFullName: string;
+};
+
+type AccessesToken = {
+	access_token: string;
 };
 
 export const cdekRouter = createTRPCRouter({
@@ -34,21 +48,16 @@ export const cdekRouter = createTRPCRouter({
 			}&client_secret=${process.env.CDEK_SECRET as string}`;
 			const api_url = `https://api.cdek.ru/v2/deliverypoints?postal_code=${input.city}`;
 
-			const req_token = await fetch(api_req_token, {
-				method: 'POST',
-			});
+			const req_token = await axios.post<AccessesToken>(api_req_token);
 
-			const res_token = await req_token.json();
-			const token: string = res_token.access_token;
+			const token = req_token.data.access_token;
 
-			const response = await fetch(api_url, {
+			const response = await axios.get<PointFromApi[]>(api_url, {
 				headers: {
 					Authorization: `Bearer ${token}`,
 				},
 			});
-			const data = await response.json();
-
-			const points: Point[] = data.map(
+			const points: FiltredPoint[] = response.data.map(
 				(value: {
 					name: string;
 					work_time: string;
@@ -77,6 +86,6 @@ export const cdekRouter = createTRPCRouter({
 					addressFullName: value.location.address_full,
 				})
 			);
-			return points;
+			return points.filter(({ type }) => type === 'PVZ');
 		}),
 });

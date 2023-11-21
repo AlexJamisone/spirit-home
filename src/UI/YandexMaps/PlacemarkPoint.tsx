@@ -1,24 +1,24 @@
 import { Placemark } from '@pbe/react-yandex-maps';
-import type { Point } from '@prisma/client';
-import { useCreateAddressContext } from '~/context/addressContext';
+import type { FiltredPoint } from '~/server/api/routers/cdek';
+import { useNewOrder } from '~/stores/useNewOrder';
 
 type PlacemarkPointProps = {
-	point: Point;
+	point: FiltredPoint;
 };
 
 const PlacemarkPoint = ({ point }: PlacemarkPointProps) => {
-	const { dispatch, input } = useCreateAddressContext();
+	const { address, setPoint, setControls } = useNewOrder();
 	return (
 		<Placemark
 			geometry={[point.latitude, point.longitude]}
 			onClick={() => {
-				dispatch({ type: 'SET_POINT', payload: point });
-				dispatch({ type: 'SET_PVZ', payload: true });
+				setPoint({ selectedPoint: point });
+				setControls({ showPVZ: true });
 			}}
 			fillColor="ff0000"
 			options={{
 				preset:
-					input.point?.name === point.name
+					address.selectedPoint?.name === point.name
 						? 'islands#darkGreenCircleIcon'
 						: 'islands#blueCircleIcon',
 			}}

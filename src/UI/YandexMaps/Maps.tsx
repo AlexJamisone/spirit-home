@@ -1,24 +1,25 @@
 import { useMediaQuery } from '@chakra-ui/react';
 import { Map } from '@pbe/react-yandex-maps';
-import { useCreateAddressContext } from '~/context/addressContext';
+import { useNewOrder } from '~/stores/useNewOrder';
 import PlacemarkPoint from './PlacemarkPoint';
 
 const Maps = () => {
-	const { valueSuggestion, points } = useCreateAddressContext();
+	const { address } = useNewOrder();
 	const [isLowerThen900] = useMediaQuery(['(max-width: 900px)']);
+	console.log(address);
 	return (
 		<Map
 			state={{
 				center: [
-					Number(valueSuggestion?.data.geo_lat),
-					Number(valueSuggestion?.data.geo_lon),
+					Number(address.valueSuggestion?.data.geo_lat),
+					Number(address.valueSuggestion?.data.geo_lon),
 				],
 				zoom: 11,
 			}}
 			height={isLowerThen900 ? '250px' : '400px'}
 			width={isLowerThen900 ? '300px' : '600px'}
 		>
-			{points?.map((point, index) => (
+			{address.points?.map((point, index) => (
 				<PlacemarkPoint key={index} point={point} />
 			))}
 		</Map>
