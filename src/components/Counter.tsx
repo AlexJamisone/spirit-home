@@ -1,13 +1,8 @@
 import { Box } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
 type CounterProps = {
 	length: number;
 };
 const Counter = ({ length }: CounterProps) => {
-	const [isLength, setIsLength] = useState(false);
-	useEffect(() => {
-		setIsLength(length > 0);
-	}, [isLength, length]);
 	return (
 		<Box
 			bgColor={'whiteAlpha.900'}
@@ -18,7 +13,7 @@ const Counter = ({ length }: CounterProps) => {
 			bottom={'-10px'}
 			right={'-10px'}
 			cursor={'pointer'}
-			opacity={isLength ? 1 : 0}
+			opacity={length > 0 ? 1 : 0}
 			transition={'opacity .2s ease-in-out'}
 			fontWeight={600}
 			textAlign={'center'}

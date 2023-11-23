@@ -11,9 +11,9 @@ import { motion } from 'framer-motion';
 import type { IconType } from 'react-icons';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { IoTrashOutline } from 'react-icons/io5';
-import { useCart } from '~/context/cartContext';
 import { env } from '~/env.mjs';
 import { CartItem } from '~/reducer/CartReducer';
+import { useCart } from '~/stores/useCart';
 
 type CartItemProps = {
 	item: CartItem;
@@ -22,8 +22,7 @@ type CartItemProps = {
 const CartItem = ({
 	item: { image, title, quantity, id, price, size },
 }: CartItemProps) => {
-	const { cartDispatch } = useCart();
-
+	const { update, remove } = useCart();
 	const handlCount = (icon: IconType, action: 'plus' | 'minus') => {
 		return (
 			<IconButton
@@ -33,25 +32,13 @@ const CartItem = ({
 				icon={<Icon as={icon} />}
 				onClick={(e) => {
 					if (quantity === 1 && action === 'minus') {
-						cartDispatch({
-							type: 'REMOVE_FROM_CART',
-							payload: {
-								id,
-								size,
-							},
-						});
+						remove(id, size);
 					} else {
-						cartDispatch({
-							type: 'UPDATE_QT',
-							payload: {
-								id,
-								quantity:
-									action === 'plus'
-										? quantity + 1
-										: quantity - 1,
-								size,
-							},
-						});
+						update(
+							id,
+							size,
+							action === 'plus' ? quantity + 1 : quantity - 1
+						);
 					}
 					e.stopPropagation();
 				}}
@@ -116,13 +103,7 @@ const CartItem = ({
 					/>
 				}
 				onClick={(e) => {
-					cartDispatch({
-						type: 'REMOVE_FROM_CART',
-						payload: {
-							id,
-							size: size,
-						},
-					});
+					remove(id, size);
 					e.stopPropagation();
 				}}
 			/>

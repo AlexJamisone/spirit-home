@@ -7,8 +7,6 @@ import Script from 'next/script';
 import Menu from '~/UI/Navigation/Menu';
 import Navigation from '~/UI/Navigation/Navigation';
 import { theme } from '~/chakra/theme';
-import { CartProvider } from '~/context/cartContext';
-import { FavoritesProvider } from '~/context/favoritesContext';
 import { api } from '~/utils/api';
 import '../styles/globals.css';
 
@@ -26,19 +24,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 				data-website-id="671dd393-6548-494c-acc4-ac101878e304"
 			/>
 			<ClerkProvider {...pageProps} localization={ruRU}>
-				<FavoritesProvider>
-					<CartProvider>
-						<SignedIn>
-							{isTablet ? null : <Menu />}
-							<Navigation />
-							<Component {...pageProps} />
-						</SignedIn>
-						<SignedOut>
-							<Navigation />
-							<Component {...pageProps} />
-						</SignedOut>
-					</CartProvider>
-				</FavoritesProvider>
+				<SignedIn>
+					{isTablet ? null : <Menu />}
+					<Navigation />
+					<Component {...pageProps} />
+				</SignedIn>
+				<SignedOut>
+					<Navigation />
+					<Component {...pageProps} />
+				</SignedOut>
 			</ClerkProvider>
 		</ChakraProvider>
 	);

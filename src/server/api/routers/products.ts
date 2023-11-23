@@ -11,15 +11,15 @@ export const productsRouter = createTRPCRouter({
 	getByFavorites: publicProcedure
 		.input(
 			z.object({
-				id: z.array(z.string()),
+				ids: z.array(z.string()),
 			})
 		)
 		.query(async ({ ctx, input }) => {
-			if (input.id.length === 0) return null;
+			if (input.ids.length === 0) return null;
 			return await ctx.prisma.product.findMany({
 				where: {
 					id: {
-						in: input.id,
+						in: input.ids,
 					},
 					NOT: {
 						archived: true,

@@ -1,11 +1,11 @@
 import { Box, Icon, useToast } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { TiHeartOutline } from 'react-icons/ti';
-import { useFavorites } from '~/context/favoritesContext';
 import { useProductCardContext } from '~/context/productCardContext';
+import { useFavorites } from '~/stores/useFavorites';
 const ProductFavorites = () => {
 	const { product } = useProductCardContext();
-	const { favoritesState, favDispatch } = useFavorites();
+	const { ids, toggle } = useFavorites();
 	const toast = useToast();
 	return (
 		<Box
@@ -15,15 +15,13 @@ const ProductFavorites = () => {
 			alignSelf="end"
 			onClick={(e) => {
 				e.preventDefault();
-				favDispatch({ type: 'TOGLLE_FAV', payload: product.id });
+				toggle(product.id);
 			}}
 		>
 			<Icon
 				as={TiHeartOutline}
 				boxSize={6}
-				color={
-					favoritesState.includes(product.id) ? 'red.400' : 'second'
-				}
+				color={ids.includes(product.id) ? 'red.400' : 'second'}
 				transition="color .3s linear"
 			/>
 		</Box>

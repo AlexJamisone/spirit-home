@@ -3,15 +3,15 @@ import { TiHeartOutline } from 'react-icons/ti';
 import ProductsCard from '~/UI/Product/ProductCard';
 import Layout from '~/components/Layout';
 import NoData from '~/components/NoData/NoData';
-import { useFavorites } from '~/context/favoritesContext';
+import { useFavorites } from '~/stores/useFavorites';
 import { api } from '~/utils/api';
 
 const FavoritesPage = () => {
-	const { favoritesState } = useFavorites();
+	const { ids } = useFavorites();
 	const { data: products } = api.products.getByFavorites.useQuery({
-		id: favoritesState,
+		ids,
 	});
-	if (!products || favoritesState.length === 0)
+	if (!products || ids.length === 0)
 		return (
 			<Layout>
 				<NoData icon={TiHeartOutline} text="В избранном пусто :(" />

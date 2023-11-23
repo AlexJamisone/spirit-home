@@ -29,7 +29,7 @@ const cartInput = z.object({
 			size: z.string(),
 		})
 	),
-	totalPrice: z.number(),
+	total: z.number(),
 });
 
 function getFromCartItems(cart: (typeof cartInput)['_input']) {

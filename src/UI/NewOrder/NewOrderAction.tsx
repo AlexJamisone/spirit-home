@@ -1,5 +1,5 @@
 import { Button } from '@chakra-ui/react';
-import { useCart } from '~/context/cartContext';
+import { useCart } from '~/stores/useCart';
 import { useNewOrder } from '~/stores/useNewOrder';
 import { api } from '~/utils/api';
 
@@ -7,7 +7,7 @@ const NewOrderAction = () => {
 	const { mutate: createNoAddress } =
 		api.orders.createNoAddressIsAuth.useMutation();
 	const { inputs, address, setError } = useNewOrder();
-	const { cartState, cartDispatch } = useCart();
+	const { items, total } = useCart();
 	return (
 		<Button
 			onClick={() =>
@@ -18,7 +18,7 @@ const NewOrderAction = () => {
 						lastName: inputs.lastName,
 						point: address?.selectedPoint
 							?.addressFullName as string,
-						cart: cartState,
+						cart: { items, total },
 					},
 					{
 						onError: (error) => {

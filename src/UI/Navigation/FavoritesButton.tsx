@@ -4,11 +4,11 @@ import { motion } from 'framer-motion';
 import { TiHeartOutline } from 'react-icons/ti';
 import ButtonsGroup from '~/components/ButtonsGroup';
 import Counter from '~/components/Counter';
-import { useFavorites } from '~/context/favoritesContext';
+import { useFavorites } from '~/stores/useFavorites';
 
 const FavoritesButton = () => {
-	const { favoritesState } = useFavorites();
-	if (favoritesState.length === 0) return null;
+	const { ids } = useFavorites();
+	if (ids.length === 0) return null;
 	return (
 		<Stack
 			as={motion.div}
@@ -30,7 +30,7 @@ const FavoritesButton = () => {
 			}}
 		>
 			<ButtonsGroup>
-				<Counter length={favoritesState.length} />
+				<Counter length={ids.length} />
 				<IconButton
 					aria-label="favorites"
 					icon={
