@@ -30,7 +30,6 @@ const SelectAddress = () => {
 				onSuccess: (points) => {
 					setControls({ showMap: true });
 					setPoint({ points });
-					console.log(address);
 				},
 			}
 		);

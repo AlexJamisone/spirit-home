@@ -10,22 +10,25 @@ export const addressesRouter = createTRPCRouter({
 				lastName: z.string().nonempty(),
 				contactPhone: z.string().nonempty().min(16),
 				point: z.string(),
+				updateName: z.boolean(),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
-			await clerkClient.users.updateUser(ctx.userId, {
-				firstName: input.firstName,
-				lastName: input.lastName,
-			});
-			await ctx.prisma.user.update({
-				where: {
-					id: ctx.userId,
-				},
-				data: {
+			if (input.updateName) {
+				await clerkClient.users.updateUser(ctx.userId, {
 					firstName: input.firstName,
 					lastName: input.lastName,
-				},
-			});
+				});
+				await ctx.prisma.user.update({
+					where: {
+						id: ctx.userId,
+					},
+					data: {
+						firstName: input.firstName,
+						lastName: input.lastName,
+					},
+				});
+			}
 			return await ctx.prisma.address.create({
 				data: {
 					contactPhone: input.contactPhone,
@@ -36,20 +39,14 @@ export const addressesRouter = createTRPCRouter({
 				},
 			});
 		}),
-	archived: privetProcedure
+	delete: privetProcedure
 		.input(z.object({ id: z.string() }))
 		.mutation(async ({ input, ctx }) => {
-			const archiveAddress = await ctx.prisma.address.update({
+			return await ctx.prisma.address.delete({
 				where: {
 					id: input.id,
 				},
-				data: {
-					archived: {
-						set: true,
-					},
-				},
 			});
-			return archiveAddress;
 		}),
 	update: privetProcedure
 		.input(

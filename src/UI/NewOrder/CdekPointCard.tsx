@@ -36,6 +36,10 @@ const CdekPointCard = () => {
 			{selectedPoint?.email && <Text>Email: {selectedPoint.email}</Text>}
 			<Button
 				size="sm"
+				border={controls.errorSelectedPVZ ? '1px solid' : undefined}
+				borderColor={
+					controls.errorSelectedPVZ ? 'orange.300' : undefined
+				}
 				onClick={() => {
 					if (controls.errorSelectedPVZ) {
 						setControls({ errorSelectedPVZ: false });

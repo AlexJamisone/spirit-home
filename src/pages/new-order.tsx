@@ -1,5 +1,5 @@
 import Layout from '~/components/Layout';
-import NewOrder from '~/components/NewOrder';
+import NewOrder from '~/UI/NewOrder';
 
 const NewOrderPage = () => {
 	return (

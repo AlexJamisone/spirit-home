@@ -4,7 +4,7 @@ import { useNewOrder } from '~/stores/useNewOrder';
 import { api } from '~/utils/api';
 
 const NewOrderAction = () => {
-	const { mutate: createNoAddress, reset } =
+	const { mutate: createNoAddress } =
 		api.orders.createNoAddressIsAuth.useMutation();
 	const { inputs, address, setError } = useNewOrder();
 	const { cartState, cartDispatch } = useCart();

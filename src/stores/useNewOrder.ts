@@ -26,6 +26,7 @@ type NewOrderAddress = {
 	points?: FiltredPoint[];
 	selectedPoint?: FiltredPoint;
 	valueSuggestion?: DaDataAddressSuggestion;
+	updateName?: boolean;
 };
 
 type NewOrderError =
@@ -74,6 +75,7 @@ const initial: NewOrderState = {
 	},
 	address: {
 		id: '',
+		updateName: true,
 	},
 };
 

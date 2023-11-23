@@ -90,13 +90,14 @@ model Order {
     id          String      @id @default(cuid())
     orderNumber Int         @default(autoincrement())
     user        User?       @relation(fields: [userId], references: [id])
-    address     Address     @relation(fields: [addressId], references: [id])
     userId      String?
     status      OrderStatus @default(PENDING)
     createdAt   DateTime    @default(now())
     orderItem   OrderItem[]
-    addressId   String
     viewed      Boolean     @default(false)
+    Address     Address?    @relation(fields: [addressId], references: [id])
+    addressId   String?
+    trase       String?
 }
 
 model OrderItem {

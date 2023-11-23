@@ -27,7 +27,13 @@ const ProductImagePreview = () => {
 		>
 			{product.image.map((id, index) => (
 				<Image
-					fallback={<Skeleton w={300} h={300} />}
+					fallback={
+						<Skeleton
+							w={300}
+							h={300}
+							display={index === currentIndex ? 'block' : 'none'}
+						/>
+					}
 					as={motion.img}
 					key={`product${id}`}
 					src={env.NEXT_PUBLIC_UPLOADTHING_URL + id}
