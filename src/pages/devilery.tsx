@@ -1,11 +1,11 @@
 import Accordion from '~/UI/Accordion/Accordion';
+import Layout from '~/components/Layout';
 
 const DevileryPage = () => {
 	return (
-		<Accordion
-			accordion={<Accordion.Items />}
-			action={<Accordion.Action />}
-		/>
+		<Layout>
+			<Accordion />
+		</Layout>
 	);
 };
 

@@ -16,17 +16,20 @@ export const accordionsRouter = createTRPCRouter({
 	create: adminProcedure
 		.input(
 			z.object({
-				title: z.string().nonempty({ message: 'Заполни строку' }),
+				title: z.string().nonempty({ message: 'Придумай вопрос!' }),
 				content: z
 					.array(z.string())
-					.min(1, { message: 'Не может быть с пустым контентом' }),
+					.min(1, {
+						message: 'Заполни ответ',
+					})
+					.transform((val) => val.filter(Boolean)),
 			})
 		)
 		.mutation(async ({ ctx, input }) => {
 			return await ctx.prisma.accordion.create({
 				data: {
 					title: input.title,
-					content: input.content.filter(Boolean),
+					content: input.content,
 				},
 			});
 		}),

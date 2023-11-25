@@ -12,8 +12,8 @@ datasource db {
 
 // Define the data model for users
 model User {
-    id         String      @id @unique
-    role       Role        @default(USER)
+    id         String     @id @unique
+    role       Role       @default(USER)
     firstName  String?
     lastName   String?
     email      String?
@@ -21,8 +21,7 @@ model User {
     comments   Comment[]
     categories Category[]
     address    Address[]
-    updateAt   DateTime    @default(now()) @updatedAt
-    favorites  Favorites[]
+    updateAt   DateTime   @default(now()) @updatedAt
 }
 
 model Address {
@@ -34,7 +33,7 @@ model Address {
     contactPhone String
     point        String
     archived     Boolean @default(false)
-    Order        Order[]
+    order        Order[]
 }
 
 model Category {
@@ -70,20 +69,12 @@ model Product {
     orders           OrderItem[]
     price            Int
     size             Size[]
-    favorites        Favorites[]
 }
 
 model Size {
     id      String    @id @default(cuid())
     value   String    @unique
     product Product[]
-}
-
-model Favorites {
-    productId String  @id
-    product   Product @relation(fields: [productId], references: [id])
-    user      User    @relation(fields: [userId], references: [id])
-    userId    String
 }
 
 model Order {
@@ -95,7 +86,7 @@ model Order {
     createdAt   DateTime    @default(now())
     orderItem   OrderItem[]
     viewed      Boolean     @default(false)
-    Address     Address?    @relation(fields: [addressId], references: [id])
+    address     Address?    @relation(fields: [addressId], references: [id])
     addressId   String?
     trase       String?
 }

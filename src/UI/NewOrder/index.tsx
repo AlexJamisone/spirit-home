@@ -14,7 +14,11 @@ const NewOrder = () => {
 		<Stack alignItems="center" gap={10}>
 			<Stack direction="row">
 				{user && user.address?.length !== 0 ? (
-					<RadioGroup onChange={(id) => setPoint({ id })} display='flex' gap={5}>
+					<RadioGroup
+						onChange={(id) => setPoint({ id })}
+						display="flex"
+						gap={5}
+					>
 						{user?.address?.map((address) => (
 							<Radio key={address.id} value={address.id}>
 								<UserAddressCard address={address} />

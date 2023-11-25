@@ -45,11 +45,6 @@ export const usersRouter = createTRPCRouter({
 				},
 				categories: true,
 				address: true,
-				favorites: {
-					select: {
-						productId: true,
-					},
-				},
 			},
 		});
 		const [user] = await clerkClient.users.getUserList({
@@ -81,32 +76,12 @@ export const usersRouter = createTRPCRouter({
 			where: {
 				id: ctx.userId,
 			},
-			include: {
-				favorites: {
-					select: {
-						productId: true,
-					},
-				},
-			},
 		});
 	}),
 	getUserForFavProduct: privetProcedure.query(async ({ ctx }) => {
 		return await ctx.prisma.user.findUnique({
 			where: {
 				id: ctx.userId,
-			},
-			include: {
-				favorites: {
-					select: {
-						product: {
-							include: {
-								size: true,
-								category: true,
-								subCategory: true,
-							},
-						},
-					},
-				},
 			},
 		});
 	}),

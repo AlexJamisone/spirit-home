@@ -12,20 +12,21 @@ import {
 import type { Accordion } from '@prisma/client';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { FiEdit2 } from 'react-icons/fi';
-import { useAccordionContext } from '~/context/accardionsContext';
+import { useAccordion } from '~/stores/useAccordion';
 import { api } from '~/utils/api';
 
 type AccardionStickProps = {
 	accordion: Accordion;
+	onToggle: () => void;
 };
 
-const AccardionStick = ({ accordion }: AccardionStickProps) => {
+const AccardionStick = ({ accordion, onToggle }: AccardionStickProps) => {
 	const { mutate: delet, isLoading: isLoadingDelet } =
 		api.accordions.deleteAcc.useMutation();
 	const { data: role } = api.users.getUserRole.useQuery();
 	const ctx = api.useContext();
 	const toast = useToast();
-	const { dispatch, onToggle } = useAccordionContext();
+	const { setEdit, setInput } = useAccordion();
 
 	return (
 		<AccordionItem>
@@ -53,18 +54,12 @@ const AccardionStick = ({ accordion }: AccardionStickProps) => {
 									icon={<Icon as={FiEdit2} />}
 									onClick={(e) => {
 										e.stopPropagation();
-										dispatch({
-											type: 'SET_ALL',
-											payload: {
-												content:
-													accordion.content.join(
-														'\n\n'
-													),
-												edit: true,
-												id: accordion.id,
-												title: accordion.title,
-											},
+										setInput({
+											content:
+												accordion.content.join('\n\n'),
+											title: accordion.title,
 										});
+										setEdit(true, accordion.id);
 										onToggle();
 									}}
 								/>

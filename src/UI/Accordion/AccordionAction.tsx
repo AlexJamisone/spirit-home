@@ -1,9 +1,16 @@
 import { Icon, IconButton } from '@chakra-ui/react';
 import { GoPlus } from 'react-icons/go';
-import { useAccordionContext } from '~/context/accardionsContext';
-import AccordionCreate from './AccordionCreate';
-const AccordionAction = () => {
-	const { onToggle } = useAccordionContext();
+import AccordionCreate from './Create';
+type AccordionActionProps = {
+	isOpen: boolean;
+	onClose: () => void;
+	onToggle: () => void;
+};
+const AccordionAction = ({
+	isOpen,
+	onClose,
+	onToggle,
+}: AccordionActionProps) => {
 	return (
 		<>
 			<IconButton
@@ -13,7 +20,7 @@ const AccordionAction = () => {
 				icon={<Icon as={GoPlus} boxSize={5} color="pink.300" />}
 				w="100%"
 			/>
-			<AccordionCreate />
+			<AccordionCreate isOpen={isOpen} onClose={onClose} />
 		</>
 	);
 };

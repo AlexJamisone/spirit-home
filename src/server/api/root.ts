@@ -5,7 +5,6 @@ import { addressesRouter } from './routers/addresses';
 import { categorysRouter } from './routers/categorys';
 import { cdekRouter } from './routers/cdek';
 import { chartsRouter } from './routers/charts';
-import { favoritesRouter } from './routers/favorites';
 import { ordersRouter } from './routers/orders';
 import { productsRouter } from './routers/products';
 import { sizeRouter } from './routers/size';
@@ -22,7 +21,6 @@ export const appRouter = createTRPCRouter({
 	orders: ordersRouter,
 	addresses: addressesRouter,
 	size: sizeRouter,
-	favorites: favoritesRouter,
 	charts: chartsRouter,
 	cdek: cdekRouter,
 	accordions: accordionsRouter,

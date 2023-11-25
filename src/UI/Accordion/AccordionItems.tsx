@@ -3,7 +3,11 @@ import { Accordion, Skeleton, Spinner } from '@chakra-ui/react';
 import { api } from '~/utils/api';
 import AccardionStick from './AccardionStick';
 
-const AccordionItems = () => {
+type AccordionItemsProps = {
+	onToggle: () => void;
+};
+
+const AccordionItems = ({ onToggle }: AccordionItemsProps) => {
 	const { data: accordions, isLoading } = api.accordions.get.useQuery();
 
 	if (!accordions || accordions.length === 0)
@@ -12,7 +16,11 @@ const AccordionItems = () => {
 	return (
 		<Accordion allowMultiple>
 			{accordions.map((accardion) => (
-				<AccardionStick accordion={accardion} key={accardion.id} />
+				<AccardionStick
+					onToggle={onToggle}
+					accordion={accardion}
+					key={accardion.id}
+				/>
 			))}
 		</Accordion>
 	);
