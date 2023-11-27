@@ -12,8 +12,7 @@ import type { IconType } from 'react-icons';
 import { IoIosArrowBack, IoIosArrowForward } from 'react-icons/io';
 import { IoTrashOutline } from 'react-icons/io5';
 import { env } from '~/env.mjs';
-import { CartItem } from '~/reducer/CartReducer';
-import { useCart } from '~/stores/useCart';
+import { useCart, type CartItem } from '~/stores/useCart';
 
 type CartItemProps = {
 	item: CartItem;

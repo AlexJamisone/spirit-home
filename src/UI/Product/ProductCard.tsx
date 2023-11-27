@@ -1,5 +1,5 @@
 import { Link } from '@chakra-ui/next-js';
-import { Card, CardFooter, useToast } from '@chakra-ui/react';
+import { Card, CardFooter, Stack, useToast } from '@chakra-ui/react';
 import type {
 	Category,
 	Product,
@@ -7,6 +7,7 @@ import type {
 	Size,
 	SubCategory,
 } from '@prisma/client';
+import { motion } from 'framer-motion';
 import { useState, type ReactNode, type SyntheticEvent } from 'react';
 import ProductCardContext from '~/context/productCardContext';
 import { api } from '~/utils/api';
@@ -96,41 +97,43 @@ const ProductsCard = ({
 				setError,
 			}}
 		>
-			<Card
-				gap={1}
-				as={role === 'USER' || !role ? Link : undefined}
-				href={`/product/${product.id}`}
-				onClick={() =>
-					role === 'ADMIN' ? handlEdit?.(product) : undefined
-				}
-				_hover={{
-					textDecoration: 'none',
-				}}
-				maxW={['300px']}
-				h={['350px', '450px']}
-				direction="column"
-				justifyContent="space-between"
-				alignItems="center"
-				p={[3, 5]}
-				border="1px solid"
-				borderColor="second"
-				rounded="41px"
-				cursor="pointer"
-				position="relative"
-				zIndex={0}
-				size={{
-					xl: 'sm',
-					'2xl': 'lg',
-				}}
-			>
-				{favorites}
-				{image}
-				{info}
-				{role === 'ADMIN' && tag}
-				<CardFooter>
-					<ProductPrice />
-				</CardFooter>
-			</Card>
+			<Stack as={motion.div} layout>
+				<Card
+					gap={1}
+					as={role === 'USER' || !role ? Link : undefined}
+					href={`/product/${product.id}`}
+					onClick={() =>
+						role === 'ADMIN' ? handlEdit?.(product) : undefined
+					}
+					_hover={{
+						textDecoration: 'none',
+					}}
+					maxW={['300px']}
+					h={['350px', '450px']}
+					direction="column"
+					justifyContent="space-between"
+					alignItems="center"
+					p={[3, 5]}
+					border="1px solid"
+					borderColor="second"
+					rounded="41px"
+					cursor="pointer"
+					position="relative"
+					zIndex={0}
+					size={{
+						xl: 'sm',
+						'2xl': 'lg',
+					}}
+				>
+					{favorites}
+					{image}
+					{info}
+					{role === 'ADMIN' && tag}
+					<CardFooter>
+						<ProductPrice />
+					</CardFooter>
+				</Card>
+			</Stack>
 		</ProductCardContext.Provider>
 	);
 };

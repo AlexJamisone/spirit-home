@@ -55,21 +55,51 @@ export const productsRouter = createTRPCRouter({
 				},
 			});
 		}),
-	getForAll: publicProcedure.query(async ({ ctx }) => {
-		const products = await ctx.prisma.product.findMany({
-			include: {
-				size: true,
-				category: true,
-				subCategory: true,
-			},
-			where: {
-				NOT: {
-					archived: true,
+	getForAll: publicProcedure
+		.input(
+			z.object({
+				limit: z.number(),
+				cursor: z.string().nullish(),
+			})
+		)
+		.query(async ({ ctx, input }) => {
+			// const products = await ctx.prisma.product.findMany({
+			// 	include: {
+			// 		size: true,
+			// 		category: true,
+			// 		subCategory: true,
+			// 	},
+			// 	where: {
+			// 		NOT: {
+			// 			archived: true,
+			// 		},
+			// 	},
+			// });
+			// return products;
+			const { limit, cursor } = input;
+			const items = await ctx.prisma.product.findMany({
+				include: {
+					size: true,
+					category: true,
+					subCategory: true,
 				},
-			},
-		});
-		return products;
-	}),
+				take: limit + 1,
+				cursor: cursor
+					? {
+							id: cursor,
+					  }
+					: undefined,
+			});
+			let nextCursor: typeof cursor | undefined;
+			if (items.length > limit) {
+				const nextItem = items.pop();
+				nextCursor = nextItem?.id;
+			}
+			return {
+				items,
+				nextCursor,
+			};
+		}),
 	getForAdmin: publicProcedure.query(async ({ ctx }) => {
 		const products = await ctx.prisma.product.findMany({
 			include: {

@@ -27,3 +27,7 @@ a {
 	stroke-linecap: round;
 	stroke-linejoin: round;
 }
+
+.infinit ::-webkit-scrollbar {
+	display: none;
+}
