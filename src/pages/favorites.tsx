@@ -1,3 +1,4 @@
+import { Spinner } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
 import { TiHeartOutline } from 'react-icons/ti';
 import ProductsCard from '~/UI/Product/ProductCard';
@@ -11,12 +12,19 @@ const FavoritesPage = () => {
 	const { data: products } = api.products.getByFavorites.useQuery({
 		ids,
 	});
-	if (!products || ids.length === 0)
+	if (!products)
+		return (
+			<Layout>
+				<Spinner />
+			</Layout>
+		);
+	if (ids.length === 0)
 		return (
 			<Layout>
 				<NoData icon={TiHeartOutline} text="В избранном пусто :(" />
 			</Layout>
 		);
+
 	return (
 		<Layout>
 			<AnimatePresence>

@@ -99,6 +99,7 @@ const ProductsCard = ({
 		>
 			<Stack as={motion.div} layout>
 				<Card
+					boxShadow="base"
 					gap={1}
 					as={role === 'USER' || !role ? Link : undefined}
 					href={`/product/${product.id}`}

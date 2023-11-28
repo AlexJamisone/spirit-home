@@ -60,22 +60,10 @@ export const productsRouter = createTRPCRouter({
 			z.object({
 				limit: z.number(),
 				cursor: z.string().nullish(),
+				search: z.string().optional(),
 			})
 		)
 		.query(async ({ ctx, input }) => {
-			// const products = await ctx.prisma.product.findMany({
-			// 	include: {
-			// 		size: true,
-			// 		category: true,
-			// 		subCategory: true,
-			// 	},
-			// 	where: {
-			// 		NOT: {
-			// 			archived: true,
-			// 		},
-			// 	},
-			// });
-			// return products;
 			const { limit, cursor } = input;
 			const items = await ctx.prisma.product.findMany({
 				include: {
@@ -89,6 +77,12 @@ export const productsRouter = createTRPCRouter({
 							id: cursor,
 					  }
 					: undefined,
+				where: {
+					name: {
+						contains: input.search,
+						mode: 'insensitive',
+					},
+				},
 			});
 			let nextCursor: typeof cursor | undefined;
 			if (items.length > limit) {

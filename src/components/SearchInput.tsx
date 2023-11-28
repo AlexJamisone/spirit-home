@@ -5,17 +5,15 @@ import {
 	InputGroup,
 	InputLeftElement,
 } from '@chakra-ui/react';
-import { useState, type Dispatch, type SetStateAction } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import { TypeAnimation } from 'react-type-animation';
+import { useSearch } from '~/stores/useSearch';
 import { scrollToComponent } from '~/utils/scrollToComponent';
 
-type SearchInputProps = {
-	setSearch: Dispatch<SetStateAction<string>>;
-};
+const SearchInput = () => {
+	const { setSearch, animationPlaceholder, setAnimationPlaceholder } =
+		useSearch();
 
-const SearchInput = ({ setSearch }: SearchInputProps) => {
-	const [animationPlaceholder, setAnimationPlaceholder] = useState(true);
 	return (
 		<Center my={0} mx="auto">
 			<InputGroup>

@@ -4,13 +4,14 @@ import Footer from '~/UI/Footer';
 import MainSection from '~/UI/MainSection/MainSection';
 import LineOfProduct from '~/UI/Product/LineOfProduct';
 import MapsWidget from '~/UI/YandexMaps/MapsWidget';
+import SearchInput from '~/components/SearchInput';
 
 const Home: NextPage = () => {
 	return (
 		<>
 			<Stack as="main" gap={10} id="content">
 				<MainSection />
-				{/* <SearchInput setSearch={setSearch} /> */}
+				<SearchInput />
 				<LineOfProduct />
 			</Stack>
 			<MapsWidget />

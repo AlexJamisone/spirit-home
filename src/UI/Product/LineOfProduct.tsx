@@ -1,32 +1,28 @@
-import { Box, Center, Spinner, Stack } from '@chakra-ui/react';
+import { Center, Spinner, Stack } from '@chakra-ui/react';
+import { useDebounce } from '@uidotdev/usehooks';
 import useEmblaCarousel from 'embla-carousel-react';
-import { WheelGesturesPlugin } from 'embla-carousel-wheel-gestures';
 import React from 'react';
 import { MdCabin } from 'react-icons/md';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import NoData from '~/components/NoData/NoData';
+import { useSearch } from '~/stores/useSearch';
 import { api } from '~/utils/api';
 import ProductsCard from './ProductCard';
 
 const LineOfProduct = () => {
-	const [emblaRef, emblaApi] = useEmblaCarousel(
-		{
-			inViewThreshold: 0,
-			dragFree: true,
-			containScroll: 'trimSnaps',
-			slides: document.querySelectorAll('.slider'),
-			container: document.querySelector('.container') as HTMLElement,
-		},
-		[
-			WheelGesturesPlugin({
-				wheelDraggingClass: 'wheel',
-			}),
-		]
-	);
+	const [emblaRef, emblaApi] = useEmblaCarousel({
+		inViewThreshold: 0,
+		dragFree: true,
+		containScroll: 'trimSnaps',
+		slides: document.querySelectorAll('.slider'),
+		container: document.querySelector('.container') as HTMLElement,
+	});
+	const { query } = useSearch();
 	const { data, fetchNextPage, hasNextPage } =
 		api.products.getForAll.useInfiniteQuery(
 			{
 				limit: 3,
+				search: useDebounce(query, 1000),
 			},
 			{
 				getNextPageParam: (lastPage) => {
@@ -53,7 +49,7 @@ const LineOfProduct = () => {
 		0
 	);
 	return (
-		<Box
+		<Stack
 			mb={10}
 			sx={{
 				maskImage:
@@ -97,7 +93,7 @@ const LineOfProduct = () => {
 					))}
 				</InfiniteScroll>
 			</Stack>
-		</Box>
+		</Stack>
 	);
 };
 
