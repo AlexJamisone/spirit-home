@@ -1,5 +1,5 @@
-import type { typeToFlattenedError } from 'zod';
 import { create } from 'zustand';
+import type { ZodError } from './types';
 
 export type AccordionState = {
 	input: {
@@ -15,8 +15,6 @@ export type AccordionState = {
 		msg?: ZodError;
 	};
 };
-
-type ZodError = typeToFlattenedError<any, string>['fieldErrors'];
 
 type AccordionAction = {
 	setInput: (input: AccordionState['input']) => void;

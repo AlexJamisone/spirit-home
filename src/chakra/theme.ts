@@ -9,6 +9,7 @@ const defultTheme: ThemeConfig = {
 const colors = {
 	brand: '#FF99FF',
 	second: '#000099',
+	secondLight: '#6161ff',
 };
 
 const fonts = {

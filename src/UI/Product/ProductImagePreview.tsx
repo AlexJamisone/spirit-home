@@ -47,7 +47,7 @@ const ProductImagePreview = () => {
 						opacity: index === currentIndex ? 1 : 0,
 						transition: {
 							type: 'spring',
-							duration: 0.5,
+							duration: 1,
 						},
 					}}
 				/>

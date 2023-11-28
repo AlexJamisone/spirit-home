@@ -17,7 +17,7 @@ export const categorysRouter = createTRPCRouter({
 	create: adminProcedure
 		.input(
 			z.object({
-				title: z.string().nonempty(),
+				title: z.string().nonempty({ message: 'Укажи категорию' }),
 				path: z
 					.string()
 					.trim()
@@ -41,9 +41,12 @@ export const categorysRouter = createTRPCRouter({
 	createSubCategory: adminProcedure
 		.input(
 			z.object({
-				id: z.string().nonempty(),
-				subTitle: z.string().trim(),
-				subPath: z
+				categoryId: z.string().nonempty(),
+				title: z
+					.string()
+					.nonempty({ message: 'Укажи подкатегорию' })
+					.trim(),
+				path: z
 					.string()
 					.trim()
 					.regex(/^[a-zA-Z]+$/, {
@@ -56,9 +59,9 @@ export const categorysRouter = createTRPCRouter({
 		.mutation(async ({ ctx, input }) => {
 			return await ctx.prisma.subCategory.create({
 				data: {
-					categoryId: input.id,
-					path: input.subPath,
-					title: input.subTitle,
+					categoryId: input.categoryId,
+					path: input.path,
+					title: input.title,
 				},
 			});
 		}),
@@ -66,8 +69,8 @@ export const categorysRouter = createTRPCRouter({
 		.input(
 			z.object({
 				id: z.string().nonempty(),
-				subTitle: z.string().trim().nonempty(),
-				subPath: z
+				title: z.string().trim().nonempty(),
+				path: z
 					.string()
 					.trim()
 					.regex(/^[a-zA-Z]+$/, {
@@ -83,8 +86,8 @@ export const categorysRouter = createTRPCRouter({
 					id: input.id,
 				},
 				data: {
-					title: input.subTitle,
-					path: input.subPath,
+					title: input.title,
+					path: input.path,
 				},
 			});
 		}),

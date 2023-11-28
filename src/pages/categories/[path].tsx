@@ -14,7 +14,6 @@ const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
 		category: path,
 	});
 	if (!products) return <NoData text="Пусто" icon={BsWind} />;
-	console.log(path);
 	return (
 		<Center pt={160} gap={5} flexWrap="wrap">
 			{products.map((product) => (

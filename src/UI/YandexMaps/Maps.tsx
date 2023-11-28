@@ -6,7 +6,6 @@ import PlacemarkPoint from './PlacemarkPoint';
 const Maps = () => {
 	const { address } = useNewOrder();
 	const [isLowerThen900] = useMediaQuery(['(max-width: 900px)']);
-	console.log(address);
 	return (
 		<Map
 			state={{
