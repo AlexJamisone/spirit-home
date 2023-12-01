@@ -1,22 +1,49 @@
 import { Image } from '@chakra-ui/next-js';
-import { Icon, IconButton, Stack } from '@chakra-ui/react';
+import { Icon, IconButton, Stack, useToast } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { TiDeleteOutline } from 'react-icons/ti';
-import { useCreateProductContext } from '~/context/createProductContext';
 import { env } from '~/env.mjs';
+import { useCreateProduct } from '~/stores/useCreateProduct';
+import { api } from '~/utils/api';
 
-const AdminCreateProductsImages = () => {
-	const { form, handlDeletImage } = useCreateProductContext();
+const AdminCreateImages = () => {
+	const { image, removeImag } = useCreateProduct();
+	const { mutate: deletImage } = api.products.deletImage.useMutation();
+	const ctx = api.useContext();
+	const toast = useToast();
+	const handlDeletImage = (id: string) => {
+		deletImage(
+			{ id },
+			{
+				onSuccess: () => {
+					void ctx.products.invalidate();
+					toast({
+						description: 'Картинка успешно удалена',
+						status: 'loading',
+						isClosable: true,
+					});
+					removeImag(id);
+				},
+				onError: ({ message }) => {
+					toast({
+						description: message,
+						status: 'error',
+						isClosable: true,
+					});
+				},
+			}
+		);
+	};
 	return (
 		<>
-			{form.image.length === 0 ? null : (
+			{image.length !== 0 && (
 				<Stack
 					direction="row"
 					flexWrap="wrap"
 					gap={5}
 					justifyContent="center"
 				>
-					{form.image.map((src, index) => (
+					{image.map((src, index) => (
 						<Stack
 							key={index}
 							position="relative"
@@ -47,13 +74,13 @@ const AdminCreateProductsImages = () => {
 										boxSize={7}
 									/>
 								}
-								onClick={() => handlDeletImage(src, index)}
+								onClick={() => handlDeletImage(src)}
 							/>
 							<Image
 								transitionDuration="0.5s"
 								objectFit="cover"
 								src={env.NEXT_PUBLIC_UPLOADTHING_URL + src}
-								alt="product"
+								alt={`product${src}`}
 								width={200}
 								height={200}
 								quality={100}
@@ -66,4 +93,4 @@ const AdminCreateProductsImages = () => {
 	);
 };
 
-export default AdminCreateProductsImages;
+export default AdminCreateImages;

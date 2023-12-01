@@ -1,11 +1,10 @@
-import { utapi } from 'uploadthing/server';
 import { z } from 'zod';
 import {
 	adminProcedure,
 	createTRPCRouter,
-	privetProcedure,
 	publicProcedure,
 } from '~/server/api/trpc';
+import { utapi } from '~/server/uploadthings';
 
 export const productsRouter = createTRPCRouter({
 	getByFavorites: publicProcedure
@@ -202,22 +201,24 @@ export const productsRouter = createTRPCRouter({
 				},
 			});
 		}),
-	deletImage: privetProcedure
-		.input(z.array(z.string()))
-		.mutation(({ input }) => {
-			const res = Promise.all(
-				input.map(async (fileName) => {
-					await utapi.deleteFiles(fileName);
-				})
-			);
-			return res;
+	deletImage: adminProcedure
+		.input(
+			z.object({
+				id: z.string(),
+			})
+		)
+		.mutation(async ({ input }) => {
+			const del = await utapi.deleteFiles(input.id);
+			return del.success;
 		}),
 	update: adminProcedure
 		.input(
 			z.object({
 				id: z.string().nonempty(),
 				name: z.string().nonempty(),
-				description: z.string().nonempty(),
+				description: z
+					.array(z.string())
+					.min(1, { message: 'Заполни Описание' }),
 				price: z.number().nonnegative(),
 				image: z.array(z.string()),
 				category: z.object({
@@ -236,7 +237,7 @@ export const productsRouter = createTRPCRouter({
 					},
 					data: {
 						name: input.name,
-						description: input.description,
+						description: input.description.filter(Boolean),
 						image: input.image,
 						subCategory: {
 							connect: {

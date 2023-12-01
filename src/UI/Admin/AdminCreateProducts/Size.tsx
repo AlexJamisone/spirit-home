@@ -1,12 +1,13 @@
 import { Stack } from '@chakra-ui/react';
-import { useCreateProductContext } from '~/context/createProductContext';
+import { api } from '~/utils/api';
 import SizeCard from './SizeCard';
 
 const Size = () => {
-	const { size } = useCreateProductContext();
+	const { data: sizes } = api.size.get.useQuery();
+	if (!sizes) return null;
 	return (
 		<Stack direction="row" flexWrap="wrap" justifyContent="center">
-			{size?.map((size) => (
+			{sizes.map((size) => (
 				<SizeCard size={size} key={size.id} />
 			))}
 		</Stack>

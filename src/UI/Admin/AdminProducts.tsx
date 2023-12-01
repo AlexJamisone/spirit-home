@@ -1,13 +1,12 @@
 import { Button, Icon, Stack, Text, useDisclosure } from '@chakra-ui/react';
 import type { Category, Product, Size, SubCategory } from '@prisma/client';
-import { useReducer } from 'react';
 import ProductsCard from '~/UI/Product/ProductCard';
 
 import { IoIosAddCircleOutline } from 'react-icons/io';
-import { FormProductReducer, initialState } from '~/reducer/FormReducer';
+import { useCreateProduct } from '~/stores/useCreateProduct';
 import { api } from '~/utils/api';
+import AdminCreateProduct from './AdminCreateProducts';
 import AdminCreateSize from './AdminCreateSize';
-import AdminProductsModal from './AdminProductsModal';
 
 const AdminProducts = () => {
 	const { isOpen, onClose, onToggle } = useDisclosure();
@@ -16,7 +15,7 @@ const AdminProducts = () => {
 		onClose: onCloseSize,
 		onToggle: onToggleSize,
 	} = useDisclosure();
-	const [form, dispatch] = useReducer(FormProductReducer, initialState);
+	const { setAll } = useCreateProduct();
 
 	const { data: user } = api.users.get.useQuery();
 	const { data: products } = api.products.getForAdmin.useQuery();
@@ -29,26 +28,23 @@ const AdminProducts = () => {
 			subCategory: SubCategory | null;
 		}
 	) => {
-		dispatch({
-			type: 'SET_ALL',
-			payload: {
-				id: product.id,
-				category: {
-					id:
-						product.category?.id ||
-						(product.subCategory?.id as string),
-					title:
-						product.categoryTitle ||
-						(product.subCategoryTitle as string),
-					sub: product.category ? false : true,
-				},
+		setAll({
+			category: {
+				id: product.category?.id || (product.subCategory?.id as string),
+				title:
+					product.category?.title ||
+					(product.subCategory?.title as string),
+				sub: product.category ? false : true,
+			},
+			id: product.id,
+			image: product.image,
+			input: {
 				description: product.description.join('\n\n'),
-				image: product.image,
 				name: product.name,
 				price: product.price,
-				size: product.size.map(({ id }) => id),
-				edit: true,
 			},
+			isEdit: true,
+			size: product.size.map(({ id }) => id),
 		});
 		onToggle();
 	};
@@ -65,7 +61,7 @@ const AdminProducts = () => {
 				h="300px"
 				variant="outline"
 				rightIcon={<Icon as={IoIosAddCircleOutline} boxSize={8} />}
-				onClick={() => onToggle()}
+				onClick={onToggle}
 			>
 				Добавить новый товар
 			</Button>
@@ -95,17 +91,7 @@ const AdminProducts = () => {
 				})
 			)}
 			<AdminCreateSize isOpen={isOpenSize} onClose={onCloseSize} />
-			<AdminProductsModal
-				isOpen={isOpen}
-				onClose={onClose}
-				form={form}
-				dispatch={dispatch}
-				action={<AdminProductsModal.Action />}
-				images={<AdminProductsModal.Images />}
-				inputs={<AdminProductsModal.Inputs />}
-				categories={<AdminProductsModal.Categories />}
-				drag={<AdminProductsModal.Drag />}
-			/>
+			<AdminCreateProduct isOpen={isOpen} onClose={onClose} />
 		</Stack>
 	);
 };

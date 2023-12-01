@@ -5,12 +5,17 @@ import {
 	Select,
 } from '@chakra-ui/react';
 import React, { type ChangeEvent } from 'react';
-import { useCreateProductContext } from '~/context/createProductContext';
+import { useCreateProduct } from '~/stores/useCreateProduct';
 import { api } from '~/utils/api';
 
 const CategoriesSelector = () => {
-	const { dispatch, form, error, isError, reset } = useCreateProductContext();
 	const { data: categories } = api.categorys.get.useQuery();
+	const {
+		setCategory,
+		error,
+		reset,
+		category: { title },
+	} = useCreateProduct();
 	const handlChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
 		const seletedValue = e.target.value;
 		let selectedId = '';
@@ -27,13 +32,12 @@ const CategoriesSelector = () => {
 				selectedId = id;
 			}
 		});
-		dispatch({
-			type: 'SET_CATEG',
-			payload: { title: seletedValue, id: selectedId, sub: isSubTitle },
-		});
+		setCategory({ title: seletedValue, id: selectedId, sub: isSubTitle });
 	};
 	return (
-		<FormControl isInvalid={isError && error?.category !== undefined}>
+		<FormControl
+			isInvalid={error?.isError && error?.msg.category !== undefined}
+		>
 			<FormLabel>Категория</FormLabel>
 			<Select
 				placeholder="Выбери категорию"
@@ -41,7 +45,7 @@ const CategoriesSelector = () => {
 					reset();
 					handlChangeSelect(e);
 				}}
-				defaultValue={form.category.title}
+				defaultValue={title}
 			>
 				{categories?.map(({ id, title, subCategory }) => (
 					<React.Fragment key={id}>
@@ -56,7 +60,7 @@ const CategoriesSelector = () => {
 				))}
 			</Select>
 			<FormErrorMessage fontWeight={600}>
-				{error?.category}
+				{error?.msg?.category}
 			</FormErrorMessage>
 		</FormControl>
 	);
