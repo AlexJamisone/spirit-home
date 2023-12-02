@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-
 type SerachState = {
 	query: string;
 	animationPlaceholder: boolean;

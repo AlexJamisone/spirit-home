@@ -5,6 +5,7 @@ import {
 	InputGroup,
 	InputLeftElement,
 } from '@chakra-ui/react';
+import type { ChangeEvent } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import { TypeAnimation } from 'react-type-animation';
 import { useSearch } from '~/stores/useSearch';
@@ -13,7 +14,9 @@ import { scrollToComponent } from '~/utils/scrollToComponent';
 const SearchInput = () => {
 	const { setSearch, animationPlaceholder, setAnimationPlaceholder } =
 		useSearch();
-
+	const handlValue = (e: ChangeEvent<HTMLInputElement>) => {
+		setSearch(e.target.value);
+	};
 	return (
 		<Center my={0} mx="auto">
 			<InputGroup>
@@ -30,10 +33,10 @@ const SearchInput = () => {
 					onChange={(e) => {
 						if (e.target.value.length === 0) {
 							setAnimationPlaceholder(true);
-							setSearch(e.target.value);
+							handlValue(e);
 						} else {
 							setAnimationPlaceholder(false);
-							setSearch(e.target.value);
+							handlValue(e);
 						}
 					}}
 				/>

@@ -5,6 +5,7 @@ import React from 'react';
 import { MdCabin } from 'react-icons/md';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import NoData from '~/components/NoData/NoData';
+import Placeholdes from '~/components/Placeholdes';
 import { useSearch } from '~/stores/useSearch';
 import { api } from '~/utils/api';
 import ProductsCard from './ProductCard';
@@ -17,6 +18,7 @@ const LineOfProduct = () => {
 		slides: document.querySelectorAll('.slider'),
 		container: document.querySelector('.container') as HTMLElement,
 	});
+
 	const { query } = useSearch();
 	const { data, fetchNextPage, hasNextPage } =
 		api.products.getForAll.useInfiniteQuery(
@@ -41,7 +43,7 @@ const LineOfProduct = () => {
 				},
 			}
 		);
-	if (!data) return null;
+	if (!data) return <Placeholdes quantity={3} />;
 	if (data.pages[0]?.items.length === 0)
 		return <NoData icon={MdCabin} text="Нет продуктов" />;
 	const dataLength = data.pages.reduce(
@@ -59,6 +61,7 @@ const LineOfProduct = () => {
 			className="wheel"
 			ref={emblaRef}
 			px={'200px'}
+			alignItems={dataLength < 5 ? 'center' : undefined}
 		>
 			<Stack direction="row" className="container">
 				<InfiniteScroll

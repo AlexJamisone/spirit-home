@@ -88,6 +88,7 @@ export const productsRouter = createTRPCRouter({
 				const nextItem = items.pop();
 				nextCursor = nextItem?.id;
 			}
+
 			return {
 				items,
 				nextCursor,
