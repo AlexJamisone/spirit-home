@@ -8,16 +8,10 @@ import {
 } from 'react-icons/md';
 import ImageFallback from '~/components/NoData/ImageFallback';
 import { env } from '~/env.mjs';
-import { api } from '~/utils/api';
-
-// type ProductImageSliderProps = {
-// 	image: string[];
-// };
-
+import { useProduct } from '~/hooks/useProduct';
 const ProductImageSlider = () => {
+	const { product } = useProduct();
 	const [selectedIndex, setSelectedIndex] = useState(0);
-	const ctx = api.useContext();
-	const data = ctx.products.getSinglProduct.getData();
 	const [emblaRef, emblaApi] = useEmblaCarousel({
 		startIndex: 0,
 	});
@@ -77,7 +71,7 @@ const ProductImageSlider = () => {
 		<Stack>
 			<Stack ref={emblaRef} overflow="hidden" position="relative">
 				<Stack direction="row">
-					{data?.image.map((src, index) => (
+					{product?.image.map((src, index) => (
 						<Image
 							fallback={<ImageFallback isSlider />}
 							key={index}
@@ -105,7 +99,7 @@ const ProductImageSlider = () => {
 				justifyContent="center"
 				overflow="hidden"
 			>
-				{data?.image.map((src, index) => (
+				{product?.image.map((src, index) => (
 					<Image
 						fallback={<ImageFallback width="100px" height="90px" />}
 						alt={`${src}`}

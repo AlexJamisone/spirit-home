@@ -1,12 +1,12 @@
 import { Button } from '@chakra-ui/react';
 import type { Size } from '@prisma/client';
-import { useProduct } from '~/stores/useProduct';
+import { useProductDitails } from '~/stores/useProductDitails';
 
 const ProductSizeBtn = ({ size }: { size: Size }) => {
-	const error = useProduct((state) => state.error);
-	const sizeValue = useProduct((state) => state.size);
-	const setSize = useProduct((state) => state.setSize);
-	const setError = useProduct((state) => state.setError);
+	const error = useProductDitails((state) => state.error);
+	const sizeValue = useProductDitails((state) => state.size);
+	const setSize = useProductDitails((state) => state.setSize);
+	const setError = useProductDitails((state) => state.setError);
 	return (
 		<Button
 			variant="outline"

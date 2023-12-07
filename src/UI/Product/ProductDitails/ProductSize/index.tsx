@@ -1,13 +1,12 @@
 import { Stack, Text } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useProduct } from '~/stores/useProduct';
-import { api } from '~/utils/api';
+import { useProduct } from '~/hooks/useProduct';
+import { useProductDitails } from '~/stores/useProductDitails';
 import ProductSizeBtn from './ProductSizeBtn';
 
 const ProductSize = () => {
-	const ctx = api.useContext();
-	const data = ctx.products.getSinglProduct.getData();
-	const error = useProduct((state) => state.error);
+	const { product } = useProduct();
+	const error = useProductDitails((state) => state.error);
 	return (
 		<Stack>
 			<Text fontWeight={600} textAlign="center">
@@ -19,7 +18,7 @@ const ProductSize = () => {
 				maxW={300}
 				justifyContent="center"
 			>
-				{data?.size.map((sz) => (
+				{product?.size.map((sz) => (
 					<ProductSizeBtn size={sz} key={sz.id} />
 				))}
 			</Stack>

@@ -1,14 +1,11 @@
 import { Stack } from '@chakra-ui/react';
 import ProductPlaceholder from '~/components/NoData/ProductPlaceholder';
-import { api } from '~/utils/api';
-import ProductAction from './ProductAction';
+import { useProduct } from '~/hooks/useProduct';
 import ProductDitailsInfo from './ProductDitailsInfo';
 import ProductImageSlider from './ProductImageSlider';
 
-const ProductDitails = ({ query }: { query: string }) => {
-	const { data: product, isLoading } = api.products.getSinglProduct.useQuery({
-		id: query,
-	});
+const ProductDitails = () => {
+	const { product, isLoading } = useProduct();
 	if (!product || isLoading) {
 		return <ProductPlaceholder />;
 	}
@@ -16,7 +13,6 @@ const ProductDitails = ({ query }: { query: string }) => {
 		<Stack direction="row" gap={20}>
 			<ProductImageSlider />
 			<ProductDitailsInfo />
-			<ProductAction />
 		</Stack>
 	);
 };

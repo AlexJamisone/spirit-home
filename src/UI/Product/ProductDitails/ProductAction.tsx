@@ -1,18 +1,17 @@
 import { Button, ButtonGroup, Icon, IconButton } from '@chakra-ui/react';
 import { TiHeartOutline } from 'react-icons/ti';
+import { useProduct } from '~/hooks/useProduct';
 import { useCart } from '~/stores/useCart';
 import { useFavorites } from '~/stores/useFavorites';
-import { useProduct } from '~/stores/useProduct';
-import { api } from '~/utils/api';
+import { useProductDitails } from '~/stores/useProductDitails';
 
 const ProductAction = () => {
-	const { size, setError, setCler } = useProduct();
+	const { size, setError, setCler } = useProductDitails();
 	const toggle = useFavorites((state) => state.toggle);
 	const ids = useFavorites((state) => state.ids);
 	const add = useCart((state) => state.add);
-	const ctx = api.useContext();
-	const data = ctx.products.getSinglProduct.getData();
-	if (!data) return null;
+	const { product } = useProduct();
+	if (!product) return null;
 	return (
 		<ButtonGroup isAttached variant="outline">
 			<Button
@@ -21,11 +20,11 @@ const ProductAction = () => {
 						setError({ isError: true, message: 'Выбери размер' });
 					} else {
 						add({
-							id: data.id,
-							image: data.image[0] ?? '',
-							price: data.price,
+							id: product.id,
+							image: product.image[0] ?? '',
+							price: product.price,
 							size: size,
-							title: data.name,
+							title: product.name,
 						});
 						setCler();
 					}
@@ -35,8 +34,8 @@ const ProductAction = () => {
 			</Button>
 			<IconButton
 				aria-label="like"
-				color={ids.includes(data.id) ? 'red.300' : undefined}
-				onClick={() => toggle(data.id)}
+				color={ids.includes(product.id) ? 'red.300' : undefined}
+				onClick={() => toggle(product.id)}
 				icon={<Icon as={TiHeartOutline} boxSize={5} />}
 			/>
 		</ButtonGroup>

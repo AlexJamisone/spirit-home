@@ -21,7 +21,7 @@ const initial: ProducState = {
 	error: null,
 };
 
-export const useProduct = create<Product>((set) => ({
+export const useProductDitails = create<Product>((set) => ({
 	...initial,
 	setCler: () => set(initial),
 	setSize: (size) =>
