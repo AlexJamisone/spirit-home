@@ -6,8 +6,11 @@ import { api } from '~/utils/api';
 const NewOrderAction = () => {
 	const { mutate: createNoAddress } =
 		api.orders.createNoAddressIsAuth.useMutation();
-	const { inputs, address, setError } = useNewOrder();
-	const { items, total } = useCart();
+	const inputs = useNewOrder((state) => state.inputs);
+	const address = useNewOrder((state) => state.address);
+	const setError = useNewOrder((state) => state.setError);
+	const items = useCart((state) => state.items);
+	const total = useCart((state) => state.total);
 	return (
 		<Button
 			onClick={() =>

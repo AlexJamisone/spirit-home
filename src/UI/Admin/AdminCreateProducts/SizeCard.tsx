@@ -7,7 +7,8 @@ type SizeCardProps = {
 };
 
 const SizeCard = ({ size }: SizeCardProps) => {
-	const { setSize, size: sizes } = useCreateProduct();
+	const sizes = useCreateProduct((state) => state.size);
+	const setSize = useCreateProduct((state) => state.setSize);
 	return (
 		<Stack w={'60px'}>
 			<Button

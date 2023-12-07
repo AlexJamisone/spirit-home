@@ -20,7 +20,7 @@ type AdminProductsModalProps = {
 };
 
 const AdminCreateProduct = ({ isOpen, onClose }: AdminProductsModalProps) => {
-	const { isEdit } = useCreateProduct();
+	const isEdit = useCreateProduct((state) => state.isEdit);
 	return (
 		<Modal
 			isOpen={isOpen}

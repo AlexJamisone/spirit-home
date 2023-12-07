@@ -3,11 +3,9 @@ import { motion } from 'framer-motion';
 import { useNewOrder } from '~/stores/useNewOrder';
 
 const CdekPointCard = () => {
-	const {
-		address: { selectedPoint },
-		controls,
-		setControls,
-	} = useNewOrder();
+	const selectedPoint = useNewOrder((state) => state.address.selectedPoint);
+	const controls = useNewOrder((state) => state.controls);
+	const setControls = useNewOrder((state) => state.setControls);
 	return (
 		<Stack
 			maxW={400}

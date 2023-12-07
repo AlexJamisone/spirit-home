@@ -7,15 +7,17 @@ type ProducCreateActionProp = {
 };
 
 const ProducCreateAction = ({ onClose }: ProducCreateActionProp) => {
-	const {
-		id,
-		isEdit,
-		input: { description, name, price },
-		category: { id: catId, sub },
-		image,
-		size,
-		setClear,
-	} = useCreateProduct();
+	const id = useCreateProduct((state) => state.id);
+	const isEdit = useCreateProduct((state) => state.isEdit);
+	const description = useCreateProduct((state) => state.input.description);
+	const name = useCreateProduct((state) => state.input.name);
+	const price = useCreateProduct((state) => state.input.price);
+	const catId = useCreateProduct((state) => state.category.id);
+	const sub = useCreateProduct((state) => state.category.sub);
+	const image = useCreateProduct((state) => state.image);
+	const size = useCreateProduct((state) => state.size);
+	const setClear = useCreateProduct((state) => state.setClear);
+
 	const { mutate: create, isLoading: isLoadingCreate } =
 		api.products.create.useMutation();
 	const { mutate: update, isLoading: isLoadingUpdate } =

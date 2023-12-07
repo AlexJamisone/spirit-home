@@ -1,11 +1,10 @@
 import { Stack, Text } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useProductContext } from '~/context/productContext';
+import { api } from '~/utils/api';
 
 const ProductDescription = () => {
-	const {
-		product: { description },
-	} = useProductContext();
+	const ctx = api.useContext();
+	const data = ctx.products.getSinglProduct.getData();
 	return (
 		<AnimatePresence>
 			<Stack
@@ -16,7 +15,7 @@ const ProductDescription = () => {
 				textAlign="center"
 				textColor="blackAlpha.600"
 			>
-				{description.map((dsk, index) => (
+				{data?.description.map((dsk, index) => (
 					<Text key={index}>{dsk}</Text>
 				))}
 			</Stack>

@@ -15,7 +15,7 @@ const AdminProducts = () => {
 		onClose: onCloseSize,
 		onToggle: onToggleSize,
 	} = useDisclosure();
-	const { setAll } = useCreateProduct();
+	const setAll = useCreateProduct((state) => state.setAll);
 
 	const { data: user } = api.users.get.useQuery();
 	const { data: products } = api.products.getForAdmin.useQuery();
@@ -82,9 +82,6 @@ const AdminProducts = () => {
 							key={product.id}
 							role={user?.role}
 							product={product}
-							image={<ProductsCard.Image />}
-							info={<ProductsCard.Info />}
-							tag={<ProductsCard.Tag />}
 							handlEdit={handlEdit}
 						/>
 					);

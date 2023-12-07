@@ -8,7 +8,9 @@ import Inputs from './Inputs';
 import NewOrderAction from './NewOrderAction';
 
 const NewOrder = () => {
-	const { controls, setPoint } = useNewOrder();
+	// const { controls, setPoint } = useNewOrder();
+	const controls = useNewOrder((state) => state.controls);
+	const setPoint = useNewOrder((state) => state.setPoint);
 	const { data: user } = api.users.get.useQuery();
 	return (
 		<Stack alignItems="center" gap={10}>

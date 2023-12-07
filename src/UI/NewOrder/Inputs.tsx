@@ -5,7 +5,10 @@ import { useNewOrder, type NewOrderInput } from '~/stores/useNewOrder';
 import SelectAddress from './SelectAddress';
 
 const Inputs = () => {
-	const { inputs, setInput, error, resetError } = useNewOrder();
+	const setInput = useNewOrder((state) => state.setInput);
+	const error = useNewOrder((state) => state.error);
+	const inputs = useNewOrder((state) => state.inputs);
+	const resetError = useNewOrder((state) => state.resetError);
 	return (
 		<Stack w={300} gap={5}>
 			{userContactInfo.map(({ name, placeholder, id }) => (

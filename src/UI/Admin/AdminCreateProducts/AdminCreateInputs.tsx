@@ -13,7 +13,10 @@ import {
 } from '~/stores/useCreateProduct';
 
 const AdminCreateInputs = () => {
-	const { error, input, setInput } = useCreateProduct();
+	// const { error, input, setInput } = useCreateProduct();
+	const error = useCreateProduct((state) => state.error);
+	const input = useCreateProduct((state) => state.input);
+	const setInput = useCreateProduct((state) => state.setInput);
 	return (
 		<Stack>
 			{createProductInput.map(

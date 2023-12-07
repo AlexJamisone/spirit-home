@@ -21,7 +21,7 @@ type AccordionAction = {
 	setEdit: (isEdit: boolean, id: string) => void;
 	setClear: () => void;
 	setError: (isError: boolean, msg?: ZodError) => void;
-	rest: () => void;
+	reset: () => void;
 };
 
 type Accordion = AccordionState & AccordionAction;
@@ -44,5 +44,5 @@ export const useAccordion = create<Accordion>((set) => ({
 	setEdit: (isEdit, id) => set(() => ({ isEdit: { edit: isEdit, id } })),
 	setClear: () => set(() => initial),
 	setError: (isError, msg) => set(() => ({ error: { isError, msg } })),
-	rest: () => set(() => ({ error: undefined })),
+	reset: () => set(() => ({ error: undefined })),
 }));

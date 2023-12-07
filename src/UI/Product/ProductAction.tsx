@@ -1,22 +1,14 @@
-import {
-	Button,
-	Icon,
-	IconButton,
-	Spinner,
-	type ButtonProps,
-} from '@chakra-ui/react';
+import { Icon, IconButton, Spinner, useToast } from '@chakra-ui/react';
 import type { IconType } from 'react-icons';
 import { BiArchiveIn, BiArchiveOut } from 'react-icons/bi';
-import { useProductCardContext } from '~/context/productCardContext';
-import Overlay from '../../components/NoData/Overlay';
+import Overlay from '~/components/NoData/Overlay';
+import { api } from '~/utils/api';
 
-type ProductActionProps = {
-	container?: ButtonProps;
-};
-
-const ProductAction = ({ container }: ProductActionProps) => {
-	const { product, role, handleArchivedProduct, isLoading } =
-		useProductCardContext();
+const ProductAction = ({ archived, id }: { archived: boolean; id: string }) => {
+	const { mutate: archivedProduct, isLoading } =
+		api.products.archived.useMutation();
+	const ctx = api.useContext();
+	const toast = useToast();
 	const handlArchiveButton = (icon: IconType) => {
 		return (
 			<IconButton
@@ -27,9 +19,34 @@ const ProductAction = ({ container }: ProductActionProps) => {
 				top={5}
 				right={5}
 				zIndex={20}
-				onClick={(e) =>
-					handleArchivedProduct?.(product.id, product.name, e)
-				}
+				onClick={(e) => {
+					archivedProduct(
+						{
+							id,
+							action: !archived,
+						},
+						{
+							onSuccess: () => {
+								toast({
+									description: archived
+										? `Товар успешно архивирован!🚀`
+										: `Товар успешно восстоновлен!🎉`,
+									status: archived ? 'info' : 'success',
+									isClosable: true,
+								});
+								void ctx.products.invalidate();
+							},
+							onError: () => {
+								toast({
+									description: `Ошбка с удалением ❌`,
+									status: 'error',
+									isClosable: true,
+								});
+							},
+						}
+					);
+					e.stopPropagation();
+				}}
 			/>
 		);
 	};
@@ -47,22 +64,15 @@ const ProductAction = ({ container }: ProductActionProps) => {
 					/>
 				</>
 			) : null}
-			{product.archived ? (
+			{archived ? (
 				<>
 					<Overlay />
 				</>
 			) : null}
-			{role === 'ADMIN' ? (
-				<>
-					{product.archived
-						? handlArchiveButton(BiArchiveOut)
-						: handlArchiveButton(BiArchiveIn)}
-				</>
-			) : (
-				<Button {...container} variant="outline" size={['sm', 'md']}>
-					В корзину
-				</Button>
-			)}
+
+			{archived
+				? handlArchiveButton(BiArchiveOut)
+				: handlArchiveButton(BiArchiveIn)}
 		</>
 	);
 };

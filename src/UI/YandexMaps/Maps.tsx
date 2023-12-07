@@ -4,7 +4,7 @@ import { useNewOrder } from '~/stores/useNewOrder';
 import PlacemarkPoint from './PlacemarkPoint';
 
 const Maps = () => {
-	const { address } = useNewOrder();
+	const address = useNewOrder((state) => state.address);
 	const [isLowerThen900] = useMediaQuery(['(max-width: 900px)']);
 	return (
 		<Map

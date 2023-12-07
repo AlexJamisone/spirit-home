@@ -10,7 +10,10 @@ import { accordionsInput } from '~/constants/accordions';
 import { useAccordion, type AccordionState } from '~/stores/useAccordion';
 
 const Inputs = () => {
-	const { input, setInput, error, rest } = useAccordion();
+	const input = useAccordion((state) => state.input);
+	const setInput = useAccordion((state) => state.setInput);
+	const error = useAccordion((state) => state.error);
+	const reset = useAccordion((state) => state.reset);
 	return (
 		<Stack>
 			{accordionsInput.map(
@@ -30,7 +33,7 @@ const Inputs = () => {
 							value={input[name]}
 							onChange={(e) => {
 								if (error?.isError) {
-									rest();
+									reset();
 								}
 								setInput({
 									[name]: e.target.value,

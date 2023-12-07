@@ -17,9 +17,7 @@ type AccordionCreateProps = {
 };
 
 const AccordionCreate = ({ isOpen, onClose }: AccordionCreateProps) => {
-	const {
-		isEdit: { edit },
-	} = useAccordion();
+	const edit = useAccordion((state) => state.isEdit.edit);
 	return (
 		<Modal isOpen={isOpen} onClose={onClose} isCentered>
 			<ModalOverlay />

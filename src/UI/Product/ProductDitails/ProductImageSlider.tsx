@@ -7,14 +7,17 @@ import {
 	MdOutlineKeyboardArrowRight,
 } from 'react-icons/md';
 import ImageFallback from '~/components/NoData/ImageFallback';
-import { useProductContext } from '~/context/productContext';
 import { env } from '~/env.mjs';
+import { api } from '~/utils/api';
+
+// type ProductImageSliderProps = {
+// 	image: string[];
+// };
 
 const ProductImageSlider = () => {
-	const {
-		product: { image },
-	} = useProductContext();
 	const [selectedIndex, setSelectedIndex] = useState(0);
+	const ctx = api.useContext();
+	const data = ctx.products.getSinglProduct.getData();
 	const [emblaRef, emblaApi] = useEmblaCarousel({
 		startIndex: 0,
 	});
@@ -74,7 +77,7 @@ const ProductImageSlider = () => {
 		<Stack>
 			<Stack ref={emblaRef} overflow="hidden" position="relative">
 				<Stack direction="row">
-					{image.map((src, index) => (
+					{data?.image.map((src, index) => (
 						<Image
 							fallback={<ImageFallback isSlider />}
 							key={index}
@@ -102,7 +105,7 @@ const ProductImageSlider = () => {
 				justifyContent="center"
 				overflow="hidden"
 			>
-				{image.map((src, index) => (
+				{data?.image.map((src, index) => (
 					<Image
 						fallback={<ImageFallback width="100px" height="90px" />}
 						alt={`${src}`}

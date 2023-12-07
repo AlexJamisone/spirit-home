@@ -7,7 +7,7 @@ import Counter from '~/components/Counter';
 import { useFavorites } from '~/stores/useFavorites';
 
 const FavoritesButton = () => {
-	const { ids } = useFavorites();
+	const ids = useFavorites((state) => state.ids);
 	if (ids.length === 0) return null;
 	return (
 		<Stack

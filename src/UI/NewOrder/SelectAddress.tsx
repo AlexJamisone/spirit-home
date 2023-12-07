@@ -17,7 +17,10 @@ import { api } from '~/utils/api';
 
 const SelectAddress = () => {
 	const { mutate: getPoints, isLoading } = api.cdek.getPoints.useMutation();
-	const { setControls, address, controls, setPoint } = useNewOrder();
+	const setControls = useNewOrder((state) => state.setControls);
+	const address = useNewOrder((state) => state.address);
+	const controls = useNewOrder((state) => state.controls);
+	const setPoint = useNewOrder((state) => state.setPoint);
 	const suggestionsRef = useRef<AddressSuggestions>(null);
 
 	const handlPoints = (

@@ -26,15 +26,12 @@ const AdminAlert = ({
 	body,
 	sub,
 }: AdminAlertProps) => {
-	const {
-		category: {
-			edit: { categoryId },
-		},
-		subCategory: {
-			edit: { subCategoryId },
-		},
-		setClear,
-	} = useCategory();
+	const setClear = useCategory((state) => state.setClear);
+	const subCategoryId = useCategory(
+		(state) => state.subCategory.edit.subCategoryId
+	);
+	const categoryId = useCategory((state) => state.category.edit.categoryId);
+
 	const { mutate: deleteCategory, isLoading: loadingDelMain } =
 		api.categorys.delete.useMutation();
 	const { mutate: deletSubCategory, isLoading: loadingDelSub } =

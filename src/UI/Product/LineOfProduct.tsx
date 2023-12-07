@@ -19,12 +19,12 @@ const LineOfProduct = () => {
 		container: document.querySelector('.container') as HTMLElement,
 	});
 
-	const { query } = useSearch();
+	const search = useSearch();
 	const { data, fetchNextPage, hasNextPage } =
 		api.products.getForAll.useInfiniteQuery(
 			{
 				limit: 3,
-				search: useDebounce(query, 1000),
+				search: useDebounce(search.query, 1000),
 			},
 			{
 				getNextPageParam: (lastPage) => {
@@ -85,10 +85,7 @@ const LineOfProduct = () => {
 									<ProductsCard
 										key={product.id}
 										product={product}
-										image={<ProductsCard.Image />}
-										info={<ProductsCard.Info />}
 										role="USER"
-										favorites={<ProductsCard.Favorites />}
 									/>
 								</Stack>
 							))}

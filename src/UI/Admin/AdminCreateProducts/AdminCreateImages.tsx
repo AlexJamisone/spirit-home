@@ -7,7 +7,8 @@ import { useCreateProduct } from '~/stores/useCreateProduct';
 import { api } from '~/utils/api';
 
 const AdminCreateImages = () => {
-	const { image, removeImag } = useCreateProduct();
+	const image = useCreateProduct((state) => state.image);
+	const removeImag = useCreateProduct((state) => state.removeImag);
 	const { mutate: deletImage } = api.products.deletImage.useMutation();
 	const ctx = api.useContext();
 	const toast = useToast();

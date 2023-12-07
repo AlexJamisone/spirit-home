@@ -21,7 +21,8 @@ type CartItemProps = {
 const CartItem = ({
 	item: { image, title, quantity, id, price, size },
 }: CartItemProps) => {
-	const { update, remove } = useCart();
+	const remove = useCart((state) => state.remove);
+	const update = useCart((state) => state.update);
 	const handlCount = (icon: IconType, action: 'plus' | 'minus') => {
 		return (
 			<IconButton

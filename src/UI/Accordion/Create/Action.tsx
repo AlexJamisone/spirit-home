@@ -13,13 +13,12 @@ export const Action = ({ onClose }: ActionProps) => {
 		api.accordions.update.useMutation();
 	const ctx = api.useContext();
 	const toast = useToast();
-
-	const {
-		isEdit: { edit, id },
-		input: { content, title },
-		setClear,
-		setError,
-	} = useAccordion();
+	const edit = useAccordion((state) => state.isEdit.edit);
+	const id = useAccordion((state) => state.isEdit.id);
+	const content = useAccordion((state) => state.input.content);
+	const title = useAccordion((state) => state.input.title);
+	const setClear = useAccordion((state) => state.setClear);
+	const setError = useAccordion((state) => state.setError);
 	const handlAction = () => {
 		if (edit) {
 			update(

@@ -17,14 +17,7 @@ const CategorysPage: NextPage<{ path: string }> = ({ path }) => {
 	return (
 		<Center pt={160} gap={5} flexWrap="wrap">
 			{products.map((product) => (
-				<ProductsCard
-					key={product.id}
-					product={product}
-					role="USER"
-					info={<ProductsCard.Info />}
-					image={<ProductsCard.Image />}
-					favorites={<ProductsCard.Favorites />}
-				/>
+				<ProductsCard key={product.id} product={product} role="USER" />
 			))}
 		</Center>
 	);

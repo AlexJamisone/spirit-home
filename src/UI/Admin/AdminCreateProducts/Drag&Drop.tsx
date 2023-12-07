@@ -4,7 +4,9 @@ import { useCreateProduct } from '~/stores/useCreateProduct';
 import { UploadDropzone } from '~/utils/uploadthings';
 
 const DragDrop = () => {
-	const { error, reset, setImage } = useCreateProduct();
+	const error = useCreateProduct((state) => state.error);
+	const reset = useCreateProduct((state) => state.reset);
+	const setImage = useCreateProduct((state) => state.setImage);
 	const imgError = error?.isError && error?.msg?.image !== undefined;
 	return (
 		<FormControl

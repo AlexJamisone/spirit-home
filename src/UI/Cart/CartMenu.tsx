@@ -19,7 +19,8 @@ import { useCart } from '~/stores/useCart';
 import CartItem from './CartItem';
 
 const CartMenu = () => {
-	const { items, total } = useCart();
+	const items = useCart((state) => state.items);
+	const total = useCart((state) => state.total);
 	return (
 		<Menu autoSelect={false}>
 			{({ onClose: closeCart }) => (

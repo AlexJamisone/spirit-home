@@ -1,8 +1,5 @@
 import { Stack, Text } from '@chakra-ui/react';
-import { useProductCardContext } from '~/context/productCardContext';
-
-const ProductInfo = () => {
-	const { product } = useProductCardContext();
+const ProductInfo = ({ name }: { name: string }) => {
 	return (
 		<Stack
 			fontWeight={400}
@@ -10,7 +7,7 @@ const ProductInfo = () => {
 			fontSize={16}
 			textAlign="center"
 		>
-			<Text>{product.name}</Text>
+			<Text>{name}</Text>
 		</Stack>
 	);
 };

@@ -10,12 +10,10 @@ import { api } from '~/utils/api';
 
 const CategoriesSelector = () => {
 	const { data: categories } = api.categorys.get.useQuery();
-	const {
-		setCategory,
-		error,
-		reset,
-		category: { title },
-	} = useCreateProduct();
+	const setCategory = useCreateProduct((state) => state.setCategory);
+	const error = useCreateProduct((state) => state.error);
+	const reset = useCreateProduct((state) => state.reset);
+	const title = useCreateProduct((state) => state.category.title);
 	const handlChangeSelect = (e: ChangeEvent<HTMLSelectElement>) => {
 		const seletedValue = e.target.value;
 		let selectedId = '';

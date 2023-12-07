@@ -8,7 +8,7 @@ import { useFavorites } from '~/stores/useFavorites';
 import { api } from '~/utils/api';
 
 const FavoritesPage = () => {
-	const { ids } = useFavorites();
+	const ids = useFavorites((state) => state.ids);
 	const { data: products } = api.products.getByFavorites.useQuery({
 		ids,
 	});
@@ -32,10 +32,7 @@ const FavoritesPage = () => {
 					<ProductsCard
 						key={product.id}
 						product={product}
-						favorites={<ProductsCard.Favorites />}
-						image={<ProductsCard.Image />}
 						role="USER"
-						info={<ProductsCard.Info />}
 					/>
 				))}
 			</AnimatePresence>

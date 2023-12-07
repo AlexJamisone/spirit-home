@@ -26,7 +26,8 @@ const AccardionStick = ({ accordion, onToggle }: AccardionStickProps) => {
 	const { data: role } = api.users.getUserRole.useQuery();
 	const ctx = api.useContext();
 	const toast = useToast();
-	const { setEdit, setInput } = useAccordion();
+	const setInput = useAccordion((state) => state.setInput);
+	const setEdit = useAccordion((state) => state.setEdit);
 
 	return (
 		<AccordionItem>

@@ -1,11 +1,7 @@
 import { Text } from '@chakra-ui/react';
-import { useProductCardContext } from '~/context/productCardContext';
 
-const ProductPrice = () => {
-	const { product } = useProductCardContext();
-	return (
-		<Text textColor="second" fontWeight={600}>{`${product.price} ₽`}</Text>
-	);
+const ProductPrice = ({ price }: { price: number }) => {
+	return <Text textColor="second" fontWeight={600}>{`${price} ₽`}</Text>;
 };
 
 export default ProductPrice;

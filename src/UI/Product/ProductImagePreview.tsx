@@ -1,17 +1,15 @@
 import { Image, Skeleton, Stack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { useState, type MouseEvent } from 'react';
-import { useProductCardContext } from '~/context/productCardContext';
 import { env } from '~/env.mjs';
 
-const ProductImagePreview = () => {
-	const { product } = useProductCardContext();
+const ProductImagePreview = ({ image }: { image: string[] }) => {
 	const [currentIndex, setCurrentIndex] = useState(0);
 	const handlMouseMove = (e: MouseEvent<HTMLDivElement>) => {
 		const x = e.nativeEvent.offsetX;
 		const imageWidth = e.currentTarget.clientWidth;
-		const newIndex = Math.floor((x / imageWidth) * product.image.length);
-		if (newIndex >= 0 && newIndex < product.image.length) {
+		const newIndex = Math.floor((x / imageWidth) * image.length);
+		if (newIndex >= 0 && newIndex < image.length) {
 			setCurrentIndex(newIndex);
 		}
 	};
@@ -25,7 +23,7 @@ const ProductImagePreview = () => {
 			w={250}
 			overflow="hidden"
 		>
-			{product.image.map((id, index) => (
+			{image.map((id, index) => (
 				<Image
 					fallback={
 						<Skeleton

@@ -1,32 +1,25 @@
 import { Button } from '@chakra-ui/react';
 import type { Size } from '@prisma/client';
-import { useProductContext } from '~/context/productContext';
+import { useProduct } from '~/stores/useProduct';
 
 const ProductSizeBtn = ({ size }: { size: Size }) => {
-	const { prodAction, productDitalState } = useProductContext();
+	const error = useProduct((state) => state.error);
+	const sizeValue = useProduct((state) => state.size);
+	const setSize = useProduct((state) => state.setSize);
+	const setError = useProduct((state) => state.setError);
 	return (
 		<Button
 			variant="outline"
-			borderColor={
-				productDitalState.error?.isError ? 'orange.300' : undefined
-			}
+			borderColor={error?.isError ? 'orange.300' : undefined}
 			size={{
 				xl: 'sm',
 				'2xl': 'md',
 			}}
 			onClick={() => {
-				prodAction({
-					type: 'SET_ALL',
-					payload: {
-						error: {
-							isError: false,
-							message: '',
-						},
-						size: size.value,
-					},
-				});
+				setError({ message: '', isError: false });
+				setSize(size.value);
 			}}
-			isActive={productDitalState.size === size.value}
+			isActive={sizeValue === size.value}
 		>
 			{size.value}
 		</Button>
