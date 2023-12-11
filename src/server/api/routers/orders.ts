@@ -112,6 +112,7 @@ export const ordersRouter = createTRPCRouter({
 							data: getFromCartItems(input.cart),
 						},
 					},
+					total: input.cart.total,
 					userId: ctx.userId,
 				},
 				include: {
@@ -119,7 +120,7 @@ export const ordersRouter = createTRPCRouter({
 				},
 			});
 			//here bot notification
-			return create;
+			return create.orderNumber;
 		}),
 	createNoAddressIsAuth: publicProcedure
 		.input(
@@ -162,11 +163,12 @@ export const ordersRouter = createTRPCRouter({
 							data: getFromCartItems(input.cart),
 						},
 					},
+					total: input.cart.total,
 					userId: ctx.userId,
 				},
 			});
 			//here bot notification
-			return createOrder;
+			return createOrder.orderNumber;
 		}),
 	createNoAuth: publicProcedure
 		.input(
@@ -230,6 +232,7 @@ export const ordersRouter = createTRPCRouter({
 								data: getFromCartItems(input.cart),
 							},
 						},
+						total: input.cart.total,
 						address: {
 							create: {
 								contactPhone: input.contactPhone,
@@ -252,7 +255,7 @@ export const ordersRouter = createTRPCRouter({
 					},
 				});
 				//here bot notification
-				return createOrder;
+				return createOrder.orderNumber;
 			} else {
 				const createOrder = await ctx.prisma.order.create({
 					data: {
@@ -269,10 +272,11 @@ export const ordersRouter = createTRPCRouter({
 								data: getFromCartItems(input.cart),
 							},
 						},
+						total: input.cart.total,
 					},
 				});
 				//hers bot notification
-				return createOrder;
+				return createOrder.orderNumber;
 			}
 		}),
 	changeViewd: adminProcedure

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import AdminCategorys from '~/UI/Admin/AdmiCategorys';
+import AdminStatistics from '~/UI/Admin/AdminCharts/AdminStatistics';
 import AdminProducts from '~/UI/Admin/AdminProducts';
 import Layout from '~/components/Layout';
 import ProtectionRoutes from '~/guards/ProtectionRoutes';
@@ -10,15 +11,7 @@ const Admin = () => {
 	const handlAdmin = () => {
 		switch (path) {
 			case 'statictic':
-				return (
-					// <AdminStatistics
-					// 	charts={<AdminStatistics.Charts />}
-					// 	stat={<AdminStatistics.Stat />}
-					// 	pick={<AdminStatistics.Pick />}
-					// 	visitors={<AdminStatistics.Visitors />}
-					// />
-					<></>
-				);
+				return <AdminStatistics />;
 			case 'categorys':
 				return <AdminCategorys />;
 			case 'product':

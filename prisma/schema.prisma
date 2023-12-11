@@ -89,6 +89,7 @@ model Order {
     address     Address?    @relation(fields: [addressId], references: [id])
     addressId   String?
     trase       String?
+    total       Int
 }
 
 model OrderItem {

@@ -8,12 +8,13 @@ const defultTheme: ThemeConfig = {
 
 const colors = {
 	brand: '#FF99FF',
+	brandLight: '#EFCAEF',
 	second: '#000099',
 	secondLight: '#6161ff',
 };
 
 const fonts = {
-	heading: `'Crimson Text', serif`,
+	heading: `'Jost', sans-serif`,
 };
 
 const theme = extendTheme({

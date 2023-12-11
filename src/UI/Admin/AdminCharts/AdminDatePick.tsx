@@ -2,10 +2,13 @@ import { Icon, IconButton, Stack } from '@chakra-ui/react';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
 import { motion } from 'framer-motion';
 import { MdDone } from 'react-icons/md';
-import { useChartsContext } from '~/context/chartsContext';
+import { useDateRange } from '~/stores/useDateRange';
 const AdminDatePick = () => {
-	const { isDate, selectedDate, setSelectedDate, setIsDate, setSend } =
-		useChartsContext();
+	const isDate = useDateRange((state) => state.isDate);
+	const selectedDate = useDateRange((state) => state.selectedDate);
+	const setSelectedDate = useDateRange((state) => state.setSelectedDate);
+	const setIsDate = useDateRange((state) => state.setIsDate);
+	const setSend = useDateRange((state) => state.setSend);
 	return (
 		<Stack direction="row" justifyContent="center">
 			<RangeDatepicker
@@ -30,6 +33,15 @@ const AdminDatePick = () => {
 					inputProps: {
 						cursor: 'pointer',
 						w: '300px',
+					},
+					dayOfMonthBtnProps: {
+						defaultBtnProps: {
+							fontFamily: `'Jost', sans-serif`,
+							fontWeight: 400,
+						},
+						isInRangeBtnProps: {
+							bgColor: 'brandLight',
+						},
 					},
 				}}
 			/>
