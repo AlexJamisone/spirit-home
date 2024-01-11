@@ -1,4 +1,4 @@
-import { Button } from '@chakra-ui/react';
+import { Button, useToast } from '@chakra-ui/react';
 import { useCreateProduct } from '~/stores/useCreateProduct';
 import { api } from '~/utils/api';
 
@@ -17,7 +17,9 @@ const ProducCreateAction = ({ onClose }: ProducCreateActionProp) => {
 	const image = useCreateProduct((state) => state.image);
 	const size = useCreateProduct((state) => state.size);
 	const setClear = useCreateProduct((state) => state.setClear);
-
+	const setError = useCreateProduct((state) => state.setError);
+	const toast = useToast();
+	const ctx = api.useContext();
 	const { mutate: create, isLoading: isLoadingCreate } =
 		api.products.create.useMutation();
 	const { mutate: update, isLoading: isLoadingUpdate } =
@@ -25,30 +27,62 @@ const ProducCreateAction = ({ onClose }: ProducCreateActionProp) => {
 
 	const handlProductAction = () => {
 		if (isEdit) {
-			update({
-				category: {
-					id: catId,
-					sub,
+			update(
+				{
+					category: {
+						id: catId,
+						sub,
+					},
+					description: description.split(/\n/g),
+					name,
+					image,
+					id,
+					price,
+					size,
 				},
-				description: description.split(/\n/g),
-				name,
-				image,
-				id,
-				price,
-				size,
-			});
+				{
+					onSuccess: () => {
+						void ctx.products.invalidate();
+						toast({
+							description: 'Продукт успешно обновлён!',
+							status: 'info',
+							isClosable: true,
+							duration: 3000,
+						});
+						onClose();
+					},
+				}
+			);
 		} else {
-			create({
-				category: {
-					id: catId,
-					sub,
+			create(
+				{
+					category: {
+						id: catId,
+						sub,
+					},
+					description: description.split(/\n/g),
+					image,
+					name,
+					price,
+					size,
 				},
-				description: description.split(/\n/g),
-				image,
-				name,
-				price,
-				size,
-			});
+				{
+					onSuccess: () => {
+						void ctx.products.invalidate();
+						toast({
+							description: 'Товар успешно создан!',
+							status: 'success',
+							isClosable: true,
+						});
+						onClose();
+					},
+					onError: (error) => {
+						const err = error.data?.zodError?.fieldErrors;
+						if (err) {
+						}
+					},
+				}
+			);
 		}
 	};
 	return (

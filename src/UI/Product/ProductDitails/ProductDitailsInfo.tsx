@@ -1,4 +1,4 @@
-import { Heading, Stack } from '@chakra-ui/react';
+import { Heading, Stack, Text } from '@chakra-ui/react';
 import { useProduct } from '~/hooks/useProduct';
 import ProductAction from './ProductAction';
 import ProductDescription from './ProductDescription';
@@ -17,6 +17,13 @@ const ProductDitailsInfo = () => {
 			}}
 		>
 			<Heading>{product?.name}</Heading>
+			<Text
+				fontSize={'2xl'}
+				fontWeight={600}
+				fontFamily={`'Jost', sans-serif`}
+			>
+				{product?.price} ₽
+			</Text>
 			<ProductSize />
 			<ProductDescription />
 			<ProductAction />

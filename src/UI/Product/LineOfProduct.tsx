@@ -45,7 +45,11 @@ const LineOfProduct = () => {
 		);
 	if (!data) return <Placeholdes quantity={3} />;
 	if (data.pages[0]?.items.length === 0)
-		return <NoData icon={MdCabin} text="Нет продуктов" />;
+		return (
+			<Stack minH={350} justifyContent={'center'}>
+				<NoData icon={MdCabin} text="Нет продуктов" />
+			</Stack>
+		);
 	const dataLength = data.pages.reduce(
 		(totalLength, page) => totalLength + page.items.length,
 		0
