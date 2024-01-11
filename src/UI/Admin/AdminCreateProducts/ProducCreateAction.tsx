@@ -79,6 +79,16 @@ const ProducCreateAction = ({ onClose }: ProducCreateActionProp) => {
 					onError: (error) => {
 						const err = error.data?.zodError?.fieldErrors;
 						if (err) {
+							setError({
+								isError: true,
+								msg: err,
+							});
+						} else {
+							toast({
+								description: error.message,
+								status: 'error',
+								isClosable: true,
+							});
 						}
 					},
 				}

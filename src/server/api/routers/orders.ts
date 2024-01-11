@@ -44,27 +44,13 @@ function getFromCartItems(cart: (typeof cartInput)['_input']) {
 export const ordersRouter = createTRPCRouter({
 	get: adminProcedure.query(async ({ ctx }) => {
 		return await ctx.prisma.order.findMany({
-			select: {
+			include: {
+				address: true,
 				orderItem: {
 					include: {
-						product: {
-							include: {
-								size: true,
-							},
-						},
+						product: true,
 					},
 				},
-				createdAt: true,
-				id: true,
-				status: true,
-				viewed: true,
-				user: {
-					include: {
-						address: true,
-					},
-				},
-				userId: true,
-				orderNumber: true,
 			},
 			orderBy: {
 				createdAt: 'desc',
