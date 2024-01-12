@@ -10,7 +10,7 @@ const SizeCard = ({ size }: SizeCardProps) => {
 	const sizes = useCreateProduct((state) => state.size);
 	const setSize = useCreateProduct((state) => state.setSize);
 	return (
-		<Stack w={'60px'}>
+		<Stack w={'fit-content'}>
 			<Button
 				onClick={() => setSize(size.id)}
 				size="sm"
