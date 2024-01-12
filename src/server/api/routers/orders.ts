@@ -55,7 +55,7 @@ export const ordersRouter = createTRPCRouter({
 			orderBy: {
 				createdAt: 'desc',
 			},
-            take: 10
+			take: 10,
 		});
 	}),
 	changeStatus: adminProcedure
