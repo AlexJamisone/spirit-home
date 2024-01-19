@@ -145,7 +145,7 @@ model CheckContent {
 }
 model Promotion {
     id String @id @default(cuid())
-    code String
+    code String @unique
     type PromotionType
     protection ProtectionType
     value Int
