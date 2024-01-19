@@ -53,7 +53,7 @@ model SubCategory {
     category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
     categoryId String
     product    Product[]
-    promotions Promotion[]
+    discounts Discount[]
 }
 
 model Product {
@@ -70,7 +70,7 @@ model Product {
     orders           OrderItem[]
     price            Int
     size             Size[]
-    promotions Promotion[]
+    discounts Discount[]
 }
 
 model Size {
@@ -143,10 +143,10 @@ model CheckContent {
     qtId     String
     price    Int
 }
-model Promotion {
+model Discount {
     id String @id @default(cuid())
     code String @unique
-    type PromotionType
+    type DiscountType
     protection ProtectionType
     value Int
     category SubCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
@@ -155,7 +155,7 @@ model Promotion {
    productId String? 
 
 }
-enum PromotionType {
+enum DiscountType {
     FIX
     PROCENT
 }

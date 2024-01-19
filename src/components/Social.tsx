@@ -13,20 +13,19 @@ const Social = () => {
 			p={[3, 5, 7]}
 			rounded="3xl"
 		>
-			{socialLinks.map(({ alt, href, icon, color }) => (
+			{socialLinks.map((link) => (
 				<Link
-					href={href}
-					key={alt}
+					href={link.href}
+					key={link.alt}
 					target="_blank"
 					as={motion.a}
 					layout
 					whileHover={{
 						scale: 1.2,
-						color,
 					}}
 					color="gray.600"
 				>
-					<Icon as={icon} boxSize={12} />
+					<link.child />
 				</Link>
 			))}
 		</Stack>

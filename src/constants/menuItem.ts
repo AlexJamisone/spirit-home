@@ -1,3 +1,4 @@
+import { CiDiscount1 } from "react-icons/ci";
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
 import { BsBookmarks } from 'react-icons/bs';
 import { FiSettings } from 'react-icons/fi';
@@ -46,6 +47,12 @@ export const menuItems = [
 		icon: IoIosAddCircleOutline,
 		title: 'Категории',
 		path: '/admin/categorys',
+		type: 'ADMIN',
+	},
+	{
+		icon: CiDiscount1,
+		title: 'Скидки',
+		path: '/admin/discount',
 		type: 'ADMIN',
 	},
 ];
