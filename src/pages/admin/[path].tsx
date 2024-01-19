@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import AdminCategorys from '~/UI/Admin/AdmiCategorys';
 import AdminStatistics from '~/UI/Admin/AdminCharts/AdminStatistics';
+import AdminDiscount from '~/UI/Admin/AdminDiscount';
 import AdminOrders from '~/UI/Admin/AdminOrders';
 import AdminProducts from '~/UI/Admin/AdminProducts';
 import Layout from '~/components/Layout';
@@ -19,6 +20,8 @@ const Admin = () => {
 				return <AdminProducts />;
 			case 'orders':
 				return <AdminOrders />;
+            case 'discount':
+                return <AdminDiscount/>
 		}
 	};
 	return (

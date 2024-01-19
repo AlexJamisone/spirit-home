@@ -37,7 +37,12 @@ const Menu = () => {
 			{menuItems
 				.filter(({ type }) => type === role)
 				.map(({ icon, path, title }) => (
-					<Stack key={title} position="relative">
+					<Stack
+						key={title}
+						position="relative"
+						as={Link}
+						href={path}
+					>
 						<Tooltip
 							hasArrow
 							label={title}
@@ -57,8 +62,6 @@ const Menu = () => {
 										color="second"
 									/>
 								}
-								as={Link}
-								href={path}
 							/>
 						</Tooltip>
 					</Stack>
