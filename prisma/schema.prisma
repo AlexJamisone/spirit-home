@@ -53,6 +53,7 @@ model SubCategory {
     category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
     categoryId String
     product    Product[]
+    promotions Promotion[]
 }
 
 model Product {
@@ -69,6 +70,7 @@ model Product {
     orders           OrderItem[]
     price            Int
     size             Size[]
+    promotions Promotion[]
 }
 
 model Size {
@@ -141,7 +143,26 @@ model CheckContent {
     qtId     String
     price    Int
 }
+model Promotion {
+    id String @id @default(cuid())
+    code String
+    type PromotionType
+    protection ProtectionType
+    value Int
+    category SubCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+   categoryId String?
+   Product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+   productId String? 
 
+}
+enum PromotionType {
+    FIX
+    PROCENT
+}
+enum ProtectionType {
+    PUBCLIC
+    AUTH
+}
 enum CheckStatus {
     COMPLETED
     CANCELLED
