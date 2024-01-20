@@ -15,6 +15,8 @@ import {
 	DiscountRadioValue,
 	useDiscount,
 } from '~/stores/useDiscount';
+import AdminDatePick from '../AdminCharts/AdminDatePick';
+import DiscountAction from './DiscountAction';
 
 const DiscountInputs = () => {
 	const { inputs, radio, setInputs, setRadio, error } = useDiscount();
@@ -22,16 +24,20 @@ const DiscountInputs = () => {
 		setRadio({ [name]: value } as DiscountRadioValue);
 	};
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
-		const { value, name } = e.target;
+		const { value, name, type } = e.target;
 		setInputs({
-			[name]: name === 'value' ? +value : value,
+			[name]: type === 'number' ? +value : value,
 		} as DiscountInputValue);
 	};
 	return (
 		<TabPanel>
 			<Stack>
+				<FormControl>
+					<FormLabel>Выбери дату проведения</FormLabel>
+					<AdminDatePick />
+				</FormControl>
 				{discounts.map(
-					({ type, placeholder, filds, name, id, label, tp}) =>
+					({ type, placeholder, filds, name, id, label, tp }) =>
 						type === 'input' ? (
 							<FormControl
 								key={id}
@@ -40,7 +46,13 @@ const DiscountInputs = () => {
 									error.error[name] !== undefined
 								}
 							>
-								<FormLabel>{label}</FormLabel>
+								<FormLabel>
+									{label}{' '}
+									{name === 'value' &&
+										(radio.type === 'PROCENT'
+											? 'в %'
+											: 'в ₽')}
+								</FormLabel>
 								<Input
 									name={name}
 									placeholder={placeholder}
@@ -48,7 +60,7 @@ const DiscountInputs = () => {
 										inputs[name as keyof DiscountInputValue]
 									}
 									onChange={handlInput}
-                                    type={tp}
+									type={tp}
 								/>
 								<FormErrorMessage>
 									{error?.error[name]}
@@ -68,13 +80,16 @@ const DiscountInputs = () => {
 								>
 									<Stack direction={'row'}>
 										{filds?.map(({ title, value }) => (
-											<Radio key={value} value={value}>{title}</Radio>
+											<Radio key={value} value={value}>
+												{title}
+											</Radio>
 										))}
 									</Stack>
 								</RadioGroup>
 							</FormControl>
 						)
 				)}
+                <DiscountAction/>
 			</Stack>
 		</TabPanel>
 	);

@@ -1,6 +1,6 @@
-import { CiDiscount1 } from "react-icons/ci";
 import { AiOutlineHome, AiOutlineUser } from 'react-icons/ai';
 import { BsBookmarks } from 'react-icons/bs';
+import { CiDiscount1 } from 'react-icons/ci';
 import { FiSettings } from 'react-icons/fi';
 import { HiOutlineClipboardDocumentList } from 'react-icons/hi2';
 import { IoIosAddCircleOutline } from 'react-icons/io';

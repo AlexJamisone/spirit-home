@@ -2,9 +2,6 @@ import { Link } from '@chakra-ui/next-js';
 import { Stack, Text } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
 import dayjs from 'dayjs';
-import Instagram from '~/assets/social/Instagram';
-import Telegram from '~/assets/social/Telegram';
-import Youtube from '~/assets/social/Youtube';
 import { socialLinks } from '~/constants/social';
 dayjs().format();
 
@@ -22,7 +19,7 @@ const Footer = () => {
 			px={20}
 			direction="row"
 			justifyContent="space-between"
-            pt={5}
+			pt={5}
 		>
 			<Stack>
 				<Link
@@ -53,11 +50,11 @@ const Footer = () => {
 			<Stack textAlign="center" alignItems="center">
 				<Text fontSize="sm">Все новости о жизни бренда:</Text>
 				<Stack direction="row">
-                    {socialLinks.map((link) => (
-                        <Link href={link.href} key={link.alt} target='_blank'>
-                            <link.child/>
-                        </Link>
-                    ))}
+					{socialLinks.map((link) => (
+						<Link href={link.href} key={link.alt} target="_blank">
+							<link.child />
+						</Link>
+					))}
 				</Stack>
 			</Stack>
 			<Stack justifyContent="end">

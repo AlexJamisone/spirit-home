@@ -145,15 +145,18 @@ model CheckContent {
 }
 model Discount {
     id String @id @default(cuid())
-    code String @unique
-    type DiscountType
-    protection ProtectionType
-    value Int
-    category SubCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-   categoryId String?
-   Product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
-   productId String? 
-
+        start DateTime
+        end DateTime
+        max Int?
+        count Int @default(0)
+        code String @unique
+        type DiscountType
+        protection ProtectionType
+        value Int
+        category SubCategory? @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+        categoryId String?
+        Product Product? @relation(fields: [productId], references: [id], onDelete: Cascade)
+        productId String? 
 }
 enum DiscountType {
     FIX

@@ -20,8 +20,8 @@ const Admin = () => {
 				return <AdminProducts />;
 			case 'orders':
 				return <AdminOrders />;
-            case 'discount':
-                return <AdminDiscount/>
+			case 'discount':
+				return <AdminDiscount />;
 		}
 	};
 	return (

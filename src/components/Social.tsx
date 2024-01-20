@@ -1,4 +1,4 @@
-import { Icon, Link, Stack } from '@chakra-ui/react';
+import { Link, Stack } from '@chakra-ui/react';
 import { motion } from 'framer-motion';
 import { socialLinks } from '~/constants/social';
 
