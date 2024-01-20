@@ -309,4 +309,28 @@ export const productsRouter = createTRPCRouter({
 				},
 			});
 		}),
+	getWithSearch: adminProcedure
+		.input(z.object({ search: z.string().optional() }))
+		.query(async ({ input, ctx }) => {
+			if (input.search && input.search !== '') {
+				return await ctx.prisma.product.findMany({
+					where: {
+						name: {
+							contains: input.search,
+							mode: 'insensitive',
+						},
+					},
+                    include: {
+                        subCategory: true
+                    }
+				});
+			} else {
+				return await ctx.prisma.product.findMany({
+					take: 10,
+                    include: {
+                        subCategory: true
+                    }
+				});
+			}
+		}),
 });

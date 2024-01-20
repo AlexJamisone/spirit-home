@@ -17,14 +17,18 @@ import {
 } from '~/stores/useDiscount';
 import AdminDatePick from '../AdminCharts/AdminDatePick';
 import DiscountAction from './DiscountAction';
+import DiscountSearchTab from './DiscountSearchTab';
 
 const DiscountInputs = () => {
-	const { inputs, radio, setInputs, setRadio, error } = useDiscount();
+	const { inputs, radio, setInputs, setRadio, error, reset } = useDiscount();
 	const handlRadio = (value: string, name: string) => {
 		setRadio({ [name]: value } as DiscountRadioValue);
 	};
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value, name, type } = e.target;
+        if(error?.isError) {
+            reset()
+        }
 		setInputs({
 			[name]: type === 'number' ? +value : value,
 		} as DiscountInputValue);
@@ -89,6 +93,7 @@ const DiscountInputs = () => {
 							</FormControl>
 						)
 				)}
+                <DiscountSearchTab/>
                 <DiscountAction/>
 			</Stack>
 		</TabPanel>

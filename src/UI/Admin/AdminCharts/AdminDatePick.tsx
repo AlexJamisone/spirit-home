@@ -45,7 +45,7 @@ const AdminDatePick = () => {
 					},
 				}}
 			/>
-			{isDate ? (
+			{isDate && (
 				<IconButton
 					as={motion.button}
 					initial={{ opacity: 0, x: -25 }}
@@ -61,11 +61,12 @@ const AdminDatePick = () => {
 					colorScheme="teal"
 					icon={<Icon as={MdDone} boxSize={5} />}
 					onClick={() => {
-						setSend(selectedDate);
+						if (selectedDate[0] && selectedDate[1])
+							setSend([selectedDate[0], selectedDate[1]]);
 						setIsDate(false);
 					}}
 				/>
-			) : null}
+			)}
 		</Stack>
 	);
 };

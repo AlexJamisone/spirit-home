@@ -9,8 +9,8 @@ type DateState = {
 };
 
 type DateAction = {
-	setSend: (date: Date[]) => void;
-	setSelectedDate: (date: Date[]) => void;
+	setSend: (date: DateState['send']) => void;
+	setSelectedDate: (date: DateState['selectedDate']) => void;
 	setIsDate: (isDate: boolean) => void;
 };
 
@@ -21,7 +21,7 @@ const initial: DateState = {
 		dayjs().startOf('month').toDate(),
 		dayjs().endOf('month').toDate(),
 	],
-	send: [],
+	send: [dayjs().startOf('month').toDate(), dayjs().endOf('month').toDate()],
 };
 export const useDateRange = create<DateRange>((set) => ({
 	...initial,

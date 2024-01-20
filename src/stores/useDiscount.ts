@@ -23,6 +23,7 @@ type DiscountAction = {
 	setRadio: (radio: DiscountRadioValue) => void;
 	setClear: () => void;
 	setError: (err: DiscountState['error']) => void;
+    reset: () => void
 };
 type Discount = DiscountState & DiscountAction;
 const initial: DiscountState = {
@@ -44,4 +45,5 @@ export const useDiscount = create<Discount>((set) => ({
 		set((state) => ({ inputs: { ...state.inputs, ...input } })),
 	setClear: () => set(initial),
 	setError: (error) => set({ error }),
+    reset: () => set(state => ({...state, error: undefined}))
 }));

@@ -53,7 +53,7 @@ export const discounts: DiscountInputs[] = [
 	},
 	{
 		id: 5,
-		placeholder: 'Введите число использований',
+		placeholder: 'Введите число использования',
 		label: 'Максимальное число использование',
 		name: 'max',
 		type: 'input',

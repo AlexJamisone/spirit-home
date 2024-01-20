@@ -7,7 +7,7 @@ import { api } from '~/utils/api';
 const AdminCharts = () => {
 	const send = useDateRange((state) => state.send);
 	const { data: orders, isLoading } = api.charts.range.useQuery({
-		selectedDate: send,
+		selectedDate: send!,
 	});
 	return (
 		<Stack gap={10}>

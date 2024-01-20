@@ -1,19 +1,18 @@
 import { DiscountType, ProtectionType } from '@prisma/client';
 import { z } from 'zod';
 import { adminProcedure, createTRPCRouter } from '../trpc';
-
 export const discountRoute = createTRPCRouter({
 	create: adminProcedure
 		.input(
 			z.object({
-				date: z.tuple([z.date(), z.date()]),
+                date: z.tuple([z.date(), z.date()]),
 				code: z
 					.string()
 					.nonempty({
 						message: 'Придумай пожалуйста код для скидки',
 					}),
-				type: z.nativeEnum(DiscountType),
-				protection: z.nativeEnum(ProtectionType),
+				type: z.custom<DiscountType>(),
+				protection: z.custom<ProtectionType>(),
 				value: z.number().positive({ message: 'Должно быть больше 0' }),
 				max: z.number().positive({ message: 'Должно быть больше 0' }).optional(),
 			})
