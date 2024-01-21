@@ -1,5 +1,6 @@
-import { Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react"
+import { Tab, TabList,  TabPanels, Tabs } from "@chakra-ui/react"
 import ProductsTab from "./ProuctsTab"
+import DiscountCategoryTab from "../DiscountCategoryTab"
 
 const DiscountSearchTab = () => {
     return (
@@ -14,9 +15,7 @@ const DiscountSearchTab = () => {
             </TabList>
             <TabPanels>
                 <ProductsTab/>
-                <TabPanel>
-                    Здесь категории
-                </TabPanel>
+                <DiscountCategoryTab/>
             </TabPanels>
         </Tabs>
     )

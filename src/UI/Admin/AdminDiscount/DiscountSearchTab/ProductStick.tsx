@@ -13,7 +13,6 @@ const ProductStick = ({ product }: ProductStickProp) => {
 	const handlChange = () => {
 		setId(product.id);
 	};
-	console.log(ids);
 	return (
 		<Stack direction="row" justifyContent='space-between'>
 			<Checkbox

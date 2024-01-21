@@ -27,7 +27,7 @@ const CategoryMenu = () => {
 						p={1}
 						minW={['150px', null]}
 					>
-						{isLoading ? (
+						{isLoading && (
 							<>
 								<MenuItem>
 									<Placholder />
@@ -39,7 +39,7 @@ const CategoryMenu = () => {
 									<Placholder />
 								</MenuItem>
 							</>
-						) : null}
+						) }
 						{categories?.map(({ id, title, subCategory, path }) => (
 							<CategoryMenuInner
 								key={id}

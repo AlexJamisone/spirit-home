@@ -138,4 +138,11 @@ export const categorysRouter = createTRPCRouter({
 				});
 			return updateCategory;
 		}),
+	getCategoryForDiscount: adminProcedure.query(async ({ ctx }) => {
+		return await ctx.prisma.category.findMany({
+            include: {
+                subCategory: true
+            }
+        });
+	}),
 });
