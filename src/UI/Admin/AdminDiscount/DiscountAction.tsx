@@ -1,6 +1,7 @@
 import { Button, Stack, useToast } from '@chakra-ui/react';
 import { useDateRange } from '~/stores/useDateRange';
 import { useDiscount } from '~/stores/useDiscount';
+import { useHelper } from '~/stores/useHelpers';
 import { api } from '~/utils/api';
 
 const DiscountAction = () => {
@@ -9,6 +10,8 @@ const DiscountAction = () => {
 	const date = useDateRange((state) => state.send);
 	const setClear = useDiscount((state) => state.setClear);
 	const setError = useDiscount((state) => state.setError);
+    const catIds = useHelper(state => state.categotys.ids)
+    const productIds = useHelper(state => state.product.ids)
 	const { mutate: create, isLoading } = api.discount.create.useMutation();
 	const ctx = api.useContext();
 	const toast = useToast();
@@ -21,9 +24,11 @@ const DiscountAction = () => {
 				protection: radio.protection,
 				type: radio.type,
 				max: inputs.max,
+                catIds,
+                productIds
 			},
 			{
-				onSuccess: ({ msg }) => {
+				onSuccess: ({ msg  }) => {
 					void ctx.discount.invalidate();
 					toast({
 						description: msg,

@@ -3,6 +3,9 @@ import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { adminProcedure, createTRPCRouter } from '../trpc';
 export const discountRoute = createTRPCRouter({
+	get: adminProcedure.query(async ({ ctx }) => {
+		return await ctx.prisma.discount.findMany({});
+	}),
 	create: adminProcedure
 		.input(
 			z.object({
@@ -23,7 +26,7 @@ export const discountRoute = createTRPCRouter({
 		)
 		.mutation(async ({ input, ctx }) => {
 			if (input.catIds.length === 0 && input.productIds.length === 0) {
-				return new TRPCError({
+				throw new TRPCError({
 					code: 'BAD_REQUEST',
 					message:
 						'Нужно указать какие товары или категории идут в скидке',
@@ -39,7 +42,7 @@ export const discountRoute = createTRPCRouter({
 					protection: input.protection,
 					value: input.value,
 					categoryIds: input.catIds,
-					productId: input.productIds
+					productId: input.productIds,
 				},
 			});
 			if (!create)
