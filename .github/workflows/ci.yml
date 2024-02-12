@@ -8,7 +8,7 @@ env:
 	UPLOADTHING_SECRET: "some fake string",
 	NEXT_PUBLIC_VISITORS_LINKS: "some fake string",
 	NEXT_PUBLIC_UPLOADTHING_URL: "some fake string",
-  CDEK_ID: "123",
+    CDEK_ID: "123",
 	CDEK_SECRET: "321"
 
 jobs:
