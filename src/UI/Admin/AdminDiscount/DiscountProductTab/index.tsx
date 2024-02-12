@@ -2,7 +2,7 @@ import { Tab, TabList,  TabPanels, Tabs } from "@chakra-ui/react"
 import ProductsTab from "./ProuctsTab"
 import DiscountCategoryTab from "../DiscountCategoryTab"
 
-const DiscountSearchTab = () => {
+const DiscountProudctTab = () => {
     return (
         <Tabs>
             <TabList>
@@ -20,4 +20,4 @@ const DiscountSearchTab = () => {
         </Tabs>
     )
 }
-export default DiscountSearchTab
+export default DiscountProudctTab 

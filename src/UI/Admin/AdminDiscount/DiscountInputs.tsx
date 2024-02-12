@@ -17,7 +17,7 @@ import {
 } from '~/stores/useDiscount';
 import AdminDatePick from '../AdminCharts/AdminDatePick';
 import DiscountAction from './DiscountAction';
-import DiscountSearchTab from './DiscountSearchTab';
+import DiscountProductTab from './DiscountProductTab';
 
 const DiscountInputs = () => {
 	const { inputs, radio, setInputs, setRadio, error, reset } = useDiscount();
@@ -93,7 +93,7 @@ const DiscountInputs = () => {
 							</FormControl>
 						)
 				)}
-                <DiscountSearchTab/>
+                <DiscountProductTab/>
                 <DiscountAction/>
 			</Stack>
 		</TabPanel>

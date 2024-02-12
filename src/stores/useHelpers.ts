@@ -10,6 +10,7 @@ type HelperState = {
 type HelperAction = {
 	setId: (id: string) => void;
 	setCatId: (id: string) => void;
+	setClear: () => void;
 };
 type Helper = HelperState & HelperAction;
 const initial: HelperState = {
@@ -40,4 +41,5 @@ export const useHelper = create<Helper>((set) => ({
 					: [...state.categotys.ids, id],
 			},
 		})),
+	setClear: () => set(initial),
 }));

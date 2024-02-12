@@ -1,5 +1,4 @@
 import { DiscountType, ProtectionType } from '@prisma/client';
-import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
 import { adminProcedure, createTRPCRouter } from '../trpc';
 export const discountRoute = createTRPCRouter({
@@ -20,18 +19,20 @@ export const discountRoute = createTRPCRouter({
 					.number()
 					.positive({ message: 'Должно быть больше 0' })
 					.optional(),
-				catIds: z.array(z.string()),
-				productIds: z.array(z.string()),
+				path: z
+					.object({
+						catIds: z.array(z.string()),
+						productIds: z.array(z.string()),
+					})
+					.refine(
+						(data) =>
+							data.catIds.length > 0 ||
+							data.productIds.length > 0,
+						'Нужно выбрать либо продукт, либо категорию'
+					),
 			})
 		)
 		.mutation(async ({ input, ctx }) => {
-			if (input.catIds.length === 0 && input.productIds.length === 0) {
-				throw new TRPCError({
-					code: 'BAD_REQUEST',
-					message:
-						'Нужно указать какие товары или категории идут в скидке',
-				});
-			}
 			const create = await ctx.prisma.discount.create({
 				data: {
 					start: input.date[0],
@@ -41,8 +42,8 @@ export const discountRoute = createTRPCRouter({
 					type: input.type,
 					protection: input.protection,
 					value: input.value,
-					categoryIds: input.catIds,
-					productId: input.productIds,
+					categoryIds: input.path.catIds,
+					productId: input.path.productIds,
 				},
 			});
 			if (!create)

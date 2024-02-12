@@ -10,22 +10,25 @@ const DiscountAction = () => {
 	const date = useDateRange((state) => state.send);
 	const setClear = useDiscount((state) => state.setClear);
 	const setError = useDiscount((state) => state.setError);
-    const catIds = useHelper(state => state.categotys.ids)
-    const productIds = useHelper(state => state.product.ids)
+	const catIds = useHelper((state) => state.categotys.ids);
+	const productIds = useHelper((state) => state.product.ids);
+	const setHelpClear = useHelper((state) => state.setClear);
 	const { mutate: create, isLoading } = api.discount.create.useMutation();
 	const ctx = api.useContext();
 	const toast = useToast();
 	const handlClick = () => {
 		create(
 			{
-                date: [date[0]!, date[1]!],
+				date: [date[0]!, date[1]!],
 				value: inputs.value,
 				code: inputs.code,
 				protection: radio.protection,
 				type: radio.type,
 				max: inputs.max,
-                catIds,
-                productIds
+				path: {
+					catIds,
+					productIds,
+				},
 			},
 			{
 				onSuccess: ({ msg  }) => {
@@ -36,6 +39,7 @@ const DiscountAction = () => {
 						isClosable: true,
 					});
 					setClear();
+					setHelpClear();
 				},
 				onError: ({ data, message }) => {
 					const err = data?.zodError?.fieldErrors;
