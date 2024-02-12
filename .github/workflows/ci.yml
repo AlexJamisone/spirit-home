@@ -1,14 +1,17 @@
 name: Prettier
-on: [push, pull_request]
+
+on:
+  push:
+  pull_requiest:
 
 env:
-  DATABASE_URL: "https://fake.com",
-	NODE_ENV: "development",
-	UPLOADTHING_APP_ID: "some fake string",
-	UPLOADTHING_SECRET: "some fake string",
-	NEXT_PUBLIC_VISITORS_LINKS: "some fake string",
-	NEXT_PUBLIC_UPLOADTHING_URL: "some fake string",
-    CDEK_ID: "123",
+    DATABASE_URL: "https://fake.com"
+	NODE_ENV: "development"
+	UPLOADTHING_APP_ID: "some fake string"
+	UPLOADTHING_SECRET: "some fake string"
+	NEXT_PUBLIC_VISITORS_LINKS: "some fake string"
+	NEXT_PUBLIC_UPLOADTHING_URL: "some fake string"
+    CDEK_ID: "123"
 	CDEK_SECRET: "321"
 
 jobs:
