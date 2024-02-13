@@ -105,6 +105,7 @@ const PromoInput = () => {
 								borderLeftRadius="0"
 								isLoading={isLoading}
 								onClick={() => handlConfirm(inputs['promo'])}
+								isDisabled={conf}
 							>
 								Потвердить
 							</Button>

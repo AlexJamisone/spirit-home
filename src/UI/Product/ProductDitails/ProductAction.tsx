@@ -25,6 +25,7 @@ const ProductAction = () => {
 							price: product.price,
 							size: size,
 							title: product.name,
+							discount: false,
 						});
 						setCler();
 					}

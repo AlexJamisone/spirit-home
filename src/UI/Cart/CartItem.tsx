@@ -19,7 +19,7 @@ type CartItemProps = {
 };
 
 const CartItem = ({
-	item: { image, title, quantity, id, price, size },
+	item: { image, title, quantity, id, price, size, discount, oldPrice },
 }: CartItemProps) => {
 	const remove = useCart((state) => state.remove);
 	const update = useCart((state) => state.update);
@@ -77,14 +77,26 @@ const CartItem = ({
 				<Text>{quantity}</Text>
 				{handlCount(IoIosArrowForward, 'plus')}
 			</Stack>
-			<Text
-				display="inline-block"
+			<Stack
+				direction="row"
 				w="100%"
-				textAlign="center"
-				fontSize={[12, 16]}
+				fontSize="12px"
+				justifyContent="center"
+				alignItems="center"
 			>
-				{price} ₽
-			</Text>
+				{discount && (
+					<Text display="inline-block" textDecoration="line-through">
+						{oldPrice} ₽
+					</Text>
+				)}
+				<Text
+					display="inline-block"
+					textAlign="center"
+					textColor={discount ? 'green.500' : undefined}
+				>
+					{price} ₽
+				</Text>
+			</Stack>
 
 			<Stack>
 				<Tag size={['sm', 'md']} textAlign="center">

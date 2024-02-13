@@ -12,6 +12,8 @@ export type CartItem = {
 	title: string;
 	image: string;
 	price: number;
+	oldPrice?: number;
+	discount: boolean;
 };
 
 type CartState = {
@@ -141,7 +143,7 @@ export const useCart = create<Cart>((set) => ({
 	confirmPromo: ({ ids, type, value }) =>
 		set((state) => {
 			const update = state.items.map((item) => {
-				if (ids.includes(item.id)) {
+				if (ids.includes(item.id) && item.discount === false) {
 					let newPrice = item.price;
 
 					if (type === DiscountType.PROCENT) {
@@ -152,7 +154,9 @@ export const useCart = create<Cart>((set) => ({
 
 					return {
 						...item,
+						oldPrice: item.price,
 						price: newPrice,
+						discount: true,
 					};
 				}
 				return item;
