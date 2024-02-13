@@ -26,9 +26,9 @@ const DiscountInputs = () => {
 	};
 	const handlInput = (e: ChangeEvent<HTMLInputElement>) => {
 		const { value, name, type } = e.target;
-        if(error?.isError) {
-            reset()
-        }
+		if (error?.isError) {
+			reset();
+		}
 		setInputs({
 			[name]: type === 'number' ? +value : value,
 		} as DiscountInputValue);
@@ -93,8 +93,8 @@ const DiscountInputs = () => {
 							</FormControl>
 						)
 				)}
-                <DiscountProductTab/>
-                <DiscountAction/>
+				<DiscountProductTab />
+				<DiscountAction />
 			</Stack>
 		</TabPanel>
 	);

@@ -5,7 +5,7 @@ type DiscountState = {
 	inputs: {
 		code: string;
 		value: number;
-        max: number
+		max: number;
 	};
 	radio: {
 		type: DiscountType;
@@ -23,14 +23,14 @@ type DiscountAction = {
 	setRadio: (radio: DiscountRadioValue) => void;
 	setClear: () => void;
 	setError: (err: DiscountState['error']) => void;
-    reset: () => void
+	reset: () => void;
 };
 type Discount = DiscountState & DiscountAction;
 const initial: DiscountState = {
 	inputs: {
 		code: '',
-        value: 0,
-        max: 0
+		value: 0,
+		max: 0,
 	},
 	radio: {
 		type: 'PROCENT',
@@ -45,5 +45,5 @@ export const useDiscount = create<Discount>((set) => ({
 		set((state) => ({ inputs: { ...state.inputs, ...input } })),
 	setClear: () => set(initial),
 	setError: (error) => set({ error }),
-    reset: () => set(state => ({...state, error: undefined}))
+	reset: () => set((state) => ({ ...state, error: undefined })),
 }));

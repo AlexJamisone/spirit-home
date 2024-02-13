@@ -6,6 +6,8 @@ export type NewOrderInput = {
 	firstName: string;
 	lastName: string;
 	contactPhone: string;
+	comment: string;
+	promo: string;
 };
 
 type NewOrderControl = {
@@ -60,6 +62,8 @@ const initial: NewOrderState = {
 		contactPhone: '',
 		firstName: '',
 		lastName: '',
+		comment: '',
+		promo: '',
 	},
 	controls: {
 		edit: false,

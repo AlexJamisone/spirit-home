@@ -1,3 +1,4 @@
+import { DiscountType } from '@prisma/client';
 import { create } from 'zustand';
 import {
 	getFromLocalStorage,
@@ -22,6 +23,15 @@ type CartAction = {
 	add: (item: Omit<CartItem, 'quantity'>) => void;
 	remove: (id: string, size: string) => void;
 	update: (id: string, size: string, quantity: number) => void;
+	confirmPromo: ({
+		ids,
+		value,
+		type,
+	}: {
+		ids: string[];
+		value: number;
+		type: DiscountType;
+	}) => void;
 	clear: () => void;
 };
 
@@ -126,6 +136,42 @@ export const useCart = create<Cart>((set) => ({
 			return {
 				...state,
 				...initialState,
+			};
+		}),
+	confirmPromo: ({ ids, type, value }) =>
+		set((state) => {
+			const update = state.items.map((item) => {
+				if (ids.includes(item.id)) {
+					let newPrice = item.price;
+
+					if (type === DiscountType.PROCENT) {
+						newPrice -= (item.price * value) / 100;
+					} else if (type === DiscountType.FIX) {
+						newPrice -= value;
+					}
+
+					return {
+						...item,
+						price: newPrice,
+					};
+				}
+				return item;
+			});
+
+			const newTotal = update.reduce(
+				(total, item) => total + item.price * item.quantity,
+				0
+			);
+
+			const newState: CartState = {
+				items: update,
+				total: newTotal,
+			};
+
+			saveToLocalStorage(newState, CART_STORAGE_KEY);
+			return {
+				...state,
+				...newState,
 			};
 		}),
 }));

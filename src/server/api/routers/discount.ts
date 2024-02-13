@@ -1,6 +1,6 @@
 import { DiscountType, ProtectionType } from '@prisma/client';
 import { z } from 'zod';
-import { adminProcedure, createTRPCRouter } from '../trpc';
+import { adminProcedure, createTRPCRouter, publicProcedure } from '../trpc';
 export const discountRoute = createTRPCRouter({
 	get: adminProcedure.query(async ({ ctx }) => {
 		return await ctx.prisma.discount.findMany({});
@@ -54,6 +54,38 @@ export const discountRoute = createTRPCRouter({
 			return {
 				msg: `Акция с кодом ${input.code} успешно создана`,
 				success: true,
+			};
+		}),
+	confirm: publicProcedure
+		.input(z.object({ promo: z.string() }))
+		.mutation(async ({ input, ctx }) => {
+			const promo = await ctx.prisma.discount.findUnique({
+				where: {
+					code: input.promo,
+				},
+			});
+			if (!promo) {
+				return {
+					find: false,
+					message: 'Промокод не найдет',
+				};
+			}
+			if (promo.protection === 'AUTH' && !ctx.userId) {
+				return {
+					find: true,
+					message:
+						'Промокод только для зарегестрированных пользователей',
+				};
+			}
+			return {
+				find: true,
+				message: 'Промокод активирован!',
+				ids:
+					promo.categoryIds.length > 0
+						? promo.categoryIds
+						: promo.productId,
+				type: promo.type,
+				value: promo.value,
 			};
 		}),
 });

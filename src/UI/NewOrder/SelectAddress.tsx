@@ -1,5 +1,6 @@
 import {
 	FormControl,
+	FormLabel,
 	Input,
 	InputGroup,
 	InputRightElement,
@@ -39,6 +40,7 @@ const SelectAddress = () => {
 	};
 	return (
 		<FormControl zIndex={10}>
+			<FormLabel>Город доставки</FormLabel>
 			<InputGroup>
 				<AddressSuggestions
 					token={process.env.NEXT_PUBLIC_API_DADATA as string}

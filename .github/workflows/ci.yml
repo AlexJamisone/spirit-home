@@ -2,10 +2,10 @@ name: Prettier
 
 on:
   push:
-  pull_request:
+    pull_request:
 
-    env:
-      DATABASE_URL: "https://fake.com"
+      env:
+        DATABASE_URL: "https://fake.com"
     NODE_ENV: "development"
     UPLOADTHING_APP_ID: "some fake string"
     UPLOADTHING_SECRET: "some fake string"

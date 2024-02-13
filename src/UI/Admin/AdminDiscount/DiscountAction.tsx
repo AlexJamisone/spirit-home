@@ -31,7 +31,7 @@ const DiscountAction = () => {
 				},
 			},
 			{
-				onSuccess: ({ msg  }) => {
+				onSuccess: ({ msg }) => {
 					void ctx.discount.invalidate();
 					toast({
 						description: msg,

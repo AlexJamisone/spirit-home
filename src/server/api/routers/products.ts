@@ -320,16 +320,16 @@ export const productsRouter = createTRPCRouter({
 							mode: 'insensitive',
 						},
 					},
-                    include: {
-                        subCategory: true
-                    }
+					include: {
+						subCategory: true,
+					},
 				});
 			} else {
 				return await ctx.prisma.product.findMany({
 					take: 10,
-                    include: {
-                        subCategory: true
-                    }
+					include: {
+						subCategory: true,
+					},
 				});
 			}
 		}),

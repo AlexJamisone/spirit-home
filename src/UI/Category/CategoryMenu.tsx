@@ -39,7 +39,7 @@ const CategoryMenu = () => {
 									<Placholder />
 								</MenuItem>
 							</>
-						) }
+						)}
 						{categories?.map(({ id, title, subCategory, path }) => (
 							<CategoryMenuInner
 								key={id}

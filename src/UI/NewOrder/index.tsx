@@ -6,15 +6,15 @@ import UserAddressCard from '../UserProfile/UserAddress/UserAddressCard';
 import CdekPointCard from './CdekPointCard';
 import Inputs from './Inputs';
 import NewOrderAction from './NewOrderAction';
+import OrderItems from './OrderItems';
 
 const NewOrder = () => {
-	// const { controls, setPoint } = useNewOrder();
 	const controls = useNewOrder((state) => state.controls);
 	const setPoint = useNewOrder((state) => state.setPoint);
 	const { data: user } = api.users.get.useQuery();
 	return (
 		<Stack alignItems="center" gap={10}>
-			<Stack direction="row">
+			<Stack direction="row" gap={5}>
 				{user && user.address?.length !== 0 ? (
 					<RadioGroup
 						onChange={(id) => setPoint({ id })}
@@ -30,11 +30,19 @@ const NewOrder = () => {
 				) : (
 					<>
 						<Inputs />
-						{controls.showMap && <YandexMap />}
+						<Stack alignItems="center">
+							{controls.showMap && <YandexMap />}
+							{controls.showPVZ && <CdekPointCard />}
+							<OrderItems show={controls.selectedPVZ} />
+						</Stack>
 					</>
 				)}
 			</Stack>
-			{controls.showPVZ && <CdekPointCard />}
+			<OrderItems
+				show={
+					controls.showMap || (!controls.showMap && !controls.showPVZ)
+				}
+			/>
 			<NewOrderAction />
 		</Stack>
 	);

@@ -89,7 +89,7 @@ const NewOrderAction = () => {
 		<Button
 			onClick={handlNewOrder}
 			isLoading={isLoadingAddressId || isLoadingNoAddress}
-			colorScheme="green"
+			colorScheme="teal"
 		>
 			Оформить заказ
 		</Button>

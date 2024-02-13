@@ -2,22 +2,26 @@ type UserContactInfo = {
 	id: number;
 	placeholder: string;
 	name: string;
+	label: string;
 };
 
 export const userContactInfo: UserContactInfo[] = [
 	{
 		id: 1,
-		placeholder: 'Имя',
+		placeholder: 'Введите Имя',
 		name: 'firstName',
+		label: 'Имя',
 	},
 	{
 		id: 2,
-		placeholder: 'Фамилия',
+		placeholder: 'Введите Фамилию',
 		name: 'lastName',
+		label: 'Фамилия',
 	},
 	{
 		id: 3,
-		placeholder: 'Телефон',
+		placeholder: 'Введите телефон',
 		name: 'contactPhone',
+		label: 'Телефон',
 	},
 ];

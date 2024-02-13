@@ -1,10 +1,10 @@
-import { Input, Stack, TabPanel, Text } from '@chakra-ui/react';
+import { Input, Stack, TabPanel } from '@chakra-ui/react';
 import { useDebounce } from '@uidotdev/usehooks';
 import LoadSkeleton from '~/components/LoadSkeleton';
+import TabsErros from '~/components/TabsErros';
 import { useSearch } from '~/stores/useSearch';
 import { api } from '~/utils/api';
 import ProductStick from './ProductStick';
-import TabsErros from '~/components/TabsErros';
 
 const ProductsTab = () => {
 	const { query, setSearch } = useSearch();
@@ -32,7 +32,7 @@ const ProductsTab = () => {
 						styleSkeleton={{ w: 300, h: 5, rounded: 'lg' }}
 					/>
 				)}
-                <TabsErros/>
+				<TabsErros />
 			</Stack>
 		</TabPanel>
 	);

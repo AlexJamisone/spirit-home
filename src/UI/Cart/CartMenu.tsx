@@ -8,13 +8,13 @@ import {
 	MenuDivider,
 	MenuItem,
 	MenuList,
-	Stack,
 	Text,
 } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
 import { SlHandbag } from 'react-icons/sl';
 import ButtonsGroup from '~/components/ButtonsGroup';
 import Counter from '~/components/Counter';
+import TotalSum from '~/components/TotalSum';
 import { useCart } from '~/stores/useCart';
 import CartItem from './CartItem';
 
@@ -62,14 +62,7 @@ const CartMenu = () => {
 						{items.length !== 0 && (
 							<>
 								<MenuDivider />
-								<Stack
-									direction="row"
-									justifyContent="space-between"
-									p={2}
-								>
-									<Text>Итог: </Text>
-									<Text fontWeight={600}>{total} ₽</Text>
-								</Stack>
+								<TotalSum />
 								<MenuDivider />
 								<Button
 									as={Link}

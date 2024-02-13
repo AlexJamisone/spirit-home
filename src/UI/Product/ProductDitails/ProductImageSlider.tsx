@@ -79,8 +79,8 @@ const ProductImageSlider = () => {
 							src={env.NEXT_PUBLIC_UPLOADTHING_URL + src}
 							flex="0 0 100%"
 							w={['100%', 300]}
-                            objectFit='contain'
-                            maxH={500}
+							objectFit="contain"
+							maxH={500}
 						/>
 					))}
 				</Stack>
@@ -109,7 +109,7 @@ const ProductImageSlider = () => {
 						key={src}
 						w={100}
 						h={90}
-                        objectFit='cover'
+						objectFit="cover"
 						cursor="pointer"
 						onClick={() => onThumbClick(index)}
 						opacity={index === selectedIndex ? 1 : 0.2}
