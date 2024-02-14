@@ -90,6 +90,9 @@ const CartItem = ({
 					</Text>
 				)}
 				<Text
+					as={motion.p}
+					initial={{ opacity: 0, y: 50 }}
+					animate={{ opacity: 1, y: 0 }}
 					display="inline-block"
 					textAlign="center"
 					textColor={discount ? 'green.500' : undefined}

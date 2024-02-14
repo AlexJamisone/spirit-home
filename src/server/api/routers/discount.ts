@@ -86,6 +86,7 @@ export const discountRoute = createTRPCRouter({
 						: promo.productId,
 				type: promo.type,
 				value: promo.value,
+                id: promo.id
 			};
 		}),
 });

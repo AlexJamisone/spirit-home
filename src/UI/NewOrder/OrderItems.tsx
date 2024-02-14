@@ -15,7 +15,7 @@ const OrderItems = ({ show }: OrderItemsProps) => {
 					<Stack>
 						{items.map((item) => (
 							<Stack
-								key={item.id}
+								key={`${item.id}+${item.size}`}
 								boxShadow="lg"
 								px={5}
 								rounded={'2xl'}

@@ -5,21 +5,23 @@ import {
 	Input,
 	InputGroup,
 	InputRightAddon,
-	useBoolean,
 	useToast,
 } from '@chakra-ui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useId } from 'react';
 import { useCart } from '~/stores/useCart';
 import { useNewOrder } from '~/stores/useNewOrder';
 import { api } from '~/utils/api';
 
 const PromoInput = () => {
-	const [conf, setConf] = useBoolean();
-	const inputs = useNewOrder((state) => state.inputs);
-	const setInput = useNewOrder((state) => state.setInput);
+    const id = useId()
 	const resetError = useNewOrder((state) => state.resetError);
 	const error = useNewOrder((state) => state.error);
 	const confirmPromo = useCart((state) => state.confirmPromo);
+	const isActive = useCart((state) => state.discount.active);
+	const wordPromo = useCart((state) => state.discount.word);
+	const setPromo = useCart((state) => state.setPromo);
+	const cancelPromo = useCart((state) => state.cancelPromo);
 	const toast = useToast();
 	const { mutate: confirm, isLoading } = api.discount.confirm.useMutation();
 	const handlConfirm = (promo: string) => {
@@ -28,7 +30,7 @@ const PromoInput = () => {
 				promo,
 			},
 			{
-				onSuccess: ({ message, find, value, ids, type }) => {
+				onSuccess: ({ message, find, value, ids, type, id }) => {
 					if (!find) {
 						toast({
 							description: message,
@@ -44,8 +46,7 @@ const PromoInput = () => {
 						});
 						return;
 					}
-					confirmPromo({ value, ids, type });
-					setConf.on();
+					confirmPromo({ value, ids, type, id, word: promo });
 					toast({
 						description: message,
 						status: 'success',
@@ -59,9 +60,8 @@ const PromoInput = () => {
 		<FormControl>
 			<FormLabel>Промокод</FormLabel>
 			<InputGroup>
-				<AnimatePresence key={69}>
 					<Input
-						isDisabled={conf}
+						isDisabled={isActive}
 						as={motion.input}
 						layout="size"
 						_placeholder={{
@@ -69,13 +69,13 @@ const PromoInput = () => {
 						}}
 						placeholder="Введите промокод"
 						name="promo"
-						value={inputs['promo']}
+						value={wordPromo}
 						onChange={(e) => {
 							if (error !== undefined) resetError();
-							setInput({ ...inputs, promo: e.target.value });
+							setPromo(e.target.value);
 						}}
 					/>
-					{inputs['promo'] && (
+					{wordPromo && (
 						<InputRightAddon
 							w="fit-content"
 							h="40px"
@@ -101,17 +101,22 @@ const PromoInput = () => {
 						>
 							<Button
 								fontSize="12px"
-								colorScheme="teal"
+								colorScheme={isActive ? 'red' : 'teal'}
 								borderLeftRadius="0"
 								isLoading={isLoading}
-								onClick={() => handlConfirm(inputs['promo'])}
-								isDisabled={conf}
+								onClick={() => {
+									if (isActive) {
+										cancelPromo();
+									}
+									if (!isActive) {
+										handlConfirm(wordPromo);
+									}
+								}}
 							>
-								Потвердить
+								{isActive ? 'Отменить' : 'Потвердить'}
 							</Button>
 						</InputRightAddon>
 					)}
-				</AnimatePresence>
 			</InputGroup>
 		</FormControl>
 	);
