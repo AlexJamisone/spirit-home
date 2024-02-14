@@ -26,8 +26,10 @@ export const discountRoute = createTRPCRouter({
 					})
 					.refine(
 						(data) =>
-							data.catIds.length > 0 ||
-							data.productIds.length > 0,
+							(data.catIds.length > 0 ||
+							data.productIds.length > 0) ||
+							(data.catIds.length > 1 &&
+								data.productIds.length > 1),
 						'Нужно выбрать либо продукт, либо категорию'
 					),
 			})
@@ -77,16 +79,53 @@ export const discountRoute = createTRPCRouter({
 						'Промокод только для зарегестрированных пользователей',
 				};
 			}
+			let ids: string[] = [];
+			if (promo.categoryIds.length > 0) {
+				const categorys = await ctx.prisma.category.findMany({
+					where: {
+						id: {
+							in: promo.categoryIds,
+						},
+					},
+					select: {
+						product: {
+							select: {
+								id: true,
+							},
+						},
+					},
+				});
+				if (categorys.length === 0) {
+					const subCategorys = await ctx.prisma.subCategory.findMany({
+						where: {
+							id: {
+								in: promo.categoryIds,
+							},
+						},
+						select: {
+							product: {
+								select: {
+									id: true,
+								},
+							},
+						},
+					});
+					ids = subCategorys.flatMap((item) =>
+						item.product.map((product) => product.id)
+					);
+				} else {
+					ids = categorys.flatMap((item) =>
+						item.product.map((product) => product.id)
+					);
+				}
+			}
 			return {
 				find: true,
 				message: 'Промокод активирован!',
-				ids:
-					promo.categoryIds.length > 0
-						? promo.categoryIds
-						: promo.productId,
+				ids: ids.length !== 0 ? ids : promo.productId,
 				type: promo.type,
 				value: promo.value,
-                id: promo.id
+				id: promo.id,
 			};
 		}),
 });

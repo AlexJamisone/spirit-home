@@ -23,6 +23,7 @@ type CartState = {
 		id: string;
 		active: boolean;
 		word: string;
+        applyCount: number
 	};
 };
 
@@ -57,6 +58,7 @@ const initialState: CartState = {
 		id: '',
 		active: false,
 		word: '',
+        applyCount: 0
 	},
 };
 const initial: CartState = getFromLocalStorage(CART_STORAGE_KEY) || {
@@ -171,7 +173,7 @@ export const useCart = create<Cart>((set) => ({
 					} else if (type === DiscountType.FIX) {
 						newPrice -= value;
 					}
-
+                    state.discount.applyCount++
 					return {
 						...item,
 						oldPrice: item.price,
@@ -181,7 +183,6 @@ export const useCart = create<Cart>((set) => ({
 				}
 				return item;
 			});
-
 			const newTotal = update.reduce(
 				(total, item) => total + item.price * item.quantity,
 				0
@@ -194,6 +195,7 @@ export const useCart = create<Cart>((set) => ({
 					id,
 					word,
 					active: true,
+                    applyCount: state.discount.applyCount
 				},
 			};
 
@@ -228,6 +230,7 @@ export const useCart = create<Cart>((set) => ({
 					word: '',
 					active: false,
 					id: '',
+                    applyCount: 0
 				},
 				items: update,
 				total: updateTotal,
