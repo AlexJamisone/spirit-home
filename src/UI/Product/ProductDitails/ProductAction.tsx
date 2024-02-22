@@ -30,6 +30,7 @@ const ProductAction = () => {
 						setCler();
 					}
 				}}
+                data-umami-event="Положили в корзину"
 			>
 				Добавить в корзину
 			</Button>
