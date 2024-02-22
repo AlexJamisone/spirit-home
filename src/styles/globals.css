@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&family=Alata&display=swap');
 html,
 body {
 	padding: 0;
@@ -15,19 +15,4 @@ a {
 
 * {
 	box-sizing: border-box;
-}
-
-.balloon_button {
-	background: red;
-}
-
-.cls-1 {
-	fill: none;
-	stroke: #009;
-	stroke-linecap: round;
-	stroke-linejoin: round;
-}
-
-.infinit ::-webkit-scrollbar {
-	display: none;
 }

@@ -1,3 +1,4 @@
+// This all Design will be delet
 import { Center, Spinner, Stack } from '@chakra-ui/react';
 import { useDebounce } from '@uidotdev/usehooks';
 import useEmblaCarousel from 'embla-carousel-react';

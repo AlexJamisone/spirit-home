@@ -12,7 +12,13 @@ const AdminOrders = () => {
 	if (isLoading) return <Spinner />;
 
 	return (
-		<Stack flexWrap="wrap" direction="row" gap={5} maxW={1200} justifyContent='center'>
+		<Stack
+			flexWrap="wrap"
+			direction="row"
+			gap={5}
+			maxW={1200}
+			justifyContent="center"
+		>
 			{orders?.map((order) => (
 				<OrderCard order={order} key={order.id} />
 			))}

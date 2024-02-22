@@ -1,14 +1,13 @@
 import {
 	FormControl,
 	FormErrorMessage,
-	FormHelperText,
 	FormLabel,
 	Input,
 	Radio,
 	RadioGroup,
 	Stack,
 	TabPanel,
-    Text,
+	Text,
 } from '@chakra-ui/react';
 import { ChangeEvent } from 'react';
 import { discounts } from '~/constants/discounts';
@@ -96,7 +95,10 @@ const DiscountInputs = () => {
 						)
 				)}
 				<DiscountProductTab />
-                <Text maxW={300} textAlign='center' textColor='blackAlpha.500'>* пока что тестирую лучше выбирать либо продукты либо категории</Text>
+				<Text maxW={300} textAlign="center" textColor="blackAlpha.500">
+					* пока что тестирую лучше выбирать либо продукты либо
+					категории
+				</Text>
 				<DiscountAction />
 			</Stack>
 		</TabPanel>

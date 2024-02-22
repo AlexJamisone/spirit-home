@@ -6,11 +6,11 @@ import NewOrder from '~/UI/NewOrder';
 
 const NewOrderPage = () => {
 	const items = useCart((state) => state.items);
-    const clear = useCart(state => state.clear)
+	const clear = useCart((state) => state.clear);
 	const { push } = useRouter();
 	useEffect(() => {
 		if (items.length === 0) {
-            clear()
+			clear();
 			push('/');
 		}
 	}, [items.length]);

@@ -26,8 +26,8 @@ export const discountRoute = createTRPCRouter({
 					})
 					.refine(
 						(data) =>
-							(data.catIds.length > 0 ||
-							data.productIds.length > 0) ||
+							data.catIds.length > 0 ||
+							data.productIds.length > 0 ||
 							(data.catIds.length > 1 &&
 								data.productIds.length > 1),
 						'Нужно выбрать либо продукт, либо категорию'

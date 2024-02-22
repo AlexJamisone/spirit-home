@@ -11,7 +11,7 @@ import {
 	Text,
 } from '@chakra-ui/react';
 import { AnimatePresence } from 'framer-motion';
-import { SlHandbag } from 'react-icons/sl';
+import { LuShoppingCart } from 'react-icons/lu';
 import ButtonsGroup from '~/components/ButtonsGroup';
 import Counter from '~/components/Counter';
 import TotalSum from '~/components/TotalSum';
@@ -31,13 +31,13 @@ const CartMenu = () => {
 							as={IconButton}
 							icon={
 								<Icon
-									as={SlHandbag}
-									fill="second"
-									boxSize={4}
+									as={LuShoppingCart}
+									boxSize={'22px'}
+									color="second"
 								/>
 							}
 							py={5}
-							variant="outline"
+							variant="ghost"
 							position="relative"
 							borderColor="second"
 							size={'md'}

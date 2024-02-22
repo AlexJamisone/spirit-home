@@ -1,5 +1,5 @@
 import { Link } from '@chakra-ui/next-js';
-import { Card, CardFooter, Stack } from '@chakra-ui/react';
+import { Button, Card, Stack, useBoolean } from '@chakra-ui/react';
 import type {
 	Category,
 	Product,
@@ -29,14 +29,19 @@ type ProductProps = {
 			subCategory: SubCategory | null;
 		}
 	) => void;
+	isBig: boolean;
 };
 
-const ProductsCard = ({ product, role, handlEdit }: ProductProps) => {
+const ProductsCard = ({ product, role, handlEdit, isBig }: ProductProps) => {
+	const [hov, setHov] = useBoolean();
 	return (
-		<Stack as={motion.div} layout>
+		<Stack
+			as={motion.div}
+			layout
+			onHoverStart={() => setHov.on()}
+			onHoverEnd={() => setHov.off()}
+		>
 			<Card
-				boxShadow="base"
-				gap={1}
 				as={role === 'USER' || !role ? Link : undefined}
 				href={`/product/${product.id}`}
 				onClick={() =>
@@ -45,26 +50,63 @@ const ProductsCard = ({ product, role, handlEdit }: ProductProps) => {
 				_hover={{
 					textDecoration: 'none',
 				}}
-				maxW={['300px']}
-				h={['350px', '450px']}
+				maxW={isBig ? 560 : 280}
+				h={isBig ? 649 : 361}
 				direction="column"
 				justifyContent="space-between"
 				alignItems="center"
-				p={[3, 5]}
-				border="1px solid"
-				borderColor="second"
-				rounded="41px"
 				cursor="pointer"
 				position="relative"
-				zIndex={0}
-				size={{
-					xl: 'sm',
-					'2xl': 'lg',
-				}}
+				variant="unstyled"
 			>
 				<ProductFavorites id={product.id} />
-				<ProductImagePreview image={product.image} />
-				<ProductInfo name={product.name} />
+				<ProductImagePreview
+					image={product.image}
+					isBig={isBig}
+					onHov={hov}
+				/>
+				{!hov && (
+					<Stack
+                        as={motion.div}
+                        initial={{opacity: 0}}
+                        animate={{opacity: 1, transition: {
+                            type: 'spring',
+                            duration: 0.7,
+                            mass: 0.5
+                        }}}
+						textAlign="center"
+						gap={0}
+						position="absolute"
+						bottom={0}
+						w="100%"
+						bg="white"
+					>
+						<ProductInfo name={product.name} />
+						<ProductPrice price={product.price} />
+					</Stack>
+				)}
+				{hov && (
+					<Button
+						variant="prime"
+						w={158}
+						fontWeight={400}
+						as={motion.button}
+						initial={{ opacity: 0, y: 50 }}
+						animate={{
+							opacity: 1,
+							y: 0,
+							transition: {
+								type: 'spring',
+								duration: 0.7,
+							},
+						}}
+						h="32px"
+						position="absolute"
+						bottom="52px"
+					>
+						Подробнее
+					</Button>
+				)}
 				{role === 'ADMIN' && (
 					<>
 						<ProductTag
@@ -79,9 +121,6 @@ const ProductsCard = ({ product, role, handlEdit }: ProductProps) => {
 						/>
 					</>
 				)}
-				<CardFooter>
-					<ProductPrice price={product.price} />
-				</CardFooter>
 			</Card>
 		</Stack>
 	);

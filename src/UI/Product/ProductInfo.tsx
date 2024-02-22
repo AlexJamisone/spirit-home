@@ -6,6 +6,8 @@ const ProductInfo = ({ name }: { name: string }) => {
 			textColor="second"
 			fontSize={16}
 			textAlign="center"
+			mt="18px"
+			mb="10px"
 		>
 			<Text>{name}</Text>
 		</Stack>

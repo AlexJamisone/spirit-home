@@ -7,8 +7,4 @@ export const links = [
 		children: 'Доставка и оплата',
 		path: '/devilery',
 	},
-	{
-		children: 'Войти',
-		path: '/signin',
-	},
 ];

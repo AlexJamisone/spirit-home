@@ -1,20 +1,36 @@
-import { Stack } from '@chakra-ui/react';
+import { Button, Divider, Stack, Text } from '@chakra-ui/react';
 import type { NextPage } from 'next';
-import Footer from '~/UI/Footer';
+import MainProductCards from '~/UI/MainSection/MainProductCards';
 import MainSection from '~/UI/MainSection/MainSection';
-import LineOfProduct from '~/UI/Product/LineOfProduct';
-import MapsWidget from '~/UI/YandexMaps/MapsWidget';
-import SearchInput from '~/components/SearchInput';
 const Home: NextPage = () => {
 	return (
 		<>
-			<Stack as="main" gap={10} id="content">
+			<Stack
+				justifyContent="center"
+				gap={0}
+				alignItems="center"
+				as="main"
+			>
 				<MainSection />
-				<SearchInput />
-				<LineOfProduct />
+				<Stack direction="row" w="100%" alignItems="center">
+					<Divider borderColor="black" />
+					<Text
+						w="100%"
+						textAlign="center"
+						minW={550}
+						my="44px"
+						textTransform="uppercase"
+					>
+						Украшения из серебра, созданные на южном побережьи
+						<br /> рядом с волнами и скалами
+					</Text>
+					<Divider borderColor="black" />
+				</Stack>
+				<MainProductCards />
+				<Button variant="prime" my="44px">
+					Все украшения
+				</Button>
 			</Stack>
-			<MapsWidget />
-			<Footer />
 		</>
 	);
 };

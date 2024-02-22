@@ -94,6 +94,16 @@ export const productsRouter = createTRPCRouter({
 				nextCursor,
 			};
 		}),
+	getForAllv1: publicProcedure.query(async ({ ctx }) => {
+		return await ctx.prisma.product.findMany({
+			include: {
+				size: true,
+				category: true,
+				subCategory: true,
+			},
+			take: 6,
+		});
+	}),
 	getForAdmin: publicProcedure.query(async ({ ctx }) => {
 		const products = await ctx.prisma.product.findMany({
 			include: {

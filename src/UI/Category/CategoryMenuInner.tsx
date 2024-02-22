@@ -25,7 +25,7 @@ const CategoryMenuInner = ({
 	closeMain,
 }: CategoryMenuInnerProps) => {
 	return (
-		<Menu placement="right-end" autoSelect={false}>
+		<Menu placement="right-start" autoSelect={false}>
 			{({ onClose }) => (
 				<>
 					<Stack w="container">
@@ -38,31 +38,51 @@ const CategoryMenuInner = ({
 								variant="ghost"
 								position="relative"
 								rightIcon={<Icon as={MdKeyboardArrowRight} />}
+								fontWeight={400}
+								_hover={{
+									textColor: 'brand',
+								}}
+								_active={{
+									textColor: 'brand',
+								}}
 							>
 								{title}
 							</MenuButton>
 						) : (
 							<Link
 								_hover={{
+									textColor: 'brand',
 									textDecoration: 'none',
-									bgColor: 'gray.100',
 								}}
-								fontWeight={600}
 								py={[1, 2]}
 								px={[3, 4]}
 								fontSize={[14, 16]}
 								rounded="md"
 								href={`/categories/${path}`}
 								onClick={closeMain}
+								fontWeight={400}
 							>
 								{title}
 							</Link>
 						)}
 					</Stack>
 
-					<MenuList display="flex" flexDirection="column">
+					<MenuList
+						display="flex"
+						flexDirection="column"
+						borderRadius="none"
+						borderBottomRightRadius="25px"
+					>
 						{subCategory?.map(({ id, title, path: subPath }) => (
-							<MenuItem key={id}>
+							<MenuItem
+								key={id}
+                                borderRadius='25px'
+								_hover={{
+									textDecoration: 'none',
+									textColor: 'brand',
+									bgColor: 'transparent',
+								}}
+							>
 								<Link
 									_hover={{
 										textDecoration: 'none',

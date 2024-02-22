@@ -49,7 +49,8 @@ const PromoInput = () => {
 					toast({
 						description:
 							discount.applyCount > 0
-								? message + ` Применилось на ${discount.applyCount} товаров`
+								? message +
+								  ` Применилось на ${discount.applyCount} товаров`
 								: 'Не было найдено товаров участвующих в акции',
 						status:
 							discount.applyCount === 0 ? 'warning' : 'success',

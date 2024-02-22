@@ -1,19 +1,18 @@
+import { Image } from '@chakra-ui/next-js';
 import { Stack } from '@chakra-ui/react';
-import Sun from '~/assets/Sun';
 import MainTitle from '../MainTitle/MainTitle';
 
 const MainSection = () => {
 	return (
-		<Stack
-			direction="row"
-			overflow="hidden"
-			justifyContent="center"
-			position="relative"
-			gap={'750px'}
-		>
-			<Sun initialPositionX={-300} />
+		<Stack width="100%" height="640px" position='relative' mt='-120px' >
+			<Image
+				position="absolute"
+				src="/assets/background.png"
+				alt="main"
+				quality={100}
+				fill
+			/>
 			<MainTitle />
-			<Sun initialPositionX={300} />
 		</Stack>
 	);
 };

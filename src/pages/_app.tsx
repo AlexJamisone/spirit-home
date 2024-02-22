@@ -1,6 +1,6 @@
-import { ChakraProvider, useMediaQuery } from '@chakra-ui/react';
+import { ChakraProvider } from '@chakra-ui/react';
 import { ruRU } from '@clerk/localizations';
-import { ClerkProvider, SignedIn, SignedOut } from '@clerk/nextjs';
+import { ClerkProvider, SignedIn } from '@clerk/nextjs';
 import { type AppType } from 'next/app';
 import Head from 'next/head';
 import Script from 'next/script';
@@ -11,7 +11,6 @@ import { api } from '~/utils/api';
 import '../styles/globals.css';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
-	const [isTablet] = useMediaQuery(['(max-width: 930px)']);
 	return (
 		<ChakraProvider theme={theme}>
 			<Head>
@@ -24,15 +23,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 				data-website-id="671dd393-6548-494c-acc4-ac101878e304"
 			/>
 			<ClerkProvider {...pageProps} localization={ruRU}>
+				<Navigation />
+				<Component {...pageProps} />
 				<SignedIn>
-					{isTablet ? null : <Menu />}
-					<Navigation />
-					<Component {...pageProps} />
+					<Menu />
 				</SignedIn>
-				<SignedOut>
-					<Navigation />
-					<Component {...pageProps} />
-				</SignedOut>
 			</ClerkProvider>
 		</ChakraProvider>
 	);

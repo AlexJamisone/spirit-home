@@ -69,6 +69,7 @@ model Product {
     orders           OrderItem[]
     price            Int
     size             Size[]
+    onMain Boolean? @default(false)
 }
 
 model Size {

@@ -1,4 +1,5 @@
 import { extendTheme, type ThemeConfig } from '@chakra-ui/react';
+import { defbtn } from './buttonTheme';
 
 const defultTheme: ThemeConfig = {
 	initialColorMode: 'light',
@@ -14,13 +15,14 @@ const colors = {
 };
 
 const fonts = {
-	heading: `'Jost', sans-serif`,
+	heading: `'Abril Fatface', serif`,
 };
 
 const theme = extendTheme({
 	defultTheme,
 	colors,
 	fonts,
+	components: { Button: defbtn },
 });
 
 export default theme;

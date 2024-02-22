@@ -28,7 +28,6 @@ const AccardionStick = ({ accordion, onToggle }: AccardionStickProps) => {
 	const toast = useToast();
 	const setInput = useAccordion((state) => state.setInput);
 	const setEdit = useAccordion((state) => state.setEdit);
-
 	return (
 		<AccordionItem>
 			<h2>
