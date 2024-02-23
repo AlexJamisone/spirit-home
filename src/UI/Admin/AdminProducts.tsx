@@ -83,6 +83,7 @@ const AdminProducts = () => {
 							role={user?.role}
 							product={product}
 							handlEdit={handlEdit}
+                            isBig={false}
 						/>
 					);
 				})

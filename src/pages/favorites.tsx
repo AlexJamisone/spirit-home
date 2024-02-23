@@ -30,6 +30,7 @@ const FavoritesPage = () => {
 			<AnimatePresence>
 				{products?.map((product) => (
 					<ProductsCard
+						isBig={false}
 						key={product.id}
 						product={product}
 						role="USER"
