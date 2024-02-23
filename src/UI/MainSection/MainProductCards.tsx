@@ -1,4 +1,4 @@
-import { Grid, GridItem } from '@chakra-ui/react';
+import { Grid, GridItem, Skeleton } from '@chakra-ui/react';
 import { api } from '~/utils/api';
 import ProductsCard from '../Product/ProductCard';
 
@@ -20,6 +20,7 @@ const MainProductCards = () => {
 				return '4 / 4 / 3 / 5';
 		}
 	};
+	const placeholders = new Array(6).fill(0).map((_, index) => index + 1);
 	return (
 		<Grid
 			gridTemplateColumns="repeat(4, 1fr)"
@@ -27,6 +28,19 @@ const MainProductCards = () => {
 			columnGap={'19px'}
 			rowGap={'40px'}
 		>
+			{!products &&
+				placeholders.map((_, idx) => (
+					<GridItem
+						key={idx + 1}
+						gridArea={handlGrid(idx)}
+						placeSelf={idx === 3 ? 'start' : undefined}
+					>
+						<Skeleton
+							w={idx === 2 || idx === 3 ? 560 : 280}
+							h={idx === 2 || idx === 3 ? 649 : 361}
+						/>
+					</GridItem>
+				))}
 			{products?.map((product, idx) => (
 				<GridItem
 					gridArea={handlGrid(idx)}
