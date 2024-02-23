@@ -1,67 +1,87 @@
-import { Link } from '@chakra-ui/next-js';
-import { Stack, Text } from '@chakra-ui/react';
+import { Box, Stack, Text } from '@chakra-ui/react';
 import { useAuth } from '@clerk/nextjs';
 import dayjs from 'dayjs';
+import { motion } from 'framer-motion';
+import NextLink from '~/components/NextLink';
+import { footerLinks } from '~/constants/footerLinks';
 import { socialLinks } from '~/constants/social';
-dayjs().format();
 
 const Footer = () => {
 	const { isSignedIn } = useAuth();
 	return (
 		<Stack
-			as="footer"
-			h={'120px'}
-			w="100%"
-			roundedTop="3xl"
-			bgColor="brand"
-			position="relative"
-			zIndex={200}
-			px={20}
+			as={motion.footer}
+			h="240px"
+			bgColor="second"
+			borderTopRadius="25px"
 			direction="row"
-			justifyContent="space-between"
-			pt={5}
+			justifyContent="space-around"
+			textColor="white"
+			py={'50px'}
 		>
-			<Stack>
-				<Link
-					href={isSignedIn ? '/profile/main' : '/signin'}
-					_hover={{
-						textDecoration: 'none',
-					}}
-				>
-					{isSignedIn ? 'Личный кабинет' : 'Войти'}
-				</Link>
-				<Link
-					href={'/favorites'}
-					_hover={{
-						textDecoration: 'none',
-					}}
-				>
-					Избранное
-				</Link>
-				<Link
-					href={'/devilery'}
-					_hover={{
-						textDecoration: 'none',
-					}}
-				>
-					Доставка и оплата
-				</Link>
-			</Stack>
-			<Stack textAlign="center" alignItems="center">
-				<Text fontSize="sm">Все новости о жизни бренда:</Text>
-				<Stack direction="row">
-					{socialLinks.map((link) => (
-						<Link href={link.href} key={link.alt} target="_blank">
-							<link.child />
-						</Link>
+			<Stack fontSize={14} as="nav">
+				<Stack as="ul" listStyleType="none">
+					{footerLinks(isSignedIn ?? false).map((item, idx) => (
+						<Box
+							as={motion.li}
+							initial={{ opacity: 0, x: -100 }}
+							whileInView={{
+								opacity: 1,
+								x: 0,
+								transition: {
+									type: 'spring',
+									duration: 0.2 * idx,
+									delay: 0.1 * idx,
+									stiffness: 50,
+								},
+							}}
+							key={item.id}
+						>
+							<NextLink href={item.href}>{item.label}</NextLink>
+						</Box>
 					))}
 				</Stack>
 			</Stack>
-			<Stack justifyContent="end">
-				<Text>Spirit Home © {dayjs().year()} </Text>
+			<Stack alignItems="center" gap="38px">
+				<Text>Все новости и жизнь бренда:</Text>
+				<Stack direction="row" gap="38px">
+					{socialLinks.map((item, idx) => (
+						<Box
+							key={item.href}
+							as={motion.div}
+							initial={{ filter: 'blur(5px)' }}
+							whileInView={{
+								filter: 'blur(0px)',
+								transition: {
+									ease: 'anticipate',
+									duration: 0.2 * idx,
+									delay: 0.1 * idx,
+								},
+							}}
+						>
+							<NextLink href={item.href}>
+								<item.child />
+							</NextLink>
+						</Box>
+					))}
+				</Stack>
+			</Stack>
+			<Stack
+				justifyContent="end"
+				as={motion.div}
+				initial={{ y: 50, filter: 'blur(5px)' }}
+				whileInView={{
+					y: 0,
+					filter: 'blur(0px)',
+					transition: {
+						duration: 0.5,
+						stiffness: 50,
+					},
+				}}
+			>
+				<Text>Spirit Home © {dayjs().get('year')}</Text>
 			</Stack>
 		</Stack>
 	);
 };
-
 export default Footer;

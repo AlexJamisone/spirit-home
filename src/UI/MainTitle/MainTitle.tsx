@@ -5,6 +5,7 @@ const MainTitle = () => {
 	return (
 		<Heading
 			as={motion.h2}
+            userSelect='none'
 			initial={{
 				opacity: 0,
 				y: -50,

@@ -1,5 +1,6 @@
 import { Button, Divider, Stack, Text } from '@chakra-ui/react';
 import type { NextPage } from 'next';
+import Footer from '~/UI/Footer';
 import MainProductCards from '~/UI/MainSection/MainProductCards';
 import MainSection from '~/UI/MainSection/MainSection';
 const Home: NextPage = () => {
@@ -27,10 +28,11 @@ const Home: NextPage = () => {
 					<Divider borderColor="black" />
 				</Stack>
 				<MainProductCards />
-				<Button variant="prime" my="44px">
+				<Button variant="prime" my="80px">
 					Все украшения
 				</Button>
 			</Stack>
+			<Footer />
 		</>
 	);
 };
